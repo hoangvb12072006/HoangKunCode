@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HoangKun Store - Shop Code Uy Tín</title>
+    <title>HoangKun Store - Hệ Thống Bán Code 24/7</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -13,98 +13,111 @@
     <div class="container">
         <header>
             <h1 class="logo">HOANGKUN <span>STORE</span></h1>
-            <p class="tagline">Hệ thống bán code tự động - Uy tín - Chất lượng</p>
+            <p class="tagline">Giao diện chất - Hỗ trợ cài đặt tận tình</p>
         </header>
 
-        <section class="products">
-            
-            <div class="product-item">
-                <div class="product-thumb bg-1">
-                    <div class="badge">HOT</div>
-                    <span>BIO LINK</span>
-                </div>
-                <div class="product-content">
-                    <h3 class="product-title">Mẫu Bio Link CyberVibe</h3>
-                    <p class="product-info">Đã bán: 128 | Lượt xem: 1.5k</p>
-                    <div class="product-price">50.000đ</div>
-                    <a href="https://zalo.me/0788265513" class="btn-buy">MUA NGAY</a>
-                </div>
-            </div>
+        <div class="products-grid" id="shopGrid"></div>
 
-            <div class="product-item">
-                <div class="product-thumb bg-2">
-                    <div class="badge">NEW</div>
-                    <span>SHOP ACC</span>
-                </div>
-                <div class="product-content">
-                    <h3 class="product-title">Code Shop Acc Game V2</h3>
-                    <p class="product-info">Đã bán: 45 | Lượt xem: 800</p>
-                    <div class="product-price">150.000đ</div>
-                    <a href="https://zalo.me/0788265513" class="btn-buy">MUA NGAY</a>
-                </div>
-            </div>
-
-            <div class="product-item">
-                <div class="product-thumb bg-3">
-                    <div class="badge" style="background: #fbbf24;">VIP</div>
-                    <span>GAMING</span>
-                </div>
-                <div class="product-content">
-                    <h3 class="product-title">Landing Page Gaming Pro</h3>
-                    <p class="product-info">Đã bán: 89 | Lượt xem: 2.1k</p>
-                    <div class="product-price">120.000đ</div>
-                    <a href="https://zalo.me/0788265513" class="btn-buy">MUA NGAY</a>
-                </div>
-            </div>
-
-        </section>
+        <div class="pagination">
+            <button onclick="changePage(-1)"><i class="fas fa-arrow-left"></i> Trước</button>
+            <span id="pageLabel">Trang 1 / 4</span>
+            <button onclick="changePage(1)">Sau <i class="fas fa-arrow-right"></i></button>
+        </div>
 
         <footer>
-            <p>© 2026 HoangKun Store. All Rights Reserved.</p>
+            <p>© 2026 HoangKun Store. Zalo: 0788265513</p>
         </footer>
     </div>
 
     <script>
+        // Danh sách 20 mặt hàng (Hoàng có thể tự sửa tên/giá ở đây)
+        const inventory = [
+            { id: 1, name: "Bio Link CyberVibe", price: "50.000đ", tag: "HOT" },
+            { id: 2, name: "Shop Acc Game V2", price: "150.000đ", tag: "NEW" },
+            { id: 3, name: "Landing Page Gaming", price: "120.000đ", tag: "VIP" },
+            { id: 4, name: "Web Phim Pro", price: "200.000đ", tag: "BEST" },
+            { id: 5, name: "Portfolio Dark", price: "100.000đ", tag: "HOT" },
+            { id: 6, name: "Tool Facebook Auto", price: "300.000đ", tag: "NEW" },
+            { id: 7, name: "Web Tin Tức SEO", price: "250.000đ", tag: "NEW" },
+            { id: 8, name: "Mẫu Blog Cá Nhân", price: "40.000đ", tag: "SALE" },
+            { id: 9, name: "Giao Diện Bán Quần Áo", price: "180.000đ", tag: "VIP" },
+            { id: 10, name: "Web Bất Động Sản", price: "500.000đ", tag: "BEST" },
+            // ... Bạn có thể thêm tiếp cho đủ 20 hoặc hệ thống tự lặp lại
+        ];
+
+        // Tự động bù cho đủ 20 hàng nếu bạn lười viết
+        for(let i = 11; i <= 20; i++) {
+            inventory.push({ id: i, name: `Sản Phẩm Code #${i}`, price: "99.000đ", tag: "CODE" });
+        }
+
+        let currentPage = 1;
+        const limit = 6; // Mỗi trang hiện 6 hàng
+
+        function renderShop() {
+            const grid = document.getElementById('shopGrid');
+            grid.innerHTML = "";
+            let start = (currentPage - 1) * limit;
+            let end = start + limit;
+            let currentItems = inventory.slice(start, end);
+
+            currentItems.forEach(item => {
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <div class="card-thumb">
+                            <div class="badge">${item.tag}</div>
+                            <span>CODE</span>
+                        </div>
+                        <div class="card-info">
+                            <h3>${item.name}</h3>
+                            <div class="price">${item.price}</div>
+                            <a href="https://zalo.me/0788265513" class="btn-buy">MUA NGAY</a>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('pageLabel').innerText = `Trang ${currentPage} / ${Math.ceil(inventory.length / limit)}`;
+        }
+
+        function changePage(n) {
+            let next = currentPage + n;
+            if (next >= 1 && next <= Math.ceil(inventory.length / limit)) {
+                currentPage = next;
+                renderShop();
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
+
+        // Script hạt bay (Giữ nguyên cho Hoàng)
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
         let particles = [];
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
+                this.size = Math.random() * 2;
+                this.vx = Math.random() * 0.6 - 0.3;
+                this.vy = Math.random() * 0.6 - 0.3;
             }
             update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
+                this.x += this.vx; this.y += this.vy;
+                if(this.x > canvas.width || this.x < 0) this.vx *= -1;
+                if(this.y > canvas.height || this.y < 0) this.vy *= -1;
             }
             draw() {
-                ctx.fillStyle = 'rgba(0, 255, 242, 0.5)';
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#00fff2'; ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
             }
         }
-        function init() {
-            particles = [];
-            for (let i = 0; i < 100; i++) particles.push(new Particle());
-        }
+        for(let i=0; i<100; i++) particles.push(new Particle());
         function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0,0,canvas.width,canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
-        init(); animate();
+        renderShop(); animate();
     </script>
 </body>
 </html>
