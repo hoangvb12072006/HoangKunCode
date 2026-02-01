@@ -209,11 +209,16 @@
 
     // --- 2. DỮ LIỆU CỬA HÀNG ---
     const products = [
-        { id: 1, name: "CODE TRAITYM 1", price: 20000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-3.jpg" },
-        { id: 2, name: "CODE TRAITYM 2", price: 25000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-9.jpg" },
-        { id: 3, name: "CODE TRAITYM 3", price: 30000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-13.jpg" },
-        { id: 4, name: "CODE WEB SHOP", price: 300000, img: "https://i.postimg.cc/JzmdcN7p/game-title.jpg" }
-    ];
+    { id: 1, name: "CODE TRAITYM 1", price: 20000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-3.jpg" },
+    { id: 2, name: "CODE TRAITYM 2", price: 25000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-9.jpg" },
+    { id: 3, name: "CODE TRAITYM 3", price: 30000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-13.jpg" },
+    { id: 4, name: "CODE WEB SHOP", price: 300000, img: "https://i.postimg.cc/JzmdcN7p/game-title.jpg" },
+    // 3 Link mới thêm vào bên dưới:
+    { id: 5, name: "CODE WEB MÈO CUTE", price: 50000, img: "https://i.postimg.cc/svBYRYkr/IMG-6222.png" },
+    { id: 6, name: "CODE GAME BẮN CUNG", price: 75000, img: "https://i.postimg.cc/QKFThDy3/IMG-6223.gif" },
+    { id: 7, name: "CODE HIỆU ỨNG RỒNG", price: 100000, img: "https://i.postimg.cc/Czfq2F8R/IMG-6224.gif" }
+];
+
 
     function renderProducts() {
         document.getElementById('productGrid').innerHTML = products.map(p => `
