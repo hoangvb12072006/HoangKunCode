@@ -11,6 +11,30 @@
     <canvas id="particleCanvas"></canvas>
 
     <div class="container">
+        <div class="user-system">
+    <div id="auth-box">
+        <input type="text" id="username" placeholder="Nhập tên tài khoản...">
+        <button class="btn-auth" onclick="login()">ĐĂNG NHẬP / ĐĂNG KÝ</button>
+    </div>
+    <div id="user-info" style="display:none;">
+        <span class="user-welcome">Chào, <b id="user-name" style="color: #00fff2;"></b></span> 
+        <span class="user-money">| Số dư: <b id="user-balance" style="color: #ffcc00;">0đ</b></span>
+        <button class="btn-topup" onclick="showRecharge()">NẠP TIỀN</button>
+        <button class="btn-logout" onclick="logout()">THOÁT</button>
+    </div>
+</div>
+
+<div id="recharge-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <h2 style="color: #00fff2;">NẠP TIỀN THỦ CÔNG</h2>
+        <hr style="border: 0.5px solid #333; margin: 15px 0;">
+        <p>Nội dung CK: <b style="color: #ff9900;">NAP <span id="ck-name"></span></b></p>
+        <p>MB Bank: <b>0788265513</b></p>
+        <p>Chủ TK: <b>NGUYEN VIET HOANG</b></p>
+        <p style="font-size: 13px; color: #aaa; margin-top: 10px;">* Chụp ảnh bill gửi Zalo Admin để được cộng tiền nhé!</p>
+        <button class="btn-buy" style="margin-top: 15px; cursor: pointer;" onclick="closeRecharge()">ĐÃ HIỂU</button>
+    </div>
+</div>
         <header>
             <h1 class="logo">HOANGKUN <span>STORE</span></h1>
             <p class="tagline">Hệ thống bán acc tự động - Uy tín - Giá rẻ</p>
@@ -118,6 +142,62 @@
         renderShop();
         initParticles();
         animate();
+
+// 1. Hàm Đăng nhập / Đăng ký
+function login() {
+    let name = document.getElementById('username').value;
+    if (name.trim() === "") {
+        alert("Hoàng ơi, nhập cái tên tài khoản đã chứ!");
+        return;
+    }
+    
+    // Lưu tên vào máy khách (LocalStorage)
+    localStorage.setItem('user', name);
+    
+    // Nếu là tài khoản mới hoàn toàn, cho ngay 0đ vào túi
+    if (!localStorage.getItem('balance_' + name)) {
+        localStorage.setItem('balance_' + name, '0');
+    }
+    
+    alert("Đăng nhập thành công! Chào mừng " + name);
+    location.reload(); // Load lại trang để hiện thông tin user
+}
+
+// 2. Hàm kiểm tra trạng thái khi vừa mở Web
+function checkLoginStatus() {
+    let loggedUser = localStorage.getItem('user');
+    if (loggedUser) {
+        // Ẩn ô nhập tên, hiện khu vực thông tin cá nhân
+        document.getElementById('auth-box').style.display = 'none';
+        document.getElementById('user-info').style.display = 'block';
+        document.getElementById('user-name').innerText = loggedUser;
+        document.getElementById('ck-name').innerText = loggedUser; // Hiện tên trong bảng nạp tiền
+        
+        // Lấy số dư và hiển thị
+        let balance = localStorage.getItem('balance_' + loggedUser) || 0;
+        document.getElementById('user-balance').innerText = parseInt(balance).toLocaleString() + 'đ';
+    }
+}
+
+// 3. Hàm Thoát tài khoản
+function logout() {
+    localStorage.removeItem('user');
+    location.reload();
+}
+
+// Gọi hàm này ngay khi trang web vừa tải xong
+checkLoginStatus();
+
+// Mở bảng nạp tiền
+function showRecharge() {
+    document.getElementById('recharge-modal').style.display = 'flex';
+}
+
+// Đóng bảng nạp tiền
+function closeRecharge() {
+    document.getElementById('recharge-modal').style.display = 'none';
+}
+    
     </script>
 </body>
 </html>
