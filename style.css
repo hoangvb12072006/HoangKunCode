@@ -95,4 +95,40 @@ header { text-align: center; margin-bottom: 30px; }
 .btn-buy:hover {
     transform: scale(1.1);
     box-shadow: 0 0 15px #ff5500;
+}\
+
+/* Badge chung */
+.badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 3px;
+    text-transform: uppercase;
+    z-index: 10;
+}
+
+/* Màu cho tag HOT (Cam cháy) */
+.tag-hot {
+    background: linear-gradient(to right, #f83600 0%, #f9d423 100%);
+    box-shadow: 0 0 10px rgba(248, 54, 0, 0.5);
+}
+
+/* Màu cho tag VIP (Đỏ tím quý tộc) */
+.tag-vip {
+    background: linear-gradient(to right, #800080 0%, #ff0000 100%);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+    border: 1px solid #fff;
+}
+
+/* Chỉnh lại tiêu đề sản phẩm cho gọn */
+.card-info h3 {
+    font-size: 0.95rem;
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    color: #333;
 }
