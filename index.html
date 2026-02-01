@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOANGKUN STORE - SHOP CODE HTML & ACC GAME UY TÍN</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* --- CSS GIAO DIỆN GAMING ĐỎ ĐEN (600 DÒNG CHI TIẾT) --- */
@@ -186,6 +188,23 @@
 </div>
 
 <script>
+
+    // Cấu hình Firebase của HoangKun Shop
+const firebaseConfig = {
+  apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g",
+  authDomain: "hoangkun-594d0.firebaseapp.com",
+  databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com",
+  projectId: "hoangkun-594d0",
+  storageBucket: "hoangkun-594d0.firebasestorage.app",
+  messagingSenderId: "919734784771",
+  appId: "1:919734784771:web:79eeac97bec6d23bad4f36",
+  measurementId: "G-9V75TQRR0D"
+};
+
+// Khởi tạo Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+    
     /* --- HỆ THỐNG DỮ LIỆU & LOGIC (GIẢ LẬP SERVER) --- */
     const inventory = [
         { id: 1, name: "CODE BIO LINK CYBERVIBE RED", price: 49000, img: "https://i.ibb.co/v6M6W7Y/bio.jpg", tag: "HOT" },
@@ -238,19 +257,37 @@ function handleRegister() {
     toggleAuth(false);
 }
 
-// 3. Xử lý Đăng nhập
-function handleLogin() {
-    const user = document.getElementById('loginUser').value.trim();
-    const pass = document.getElementById('loginPass').value;
-    const storedPass = localStorage.getItem('pass_' + user);
+// Đăng ký & Đăng nhập với Firebase
+function handleAuth(isRegister) {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    if (!user || !pass) return alert("Vui lòng nhập đủ!");
 
-    if(storedPass && storedPass === pass) {
-        localStorage.setItem('user', user);
-        alert("Đăng nhập thành công! Chào " + user);
-        location.reload();
-    } else {
-        alert("Sai tài khoản hoặc mật khẩu rồi!");
-    }
+    db.ref('users/' + user).once('value').then((snapshot) => {
+        const userData = snapshot.val();
+        if (isRegister) {
+            if (userData) return alert("Tài khoản đã tồn tại!");
+            db.ref('users/' + user).set({ password: pass, balance: 0 });
+            alert("Đăng ký thành công!");
+        } else {
+            if (!userData || userData.password !== pass) return alert("Sai tài khoản hoặc mật khẩu!");
+            localStorage.setItem('currentUser', user);
+            location.reload();
+        }
+    });
+
+// Cập nhật số dư tự động từ xa
+const currentUser = localStorage.getItem('currentUser');
+if (currentUser) {
+    db.ref('users/' + currentUser).on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            document.getElementById('user-info').style.display = 'flex';
+            document.getElementById('auth-box').style.display = 'none';
+            document.getElementById('display-name').innerText = currentUser;
+            document.getElementById('user-balance').innerText = data.balance.toLocaleString();
+        }
+    });
 }
 
     function checkStatus() {
