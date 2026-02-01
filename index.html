@@ -24,9 +24,8 @@
             <button onclick="changePage(1)">SAU</button>
         </div>
    </div> 
-
 <script>
-        // 1. Danh sách sản phẩm với tiêu chí HOT và VIP
+        // 1. Dữ liệu sản phẩm (Giữ nguyên bản HOT/VIP của bạn)
         const inventory = [
             { id: 1, name: "CODE BIO LINK CYBERVIBE", count: "1,250", price: "49.000đ", img: "https://i.ibb.co/v6M6W7Y/bio.jpg", tag: "HOT" },
             { id: 2, name: "CODE SHOP ACC GAME V2", count: "845", price: "250.000đ", img: "https://i.ibb.co/VmqY8S7/shop.jpg", tag: "HOT" },
@@ -38,23 +37,16 @@
             { id: 8, name: "CODE TOOL FACEBOOK AUTO", count: "670", price: "199.000đ", img: "https://i.ibb.co/vYm6X8v/fb.jpg", tag: "HOT" }
         ];
 
-        // Tự tạo thêm cho đủ 20 món (Món đắt tiền sẽ tự động là VIP)
         while(inventory.length < 20) {
             let base = inventory[inventory.length % 8];
-            let randomPrice = (Math.floor(Math.random() * 90) + 10) * 10; // Từ 100k đến 1 triệu
-            inventory.push({
-                ...base,
-                id: inventory.length + 1,
-                name: base.name + " PRO V" + (inventory.length + 1),
-                price: randomPrice + ".000đ",
-                count: Math.floor(Math.random() * 1000) + 50,
-                tag: randomPrice > 500 ? "VIP" : "HOT" // Trên 500k là VIP, dưới là HOT
-            });
+            let randomPrice = (Math.floor(Math.random() * 90) + 10) * 10;
+            inventory.push({...base, id: inventory.length + 1, name: base.name + " V" + (inventory.length + 1), price: randomPrice + ".000đ", count: Math.floor(Math.random() * 1000) + 50, tag: randomPrice > 500 ? "VIP" : "HOT"});
         }
 
         let currentPage = 1;
         const limit = 8;
 
+        // 2. Hàm hiển thị Shop
         function renderShop() {
             const grid = document.getElementById('shopGrid');
             if(!grid) return;
@@ -63,9 +55,7 @@
             let currentItems = inventory.slice(start, start + limit);
 
             currentItems.forEach(item => {
-                // Đổi màu Tag dựa trên loại HOT hay VIP
                 const tagClass = item.tag === "VIP" ? "tag-vip" : "tag-hot";
-                
                 grid.innerHTML += `
                     <div class="product-card">
                         <div class="card-thumb">
@@ -80,8 +70,7 @@
                                 <a href="https://zalo.me/0788265513" class="btn-buy">MUA NGAY</a>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
             document.getElementById('pageLabel').innerText = `Trang ${currentPage} / ${Math.ceil(inventory.length / limit)}`;
         }
@@ -93,26 +82,41 @@
             }
         }
 
-        // Hiệu ứng hạt bay
+        // 3. CODE SỬA LỖI CHẤM CHẤM (PARTICLES)
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
         let particles = [];
-        for(let i=0; i<80; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5, s: Math.random()*2});
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 80; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 1,
+                    vy: (Math.random() - 0.5) * 1,
+                    size: Math.random() * 2 + 1
+                });
+            }
+        }
+
         function animate() {
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.fillStyle = 'rgba(0, 255, 242, 0.3)';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(0, 200, 255, 0.4)"; 
             particles.forEach(p => {
                 p.x += p.vx; p.y += p.vy;
-                if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
             });
             requestAnimationFrame(animate);
         }
 
+        window.addEventListener('resize', initParticles);
         renderShop();
+        initParticles();
         animate();
     </script>
 </body>
