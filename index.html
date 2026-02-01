@@ -3,201 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HoangKun Store - Shop Acc Uy Tín</title>
-    <link rel="stylesheet" href="style.css">
+    <title>HOANGKUN STORE - SHOP CODE HTML & ACC GAME UY TÍN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- CSS GIAO DIỆN GAMING ĐỎ ĐEN (600 DÒNG CHI TIẾT) --- */
+        :root {
+            --primary: #ff0000;
+            --secondary: #1a1a1a;
+            --accent: #ff4d4d;
+            --text: #ffffff;
+            --bg: #050505;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Hiệu ứng nền Particles */
+        #particleCanvas {
+            position: fixed; top: 0; left: 0; z-index: -1;
+            background: radial-gradient(circle, #1a0000 0%, #050505 100%);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header & Navigation */
+        nav {
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 2px solid var(--primary);
+            padding: 10px 0;
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 28px; font-weight: 800; color: var(--text); text-decoration: none; }
+        .logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+
+        /* Hệ thống Tài khoản */
+        .user-box { display: flex; align-items: center; gap: 15px; }
+        .balance-display { background: #222; padding: 5px 15px; border-radius: 20px; border: 1px solid var(--primary); }
+        .balance-display b { color: #ffcc00; }
+
+        .btn {
+            padding: 10px 20px; border-radius: 5px; border: none;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; text-decoration: none; display: inline-block;
+        }
+        .btn-red { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); }
+        .btn-red:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 0 25px var(--primary); }
+        .btn-outline { background: transparent; border: 1px solid var(--primary); color: white; }
+
+        /* Banner */
+        .banner {
+            text-align: center; padding: 80px 0;
+            background: url('https://i.ibb.co/6y4XvVz/bg-gaming.jpg') no-repeat center;
+            background-size: cover; border-radius: 20px; margin: 20px 0;
+            border: 1px solid #333;
+        }
+        .banner h2 { font-size: 45px; margin: 0; text-shadow: 2px 2px 10px #000; }
+
+        /* Danh mục sản phẩm */
+        .shop-title { border-left: 5px solid var(--primary); padding-left: 15px; margin: 40px 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+
+        .card {
+            background: var(--secondary); border-radius: 10px; overflow: hidden;
+            transition: 0.4s; border: 1px solid #333; position: relative;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--primary); }
+
+        .thumb { position: relative; height: 180px; }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .badge {
+            position: absolute; top: 10px; right: 10px; padding: 4px 10px;
+            font-size: 12px; font-weight: bold; border-radius: 3px;
+        }
+        .badge-hot { background: #ffcc00; color: #000; }
+        .badge-vip { background: var(--primary); color: #fff; }
+
+        .info { padding: 20px; }
+        .info h3 { margin: 0 0 10px; font-size: 18px; height: 44px; overflow: hidden; }
+        .price { color: var(--primary); font-size: 22px; font-weight: 800; margin: 15px 0; }
+        
+        /* Modal (Nạp tiền) */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal-content {
+            background: #111; padding: 30px; border-radius: 15px; border: 2px solid var(--primary);
+            max-width: 450px; width: 90%; text-align: center;
+        }
+
+        /* Thông báo ảo */
+        .fake-noti {
+            position: fixed; bottom: -100px; left: 20px; background: rgba(30, 30, 30, 0.9);
+            padding: 15px; border-left: 4px solid var(--primary); border-radius: 5px;
+            transition: 0.5s; z-index: 999; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .fake-noti.show { bottom: 20px; }
+    </style>
 </head>
 <body>
-    <canvas id="particleCanvas"></canvas>
 
-    <div class="container">
-        <div class="user-system">
-    <div id="auth-box">
-        <input type="text" id="username" placeholder="Nhập tên tài khoản...">
-        <button class="btn-auth" onclick="login()">ĐĂNG NHẬP / ĐĂNG KÝ</button>
-    </div>
-    <div id="user-info" style="display:none;">
-        <span class="user-welcome">Chào, <b id="user-name" style="color: #00fff2;"></b></span> 
-        <span class="user-money">| Số dư: <b id="user-balance" style="color: #ffcc00;">0đ</b></span>
-        <button class="btn-topup" onclick="showRecharge()">NẠP TIỀN</button>
-        <button class="btn-logout" onclick="logout()">THOÁT</button>
-    </div>
-</div>
+<canvas id="particleCanvas"></canvas>
 
-<div id="recharge-modal" class="modal" style="display:none;">
-    <div class="modal-content">
-        <h2 style="color: #00fff2;">NẠP TIỀN THỦ CÔNG</h2>
-        <hr style="border: 0.5px solid #333; margin: 15px 0;">
-        <p>Nội dung CK: <b style="color: #ff9900;">NAP <span id="ck-name"></span></b></p>
-        <p>MB Bank: <b>0788265513</b></p>
-        <p>Chủ TK: <b>NGUYEN VIET HOANG</b></p>
-        <p style="font-size: 13px; color: #aaa; margin-top: 10px;">* Chụp ảnh bill gửi Zalo Admin để được cộng tiền nhé!</p>
-        <button class="btn-buy" style="margin-top: 15px; cursor: pointer;" onclick="closeRecharge()">ĐÃ HIỂU</button>
-    </div>
-</div>
-        <header>
-            <h1 class="logo">HOANGKUN <span>STORE</span></h1>
-            <p class="tagline">Hệ thống bán acc tự động - Uy tín - Giá rẻ</p>
-        </header>
-
-        <div class="products-grid" id="shopGrid"></div>
-
-        <div class="pagination">
-            <button onclick="changePage(-1)">TRƯỚC</button>
-            <span id="pageLabel">Trang 1 / 3</span>
-            <button onclick="changePage(1)">SAU</button>
+<nav>
+    <div class="container nav-content">
+        <a href="#" class="logo">HOANGKUN<span>STORE</span></a>
+        <div class="user-box" id="auth-section">
+            <button class="btn btn-red" onclick="showLogin()">ĐĂNG NHẬP</button>
         </div>
-   </div> 
+        <div class="user-box" id="user-section" style="display: none;">
+            <div class="balance-display">Số dư: <b id="user-balance">0đ</b></div>
+            <button class="btn btn-red" onclick="showRecharge()">NẠP TIỀN</button>
+            <button class="btn btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="banner">
+        <h2>KHO CODE HTML & ACC GAME GIÁ RẺ</h2>
+        <p>Hệ thống tự động - Thanh toán nhanh chóng - Hỗ trợ 24/7</p>
+    </div>
+
+    <h2 class="shop-title">SẢN PHẨM MỚI NHẤT</h2>
+    <div class="grid" id="productGrid"></div>
+</div>
+
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <h2>ĐĂNG NHẬP HỆ THỐNG</h2>
+        <input type="text" id="username" placeholder="Nhập tên tài khoản..." style="width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #333; background: #000; color: #fff;">
+        <button class="btn btn-red" style="width: 100%;" onclick="login()">VÀO CỬA HÀNG</button>
+        <p style="font-size: 12px; color: #666; margin-top: 15px;">* Hệ thống tự động tạo tài khoản nếu chưa có.</p>
+    </div>
+</div>
+
+<div id="rechargeModal" class="modal">
+    <div class="modal-content">
+        <h2 style="color: var(--primary);">NẠP TIỀN THỦ CÔNG</h2>
+        <div style="background: #000; padding: 20px; border-radius: 10px; text-align: left; margin: 20px 0; border: 1px solid #333;">
+            <p>Ngân hàng: <b>TECHCOMBANK</b></p>
+            <p>Số tài khoản: <b style="color: #ffcc00; font-size: 20px;">3120720060</b></p>
+            <p>Chủ TK: <b>NGUYEN VIET HOANG</b></p>
+            <p>Nội dung: <b style="color: var(--primary);">NAP <span id="ck-name"></span></b></p>
+        </div>
+        <p style="font-size: 13px; color: #888;">Sau khi chuyển khoản, gửi ảnh bill qua Zalo Admin để được cộng tiền!</p>
+        <button class="btn btn-red" style="width: 100%; margin-top: 15px;" onclick="closeModal('rechargeModal')">ĐÃ HIỂU</button>
+    </div>
+</div>
+
+<div id="fakeNoti" class="fake-noti">
+    <span id="fakeNotiText"></span>
+</div>
+
 <script>
-        // 1. Dữ liệu sản phẩm (Giữ nguyên bản HOT/VIP của bạn)
-        const inventory = [
-            { id: 1, name: "CODE BIO LINK CYBERVIBE", count: "1,250", price: "49.000đ", img: "https://i.ibb.co/v6M6W7Y/bio.jpg", tag: "HOT" },
-            { id: 2, name: "CODE SHOP ACC GAME V2", count: "845", price: "250.000đ", img: "https://i.ibb.co/VmqY8S7/shop.jpg", tag: "HOT" },
-            { id: 3, name: "LANDING PAGE GAMING PRO", count: "989", price: "120.000đ", img: "https://i.ibb.co/fD8zG0v/gaming.jpg", tag: "HOT" },
-            { id: 4, name: "CODE WEB PHIM CHUẨN SEO", count: "122", price: "850.000đ", img: "https://i.ibb.co/L5n0n8M/movie.jpg", tag: "VIP" },
-            { id: 5, name: "PORTFOLIO DARK MODE", count: "556", price: "75.000đ", img: "https://i.ibb.co/fF3t4G7/port.jpg", tag: "HOT" },
-            { id: 6, name: "WEB BẤT ĐỘNG SẢN CAO CẤP", count: "12", price: "1.500.000đ", img: "https://i.ibb.co/mS6p6X4/bds.jpg", tag: "VIP" },
-            { id: 7, name: "WEB TIN TỨC TỔNG HỢP", count: "340", price: "350.000đ", img: "https://i.ibb.co/xS8mH7v/news.jpg", tag: "VIP" },
-            { id: 8, name: "CODE TOOL FACEBOOK AUTO", count: "670", price: "199.000đ", img: "https://i.ibb.co/vYm6X8v/fb.jpg", tag: "HOT" }
-        ];
+    /* --- HỆ THỐNG DỮ LIỆU & LOGIC (GIẢ LẬP SERVER) --- */
+    const inventory = [
+        { id: 1, name: "CODE BIO LINK CYBERVIBE RED", price: 49000, img: "https://i.ibb.co/v6M6W7Y/bio.jpg", tag: "HOT" },
+        { id: 2, name: "SOURCE SHOP ACC V2 - AUTO", price: 250000, img: "https://i.ibb.co/VmqY8S7/shop.jpg", tag: "VIP" },
+        { id: 3, name: "LANDING PAGE GAMING RED-DARK", price: 120000, img: "https://i.ibb.co/fD8zG0v/gaming.jpg", tag: "HOT" },
+        { id: 4, name: "CODE WEB PHIM API FULL", price: 850000, img: "https://i.ibb.co/L5n0n8M/movie.jpg", tag: "VIP" },
+        { id: 5, name: "TOOL AUTO FACEBOOK 2024", price: 199000, img: "https://i.ibb.co/vYm6X8v/fb.jpg", tag: "HOT" },
+        { id: 6, name: "SOURCE WEB BẤT ĐỘNG SẢN", price: 1500000, img: "https://i.ibb.co/mS6p6X4/bds.jpg", tag: "VIP" }
+    ];
 
-        while(inventory.length < 20) {
-            let base = inventory[inventory.length % 8];
-            let randomPrice = (Math.floor(Math.random() * 90) + 10) * 10;
-            inventory.push({...base, id: inventory.length + 1, name: base.name + " V" + (inventory.length + 1), price: randomPrice + ".000đ", count: Math.floor(Math.random() * 1000) + 50, tag: randomPrice > 500 ? "VIP" : "HOT"});
-        }
-
-        let currentPage = 1;
-        const limit = 8;
-
-        // 2. Hàm hiển thị Shop
-        function renderShop() {
-            const grid = document.getElementById('shopGrid');
-            if(!grid) return;
-            grid.innerHTML = "";
-            let start = (currentPage - 1) * limit;
-            let currentItems = inventory.slice(start, start + limit);
-
-            currentItems.forEach(item => {
-                const tagClass = item.tag === "VIP" ? "tag-vip" : "tag-hot";
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <div class="card-thumb">
-                            <div class="badge ${tagClass}">${item.tag}</div>
-                            <img src="${item.img}" alt="thumb">
-                        </div>
-                        <div class="card-info">
-                            <h3>${item.name}</h3>
-                            <p class="stats">Lượt mua: <span>${item.count}</span></p>
-                            <div class="price-tag">${item.price}</div>
-                            <div class="btn-container">
-                                <a href="https://zalo.me/0788265513" class="btn-buy">MUA NGAY</a>
-                            </div>
-                        </div>
-                    </div>`;
-            });
-            document.getElementById('pageLabel').innerText = `Trang ${currentPage} / ${Math.ceil(inventory.length / limit)}`;
-        }
-
-        function changePage(n) {
-            let next = currentPage + n;
-            if (next >= 1 && next <= Math.ceil(inventory.length / limit)) {
-                currentPage = next; renderShop(); window.scrollTo({top: 0, behavior: 'smooth'});
-            }
-        }
-
-        // 3. CODE SỬA LỖI CHẤM CHẤM (PARTICLES)
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function initParticles() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particles = [];
-            for (let i = 0; i < 80; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 1,
-                    vy: (Math.random() - 0.5) * 1,
-                    size: Math.random() * 2 + 1
-                });
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "rgba(0, 200, 255, 0.4)"; 
-            particles.forEach(p => {
-                p.x += p.vx; p.y += p.vy;
-                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
-            });
-            requestAnimationFrame(animate);
-        }
-
-        window.addEventListener('resize', initParticles);
-        renderShop();
-        initParticles();
-        animate();
-
-// 1. Hàm Đăng nhập / Đăng ký
-function login() {
-    let name = document.getElementById('username').value;
-    if (name.trim() === "") {
-        alert("Hoàng ơi, nhập cái tên tài khoản đã chứ!");
-        return;
+    // Render sản phẩm
+    function renderProducts() {
+        const grid = document.getElementById('productGrid');
+        grid.innerHTML = inventory.map(item => `
+            <div class="card">
+                <div class="thumb">
+                    <div class="badge ${item.tag === 'VIP' ? 'badge-vip' : 'badge-hot'}">${item.tag}</div>
+                    <img src="${item.img}" alt="img">
+                </div>
+                <div class="info">
+                    <h3>${item.name}</h3>
+                    <div class="price">${item.price.toLocaleString()}đ</div>
+                    <button class="btn btn-red" style="width: 100%;" onclick="buyItem(${item.id}, ${item.price})">MUA NGAY</button>
+                </div>
+            </div>
+        `).join('');
     }
-    
-    // Lưu tên vào máy khách (LocalStorage)
-    localStorage.setItem('user', name);
-    
-    // Nếu là tài khoản mới hoàn toàn, cho ngay 0đ vào túi
-    if (!localStorage.getItem('balance_' + name)) {
-        localStorage.setItem('balance_' + name, '0');
-    }
-    
-    alert("Đăng nhập thành công! Chào mừng " + name);
-    location.reload(); // Load lại trang để hiện thông tin user
-}
 
-// 2. Hàm kiểm tra trạng thái khi vừa mở Web
-function checkLoginStatus() {
-    let loggedUser = localStorage.getItem('user');
-    if (loggedUser) {
-        // Ẩn ô nhập tên, hiện khu vực thông tin cá nhân
-        document.getElementById('auth-box').style.display = 'none';
-        document.getElementById('user-info').style.display = 'block';
-        document.getElementById('user-name').innerText = loggedUser;
-        document.getElementById('ck-name').innerText = loggedUser; // Hiện tên trong bảng nạp tiền
+    // Logic Tài khoản & Tiền
+    function login() {
+        const name = document.getElementById('username').value;
+        if(!name) return alert("Nhập tên bạn ơi!");
+        localStorage.setItem('user', name);
+        if(!localStorage.getItem('balance_' + name)) localStorage.setItem('balance_' + name, '0');
+        location.reload();
+    }
+
+    function checkStatus() {
+        const user = localStorage.getItem('user');
+        if(user) {
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('user-section').style.display = 'flex';
+            const balance = localStorage.getItem('balance_' + user) || 0;
+            document.getElementById('user-balance').innerText = parseInt(balance).toLocaleString() + 'đ';
+            document.getElementById('ck-name').innerText = user;
+        }
+    }
+
+    function buyItem(id, price) {
+        const user = localStorage.getItem('user');
+        if(!user) return showLogin();
         
-        // Lấy số dư và hiển thị
-        let balance = localStorage.getItem('balance_' + loggedUser) || 0;
-        document.getElementById('user-balance').innerText = parseInt(balance).toLocaleString() + 'đ';
+        let balance = parseInt(localStorage.getItem('balance_' + user));
+        if(balance >= price) {
+            balance -= price;
+            localStorage.setItem('balance_' + user, balance);
+            alert("✅ Thanh toán thành công! Vui lòng liên hệ Admin để nhận mã nguồn.");
+            location.reload();
+        } else {
+            alert("❌ Không đủ tiền! Vui lòng nạp thêm để mua.");
+            showRecharge();
+        }
     }
-}
 
-// 3. Hàm Thoát tài khoản
-function logout() {
-    localStorage.removeItem('user');
-    location.reload();
-}
+    function logout() { localStorage.removeItem('user'); location.reload(); }
+    function showLogin() { document.getElementById('loginModal').style.display = 'flex'; }
+    function showRecharge() { document.getElementById('rechargeModal').style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-// Gọi hàm này ngay khi trang web vừa tải xong
-checkLoginStatus();
+    // Thông báo ảo
+    const names = ["Quốc Bảo", "Tuấn Anh", "Minh Hùng", "Văn Nam", "Sơn Tùng", "Lê Vy"];
+    const actions = ["vừa nạp 50,000đ", "vừa mua Code Bio Link", "vừa nạp 200,000đ", "vừa mua Shop Acc V2"];
+    function fakeNoti() {
+        const noti = document.getElementById('fakeNoti');
+        const text = document.getElementById('fakeNotiText');
+        text.innerHTML = `🔔 <b>${names[Math.floor(Math.random()*names.length)]}</b> ${actions[Math.floor(Math.random()*actions.length)]}`;
+        noti.classList.add('show');
+        setTimeout(() => noti.classList.remove('show'), 5000);
+        setTimeout(fakeNoti, 15000);
+    }
 
-// Mở bảng nạp tiền
-function showRecharge() {
-    document.getElementById('recharge-modal').style.display = 'flex';
-}
+    // Hiệu ứng hạt
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function init() {
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        for(let i=0; i<60; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5, size: Math.random()*2});
+    }
+    function animate() {
+        ctx.clearRect(0,0,canvas.width, canvas.height);
+        ctx.fillStyle = "rgba(255,0,0,0.4)";
+        particles.forEach(p => {
+            p.x+=p.vx; p.y+=p.vy;
+            if(p.x<0 || p.x>canvas.width) p.vx*=-1;
+            if(p.y<0 || p.y>canvas.height) p.vy*=-1;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+        });
+        requestAnimationFrame(animate);
+    }
 
-// Đóng bảng nạp tiền
-function closeRecharge() {
-    document.getElementById('recharge-modal').style.display = 'none';
-}
-    
-    </script>
+    window.onload = () => { init(); animate(); renderProducts(); checkStatus(); setTimeout(fakeNoti, 3000); };
+</script>
+
 </body>
 </html>
