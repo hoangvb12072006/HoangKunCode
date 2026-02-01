@@ -187,25 +187,23 @@
     <span id="fakeNotiText"></span>
 </div>
 
-<script>
+   <script>
+    // 1. Cấu hình Firebase của HoangKun Shop
+    const firebaseConfig = {
+        apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g",
+        authDomain: "hoangkun-594d0.firebaseapp.com",
+        databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com",
+        projectId: "hoangkun-594d0",
+        storageBucket: "hoangkun-594d0.firebasestorage.app",
+        messagingSenderId: "919734784771",
+        appId: "1:919734784771:web:79eeac97bec6d23bad4f36",
+        measurementId: "G-9V75TQRR0D"
+    };
 
-    // Cấu hình Firebase của HoangKun Shop
-const firebaseConfig = {
-  apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g",
-  authDomain: "hoangkun-594d0.firebaseapp.com",
-  databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com",
-  projectId: "hoangkun-594d0",
-  storageBucket: "hoangkun-594d0.firebasestorage.app",
-  messagingSenderId: "919734784771",
-  appId: "1:919734784771:web:79eeac97bec6d23bad4f36",
-  measurementId: "G-9V75TQRR0D"
-};
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-// Khởi tạo Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-    
-    /* --- HỆ THỐNG DỮ LIỆU & LOGIC (GIẢ LẬP SERVER) --- */
+    // 2. Danh sách sản phẩm
     const inventory = [
         { id: 1, name: "CODE BIO LINK CYBERVIBE RED", price: 49000, img: "https://i.ibb.co/v6M6W7Y/bio.jpg", tag: "HOT" },
         { id: 2, name: "SOURCE SHOP ACC V2 - AUTO", price: 250000, img: "https://i.ibb.co/VmqY8S7/shop.jpg", tag: "VIP" },
@@ -215,7 +213,6 @@ const db = firebase.database();
         { id: 6, name: "SOURCE WEB BẤT ĐỘNG SẢN", price: 1500000, img: "https://i.ibb.co/mS6p6X4/bds.jpg", tag: "VIP" }
     ];
 
-    // Render sản phẩm
     function renderProducts() {
         const grid = document.getElementById('productGrid');
         grid.innerHTML = inventory.map(item => `
@@ -233,86 +230,69 @@ const db = firebase.database();
         `).join('');
     }
 
-    // Logic Tài khoản & Tiền
-   // 1. Chuyển đổi giao diện Đăng nhập / Đăng ký
-function toggleAuth(isRegister) {
-    document.getElementById('authTitle').innerText = isRegister ? "ĐĂNG KÝ" : "ĐĂNG NHẬP";
-    document.getElementById('loginFields').style.display = isRegister ? "none" : "block";
-    document.getElementById('registerFields').style.display = isRegister ? "block" : "none";
-}
+    // 3. Hệ thống Tài khoản & Tiền (Firebase Realtime)
+    function toggleAuth(isRegister) {
+        document.getElementById('authTitle').innerText = isRegister ? "ĐĂNG KÝ" : "ĐĂNG NHẬP";
+        document.getElementById('loginFields').style.display = isRegister ? "none" : "block";
+        document.getElementById('registerFields').style.display = isRegister ? "block" : "none";
+    }
 
-// 2. Xử lý Đăng ký
-function handleRegister() {
-    const user = document.getElementById('regUser').value.trim();
-    const pass = document.getElementById('regPass').value;
-    const confirm = document.getElementById('regPassConfirm').value;
+    function handleRegister() {
+        const user = document.getElementById('regUser').value.trim();
+        const pass = document.getElementById('regPass').value;
+        const confirm = document.getElementById('regPassConfirm').value;
+        if(!user || !pass) return alert("Nhập đủ thông tin Hoàng ơi!");
+        if(pass !== confirm) return alert("Mật khẩu không khớp!");
 
-    if(!user || !pass) return alert("Nhập đủ thông tin đã Hoàng ơi!");
-    if(pass !== confirm) return alert("Mật khẩu nhập lại không khớp!");
-    if(localStorage.getItem('pass_' + user)) return alert("Tên này có người dùng rồi!");
+        db.ref('users/' + user).once('value').then((snapshot) => {
+            if (snapshot.exists()) return alert("Tài khoản đã tồn tại!");
+            db.ref('users/' + user).set({ pass: pass, balance: 0 }).then(() => {
+                alert("Đăng ký thành công! Đăng nhập đi Hoàng.");
+                toggleAuth(false);
+            });
+        });
+    }
 
-    localStorage.setItem('pass_' + user, pass);
-    localStorage.setItem('balance_' + user, '0');
-    alert("Đăng ký thành công! Giờ đăng nhập nhé.");
-    toggleAuth(false);
-}
-
-// Đăng ký & Đăng nhập với Firebase
-function handleAuth(isRegister) {
-    const user = document.getElementById('username').value.trim();
-    const pass = document.getElementById('password').value.trim();
-    if (!user || !pass) return alert("Vui lòng nhập đủ!");
-
-    db.ref('users/' + user).once('value').then((snapshot) => {
-        const userData = snapshot.val();
-        if (isRegister) {
-            if (userData) return alert("Tài khoản đã tồn tại!");
-            db.ref('users/' + user).set({ password: pass, balance: 0 });
-            alert("Đăng ký thành công!");
-        } else {
-            if (!userData || userData.password !== pass) return alert("Sai tài khoản hoặc mật khẩu!");
-            localStorage.setItem('currentUser', user);
-            location.reload();
-        }
-    });
-
-// Cập nhật số dư tự động từ xa
-const currentUser = localStorage.getItem('currentUser');
-if (currentUser) {
-    db.ref('users/' + currentUser).on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            document.getElementById('user-info').style.display = 'flex';
-            document.getElementById('auth-box').style.display = 'none';
-            document.getElementById('display-name').innerText = currentUser;
-            document.getElementById('user-balance').innerText = data.balance.toLocaleString();
-        }
-    });
-}
+    function handleLogin() {
+        const user = document.getElementById('loginUser').value.trim();
+        const pass = document.getElementById('loginPass').value;
+        db.ref('users/' + user).once('value').then((snapshot) => {
+            const data = snapshot.val();
+            if (data && data.pass === pass) {
+                localStorage.setItem('user', user);
+                location.reload();
+            } else {
+                alert("Sai tài khoản hoặc mật khẩu!");
+            }
+        });
+    }
 
     function checkStatus() {
         const user = localStorage.getItem('user');
-        if(user) {
+        if (user) {
             document.getElementById('auth-section').style.display = 'none';
             document.getElementById('user-section').style.display = 'flex';
-            const balance = localStorage.getItem('balance_' + user) || 0;
-            document.getElementById('user-balance').innerText = parseInt(balance).toLocaleString() + 'đ';
             document.getElementById('ck-name').innerText = user;
+            // Lắng nghe tiền nhảy số tự động
+            db.ref('users/' + user).on('value', (snapshot) => {
+                const data = snapshot.val();
+                const balance = data ? (data.balance || 0) : 0;
+                document.getElementById('user-balance').innerText = balance.toLocaleString() + 'đ';
+                localStorage.setItem('currentBalance', balance);
+            });
         }
     }
 
     function buyItem(id, price) {
         const user = localStorage.getItem('user');
         if(!user) return showLogin();
-        
-        let balance = parseInt(localStorage.getItem('balance_' + user));
+        const balance = parseInt(localStorage.getItem('currentBalance') || 0);
         if(balance >= price) {
-            balance -= price;
-            localStorage.setItem('balance_' + user, balance);
-            alert("✅ Thanh toán thành công! Vui lòng liên hệ Admin để nhận mã nguồn.");
-            location.reload();
+            db.ref('users/' + user).update({ balance: balance - price }).then(() => {
+                alert("✅ Mua thành công! Liên hệ Hoàng Kun để nhận hàng.");
+            });
         } else {
-            alert("❌ Không đủ tiền! Vui lòng nạp thêm để mua.");
+            alert("❌ Không đủ tiền! Nạp thêm đi bạn.");
             showRecharge();
         }
     }
@@ -322,19 +302,7 @@ if (currentUser) {
     function showRecharge() { document.getElementById('rechargeModal').style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-    // Thông báo ảo
-    const names = ["Quốc Bảo", "Tuấn Anh", "Minh Hùng", "Văn Nam", "Sơn Tùng", "Lê Vy"];
-    const actions = ["vừa nạp 50,000đ", "vừa mua Code Bio Link", "vừa nạp 200,000đ", "vừa mua Shop Acc V2"];
-    function fakeNoti() {
-        const noti = document.getElementById('fakeNoti');
-        const text = document.getElementById('fakeNotiText');
-        text.innerHTML = `🔔 <b>${names[Math.floor(Math.random()*names.length)]}</b> ${actions[Math.floor(Math.random()*actions.length)]}`;
-        noti.classList.add('show');
-        setTimeout(() => noti.classList.remove('show'), 5000);
-        setTimeout(fakeNoti, 15000);
-    }
-
-    // Hiệu ứng hạt
+    // Hiệu ứng hạt & Thông báo ảo
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -354,7 +322,7 @@ if (currentUser) {
         requestAnimationFrame(animate);
     }
 
-    window.onload = () => { init(); animate(); renderProducts(); checkStatus(); setTimeout(fakeNoti, 3000); };
+    window.onload = () => { init(); animate(); renderProducts(); checkStatus(); };
 </script>
 
 </body>
