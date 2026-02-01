@@ -21,9 +21,21 @@
         nav { background: rgba(0, 0, 0, 0.85); border-bottom: 2px solid var(--primary); padding: 15px 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(15px); }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         .nav-content { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 26px; font-weight: 900; color: #fff; text-decoration: none; letter-spacing: 2px; }
-        .logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+/* Tìm đến dòng 24 và thay bằng đoạn này */
+.logo {
+    font-size: 26px;
+    font-weight: 900;
+    text-transform: uppercase;
+    animation: rgb-glow 4s infinite linear; /* Thêm dòng này để kích hoạt đổi màu */
+}
 
+/* Thêm hiệu ứng chạy màu vào bất kỳ đâu trong thẻ <style> */
+@keyframes rgb-glow {
+    0% { color: #ff0000; text-shadow: 0 0 15px #ff0000; }
+    33% { color: #00ff00; text-shadow: 0 0 15px #00ff00; }
+    66% { color: #00ffff; text-shadow: 0 0 15px #00ffff; }
+    100% { color: #ff0000; text-shadow: 0 0 15px #ff0000; }
+}
         /* Nút bấm xịn */
         .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
         .btn-red { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); }
@@ -371,5 +383,37 @@
         startFakeNoti();
     };
 </script>
+
+    <script>
+    const canvas = document.getElementById('particleCanvas');
+    if(canvas) {
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+        for(let i=0; i<100; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 1,
+                speedY: Math.random() * 1 + 0.5
+            });
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+            particles.forEach(p => {
+                p.y -= p.speedY;
+                if(p.y < 0) p.y = canvas.height;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    }
+</script>
+    
 </body>
 </html>
