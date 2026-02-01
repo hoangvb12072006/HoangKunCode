@@ -139,13 +139,34 @@
 
 <div id="loginModal" class="modal">
     <div class="modal-content">
-        <h2>ĐĂNG NHẬP HỆ THỐNG</h2>
-        <input type="text" id="username" placeholder="Nhập tên tài khoản..." style="width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #333; background: #000; color: #fff;">
-        <button class="btn btn-red" style="width: 100%;" onclick="login()">VÀO CỬA HÀNG</button>
-        <p style="font-size: 12px; color: #666; margin-top: 15px;">* Hệ thống tự động tạo tài khoản nếu chưa có.</p>
+        <h2 id="authTitle" style="color: var(--primary); margin-bottom: 20px;">ĐĂNG NHẬP</h2>
+        
+        <div id="loginFields">
+            <div class="form-group">
+                <input type="text" id="loginUser" placeholder="Tên tài khoản..." class="auth-input">
+            </div>
+            <div class="form-group">
+                <input type="password" id="loginPass" placeholder="Mật khẩu..." class="auth-input">
+            </div>
+            <button class="btn btn-red" style="width: 100%; margin-top: 15px;" onclick="handleLogin()">VÀO CỬA HÀNG</button>
+            <p class="auth-switch">Chưa có tài khoản? <a href="javascript:void(0)" onclick="toggleAuth(true)">Đăng ký ngay</a></p>
+        </div>
+
+        <div id="registerFields" style="display: none;">
+            <div class="form-group">
+                <input type="text" id="regUser" placeholder="Tạo tên tài khoản..." class="auth-input">
+            </div>
+            <div class="form-group">
+                <input type="password" id="regPass" placeholder="Tạo mật khẩu..." class="auth-input">
+            </div>
+            <div class="form-group">
+                <input type="password" id="regPassConfirm" placeholder="Nhập lại mật khẩu..." class="auth-input">
+            </div>
+            <button class="btn btn-red" style="width: 100%; margin-top: 15px;" onclick="handleRegister()">TẠO TÀI KHOẢN</button>
+            <p class="auth-switch">Đã có tài khoản? <a href="javascript:void(0)" onclick="toggleAuth(false)">Quay lại Đăng nhập</a></p>
+        </div>
     </div>
 </div>
-
 <div id="rechargeModal" class="modal">
     <div class="modal-content">
         <h2 style="color: var(--primary);">NẠP TIỀN THỦ CÔNG</h2>
@@ -194,13 +215,43 @@
     }
 
     // Logic Tài khoản & Tiền
-    function login() {
-        const name = document.getElementById('username').value;
-        if(!name) return alert("Nhập tên bạn ơi!");
-        localStorage.setItem('user', name);
-        if(!localStorage.getItem('balance_' + name)) localStorage.setItem('balance_' + name, '0');
+   // 1. Chuyển đổi giao diện Đăng nhập / Đăng ký
+function toggleAuth(isRegister) {
+    document.getElementById('authTitle').innerText = isRegister ? "ĐĂNG KÝ" : "ĐĂNG NHẬP";
+    document.getElementById('loginFields').style.display = isRegister ? "none" : "block";
+    document.getElementById('registerFields').style.display = isRegister ? "block" : "none";
+}
+
+// 2. Xử lý Đăng ký
+function handleRegister() {
+    const user = document.getElementById('regUser').value.trim();
+    const pass = document.getElementById('regPass').value;
+    const confirm = document.getElementById('regPassConfirm').value;
+
+    if(!user || !pass) return alert("Nhập đủ thông tin đã Hoàng ơi!");
+    if(pass !== confirm) return alert("Mật khẩu nhập lại không khớp!");
+    if(localStorage.getItem('pass_' + user)) return alert("Tên này có người dùng rồi!");
+
+    localStorage.setItem('pass_' + user, pass);
+    localStorage.setItem('balance_' + user, '0');
+    alert("Đăng ký thành công! Giờ đăng nhập nhé.");
+    toggleAuth(false);
+}
+
+// 3. Xử lý Đăng nhập
+function handleLogin() {
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    const storedPass = localStorage.getItem('pass_' + user);
+
+    if(storedPass && storedPass === pass) {
+        localStorage.setItem('user', user);
+        alert("Đăng nhập thành công! Chào " + user);
         location.reload();
+    } else {
+        alert("Sai tài khoản hoặc mật khẩu rồi!");
     }
+}
 
     function checkStatus() {
         const user = localStorage.getItem('user');
