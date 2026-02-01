@@ -183,24 +183,46 @@
         document.getElementById('regFields').style.display = isRegister ? "block" : "none";
         document.getElementById('switchText').innerHTML = isRegister ? "Đã có tài khoản? <b onclick='toggleAuth()'>Đăng nhập</b>" : "Chưa có tài khoản? <b onclick='toggleAuth()'>Đăng ký</b>";
     }
+// Thay thế toàn bộ đoạn handleAuth cũ bằng đoạn này:
+function handleAuth() {
+    // Lấy đúng ID từ giao diện: userInput và passInput
+    const user = document.getElementById('userInput').value.trim();
+    const pass = document.getElementById('passInput').value;
+    
+    if(!user || !pass) return alert("Vui lòng nhập đủ tài khoản và mật khẩu!");
 
-    function handleAuth() {
-        const user = document.getElementById('userInput').value.trim();
-        const pass = document.getElementById('passInput').value;
-        if(!user || !pass) return alert("Vui lòng điền đủ!");
-
-        if(isRegister) {
-            const confirm = document.getElementById('confirmInput').value;
-            if(pass !== confirm) return alert("Mật khẩu không khớp!");
-            db.ref('users/' + user).set({ pass: pass, balance: 0 }).then(() => { alert("Đăng ký xong! Hãy đăng nhập."); toggleAuth(); });
-        } else {
-            db.ref('users/' + user).once('value').then(snap => {
-                const data = snap.val();
-                if(data && data.pass === pass) { localStorage.setItem('user', user); location.reload(); }
-                else alert("Sai thông tin tài khoản!");
-            });
-        }
+    if(isRegister) {
+        // Chế độ Đăng ký
+        const confirm = document.getElementById('confirmInput').value;
+        if(pass !== confirm) return alert("Mật khẩu nhập lại không khớp!");
+        
+        db.ref('users/' + user).once('value').then(snap => {
+            if(snap.exists()) {
+                alert("Tài khoản này đã có người dùng rồi!");
+            } else {
+                db.ref('users/' + user).set({
+                    pass: pass,
+                    balance: 0
+                }).then(() => {
+                    alert("Đăng ký thành công! Giờ hãy Đăng nhập nhé.");
+                    toggleAuth(); // Chuyển sang màn đăng nhập
+                });
+            }
+        });
+    } else {
+        // Chế độ Đăng nhập
+        db.ref('users/' + user).once('value').then(snap => {
+            const data = snap.val();
+            if(data && data.pass === pass) {
+                localStorage.setItem('user', user);
+                alert("Đăng nhập thành công! Chào " + user);
+                location.reload();
+            } else {
+                alert("Sai tài khoản hoặc mật khẩu rồi Hoàng ơi!");
+            }
+        });
     }
+}
 
     function checkUser() {
         const user = localStorage.getItem('user');
