@@ -297,3 +297,61 @@ nav {
     .banner h2 { font-size: 32px; }
     .nav-content { flex-direction: column; gap: 15px; }
 }
+
+/* --- CSS BỔ SUNG CHO FORM ĐĂNG NHẬP/ĐĂNG KÝ --- */
+
+/* Căn chỉnh các nhóm nhập liệu */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* Style cho các ô nhập Tên và Mật khẩu */
+.auth-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    background: #000; /* Nền đen cho giống ảnh mẫu */
+    color: #fff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* Giữ ô nhập không bị tràn viền */
+}
+
+/* Hiệu ứng khi nhấn chuột vào ô nhập */
+.auth-input:focus {
+    border-color: var(--primary); /* Đổi sang viền đỏ */
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Phát sáng đỏ */
+    outline: none;
+}
+
+/* Style cho dòng chữ chuyển đổi Đăng nhập/Đăng ký */
+.auth-switch {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #888;
+}
+
+.auth-switch a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.auth-switch a:hover {
+    text-shadow: 0 0 8px var(--primary);
+    text-decoration: underline;
+}
+
+/* Làm cho Modal hiện ra mượt mà hơn */
+.modal-content {
+    animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
