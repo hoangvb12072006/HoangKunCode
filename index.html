@@ -26,33 +26,35 @@
    </div> 
 
 <script>
-        // 1. Danh sách 20 loại Code Web với giá khác nhau
+        // 1. Danh sách sản phẩm với tiêu chí HOT và VIP
         const inventory = [
-            { id: 1, name: "CODE BIO LINK CYBERVIBE", count: "128", price: "49.000đ", img: "https://i.ibb.co/v6M6W7Y/bio.jpg" },
-            { id: 2, name: "CODE SHOP ACC GAME V2", count: "45", price: "250.000đ", img: "https://i.ibb.co/VmqY8S7/shop.jpg" },
-            { id: 3, name: "LANDING PAGE GAMING PRO", count: "89", price: "120.000đ", img: "https://i.ibb.co/fD8zG0v/gaming.jpg" },
-            { id: 4, name: "CODE WEB PHIM CHUẨN SEO", count: "22", price: "450.000đ", img: "https://i.ibb.co/L5n0n8M/movie.jpg" },
-            { id: 5, name: "PORTFOLIO DARK MODE", count: "56", price: "75.000đ", img: "https://i.ibb.co/fF3t4G7/port.jpg" },
-            { id: 6, name: "WEB BẤT ĐỘNG SẢN VIP", count: "12", price: "999.000đ", img: "https://i.ibb.co/mS6p6X4/bds.jpg" },
-            { id: 7, name: "WEB TIN TỨC TỔNG HỢP", count: "34", price: "350.000đ", img: "https://i.ibb.co/xS8mH7v/news.jpg" },
-            { id: 8, name: "CODE TOOL FACEBOOK AUTO", count: "67", price: "199.000đ", img: "https://i.ibb.co/vYm6X8v/fb.jpg" }
+            { id: 1, name: "CODE BIO LINK CYBERVIBE", count: "1,250", price: "49.000đ", img: "https://i.ibb.co/v6M6W7Y/bio.jpg", tag: "HOT" },
+            { id: 2, name: "CODE SHOP ACC GAME V2", count: "845", price: "250.000đ", img: "https://i.ibb.co/VmqY8S7/shop.jpg", tag: "HOT" },
+            { id: 3, name: "LANDING PAGE GAMING PRO", count: "989", price: "120.000đ", img: "https://i.ibb.co/fD8zG0v/gaming.jpg", tag: "HOT" },
+            { id: 4, name: "CODE WEB PHIM CHUẨN SEO", count: "122", price: "850.000đ", img: "https://i.ibb.co/L5n0n8M/movie.jpg", tag: "VIP" },
+            { id: 5, name: "PORTFOLIO DARK MODE", count: "556", price: "75.000đ", img: "https://i.ibb.co/fF3t4G7/port.jpg", tag: "HOT" },
+            { id: 6, name: "WEB BẤT ĐỘNG SẢN CAO CẤP", count: "12", price: "1.500.000đ", img: "https://i.ibb.co/mS6p6X4/bds.jpg", tag: "VIP" },
+            { id: 7, name: "WEB TIN TỨC TỔNG HỢP", count: "340", price: "350.000đ", img: "https://i.ibb.co/xS8mH7v/news.jpg", tag: "VIP" },
+            { id: 8, name: "CODE TOOL FACEBOOK AUTO", count: "670", price: "199.000đ", img: "https://i.ibb.co/vYm6X8v/fb.jpg", tag: "HOT" }
         ];
 
-        // Tự tạo thêm cho đủ 20 món với giá ngẫu nhiên
+        // Tự tạo thêm cho đủ 20 món (Món đắt tiền sẽ tự động là VIP)
         while(inventory.length < 20) {
             let base = inventory[inventory.length % 8];
+            let randomPrice = (Math.floor(Math.random() * 90) + 10) * 10; // Từ 100k đến 1 triệu
             inventory.push({
                 ...base,
                 id: inventory.length + 1,
-                name: base.name + " V" + (inventory.length + 1),
-                price: (Math.floor(Math.random() * 20) + 5) * 10 + ".000đ"
+                name: base.name + " PRO V" + (inventory.length + 1),
+                price: randomPrice + ".000đ",
+                count: Math.floor(Math.random() * 1000) + 50,
+                tag: randomPrice > 500 ? "VIP" : "HOT" // Trên 500k là VIP, dưới là HOT
             });
         }
 
         let currentPage = 1;
         const limit = 8;
 
-        // 2. Hàm hiển thị (Render)
         function renderShop() {
             const grid = document.getElementById('shopGrid');
             if(!grid) return;
@@ -61,10 +63,13 @@
             let currentItems = inventory.slice(start, start + limit);
 
             currentItems.forEach(item => {
+                // Đổi màu Tag dựa trên loại HOT hay VIP
+                const tagClass = item.tag === "VIP" ? "tag-vip" : "tag-hot";
+                
                 grid.innerHTML += `
                     <div class="product-card">
                         <div class="card-thumb">
-                            <div class="discount-tag">GIẢM 20%</div>
+                            <div class="badge ${tagClass}">${item.tag}</div>
                             <img src="${item.img}" alt="thumb">
                         </div>
                         <div class="card-info">
@@ -88,13 +93,13 @@
             }
         }
 
-        // 3. Hiệu ứng hạt bay
+        // Hiệu ứng hạt bay
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
         let particles = [];
-        for(let i=0; i<100; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5, s: Math.random()*2});
+        for(let i=0; i<80; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5, s: Math.random()*2});
         function animate() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.fillStyle = 'rgba(0, 255, 242, 0.3)';
