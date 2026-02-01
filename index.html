@@ -296,59 +296,51 @@
         }
     }
 
-    // --- 4. QUẢN LÝ TRẠNG THÁI NGƯỜI DÙNG ---
-    function checkLogin() {
-        const user = localStorage.getItem('hoangUser');
-        if(user) {
-            document.getElementById('auth-section').style.display = 'none';
-            document.getElementById('user-section').style.display = 'flex';
-            document.getElementById('history-section').style.display = 'block';
-            document.getElementById('display-name').innerText = user;
-            document.getElementById('ck-name').innerText = user.toUpperCase();
-            
-            // Lắng nghe số dư thực tế từ Firebase
-            db.ref('users/' + user).on('value', snap => {
-                const data = snap.val();
-                if(data) {
-                    const balance = data.balance || 0;
-                    document.getElementById('user-balance').innerText = balance.toLocaleString() + 'đ';
-                    localStorage.setItem('hoangBal', balance);
-                }
+ function checkLogin() {
+    const user = localStorage.getItem('hoangUser');
+    if(!user) return;
+
+    document.getElementById('auth-section').style.display = 'none';
+    document.getElementById('user-section').style.display = 'flex';
+    document.getElementById('history-section').style.display = 'block';
+    document.getElementById('display-name').innerText = user;
+    document.getElementById('ck-name').innerText = user.toUpperCase();
+
+    // 🔄 Lắng nghe số dư
+    db.ref('users/' + user).on('value', snap => {
+        const data = snap.val();
+        if(!data) return;
+
+        const balance = data.balance || 0;
+        document.getElementById('user-balance').innerText = balance.toLocaleString() + 'đ';
+        localStorage.setItem('hoangBal', balance);
+    });
+
+    // 🔔 Thông báo nạp tiền (5s + nút đóng)
+    db.ref('users/' + user + '/notify').on('value', snap => {
+        const noti = snap.val();
+        if(noti && noti.amount) {
+            Swal.fire({
+                icon: 'success',
+                title: 'NẠP TIỀN THÀNH CÔNG',
+                html: `Bạn đã được nạp <b style="color:#00ff00">+${noti.amount.toLocaleString()}đ</b>`,
+                confirmButtonText: 'Đóng',
+                confirmButtonColor: '#ff0000',
+                timer: 5000,
+                timerProgressBar: true,
+                allowOutsideClick: false
             });
 
+            // ❌ Xóa để không hiện lại
+            db.ref('users/' + user + '/notify').remove();
+        }
+    });
+     
             // Tải lịch sử mua hàng
             loadHistory(user);
         }
     }
 
-    db.ref('users/' + user).on('value', snap => {
-    const data = snap.val();
-    if(data) {
-        const balance = data.balance || 0;
-        document.getElementById('user-balance').innerText = balance.toLocaleString() + 'đ';
-        localStorage.setItem('hoangBal', balance);
-    }
-});
-
-    // 🔔 Thông báo nạp tiền (hiện 5s + có nút đóng)
-db.ref('users/' + user + '/notify').on('value', snap => {
-    const noti = snap.val();
-    if(noti && noti.amount) {
-        Swal.fire({
-            icon: 'success',
-            title: 'NẠP TIỀN THÀNH CÔNG',
-            html: `Bạn đã được nạp <b style="color:#00ff00">+${noti.amount.toLocaleString()}đ</b>`,
-            confirmButtonText: 'Đóng',
-            confirmButtonColor: '#ff0000',
-            timer: 5000,
-            timerProgressBar: true,
-            allowOutsideClick: false
-        });
-
-        // Xóa notify để không hiện lại
-        db.ref('users/' + user + '/notify').remove();
-    }
-});
     
     function buyItem(name, price) {
         const user = localStorage.getItem('hoangUser');
