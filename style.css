@@ -1,138 +1,36 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #f4f7f6; color: #333; font-family: 'Arial', sans-serif; }
+/* FILE: style.css 
+   AUTHOR: Gemini for HOANGKUN STORE
+   STYLE: RED-DARK GAMING ULTIMATE 
+*/
 
-#particleCanvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
-
-.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-
-header { text-align: center; margin-bottom: 30px; }
-.logo { font-size: 2.5rem; font-weight: 900; color: #333; }
-.logo span { color: #00fff2; text-shadow: 1px 1px 2px #aaa; }
-.tagline { color: #777; font-size: 0.9rem; }
-
-/* Lưới 4 cột chuẩn mẫu */
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 15px;
+/* 1. Reset & Base Style */
+:root {
+    --primary: #ff0000;      /* Đỏ rực */
+    --primary-hover: #cc0000;
+    --bg-dark: #050505;      /* Đen sâu */
+    --card-bg: rgba(20, 20, 20, 0.85);
+    --text-main: #ffffff;
+    --text-dim: #bbbbbb;
+    --glow: 0 0 15px rgba(255, 0, 0, 0.5);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Ô sản phẩm trắng tinh khôi */
-.product-card {
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-}
-.product-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-
-.card-thumb {
-    width: 100%;
-    position: relative;
-    padding-top: 56.25%; /* Tỉ lệ 16:9 */
-    overflow: hidden;
-    border-bottom: 1px solid #eee;
-}
-.card-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-
-.discount-tag {
-    position: absolute; top: 5px; right: 5px;
-    background: #ff4d4d; color: #fff; padding: 2px 6px;
-    font-size: 10px; font-weight: bold; border-radius: 2px; z-index: 10;
+* {
+    box-sizing: border-box;
+    outline: none;
 }
 
-.card-info { padding: 15px; text-align: center; flex-grow: 1; }
-.card-info h3 { font-size: 0.9rem; color: #555; margin-bottom: 8px; font-weight: bold; text-transform: uppercase; }
-.stats { font-size: 0.8rem; color: #888; margin-bottom: 15px; }
-.stats span { color: #333; font-weight: bold; }
-
-/* Nút MUA NGAY màu vàng viền đỏ cực giống mẫu */
-.btn-container { border-top: 1px solid #eee; padding-top: 15px; }
-.btn-buy {
-    display: inline-block;
-    background: #ffcc00; /* Màu vàng nick.vn */
-    color: #cc0000; /* Chữ đỏ */
-    padding: 8px 30px;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: 800;
-    font-size: 1.1rem;
-    border: 2px solid #cc0000;
-    transition: 0.2s;
-}
-.btn-buy:hover { background: #cc0000; color: #fff; }
-
-/* Pagination */
-.pagination { margin-top: 30px; text-align: center; }
-.pagination button { padding: 8px 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; border-radius: 4px; font-weight: bold; }
-.pagination span { margin: 0 15px; font-weight: bold; color: #555; }
-
-/* Giá tiền đỏ đậm, to rõ */
-.price-tag {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: #e60000;
-    margin: 10px 0;
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
-/* Nút MUA NGAY màu cam rực rỡ */
-.btn-buy {
-    display: inline-block;
-    background: linear-gradient(180deg, #ff9900 0%, #ff5500 100%);
-    color: #fff !important;
-    padding: 10px 25px;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 50px;
-    border: 2px solid #fff;
-    box-shadow: 0 4px 10px rgba(255, 85, 0, 0.4);
-    transition: 0.3s;
-    text-transform: uppercase;
-}
-
-.btn-buy:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px #ff5500;
-}\
-
-/* Badge chung */
-.badge {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    padding: 3px 10px;
-    font-size: 11px;
-    font-weight: bold;
-    color: #fff;
-    border-radius: 3px;
-    text-transform: uppercase;
-    z-index: 10;
-}
-
-/* Màu cho tag HOT (Cam cháy) */
-.tag-hot {
-    background: linear-gradient(to right, #f83600 0%, #f9d423 100%);
-    box-shadow: 0 0 10px rgba(248, 54, 0, 0.5);
-}
-
-/* Màu cho tag VIP (Đỏ tím quý tộc) */
-.tag-vip {
-    background: linear-gradient(to right, #800080 0%, #ff0000 100%);
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
-    border: 1px solid #fff;
-}
-
-/* Chỉnh lại tiêu đề sản phẩm cho gọn */
-.card-info h3 {
-    font-size: 0.95rem;
-    height: 40px;
-    overflow: hidden;
-    margin-bottom: 10px;
-    color: #333;
-}
-
+/* 2. Hiệu ứng nền Particles */
 #particleCanvas {
     position: fixed;
     top: 0;
@@ -140,28 +38,262 @@ header { text-align: center; margin-bottom: 30px; }
     width: 100%;
     height: 100%;
     z-index: -1;
-    pointer-events: none;
-    background: #000000; /* Đổi thành màu đen tuyền */
+    background: radial-gradient(circle at center, #1a0000 0%, #050505 100%);
 }
 
-/* Thêm đoạn này để chữ trên web không bị chìm vào nền đen */
-body {
-    color: #ffffff; /* Đổi toàn bộ chữ sang màu trắng cho dễ đọc */
+/* 3. Khung container chính */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.product-card {
-    background: #1a1a1a; /* Nền của ô sản phẩm thành màu xám đen cho sang */
-    border: 1px solid #333; /* Viền tối màu */
-}
-
-.card-info h3 {
-    color: #ffffff !important; /* Tên sản phẩm màu trắng */
-}
-
-#particleCanvas {
-    position: fixed;
+/* 4. Thanh Navigation (Xịn như shop lớn) */
+nav {
+    background: rgba(0, 0, 0, 0.9);
+    border-bottom: 2px solid var(--primary);
+    padding: 12px 0;
+    position: sticky;
     top: 0;
-    left: 0;
-    z-index: -1;
-    pointer-events: none;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: 900;
+    text-decoration: none;
+    color: var(--text-main);
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: var(--primary);
+    text-shadow: var(--glow);
+}
+
+/* 5. Hệ thống User & Số dư */
+.user-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.balance-display {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 18px;
+    border-radius: 50px;
+    border: 1px solid var(--primary);
+    font-size: 14px;
+    box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.1);
+}
+
+.balance-display b {
+    color: #ffcc00;
+    font-size: 16px;
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.3);
+}
+
+/* 6. Nút bấm (Buttons) cực nghệ */
+.btn {
+    padding: 10px 22px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-red {
+    background: linear-gradient(135deg, #ff0000 0%, #990000 100%);
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+}
+
+.btn-red:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px var(--primary);
+    background: linear-gradient(135deg, #ff4d4d 0%, #ff0000 100%);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: white;
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    box-shadow: var(--glow);
+}
+
+/* 7. Banner & Header */
+.banner {
+    text-align: center;
+    padding: 100px 20px;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                url('https://i.ibb.co/6y4XvVz/bg-gaming.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    border: 1px solid #222;
+    margin: 20px 0 50px;
+}
+
+.banner h2 {
+    font-size: 48px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px #000;
+}
+
+/* 8. Danh sách sản phẩm (Grid) */
+.shop-title {
+    font-size: 24px;
+    text-transform: uppercase;
+    border-left: 5px solid var(--primary);
+    padding-left: 15px;
+    margin-bottom: 30px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #222;
+    transition: var(--transition);
+}
+
+.card:hover {
+    border-color: var(--primary);
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.15);
+}
+
+.thumb {
+    height: 190px;
+    position: relative;
+    overflow: hidden;
+}
+
+.thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card:hover .thumb img {
+    transform: scale(1.1);
+}
+
+.badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.badge-hot { background: #ffcc00; color: #000; }
+.badge-vip { background: var(--primary); color: #fff; box-shadow: 0 0 10px var(--primary); }
+
+.info {
+    padding: 20px;
+    text-align: center;
+}
+
+.info h3 {
+    margin: 0 0 10px;
+    font-size: 17px;
+    color: #fff;
+    height: 48px;
+    overflow: hidden;
+}
+
+.price {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--primary);
+    margin: 15px 0;
+}
+
+/* 9. Modal (Nạp tiền & Đăng nhập) */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #111;
+    padding: 40px;
+    border-radius: 15px;
+    border: 1px solid var(--primary);
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 0 50px rgba(255, 0, 0, 0.2);
+    position: relative;
+}
+
+/* 10. Thông báo ảo (Fake Notification) */
+.fake-noti {
+    position: fixed;
+    bottom: -100px;
+    left: 20px;
+    background: rgba(15, 15, 15, 0.95);
+    border-left: 4px solid var(--primary);
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    z-index: 9999;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fake-noti.show {
+    bottom: 25px;
+}
+
+.fake-noti b {
+    color: var(--primary);
+}
+
+/* 11. Pagination */
+.pagination {
+    margin: 50px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+/* 12. Responsive */
+@media (max-width: 768px) {
+    .banner h2 { font-size: 32px; }
+    .nav-content { flex-direction: column; gap: 15px; }
 }
