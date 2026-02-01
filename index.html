@@ -24,7 +24,7 @@
         .btn-red { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
         .btn-red:hover { background: #ff3333; transform: scale(1.05); box-shadow: 0 0 25px var(--primary); }
         
-        /* Modern Modal (Đăng nhập/Đăng ký xịn) */
+        /* Modern Modal */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(8px); }
         .modal-content { 
             background: rgba(20, 20, 20, 0.95); 
@@ -87,7 +87,7 @@
         <div id="user-section" style="display: none; align-items: center; gap: 20px;">
             <div class="balance-display">Số dư: <b id="user-balance">0đ</b></div>
             <button class="btn btn-red" onclick="showRecharge()">NẠP TIỀN</button>
-            <i class="fas fa-sign-out-alt" style="cursor:pointer; color: #ff4d4d;" onclick="logout()"></i>
+            <i class="fas fa-sign-out-alt" style="cursor:pointer; color: #ff4d4d; margin-left: 10px;" onclick="logout()"></i>
         </div>
     </div>
 </nav>
@@ -135,7 +135,7 @@
             <p>Chủ TK: <b>NGUYEN VIET HOANG</b></p>
             <p>Nội dung: <b style="color: var(--primary);">NAP <span id="ck-name"></span></b></p>
         </div>
-        <button class="btn btn-red" style="width: 100%; margin-top: 20px;" onclick="closeModal('rechargeModal')">ĐÃ CHUYỂN KHOẢN</button>
+        <button class="btn btn-red" style="width: 100%; margin-top: 20px;" onclick="closeModal('rechargeModal')">ĐÃ HIỂU</button>
     </div>
 </div>
 
@@ -145,20 +145,20 @@
 </div>
 
 <script>
-    // --- FIREBASE CONFIG ---
+    // --- CẤU HÌNH FIREBASE ---
     const firebaseConfig = {
         apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g",
         databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com",
     };
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // --- DATA ---
+    // --- DANH SÁCH SẢN PHẨM ---
     const items = [
         { name: "BIO LINK CYBER RED", price: 49000, img: "https://i.ibb.co/v6M6W7Y/bio.jpg" },
-        { name: "SHOP ACC V2 AUTO", price: 250000, img: "https://i.ibb.co/VmqY8S7/shop.jpg" },
-        { name: "GAMING LANDING PAGE", price: 120000, img: "https://i.ibb.co/fD8zG0v/gaming.jpg" },
-        { name: "TOOL FB PREMIUM", price: 199000, img: "https://i.ibb.co/vYm6X8v/fb.jpg" }
+        { name: "SOURCE SHOP ACC V2 - AUTO", price: 250000, img: "https://i.ibb.co/VmqY8S7/shop.jpg" },
+        { name: "LANDING PAGE GAMING RED-DARK", price: 120000, img: "https://i.ibb.co/fD8zG0v/gaming.jpg" },
+        { name: "CODE WEB PHIM API FULL", price: 850000, img: "https://i.ibb.co/L5n0n8M/movie.jpg" }
     ];
 
     function renderItems() {
@@ -174,98 +174,115 @@
         `).join('');
     }
 
-    // --- AUTH LOGIC ---
+    // --- XỬ LÝ ĐĂNG NHẬP / ĐĂNG KÝ ---
     let isRegister = false;
-    function showAuth(reg) { isRegister = reg; updateAuthUI(); document.getElementById('authModal').style.display = 'flex'; }
-    function toggleAuth() { isRegister = !isRegister; updateAuthUI(); }
+
+    function showAuth(reg) { 
+        isRegister = reg; 
+        updateAuthUI(); 
+        document.getElementById('authModal').style.display = 'flex'; 
+    }
+
+    function toggleAuth() { 
+        isRegister = !isRegister; 
+        updateAuthUI(); 
+    }
+
     function updateAuthUI() {
-        document.getElementById('authTitle').innerText = isRegister ? "REGISTER" : "LOGIN";
-        document.getElementById('regFields').style.display = isRegister ? "block" : "none";
-        document.getElementById('switchText').innerHTML = isRegister ? "Đã có tài khoản? <b onclick='toggleAuth()'>Đăng nhập</b>" : "Chưa có tài khoản? <b onclick='toggleAuth()'>Đăng ký</b>";
-    }
-// Thay thế toàn bộ đoạn handleAuth cũ bằng đoạn này:
-function handleAuth() {
-    // Lấy đúng ID từ giao diện: userInput và passInput
-    const user = document.getElementById('userInput').value.trim();
-    const pass = document.getElementById('passInput').value;
-    
-    if(!user || !pass) return alert("Vui lòng nhập đủ tài khoản và mật khẩu!");
-
-    if(isRegister) {
-        // Chế độ Đăng ký
-        const confirm = document.getElementById('confirmInput').value;
-        if(pass !== confirm) return alert("Mật khẩu nhập lại không khớp!");
+        const title = document.getElementById('authTitle');
+        const regFields = document.getElementById('regFields');
+        const switchText = document.getElementById('switchText');
         
-        db.ref('users/' + user).once('value').then(snap => {
-            if(snap.exists()) {
-                alert("Tài khoản này đã có người dùng rồi!");
-            } else {
-                db.ref('users/' + user).set({
-                    pass: pass,
-                    balance: 0
-                }).then(() => {
-                    alert("Đăng ký thành công! Giờ hãy Đăng nhập nhé.");
-                    toggleAuth(); // Chuyển sang màn đăng nhập
-                });
-            }
-        });
-    } else {
-        // Chế độ Đăng nhập
-        db.ref('users/' + user).once('value').then(snap => {
-            const data = snap.val();
-            if(data && data.pass === pass) {
-                localStorage.setItem('user', user);
-                alert("Đăng nhập thành công! Chào " + user);
-                location.reload();
-            } else {
-                alert("Sai tài khoản hoặc mật khẩu rồi Hoàng ơi!");
-            }
-        });
+        if (isRegister) {
+            title.innerText = "REGISTER";
+            regFields.style.display = "block";
+            switchText.innerHTML = "Đã có tài khoản? <b onclick='toggleAuth()'>Đăng nhập</b>";
+        } else {
+            title.innerText = "LOGIN";
+            regFields.style.display = "none";
+            switchText.innerHTML = "Chưa có tài khoản? <b onclick='toggleAuth()'>Đăng ký</b>";
+        }
     }
-}
 
-    function checkUser() {
-        const user = localStorage.getItem('user');
+    function handleAuth() {
+        const user = document.getElementById('userInput').value.trim();
+        const pass = document.getElementById('passInput').value;
+        
+        if(!user || !pass) return alert("Vui lòng nhập đủ tài khoản và mật khẩu!");
+
+        if(isRegister) {
+            const confirm = document.getElementById('confirmInput').value;
+            if(pass !== confirm) return alert("Mật khẩu nhập lại không khớp!");
+            
+            db.ref('users/' + user).once('value').then(snap => {
+                if(snap.exists()) {
+                    alert("Tài khoản này đã tồn tại!");
+                } else {
+                    db.ref('users/' + user).set({ pass: pass, balance: 0 }).then(() => {
+                        alert("Đăng ký thành công! Hãy đăng nhập.");
+                        isRegister = false;
+                        updateAuthUI();
+                    });
+                }
+            });
+        } else {
+            db.ref('users/' + user).once('value').then(snap => {
+                const data = snap.val();
+                if(data && data.pass === pass) {
+                    localStorage.setItem('currentUser', user);
+                    alert("Chào mừng " + user + "!");
+                    location.reload();
+                } else {
+                    alert("Sai tài khoản hoặc mật khẩu!");
+                }
+            });
+        }
+    }
+
+    // --- KIỂM TRA TRẠNG THÁI NGƯỜI DÙNG ---
+    function checkStatus() {
+        const user = localStorage.getItem('currentUser');
         if(user) {
             document.getElementById('auth-section').style.display = 'none';
             document.getElementById('user-section').style.display = 'flex';
             document.getElementById('ck-name').innerText = user;
+            
             db.ref('users/' + user).on('value', snap => {
-                const bal = (snap.val() && snap.val().balance) || 0;
-                document.getElementById('user-balance').innerText = bal.toLocaleString() + 'đ';
-                localStorage.setItem('bal', bal);
+                const data = snap.val();
+                if(data) {
+                    const bal = data.balance || 0;
+                    document.getElementById('user-balance').innerText = bal.toLocaleString() + 'đ';
+                    localStorage.setItem('currentBal', bal);
+                }
             });
         }
     }
 
     function buyItem(price) {
-        const user = localStorage.getItem('user');
+        const user = localStorage.getItem('currentUser');
         if(!user) return showAuth(false);
-        const bal = parseInt(localStorage.getItem('bal') || 0);
+        const bal = parseInt(localStorage.getItem('currentBal') || 0);
         if(bal >= price) {
-            db.ref('users/' + user).update({ balance: bal - price }).then(() => alert("✅ Mua thành công! Check tin nhắn Admin."));
-        } else { alert("❌ Không đủ tiền!"); showRecharge(); }
+            db.ref('users/' + user).update({ balance: bal - price }).then(() => {
+                alert("✅ Mua thành công! Liên hệ Admin để nhận code.");
+            });
+        } else {
+            alert("❌ Số dư không đủ!");
+            showRecharge();
+        }
     }
 
-    function logout() { localStorage.removeItem('user'); location.reload(); }
+    function logout() { localStorage.removeItem('currentUser'); location.reload(); }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     function showRecharge() { document.getElementById('rechargeModal').style.display = 'flex'; }
 
-    // --- EFFECTS ---
-    const names = ["Quốc Bảo", "Văn Nam", "Minh Hùng", "Sơn Tùng", "Thúy Vy"];
-    function fakeNoti() {
-        const noti = document.getElementById('fakeNoti');
-        document.getElementById('fakeNotiText').innerHTML = `<b>${names[Math.floor(Math.random()*names.length)]}</b> vừa nạp 100,000đ thành công!`;
-        noti.classList.add('show');
-        setTimeout(() => noti.classList.remove('show'), 5000);
-        setTimeout(fakeNoti, 12000);
-    }
-
+    // --- HIỆU ỨNG NỀN ---
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     let pts = [];
     function init() {
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        pts = [];
         for(let i=0; i<60; i++) pts.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5});
     }
     function draw() {
@@ -278,7 +295,17 @@ function handleAuth() {
         requestAnimationFrame(draw);
     }
 
-    window.onload = () => { init(); draw(); renderItems(); checkUser(); fakeNoti(); };
+    function fakeNoti() {
+        const names = ["Quốc Bảo", "Văn Nam", "Minh Hùng", "Sơn Tùng", "Thúy Vy"];
+        const noti = document.getElementById('fakeNoti');
+        document.getElementById('fakeNotiText').innerHTML = `<b>${names[Math.floor(Math.random()*names.length)]}</b> vừa nạp 100,000đ thành công!`;
+        noti.classList.add('show');
+        setTimeout(() => noti.classList.remove('show'), 5000);
+        setTimeout(fakeNoti, 15000);
+    }
+
+    window.onload = () => { init(); draw(); renderItems(); checkStatus(); fakeNoti(); };
+    window.onresize = init;
 </script>
 </body>
 </html>
