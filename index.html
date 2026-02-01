@@ -3,111 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOANGKUN STORE - SHOP CODE HTML & ACC GAME UY TÍN</title>
+    <title>HOANGKUN STORE - PREMIUM GAMING SHOP</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* --- CSS GIAO DIỆN GAMING ĐỎ ĐEN (600 DÒNG CHI TIẾT) --- */
-        :root {
-            --primary: #ff0000;
-            --secondary: #1a1a1a;
-            --accent: #ff4d4d;
-            --text: #ffffff;
-            --bg: #050505;
-        }
-
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* Hiệu ứng nền Particles */
-        #particleCanvas {
-            position: fixed; top: 0; left: 0; z-index: -1;
-            background: radial-gradient(circle, #1a0000 0%, #050505 100%);
-        }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-
-        /* Header & Navigation */
-        nav {
-            background: rgba(0, 0, 0, 0.9);
-            border-bottom: 2px solid var(--primary);
-            padding: 10px 0;
-            position: sticky; top: 0; z-index: 100;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-content { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 28px; font-weight: 800; color: var(--text); text-decoration: none; }
-        .logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
-
-        /* Hệ thống Tài khoản */
-        .user-box { display: flex; align-items: center; gap: 15px; }
-        .balance-display { background: #222; padding: 5px 15px; border-radius: 20px; border: 1px solid var(--primary); }
-        .balance-display b { color: #ffcc00; }
-
-        .btn {
-            padding: 10px 20px; border-radius: 5px; border: none;
-            font-weight: bold; cursor: pointer; transition: 0.3s;
-            text-transform: uppercase; text-decoration: none; display: inline-block;
-        }
-        .btn-red { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); }
-        .btn-red:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 0 25px var(--primary); }
-        .btn-outline { background: transparent; border: 1px solid var(--primary); color: white; }
-
-        /* Banner */
-        .banner {
-            text-align: center; padding: 80px 0;
-            background: url('https://i.ibb.co/6y4XvVz/bg-gaming.jpg') no-repeat center;
-            background-size: cover; border-radius: 20px; margin: 20px 0;
-            border: 1px solid #333;
-        }
-        .banner h2 { font-size: 45px; margin: 0; text-shadow: 2px 2px 10px #000; }
-
-        /* Danh mục sản phẩm */
-        .shop-title { border-left: 5px solid var(--primary); padding-left: 15px; margin: 40px 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-
-        .card {
-            background: var(--secondary); border-radius: 10px; overflow: hidden;
-            transition: 0.4s; border: 1px solid #333; position: relative;
-        }
-        .card:hover { transform: translateY(-10px); border-color: var(--primary); }
-
-        .thumb { position: relative; height: 180px; }
-        .thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .badge {
-            position: absolute; top: 10px; right: 10px; padding: 4px 10px;
-            font-size: 12px; font-weight: bold; border-radius: 3px;
-        }
-        .badge-hot { background: #ffcc00; color: #000; }
-        .badge-vip { background: var(--primary); color: #fff; }
-
-        .info { padding: 20px; }
-        .info h3 { margin: 0 0 10px; font-size: 18px; height: 44px; overflow: hidden; }
-        .price { color: var(--primary); font-size: 22px; font-weight: 800; margin: 15px 0; }
+        :root { --primary: #ff0000; --secondary: #121212; --accent: #ff4d4d; --text: #ffffff; --bg: #050505; }
+        body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; }
+        #particleCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: radial-gradient(circle, #1a0000 0%, #050505 100%); }
         
-        /* Modal (Nạp tiền) */
-        .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000;
-        }
-        .modal-content {
-            background: #111; padding: 30px; border-radius: 15px; border: 2px solid var(--primary);
-            max-width: 450px; width: 90%; text-align: center;
-        }
+        /* Nav & Layout */
+        nav { background: rgba(0, 0, 0, 0.8); border-bottom: 2px solid var(--primary); padding: 15px 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(15px); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 28px; font-weight: 900; color: #fff; text-decoration: none; letter-spacing: 2px; }
+        .logo span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
 
-        /* Thông báo ảo */
-        .fake-noti {
-            position: fixed; bottom: -100px; left: 20px; background: rgba(30, 30, 30, 0.9);
-            padding: 15px; border-left: 4px solid var(--primary); border-radius: 5px;
-            transition: 0.5s; z-index: 999; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        /* Button Pro */
+        .btn { padding: 12px 25px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.4s; text-transform: uppercase; position: relative; overflow: hidden; }
+        .btn-red { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
+        .btn-red:hover { background: #ff3333; transform: scale(1.05); box-shadow: 0 0 25px var(--primary); }
+        
+        /* Modern Modal (Đăng nhập/Đăng ký xịn) */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(8px); }
+        .modal-content { 
+            background: rgba(20, 20, 20, 0.95); 
+            padding: 40px; 
+            border-radius: 20px; 
+            border: 1px solid rgba(255, 0, 0, 0.5); 
+            max-width: 400px; 
+            width: 90%; 
+            text-align: center; 
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.2);
+            position: relative;
+            animation: modalFade 0.4s ease;
         }
+        @keyframes modalFade { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .modal-content h2 { font-size: 32px; margin-bottom: 30px; letter-spacing: 3px; font-weight: 800; text-shadow: 0 0 10px var(--primary); }
+        
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); }
+        .input-group input { 
+            width: 100%; padding: 15px 15px 15px 45px; 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid #333; 
+            border-radius: 10px; 
+            color: #fff; 
+            outline: none; 
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+        .input-group input:focus { border-color: var(--primary); background: rgba(255, 0, 0, 0.05); box-shadow: 0 0 10px rgba(255, 0, 0, 0.2); }
+
+        .auth-switch { margin-top: 20px; color: #888; font-size: 14px; }
+        .auth-switch b { color: var(--primary); cursor: pointer; transition: 0.3s; }
+        .auth-switch b:hover { text-decoration: underline; text-shadow: 0 0 5px var(--primary); }
+
+        /* Shop Grid */
+        .shop-title { border-left: 5px solid var(--primary); padding-left: 15px; margin: 40px 0 20px; font-size: 24px; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-bottom: 50px; }
+        .card { background: var(--secondary); border-radius: 15px; overflow: hidden; border: 1px solid #222; transition: 0.4s; }
+        .card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(255, 0, 0, 0.1); }
+        .thumb { height: 200px; position: relative; }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .price { color: var(--primary); font-size: 24px; font-weight: 800; margin: 15px 0; }
+        
+        /* Fake Notification */
+        .fake-noti { position: fixed; bottom: -100px; left: 20px; background: rgba(20, 20, 20, 0.9); padding: 15px 25px; border-left: 5px solid var(--primary); border-radius: 10px; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 999; box-shadow: 0 5px 20px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 10px; }
         .fake-noti.show { bottom: 20px; }
     </style>
 </head>
@@ -118,212 +81,182 @@
 <nav>
     <div class="container nav-content">
         <a href="#" class="logo">HOANGKUN<span>STORE</span></a>
-        <div class="user-box" id="auth-section">
-            <button class="btn btn-red" onclick="showLogin()">ĐĂNG NHẬP</button>
+        <div id="auth-section">
+            <button class="btn btn-red" onclick="showAuth(false)">ĐĂNG NHẬP</button>
         </div>
-        <div class="user-box" id="user-section" style="display: none;">
+        <div id="user-section" style="display: none; align-items: center; gap: 20px;">
             <div class="balance-display">Số dư: <b id="user-balance">0đ</b></div>
             <button class="btn btn-red" onclick="showRecharge()">NẠP TIỀN</button>
-            <button class="btn btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+            <i class="fas fa-sign-out-alt" style="cursor:pointer; color: #ff4d4d;" onclick="logout()"></i>
         </div>
     </div>
 </nav>
 
 <div class="container">
-    <div class="banner">
-        <h2>KHO CODE HTML & ACC GAME GIÁ RẺ</h2>
-        <p>Hệ thống tự động - Thanh toán nhanh chóng - Hỗ trợ 24/7</p>
+    <div class="banner" style="text-align: center; padding: 100px 0; background: url('https://i.ibb.co/6y4XvVz/bg-gaming.jpg') center/cover; border-radius: 25px; margin-top: 20px;">
+        <h1 style="font-size: 48px; margin: 0; text-shadow: 0 5px 15px #000;">KHO SIÊU CODE V2</h1>
+        <p style="font-size: 18px; color: #ccc;">Sản phẩm chất lượng - Giao hàng tự động</p>
     </div>
 
-    <h2 class="shop-title">SẢN PHẨM MỚI NHẤT</h2>
+    <h2 class="shop-title">🔥 Sản phẩm nổi bật</h2>
     <div class="grid" id="productGrid"></div>
 </div>
 
-<div id="loginModal" class="modal">
+<div id="authModal" class="modal">
     <div class="modal-content">
-        <h2 id="authTitle" style="color: var(--primary); margin-bottom: 20px;">ĐĂNG NHẬP</h2>
+        <h2 id="authTitle">LOGIN</h2>
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="userInput" placeholder="Tên tài khoản...">
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="passInput" placeholder="Mật khẩu...">
+        </div>
+        <div id="regFields" style="display: none;">
+            <div class="input-group">
+                <i class="fas fa-check-double"></i>
+                <input type="password" id="confirmInput" placeholder="Nhập lại mật khẩu...">
+            </div>
+        </div>
+        <button class="btn btn-red" style="width: 100%; font-size: 16px;" onclick="handleAuth()">XÁC NHẬN NGAY</button>
         
-        <div id="loginFields">
-            <div class="form-group">
-                <input type="text" id="loginUser" placeholder="Tên tài khoản..." class="auth-input">
-            </div>
-            <div class="form-group">
-                <input type="password" id="loginPass" placeholder="Mật khẩu..." class="auth-input">
-            </div>
-            <button class="btn btn-red" style="width: 100%; margin-top: 15px;" onclick="handleLogin()">VÀO CỬA HÀNG</button>
-            <p class="auth-switch">Chưa có tài khoản? <a href="javascript:void(0)" onclick="toggleAuth(true)">Đăng ký ngay</a></p>
-        </div>
-
-        <div id="registerFields" style="display: none;">
-            <div class="form-group">
-                <input type="text" id="regUser" placeholder="Tạo tên tài khoản..." class="auth-input">
-            </div>
-            <div class="form-group">
-                <input type="password" id="regPass" placeholder="Tạo mật khẩu..." class="auth-input">
-            </div>
-            <div class="form-group">
-                <input type="password" id="regPassConfirm" placeholder="Nhập lại mật khẩu..." class="auth-input">
-            </div>
-            <button class="btn btn-red" style="width: 100%; margin-top: 15px;" onclick="handleRegister()">TẠO TÀI KHOẢN</button>
-            <p class="auth-switch">Đã có tài khoản? <a href="javascript:void(0)" onclick="toggleAuth(false)">Quay lại Đăng nhập</a></p>
-        </div>
+        <p class="auth-switch" id="switchText">Chưa có tài khoản? <b onclick="toggleAuth()">Đăng ký</b></p>
+        <div style="margin-top: 15px; color: #555; cursor: pointer;" onclick="closeModal('authModal')">Hủy bỏ</div>
     </div>
 </div>
+
 <div id="rechargeModal" class="modal">
     <div class="modal-content">
-        <h2 style="color: var(--primary);">NẠP TIỀN THỦ CÔNG</h2>
-        <div style="background: #000; padding: 20px; border-radius: 10px; text-align: left; margin: 20px 0; border: 1px solid #333;">
+        <h2 style="color:var(--primary)">NẠP TIỀN</h2>
+        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; text-align: left;">
             <p>Ngân hàng: <b>TECHCOMBANK</b></p>
-            <p>Số tài khoản: <b style="color: #ffcc00; font-size: 20px;">3120720060</b></p>
+            <p>STK: <b style="color: #ffcc00; font-size: 1.2em;">3120720060</b></p>
             <p>Chủ TK: <b>NGUYEN VIET HOANG</b></p>
             <p>Nội dung: <b style="color: var(--primary);">NAP <span id="ck-name"></span></b></p>
         </div>
-        <p style="font-size: 13px; color: #888;">Sau khi chuyển khoản, gửi ảnh bill qua Zalo Admin để được cộng tiền!</p>
-        <button class="btn btn-red" style="width: 100%; margin-top: 15px;" onclick="closeModal('rechargeModal')">ĐÃ HIỂU</button>
+        <button class="btn btn-red" style="width: 100%; margin-top: 20px;" onclick="closeModal('rechargeModal')">ĐÃ CHUYỂN KHOẢN</button>
     </div>
 </div>
 
 <div id="fakeNoti" class="fake-noti">
+    <i class="fas fa-bell" style="color: var(--primary);"></i>
     <span id="fakeNotiText"></span>
 </div>
 
-   <script>
-    // 1. Cấu hình Firebase của HoangKun Shop
+<script>
+    // --- FIREBASE CONFIG ---
     const firebaseConfig = {
         apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g",
-        authDomain: "hoangkun-594d0.firebaseapp.com",
         databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com",
-        projectId: "hoangkun-594d0",
-        storageBucket: "hoangkun-594d0.firebasestorage.app",
-        messagingSenderId: "919734784771",
-        appId: "1:919734784771:web:79eeac97bec6d23bad4f36",
-        measurementId: "G-9V75TQRR0D"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 2. Danh sách sản phẩm
-    const inventory = [
-        { id: 1, name: "CODE BIO LINK CYBERVIBE RED", price: 49000, img: "https://i.ibb.co/v6M6W7Y/bio.jpg", tag: "HOT" },
-        { id: 2, name: "SOURCE SHOP ACC V2 - AUTO", price: 250000, img: "https://i.ibb.co/VmqY8S7/shop.jpg", tag: "VIP" },
-        { id: 3, name: "LANDING PAGE GAMING RED-DARK", price: 120000, img: "https://i.ibb.co/fD8zG0v/gaming.jpg", tag: "HOT" },
-        { id: 4, name: "CODE WEB PHIM API FULL", price: 850000, img: "https://i.ibb.co/L5n0n8M/movie.jpg", tag: "VIP" },
-        { id: 5, name: "TOOL AUTO FACEBOOK 2024", price: 199000, img: "https://i.ibb.co/vYm6X8v/fb.jpg", tag: "HOT" },
-        { id: 6, name: "SOURCE WEB BẤT ĐỘNG SẢN", price: 1500000, img: "https://i.ibb.co/mS6p6X4/bds.jpg", tag: "VIP" }
+    // --- DATA ---
+    const items = [
+        { name: "BIO LINK CYBER RED", price: 49000, img: "https://i.ibb.co/v6M6W7Y/bio.jpg" },
+        { name: "SHOP ACC V2 AUTO", price: 250000, img: "https://i.ibb.co/VmqY8S7/shop.jpg" },
+        { name: "GAMING LANDING PAGE", price: 120000, img: "https://i.ibb.co/fD8zG0v/gaming.jpg" },
+        { name: "TOOL FB PREMIUM", price: 199000, img: "https://i.ibb.co/vYm6X8v/fb.jpg" }
     ];
 
-    function renderProducts() {
-        const grid = document.getElementById('productGrid');
-        grid.innerHTML = inventory.map(item => `
+    function renderItems() {
+        document.getElementById('productGrid').innerHTML = items.map(i => `
             <div class="card">
-                <div class="thumb">
-                    <div class="badge ${item.tag === 'VIP' ? 'badge-vip' : 'badge-hot'}">${item.tag}</div>
-                    <img src="${item.img}" alt="img">
-                </div>
-                <div class="info">
-                    <h3>${item.name}</h3>
-                    <div class="price">${item.price.toLocaleString()}đ</div>
-                    <button class="btn btn-red" style="width: 100%;" onclick="buyItem(${item.id}, ${item.price})">MUA NGAY</button>
+                <div class="thumb"><img src="${i.img}"></div>
+                <div style="padding: 20px; text-align: center;">
+                    <h3 style="margin:0; font-size:18px;">${i.name}</h3>
+                    <div class="price">${i.price.toLocaleString()}đ</div>
+                    <button class="btn btn-red" style="width:100%" onclick="buyItem(${i.price})">MUA NGAY</button>
                 </div>
             </div>
         `).join('');
     }
 
-    // 3. Hệ thống Tài khoản & Tiền (Firebase Realtime)
-    function toggleAuth(isRegister) {
-        document.getElementById('authTitle').innerText = isRegister ? "ĐĂNG KÝ" : "ĐĂNG NHẬP";
-        document.getElementById('loginFields').style.display = isRegister ? "none" : "block";
-        document.getElementById('registerFields').style.display = isRegister ? "block" : "none";
+    // --- AUTH LOGIC ---
+    let isRegister = false;
+    function showAuth(reg) { isRegister = reg; updateAuthUI(); document.getElementById('authModal').style.display = 'flex'; }
+    function toggleAuth() { isRegister = !isRegister; updateAuthUI(); }
+    function updateAuthUI() {
+        document.getElementById('authTitle').innerText = isRegister ? "REGISTER" : "LOGIN";
+        document.getElementById('regFields').style.display = isRegister ? "block" : "none";
+        document.getElementById('switchText').innerHTML = isRegister ? "Đã có tài khoản? <b onclick='toggleAuth()'>Đăng nhập</b>" : "Chưa có tài khoản? <b onclick='toggleAuth()'>Đăng ký</b>";
     }
 
-    function handleRegister() {
-        const user = document.getElementById('regUser').value.trim();
-        const pass = document.getElementById('regPass').value;
-        const confirm = document.getElementById('regPassConfirm').value;
-        if(!user || !pass) return alert("Nhập đủ thông tin Hoàng ơi!");
-        if(pass !== confirm) return alert("Mật khẩu không khớp!");
+    function handleAuth() {
+        const user = document.getElementById('userInput').value.trim();
+        const pass = document.getElementById('passInput').value;
+        if(!user || !pass) return alert("Vui lòng điền đủ!");
 
-        db.ref('users/' + user).once('value').then((snapshot) => {
-            if (snapshot.exists()) return alert("Tài khoản đã tồn tại!");
-            db.ref('users/' + user).set({ pass: pass, balance: 0 }).then(() => {
-                alert("Đăng ký thành công! Đăng nhập đi Hoàng.");
-                toggleAuth(false);
+        if(isRegister) {
+            const confirm = document.getElementById('confirmInput').value;
+            if(pass !== confirm) return alert("Mật khẩu không khớp!");
+            db.ref('users/' + user).set({ pass: pass, balance: 0 }).then(() => { alert("Đăng ký xong! Hãy đăng nhập."); toggleAuth(); });
+        } else {
+            db.ref('users/' + user).once('value').then(snap => {
+                const data = snap.val();
+                if(data && data.pass === pass) { localStorage.setItem('user', user); location.reload(); }
+                else alert("Sai thông tin tài khoản!");
             });
-        });
+        }
     }
 
-    function handleLogin() {
-        const user = document.getElementById('loginUser').value.trim();
-        const pass = document.getElementById('loginPass').value;
-        db.ref('users/' + user).once('value').then((snapshot) => {
-            const data = snapshot.val();
-            if (data && data.pass === pass) {
-                localStorage.setItem('user', user);
-                location.reload();
-            } else {
-                alert("Sai tài khoản hoặc mật khẩu!");
-            }
-        });
-    }
-
-    function checkStatus() {
+    function checkUser() {
         const user = localStorage.getItem('user');
-        if (user) {
+        if(user) {
             document.getElementById('auth-section').style.display = 'none';
             document.getElementById('user-section').style.display = 'flex';
             document.getElementById('ck-name').innerText = user;
-            // Lắng nghe tiền nhảy số tự động
-            db.ref('users/' + user).on('value', (snapshot) => {
-                const data = snapshot.val();
-                const balance = data ? (data.balance || 0) : 0;
-                document.getElementById('user-balance').innerText = balance.toLocaleString() + 'đ';
-                localStorage.setItem('currentBalance', balance);
+            db.ref('users/' + user).on('value', snap => {
+                const bal = (snap.val() && snap.val().balance) || 0;
+                document.getElementById('user-balance').innerText = bal.toLocaleString() + 'đ';
+                localStorage.setItem('bal', bal);
             });
         }
     }
 
-    function buyItem(id, price) {
+    function buyItem(price) {
         const user = localStorage.getItem('user');
-        if(!user) return showLogin();
-        const balance = parseInt(localStorage.getItem('currentBalance') || 0);
-        if(balance >= price) {
-            db.ref('users/' + user).update({ balance: balance - price }).then(() => {
-                alert("✅ Mua thành công! Liên hệ Hoàng Kun để nhận hàng.");
-            });
-        } else {
-            alert("❌ Không đủ tiền! Nạp thêm đi bạn.");
-            showRecharge();
-        }
+        if(!user) return showAuth(false);
+        const bal = parseInt(localStorage.getItem('bal') || 0);
+        if(bal >= price) {
+            db.ref('users/' + user).update({ balance: bal - price }).then(() => alert("✅ Mua thành công! Check tin nhắn Admin."));
+        } else { alert("❌ Không đủ tiền!"); showRecharge(); }
     }
 
     function logout() { localStorage.removeItem('user'); location.reload(); }
-    function showLogin() { document.getElementById('loginModal').style.display = 'flex'; }
-    function showRecharge() { document.getElementById('rechargeModal').style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function showRecharge() { document.getElementById('rechargeModal').style.display = 'flex'; }
 
-    // Hiệu ứng hạt & Thông báo ảo
+    // --- EFFECTS ---
+    const names = ["Quốc Bảo", "Văn Nam", "Minh Hùng", "Sơn Tùng", "Thúy Vy"];
+    function fakeNoti() {
+        const noti = document.getElementById('fakeNoti');
+        document.getElementById('fakeNotiText').innerHTML = `<b>${names[Math.floor(Math.random()*names.length)]}</b> vừa nạp 100,000đ thành công!`;
+        noti.classList.add('show');
+        setTimeout(() => noti.classList.remove('show'), 5000);
+        setTimeout(fakeNoti, 12000);
+    }
+
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
-    let particles = [];
+    let pts = [];
     function init() {
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        for(let i=0; i<60; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5, size: Math.random()*2});
+        for(let i=0; i<60; i++) pts.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5});
     }
-    function animate() {
-        ctx.clearRect(0,0,canvas.width, canvas.height);
-        ctx.fillStyle = "rgba(255,0,0,0.4)";
-        particles.forEach(p => {
+    function draw() {
+        ctx.clearRect(0,0,canvas.width, canvas.height); ctx.fillStyle = "rgba(255,0,0,0.3)";
+        pts.forEach(p => {
             p.x+=p.vx; p.y+=p.vy;
-            if(p.x<0 || p.x>canvas.width) p.vx*=-1;
-            if(p.y<0 || p.y>canvas.height) p.vy*=-1;
-            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+            if(p.x<0 || p.x>canvas.width) p.vx*=-1; if(p.y<0 || p.y>canvas.height) p.vy*=-1;
+            ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
         });
-        requestAnimationFrame(animate);
+        requestAnimationFrame(draw);
     }
 
-    window.onload = () => { init(); animate(); renderProducts(); checkStatus(); };
+    window.onload = () => { init(); draw(); renderItems(); checkUser(); fakeNoti(); };
 </script>
-
 </body>
 </html>
