@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HoangKun Store - Hệ Thống Bán Code 24/7</title>
+    <title>HoangKun Store - Shop Acc Uy Tín</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -13,64 +13,57 @@
     <div class="container">
         <header>
             <h1 class="logo">HOANGKUN <span>STORE</span></h1>
-            <p class="tagline">Giao diện chất - Hỗ trợ cài đặt tận tình</p>
+            <p class="tagline">Hệ thống bán acc tự động - Uy tín - Giá rẻ</p>
         </header>
 
         <div class="products-grid" id="shopGrid"></div>
 
         <div class="pagination">
-            <button onclick="changePage(-1)"><i class="fas fa-arrow-left"></i> Trước</button>
-            <span id="pageLabel">Trang 1 / 4</span>
-            <button onclick="changePage(1)">Sau <i class="fas fa-arrow-right"></i></button>
+            <button onclick="changePage(-1)">TRƯỚC</button>
+            <span id="pageLabel">Trang 1 / 3</span>
+            <button onclick="changePage(1)">SAU</button>
         </div>
-
-        <footer>
-            <p>© 2026 HoangKun Store. Zalo: 0788265513</p>
-        </footer>
     </div>
 
     <script>
-        // Danh sách 20 mặt hàng (Hoàng có thể tự sửa tên/giá ở đây)
         const inventory = [
-            { id: 1, name: "Bio Link CyberVibe", price: "50.000đ", tag: "HOT" },
-            { id: 2, name: "Shop Acc Game V2", price: "150.000đ", tag: "NEW" },
-            { id: 3, name: "Landing Page Gaming", price: "120.000đ", tag: "VIP" },
-            { id: 4, name: "Web Phim Pro", price: "200.000đ", tag: "BEST" },
-            { id: 5, name: "Portfolio Dark", price: "100.000đ", tag: "HOT" },
-            { id: 6, name: "Tool Facebook Auto", price: "300.000đ", tag: "NEW" },
-            { id: 7, name: "Web Tin Tức SEO", price: "250.000đ", tag: "NEW" },
-            { id: 8, name: "Mẫu Blog Cá Nhân", price: "40.000đ", tag: "SALE" },
-            { id: 9, name: "Giao Diện Bán Quần Áo", price: "180.000đ", tag: "VIP" },
-            { id: 10, name: "Web Bất Động Sản", price: "500.000đ", tag: "BEST" },
-            // ... Bạn có thể thêm tiếp cho đủ 20 hoặc hệ thống tự lặp lại
+            { id: 1, name: "DANH MỤC GAME LIÊN QUÂN", count: "24,008", img: "https://i.imgur.com/8v9LzYp.png" },
+            { id: 2, name: "DANH MỤC GAME FREE FIRE", count: "23,708", img: "https://i.imgur.com/XGfR1A3.png" },
+            { id: 3, name: "DANH MỤC GAME LIÊN MINH", count: "1,713", img: "https://i.imgur.com/u7fMhH7.png" },
+            { id: 4, name: "DANH MỤC GAME NGỌC RỒNG", count: "16,539", img: "https://i.imgur.com/vH4B6Z6.png" },
+            { id: 5, name: "DANH MỤC GAME PUBG MOBILE", count: "5,102", img: "https://i.imgur.com/zV6J6X0.png" },
+            { id: 6, name: "DANH MỤC ZING SPEED MOBILE", count: "1,200", img: "https://i.imgur.com/yGf5YnC.png" },
+            { id: 7, name: "DANH MỤC GAME FIFA ONLINE 4", count: "3,450", img: "https://i.imgur.com/9tH5Y6R.png" },
+            { id: 8, name: "DANH MỤC GAME LÀNG LÁ", count: "890", img: "https://i.imgur.com/Wf5G7N6.png" }
         ];
 
-        // Tự động bù cho đủ 20 hàng nếu bạn lười viết
-        for(let i = 11; i <= 20; i++) {
-            inventory.push({ id: i, name: `Sản Phẩm Code #${i}`, price: "99.000đ", tag: "CODE" });
+        // Tự nhân bản cho đủ 20 ô nếu cần
+        while(inventory.length < 20) {
+            inventory.push({...inventory[inventory.length % 8], id: inventory.length + 1});
         }
 
         let currentPage = 1;
-        const limit = 6; // Mỗi trang hiện 6 hàng
+        const limit = 8;
 
         function renderShop() {
             const grid = document.getElementById('shopGrid');
             grid.innerHTML = "";
             let start = (currentPage - 1) * limit;
-            let end = start + limit;
-            let currentItems = inventory.slice(start, end);
+            let currentItems = inventory.slice(start, start + limit);
 
             currentItems.forEach(item => {
                 grid.innerHTML += `
                     <div class="product-card">
                         <div class="card-thumb">
-                            <div class="badge">${item.tag}</div>
-                            <span>CODE</span>
+                            <div class="discount-tag">GIẢM 30%</div>
+                            <img src="${item.img}" alt="thumb">
                         </div>
                         <div class="card-info">
                             <h3>${item.name}</h3>
-                            <div class="price">${item.price}</div>
-                            <a href="https://zalo.me/0788265513" class="btn-buy">MUA NGAY</a>
+                            <p class="stats">Số tài khoản: <span>${item.count}</span></p>
+                            <div class="btn-container">
+                                <a href="https://zalo.me/0788265513" class="btn-buy">MUA NGAY</a>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -81,40 +74,26 @@
         function changePage(n) {
             let next = currentPage + n;
             if (next >= 1 && next <= Math.ceil(inventory.length / limit)) {
-                currentPage = next;
-                renderShop();
-                window.scrollTo({top: 0, behavior: 'smooth'});
+                currentPage = next; renderShop(); window.scrollTo({top: 0, behavior: 'smooth'});
             }
         }
 
-        // Script hạt bay (Giữ nguyên cho Hoàng)
+        // Particle background
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
         let particles = [];
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2;
-                this.vx = Math.random() * 0.6 - 0.3;
-                this.vy = Math.random() * 0.6 - 0.3;
-            }
-            update() {
-                this.x += this.vx; this.y += this.vy;
-                if(this.x > canvas.width || this.x < 0) this.vx *= -1;
-                if(this.y > canvas.height || this.y < 0) this.vy *= -1;
-            }
-            draw() {
-                ctx.fillStyle = '#00fff2'; ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
-            }
-        }
-        for(let i=0; i<100; i++) particles.push(new Particle());
+        for(let i=0; i<80; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5, s: Math.random()*2});
         function animate() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
+            ctx.fillStyle = 'rgba(0, 255, 242, 0.2)';
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+            });
             requestAnimationFrame(animate);
         }
         renderShop(); animate();
