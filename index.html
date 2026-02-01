@@ -26,31 +26,33 @@
    </div> 
 
 <script>
-        // 1. Danh sách sản phẩm (Inventory)
+        // 1. Danh sách 20 loại Code Web với giá khác nhau
         const inventory = [
-            { id: 1, name: "CODE BIO LINK CYBERVIBE", count: "128", price: "50.000đ", img: "https://i.ibb.co/v6M6W7Y/bio.jpg" },
-            { id: 2, name: "CODE SHOP ACC GAME V2", count: "45", price: "150.000đ", img: "https://i.ibb.co/VmqY8S7/shop.jpg" },
+            { id: 1, name: "CODE BIO LINK CYBERVIBE", count: "128", price: "49.000đ", img: "https://i.ibb.co/v6M6W7Y/bio.jpg" },
+            { id: 2, name: "CODE SHOP ACC GAME V2", count: "45", price: "250.000đ", img: "https://i.ibb.co/VmqY8S7/shop.jpg" },
             { id: 3, name: "LANDING PAGE GAMING PRO", count: "89", price: "120.000đ", img: "https://i.ibb.co/fD8zG0v/gaming.jpg" },
-            { id: 4, name: "CODE WEB PHIM CHUẨN SEO", count: "22", price: "200.000đ", img: "https://i.ibb.co/L5n0n8M/movie.jpg" },
-            { id: 5, name: "PORTFOLIO DARK MODE", count: "56", price: "80.000đ", img: "https://i.ibb.co/fF3t4G7/port.jpg" },
-            { id: 6, name: "WEB BẤT ĐỘNG SẢN VIP", count: "12", price: "500.000đ", img: "https://i.ibb.co/mS6p6X4/bds.jpg" },
-            { id: 7, name: "WEB TIN TỨC TỔNG HỢP", count: "34", price: "250.000đ", img: "https://i.ibb.co/xS8mH7v/news.jpg" },
-            { id: 8, name: "CODE TOOL FACEBOOK AUTO", count: "67", price: "300.000đ", img: "https://i.ibb.co/vYm6X8v/fb.jpg" }
+            { id: 4, name: "CODE WEB PHIM CHUẨN SEO", count: "22", price: "450.000đ", img: "https://i.ibb.co/L5n0n8M/movie.jpg" },
+            { id: 5, name: "PORTFOLIO DARK MODE", count: "56", price: "75.000đ", img: "https://i.ibb.co/fF3t4G7/port.jpg" },
+            { id: 6, name: "WEB BẤT ĐỘNG SẢN VIP", count: "12", price: "999.000đ", img: "https://i.ibb.co/mS6p6X4/bds.jpg" },
+            { id: 7, name: "WEB TIN TỨC TỔNG HỢP", count: "34", price: "350.000đ", img: "https://i.ibb.co/xS8mH7v/news.jpg" },
+            { id: 8, name: "CODE TOOL FACEBOOK AUTO", count: "67", price: "199.000đ", img: "https://i.ibb.co/vYm6X8v/fb.jpg" }
         ];
 
-        // 2. Tự nhân bản cho đủ 20 ô
+        // Tự tạo thêm cho đủ 20 món với giá ngẫu nhiên
         while(inventory.length < 20) {
+            let base = inventory[inventory.length % 8];
             inventory.push({
-                ...inventory[inventory.length % 8], 
+                ...base,
                 id: inventory.length + 1,
-                name: inventory[inventory.length % 8].name + " PRO"
+                name: base.name + " V" + (inventory.length + 1),
+                price: (Math.floor(Math.random() * 20) + 5) * 10 + ".000đ"
             });
         }
 
         let currentPage = 1;
         const limit = 8;
 
-        // 3. Hàm hiển thị sản phẩm (Có Giá Tiền)
+        // 2. Hàm hiển thị (Render)
         function renderShop() {
             const grid = document.getElementById('shopGrid');
             if(!grid) return;
@@ -68,9 +70,9 @@
                         <div class="card-info">
                             <h3>${item.name}</h3>
                             <p class="stats">Lượt mua: <span>${item.count}</span></p>
-                            <div class="price-tag" style="color: #cc0000; font-weight: bold; font-size: 1.2rem; margin: 10px 0;">${item.price}</div>
+                            <div class="price-tag">${item.price}</div>
                             <div class="btn-container">
-                                <a href="https://zalo.me/0788265513" class="btn-buy" style="background: #ffcc00; color: #cc0000; border: 2px solid #cc0000; padding: 8px 20px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block;">MUA NGAY</a>
+                                <a href="https://zalo.me/0788265513" class="btn-buy">MUA NGAY</a>
                             </div>
                         </div>
                     </div>
@@ -79,17 +81,14 @@
             document.getElementById('pageLabel').innerText = `Trang ${currentPage} / ${Math.ceil(inventory.length / limit)}`;
         }
 
-        // 4. Hàm chuyển trang
         function changePage(n) {
             let next = currentPage + n;
             if (next >= 1 && next <= Math.ceil(inventory.length / limit)) {
-                currentPage = next;
-                renderShop();
-                window.scrollTo({top: 0, behavior: 'smooth'});
+                currentPage = next; renderShop(); window.scrollTo({top: 0, behavior: 'smooth'});
             }
         }
 
-        // 5. Hiệu ứng hạt bay (Chấm chấm)
+        // 3. Hiệu ứng hạt bay
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -108,7 +107,6 @@
             requestAnimationFrame(animate);
         }
 
-        // Khởi chạy
         renderShop();
         animate();
     </script>
