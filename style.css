@@ -8,9 +8,14 @@ body {
 }
 
 #particleCanvas {
-    position: fixed;
-    top: 0; left: 0;
-    z-index: -1;
+    position: fixed !important; /* Luôn dính vào màn hình khi cuộn */
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: -1 !important; /* Nằm dưới cùng */
+    background: #000 !important; /* Nền đen tuyệt đối */
+    display: block !important;
 }
 
 .container {
