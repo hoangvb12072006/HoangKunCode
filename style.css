@@ -1,63 +1,70 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #000; color: #fff; font-family: 'Arial', sans-serif; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #f4f7f6; color: #333; font-family: 'Arial', sans-serif; }
 
-#particleCanvas { position: fixed; top: 0; left: 0; z-index: -1; }
+#particleCanvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
 
-.container { max-width: 1000px; margin: 0 auto; padding: 40px 15px; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-header { text-align: center; margin-bottom: 40px; }
-.logo { font-size: 2.5rem; text-transform: uppercase; }
-.logo span { color: #00fff2; text-shadow: 0 0 10px #00fff2; }
+header { text-align: center; margin-bottom: 30px; }
+.logo { font-size: 2.5rem; font-weight: 900; color: #333; }
+.logo span { color: #00fff2; text-shadow: 1px 1px 2px #aaa; }
+.tagline { color: #777; font-size: 0.9rem; }
 
-/* Chia lưới 3 cột */
+/* Lưới 4 cột chuẩn mẫu */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 15px;
 }
 
-/* Ô sản phẩm */
+/* Ô sản phẩm trắng tinh khôi */
 .product-card {
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 10px;
-    overflow: hidden;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
     transition: 0.3s;
+    display: flex;
+    flex-direction: column;
 }
-.product-card:hover { border-color: #00fff2; transform: translateY(-5px); }
+.product-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
 .card-thumb {
-    height: 140px; background: linear-gradient(45deg, #1a1a1a, #333);
-    display: flex; align-items: center; justify-content: center;
-    position: relative; font-weight: bold; color: #444; font-size: 1.5rem;
+    width: 100%;
+    position: relative;
+    padding-top: 56.25%; /* Tỉ lệ 16:9 */
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+}
+.card-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+
+.discount-tag {
+    position: absolute; top: 5px; right: 5px;
+    background: #ff4d4d; color: #fff; padding: 2px 6px;
+    font-size: 10px; font-weight: bold; border-radius: 2px; z-index: 10;
 }
 
-.badge {
-    position: absolute; top: 10px; right: 10px;
-    background: #ef4444; color: #fff; padding: 2px 8px;
-    border-radius: 4px; font-size: 10px; font-weight: bold;
-}
+.card-info { padding: 15px; text-align: center; flex-grow: 1; }
+.card-info h3 { font-size: 0.9rem; color: #555; margin-bottom: 8px; font-weight: bold; text-transform: uppercase; }
+.stats { font-size: 0.8rem; color: #888; margin-bottom: 15px; }
+.stats span { color: #333; font-weight: bold; }
 
-.card-info { padding: 20px; text-align: center; }
-.card-info h3 { font-size: 1.1rem; margin-bottom: 15px; height: 40px; }
-
-.price { font-size: 1.6rem; font-weight: bold; color: #ffde00; margin-bottom: 20px; }
-
-/* Nút mua đỏ rực */
+/* Nút MUA NGAY màu vàng viền đỏ cực giống mẫu */
+.btn-container { border-top: 1px solid #eee; padding-top: 15px; }
 .btn-buy {
-    display: block; background: #e11d48; color: #fff; padding: 12px;
-    text-decoration: none; border-radius: 6px; font-weight: bold;
+    display: inline-block;
+    background: #ffcc00; /* Màu vàng nick.vn */
+    color: #cc0000; /* Chữ đỏ */
+    padding: 8px 30px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    border: 2px solid #cc0000;
+    transition: 0.2s;
 }
-.btn-buy:hover { background: #f43f5e; box-shadow: 0 0 15px rgba(225, 29, 72, 0.5); }
+.btn-buy:hover { background: #cc0000; color: #fff; }
 
-/* Phân trang */
-.pagination {
-    margin-top: 40px; display: flex; justify-content: center; align-items: center; gap: 20px;
-}
-.pagination button {
-    background: #222; border: 1px solid #00fff2; color: #00fff2;
-    padding: 8px 16px; border-radius: 4px; cursor: pointer;
-}
-.pagination button:hover { background: #00fff2; color: #000; }
-
-footer { text-align: center; margin-top: 40px; color: #555; font-size: 0.8rem; }
+/* Pagination */
+.pagination { margin-top: 30px; text-align: center; }
+.pagination button { padding: 8px 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; border-radius: 4px; font-weight: bold; }
+.pagination span { margin: 0 15px; font-weight: bold; color: #555; }
