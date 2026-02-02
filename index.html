@@ -356,48 +356,55 @@
     }
 
     function buyItem(name, price, downloadLink) {
-        const user = localStorage.getItem('hoangUser');
-        if(!user) return showAuth(false);
+    const user = localStorage.getItem('hoangUser');
+    if(!user) return showAuth(false);
 
-        const currentBal = parseInt(localStorage.getItem('hoangBal') || 0);
-        if(currentBal < price) {
-            Swal.fire("Thiếu tiền", "Số dư không đủ để mua sản phẩm này!", "warning").then(() => showRecharge());
-            return;
-        }
+    const currentBal = parseInt(localStorage.getItem('hoangBal') || 0);
+    if(currentBal < price) {
+        Swal.fire("Thiếu tiền", "Số dư không đủ để mua sản phẩm này!", "warning").then(() => showRecharge());
+        return;
+    }
 
-        Swal.fire({
-            title: 'Xác nhận mua?',
-            text: `Bạn có chắc muốn mua ${name} với giá ${price.toLocaleString()}đ?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#ff0000',
-            confirmButtonText: 'MUA NGAY'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const newBal = currentBal - price;
+    Swal.fire({
+        title: 'Xác nhận mua?',
+        text: `Bạn có chắc muốn mua ${name} với giá ${price.toLocaleString()}đ?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ff0000',
+        confirmButtonText: 'MUA NGAY'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const newBal = currentBal - price;
+            const now = new Date().toLocaleString();
 
-                // Lưu vào Kho Code Đã Mua
+            // 1. Lưu vào Kho Code (Bảng dưới)
             db.ref('bought_codes/' + user).push({
                 name: name,
                 link: downloadLink,
-                date: new Date().toLocaleString()
+                date: now
             });
-                
-                const historyRef = db.ref('history/' + user).push();
-                
-                // Trừ tiền và lưu lịch sử đồng thời
-                db.ref('users/' + user).update({ balance: newBal }).then(() => {
-                    historyRef.set({
-                        product: name,
-                        price: price,
-                        date: new Date().toLocaleString(),
-                        status: "Hoàn thành"
-                      });
-                    Swal.fire("Thành công", "Giao dịch thành công! Link tải đã xuất hiện ở KHO CODE ĐÃ MUA bên dưới.", "success");
+
+            // 2. Lưu vào Lịch sử giao dịch (Bảng trên) - Dùng push().set() để đảm bảo đồng bộ
+            const historyRef = db.ref('history/' + user).push();
+            historyRef.set({
+                product: name,
+                price: price,
+                date: now,
+                status: "Hoàn thành"
+            });
+
+            // 3. Trừ tiền và thông báo
+            db.ref('users/' + user).update({ balance: newBal }).then(() => {
+                Swal.fire({
+                    title: "Thành công!",
+                    text: "Giao dịch thành công! Kiểm tra Kho Code và Lịch sử bên dưới.",
+                    icon: "success",
+                    timer: 3000
                 });
-            }
-        });
-    }
+            });
+        }
+    });
+}
 
     function loadHistory(user) {
         db.ref('history/' + user).on('value', snap => {
