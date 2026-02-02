@@ -12,6 +12,25 @@
     
     <style>
 
+/* Hiệu ứng bo góc và đổ bóng cho ảnh sản phẩm */
+.thumb img {
+    transition: transform 0.5s ease;
+}
+.card:hover .thumb img {
+    transform: scale(1.1); /* Phóng to nhẹ ảnh khi di chuột vào */
+}
+
+/* Làm cho các nút liên hệ (Zalo, FB) rung nhẹ để thu hút sự chú ý */
+@keyframes shake {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    50% { transform: rotate(-5deg); }
+    100% { transform: rotate(0deg); }
+}
+.contact-item {
+    animation: shake 2s infinite ease-in-out;
+}
+
         .contact-sidebar {
     position: fixed;
     right: 20px;
