@@ -169,19 +169,18 @@
     </div>
 </div>
 
-<div id="kho-code-section" class="history-box" style="margin-top: 30px; border-color: #00ff00;">
-    <h3 style="color: #00ff00;"><i class="fas fa-code"></i> KHO CODE ĐÃ MUA (LINK TẢI)</h3>
-    <table>
+<div id="history-section" class="history-box" style="display:none; border: 1px solid #ff0000; margin-top: 30px;">
+    <h3 style="color: var(--primary); text-align: center;"><i class="fas fa-shopping-cart"></i> LỊCH SỬ GIAO DỊCH & KHO CODE</h3>
+    <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
         <thead>
-            <tr>
-                <th>Tên Sản Phẩm</th>
-                <th>Ngày Mua</th>
-                <th>Link Tải File</th>
+            <tr style="background: #222; color: #fff;">
+                <th style="width: 30%; padding: 10px; border: 1px solid #333;">Tên Sản Phẩm</th>
+                <th style="width: 15%; border: 1px solid #333;">Giá</th>
+                <th style="width: 30%; border: 1px solid #333;">Ngày Mua</th>
+                <th style="width: 25%; border: 1px solid #333;">Link Tải</th>
             </tr>
         </thead>
-        <tbody id="kho-code-body">
-            <tr><td colspan="3" style="text-align:center">Bạn chưa mua code nào</td></tr>
-        </tbody>
+        <tbody id="history-body"></tbody>
     </table>
 </div>
     
@@ -355,19 +354,19 @@
         }
     }
 
-    function buyItem(name, price, downloadLink) {
+   function buyItem(name, price, downloadLink) {
     const user = localStorage.getItem('hoangUser');
     if(!user) return showAuth(false);
 
     const currentBal = parseInt(localStorage.getItem('hoangBal') || 0);
     if(currentBal < price) {
-        Swal.fire("Thiếu tiền", "Số dư không đủ để mua sản phẩm này!", "warning").then(() => showRecharge());
+        Swal.fire("Thiếu tiền", "Số dư không đủ!", "warning").then(() => showRecharge());
         return;
     }
 
     Swal.fire({
         title: 'Xác nhận mua?',
-        text: `Bạn có chắc muốn mua ${name} với giá ${price.toLocaleString()}đ?`,
+        text: `Mua ${name} với giá ${price.toLocaleString()}đ?`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#ff0000',
@@ -377,53 +376,48 @@
             const newBal = currentBal - price;
             const now = new Date().toLocaleString();
 
-            // 1. Lưu vào Kho Code (Bảng dưới)
-            db.ref('bought_codes/' + user).push({
-                name: name,
-                link: downloadLink,
-                date: now
-            });
-
-            // 2. Lưu vào Lịch sử giao dịch (Bảng trên) - Dùng push().set() để đảm bảo đồng bộ
-            const historyRef = db.ref('history/' + user).push();
-            historyRef.set({
+            // Chỉ lưu vào 1 bảng duy nhất là 'history' nhưng có thêm link
+            db.ref('history/' + user).push({
                 product: name,
                 price: price,
                 date: now,
-                status: "Hoàn thành"
+                link: downloadLink, // Lưu link vào đây luôn
+                status: "Thành công"
             });
 
-            // 3. Trừ tiền và thông báo
+            // Cập nhật tiền
             db.ref('users/' + user).update({ balance: newBal }).then(() => {
-                Swal.fire({
-                    title: "Thành công!",
-                    text: "Giao dịch thành công! Kiểm tra Kho Code và Lịch sử bên dưới.",
-                    icon: "success",
-                    timer: 3000
-                });
+                Swal.fire("Thành công!", "Sản phẩm đã được thêm vào lịch sử bên dưới.", "success");
             });
         }
     });
 }
+   function loadHistory(user) {
+    db.ref('history/' + user).on('value', snap => {
+        const historyBody = document.getElementById('history-body');
+        const data = snap.val();
+        if(!data) {
+            historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center">Chưa có giao dịch nào</td></tr>';
+            return;
+        }
 
-    function loadHistory(user) {
-        db.ref('history/' + user).on('value', snap => {
-            const historyBody = document.getElementById('history-body');
-            const data = snap.val();
-            if(!data) return;
-
-            let html = '';
-            for(let id in data) {
-                html = `<tr>
-                    <td>${data[id].product}</td>
-                    <td>${data[id].price.toLocaleString()}đ</td>
-                    <td>${data[id].date}</td>
-                    <td style="color:#00ff00">${data[id].status}</td>
-                </tr>` + html;
-            }
-            historyBody.innerHTML = html;
-        });
-    }
+        let html = '';
+        for(let id in data) {
+            html = `<tr>
+                <td style="color:#fff; padding: 10px; border: 1px solid #333;">${data[id].product}</td>
+                <td style="color:var(--primary); border: 1px solid #333;">${data[id].price.toLocaleString()}đ</td>
+                <td style="color:#ccc; font-size: 13px; border: 1px solid #333;">${data[id].date}</td>
+                <td style="text-align: center; border: 1px solid #333;">
+                    <a href="${data[id].link}" target="_blank" 
+                       style="color:#00ff00; text-decoration:none; font-weight:bold; border:1px solid #00ff00; padding:3px 8px; border-radius:4px; font-size:12px;">
+                       <i class="fas fa-download"></i> TẢI FILE
+                    </a>
+                </td>
+            </tr>` + html;
+        }
+        historyBody.innerHTML = html;
+    });
+}
 
     function logout() { localStorage.removeItem('hoangUser'); location.reload(); }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
