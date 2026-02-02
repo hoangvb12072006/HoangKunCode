@@ -266,7 +266,7 @@
                 <div class="card-body">
                     <h3 style="font-size:16px; margin:0;">${p.name}</h3>
                     <div class="price">${p.price.toLocaleString()}đ</div>
-                    <button class="btn btn-red" style="width:100%" onclick="buyItem('${p.name}', ${p.price})">MUA NGAY</button>
+                    <button class="btn btn-red" style="width:100%" onclick="buyItem('${p.name}', ${p.price}, '${p.link}')">MUA NGAY</button>
                 </div>
             </div>
         `).join('');
@@ -351,7 +351,7 @@
             });
 
             // Tải lịch sử mua hàng
-            loadHistory(user);
+           loadBoughtCodes(user);
         }
     }
 
