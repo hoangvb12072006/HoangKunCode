@@ -392,7 +392,7 @@
         }
     });
 }
-   function loadHistory(user) {
+  function loadHistory(user) {
     db.ref('history/' + user).on('value', snap => {
         const historyBody = document.getElementById('history-body');
         const data = snap.val();
@@ -405,12 +405,12 @@
         for(let id in data) {
             html = `<tr>
                 <td style="color:#fff; padding: 10px; border: 1px solid #333;">${data[id].product}</td>
-                <td style="color:var(--primary); border: 1px solid #333;">${data[id].price.toLocaleString()}đ</td>
+                <td style="color:var(--primary); border: 1px solid #333;">${(data[id].price || 0).toLocaleString()}đ</td>
                 <td style="color:#ccc; font-size: 13px; border: 1px solid #333;">${data[id].date}</td>
                 <td style="text-align: center; border: 1px solid #333;">
-                    <a href="${data[id].link}" target="_blank" 
+                    <a href="${data[id].link || '#'}" target="_blank" 
                        style="color:#00ff00; text-decoration:none; font-weight:bold; border:1px solid #00ff00; padding:3px 8px; border-radius:4px; font-size:12px;">
-                       <i class="fas fa-download"></i> TẢI FILE
+                       <i class="fas fa-download"></i> TẢI VỀ
                     </a>
                 </td>
             </tr>` + html;
