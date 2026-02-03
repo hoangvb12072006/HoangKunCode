@@ -281,7 +281,7 @@
 
     // --- 2. DỮ LIỆU CỬA HÀNG ---
    const products = [
-    { id: 1, name: "CODE TRAITYM 1", price: 22000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-3.jpg", link: "https://www.mediafire.com/file/x82cfpep8576y2m/Code_tr%25C3%25A1i_tym_1.zip/file" },
+   { id: 1, name: "CODE TRAITYM 1", price: 22000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-3.jpg", link: "https://www.mediafire.com/file/x82cfpep8576y2m/Code_tr%25C3%25A1i_tym_1.zip/file" },
     { id: 2, name: "CODE TRAITYM 2", price: 28000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-9.jpg", link: "https://www.mediafire.com/file/9ouog8a5ot8bbjr/Code_tr%25C3%25A1i_tym_2.zip/file" },
     { id: 3, name: "CODE TRAITYM 3", price: 32000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-13.jpg", link: "https://www.mediafire.com/file/y5koz065nphas87/Code_tr%25C3%25A1i_tym_3.zip/file" },
     { id: 4, name: "CODE WEB SHOP", price: 350000, img: "https://i.postimg.cc/JzmdcN7p/game-title.jpg", link: "https://www.mediafire.com/file/kpd7vqbm7235b46/Code+website+Game.zip/file" },
@@ -289,14 +289,13 @@
     { id: 6, name: "CODE WEB MÈO CUTE", price: 75000, img: "https://i.postimg.cc/QKFThDy3/IMG-6223.gif", link: "https://www.mediafire.com/file/tcobfv1lccqrvjb/Code_chu%25CC%2581c_mu%25CC%259B%25CC%2580ng_sinh_nha%25CC%25A3%25CC%2582t_1.zip/file" },
     { id: 7, name: "CODE HIỆU ỨNG RỒNG", price: 69000, img: "https://i.postimg.cc/Czfq2F8R/IMG-6224.gif", link: "https://www.mediafire.com/file/csvufyf40lrz37s/Code_hie%25CC%25A3%25CC%2582u_u%25CC%259B%25CC%2581ng_tro%25CC%2589_chuo%25CC%25A3%25CC%2582t_1.zip/file" },
     { id: 8, name: "CODE HIỆU ỨNG CHUỘT 2", price: 65000, img: "https://i.postimg.cc/K3mMVW6Q/IMG-6225.gif", link: "https://www.mediafire.com/file/rzwparz9rv49icq/Code_Hie%25CC%25A3%25CC%2582u_U%25CC%259B%25CC%2581ng_Chuo%25CC%25A3%25CC%2582t_2.zip/file" },
-    { id: 9, name: "CODE HIỆU ỨNG CHUỘT 3", price: 67000, img: "https://i.postimg.cc/Bt3HX8jF/IMG-6226.gif", link: "https://www.mediafire.com/file/kueqacmv4wi1cuv/Code_Hie%25CC%25A3%25CC%2582u_U%25CC%259B%25CC%2581ng_Chuo%25CC%25A3%25CC%2582t_3.zip/file" },
     { id: 10, name: "Code Thư Tỏ Tình", price: 50000, img: "https://i.postimg.cc/q62Czw4K/IMG-6227.gif", link: "https://www.mediafire.com/file/689n10vjdpsnnfv/Code_Thu%25CC%259B_To%25CC%2589_Ti%25CC%2580nh.zip/file" },
     { id: 11, name: "Code Thiệp Chúc Giáng Sinh", price: 51000, img: "https://i.postimg.cc/3yHJnG5Y/IMG-6228.png", link: "https://www.mediafire.com/file/t914seytwtw0me0/Code_Thu%25CC%259B_Gia%25CC%2581ng_Sinh.zip/file" },
     { id: 12, name: "CODE HIỆU ỨNG CHUỘT 4", price: 63000, img: "https://i.postimg.cc/NKjWYf6d/IMG-6231.gif", link: "https://www.mediafire.com/file/e064bjd9uyb8z75/Code_Hie%25CC%25A3%25CC%2582u_U%25CC%259B%25CC%2581ng_Chuo%25CC%25A3%25CC%2582t_4.zip/file" },
     { id: 13, name: "CODE HIỆU ỨNG CHUỘT 5", price: 58000, img: "https://i.postimg.cc/HrkfHswf/IMG-6232.gif", link: "https://www.mediafire.com/file/6zwm6ew9ygnr1u3/Code_Hie%25CC%25A3%25CC%2582u_U%25CC%259B%25CC%2581ng_Chuo%25CC%25A3%25CC%2582t_5.zip/file" },
-    { id: 14, name: "CODE HIỆU ỨNG LOADDING", price: 21000, img: "https://i.postimg.cc/pmLgxXfS/IMG-6233.png", link: "https://www.mediafire.com/file/zgsje7jjri4wh7t/Code_Hie%25CC%25A3%25CC%2582u_U%25CC%259B%25CC%2581ng_Loadding.zip/file" }
-    { id: 15, name: "Code Qly Web Trường Học", price: 100000, img: "https://i.postimg.cc/G3B9xytZ/Untitled.png", link: "https://www.mediafire.com/file/xd5x96ia1g6arbv/Code+website+quản+lý+trường+học.zip/file" },
-   ];
+    { id: 14, name: "CODE HIỆU ỨNG LOADDING", price: 21000, img: "https://i.postimg.cc/pmLgxXfS/IMG-6233.png", link: "https://www.mediafire.com/file/zgsje7jjri4wh7t/Code_Hie%25CC%25A3%25CC%2582u_U%25CC%259B%25CC%2581ng_Loadding.zip/file" },
+    { id: 15, name: "Code Qly Web Trường Học", price: 100000, img: "https://i.postimg.cc/G3B9xytZ/Untitled.png", link: "https://www.mediafire.com/file/xd5x96ia1g6arbv/Code+website+quản+lý+trường+học.zip/file" }
+];
     function renderProducts() {
         document.getElementById('productGrid').innerHTML = products.map(p => `
             <div class="card">
