@@ -412,51 +412,44 @@ const products = [
     }
 
         // --- 4. QUẢN LÝ TRẠNG THÁI NGƯỜI DÙNG ---
-    function checkLogin() {
+        function checkLogin() {
         const user = localStorage.getItem('hoangUser');
-        if(user) {
-            document.getElementById('auth-section').style.display = 'none';
-            document.getElementById('user-section').style.display = 'flex';
+        const userSection = document.getElementById('user-section');
+        const authSection = document.getElementById('auth-section');
+
+        if(user && userSection) {
+            authSection.style.display = 'none';
+            userSection.style.display = 'flex';
             document.getElementById('history-section').style.display = 'block';
             
-            // Cập nhật nội dung cho user-section (Bao gồm nút Trang cá nhân và tên)
-            const userSection = document.getElementById('user-section');
-            if (userSection) {
-                userSection.innerHTML = `
-                    <button onclick="openProfile()" id="btn-profile" style="background: #333; color: #fff; border: 1px solid #555; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 5px;">
-                        <i class="fas fa-user"></i> Trang cá nhân
-                    </button>
-                    <span style="color: #fff; margin-right: 10px;">Xin chào, <b style="color: #e91e63;">${user}</b></span>
-                    <div style="background: #222; padding: 5px 12px; border-radius: 20px; font-size: 14px; display: inline-block; margin-right: 10px;">
-                        <i class="fas fa-wallet" style="color:#00ff00"></i> <span id="user-balance">0đ</span>
-                    </div>
-                    <button onclick="showRecharge()" class="btn btn-red" style="padding: 5px 10px; font-size: 12px;">NẠP</button>
-                    <i class="fas fa-sign-out-alt" style="cursor:pointer; color: #666; margin-left: 10px;" onclick="logout()"></i>
-                `;
-            }
+            // Vẽ lại menu để nút "Trang cá nhân" hoạt động
+            userSection.innerHTML = `
+                <button onclick="openProfile()" style="background: #333; color: #fff; border: 1px solid #555; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 5px;">
+                    <i class="fas fa-user"></i> Trang cá nhân
+                </button>
+                <span style="color: #fff; margin-right: 10px;">Chào, <b style="color:var(--primary)">${user}</b></span>
+                <div style="background: #222; padding: 5px 12px; border-radius: 20px; font-size: 14px; margin-right: 10px;">
+                    <i class="fas fa-wallet" style="color:#00ff00"></i> <span id="user-balance">0đ</span>
+                </div>
+                <button class="btn btn-red" style="padding: 5px 10px; font-size: 12px;" onclick="showRecharge()">NẠP</button>
+                <i class="fas fa-sign-out-alt" style="cursor:pointer; color: #666; margin-left:10px" onclick="logout()"></i>
+            `;
             
-            document.getElementById('ck-name').innerText = user.toUpperCase();
-
+            if(document.getElementById('ck-name')) document.getElementById('ck-name').innerText = user.toUpperCase();
             
-    // Chèn nút vào trước nút NAP hoặc trước tên hiển thị
-    userSection.insertBefore(profileBtn, userSection.firstChild);
-}
-            document.getElementById('ck-name').innerText = user.toUpperCase();
-            
-            // Lắng nghe số dư thực tế từ Firebase
             db.ref('users/' + user).on('value', snap => {
                 const data = snap.val();
                 if(data) {
                     const balance = data.balance || 0;
-                    document.getElementById('user-balance').innerText = balance.toLocaleString() + 'đ';
+                    const balEl = document.getElementById('user-balance');
+                    if(balEl) balEl.innerText = balance.toLocaleString() + 'đ';
                     localStorage.setItem('hoangBal', balance);
                 }
             });
-
-            // Tải lịch sử mua hàng
-           loadHistory(user);
+            loadHistory(user);
         }
     }
+
 
     // Cấu hình thưởng
 const prizes = [
