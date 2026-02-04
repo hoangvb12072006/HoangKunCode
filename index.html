@@ -831,6 +831,41 @@ function updateWheelUI(user) {
 }
 // Chạy hàm
 loadTopTen();
+
+        function openProfile() {
+    const user = localStorage.getItem('hoangUser');
+    if(!user) return showAuth(false);
+
+    // Ẩn tất cả các phần nội dung chính của shop
+    document.querySelectorAll('section, .container-fluid, #main-content').forEach(el => el.style.display = 'none');
+    document.getElementById('profile-page').style.display = 'block';
+    document.getElementById('p-username').value = user;
+    
+    // Load lịch sử từ Firebase (Bảng wallet_history bạn tự tạo thêm)
+    db.ref('wallet_history/' + user).limitToLast(20).on('value', snap => {
+        const body = document.getElementById('wallet-history-body');
+        body.innerHTML = '';
+        const data = snap.val();
+        if(!data) {
+            body.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Không có dữ liệu</td></tr>';
+            return;
+        }
+        Object.values(data).reverse().forEach(item => {
+            body.innerHTML += `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px;">${item.date}</td>
+                    <td style="padding: 12px; color:${item.amount > 0 ? 'green' : 'red'}; font-weight:bold;">${item.amount > 0 ? '+' : ''}${item.amount.toLocaleString()}đ</td>
+                    <td style="padding: 12px;">${(item.balanceBefore || 0).toLocaleString()}đ</td>
+                    <td style="padding: 12px;">${(item.balanceAfter || 0).toLocaleString()}đ</td>
+                    <td style="padding: 12px;"><span style="background:#eee; padding:2px 8px; border-radius:10px; font-size:12px;">${item.note}</span></td>
+                </tr>`;
+        });
+    });
+}
+
+function closeProfile() {
+    location.reload(); // Cách nhanh nhất để quay lại trang chủ mà không bị lỗi giao diện
+}
         
 </script>
 
@@ -846,6 +881,55 @@ loadTopTen();
     <a href="https://t.me/@kunmmo2006" target="_blank" class="contact-item telegram">
         <i class="fa-brands fa-telegram"></i>
     </a>
+</div>
+
+    <div id="profile-page" style="display: none; background: #f4f6f9; min-height: 100vh; padding: 20px 0;">
+    <div class="container" style="max-width: 1100px;">
+        <nav style="margin-bottom: 20px; font-size: 14px;">
+            <a href="#" onclick="closeProfile()" style="text-decoration:none; color:#333;">Trang chủ</a> 
+            <span style="color:#999;"> &gt; Lịch sử giao dịch</span>
+        </nav>
+
+        <div style="background: #fff; padding: 25px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <label style="display:block; margin-bottom:5px; font-weight:bold;">Tên của bạn <span style="color:red">*</span></label>
+                    <input type="text" id="p-username" disabled style="width:100%; padding:10px; border:1px solid #ddd; background:#f9f9f9;">
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:5px; font-weight:bold;">Số điện thoại</label>
+                    <input type="text" placeholder="Chưa cập nhật" style="width:100%; padding:10px; border:1px solid #ddd;">
+                </div>
+            </div>
+            <div style="margin-top:15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:bold;">Mật khẩu mới</label>
+                <input type="password" id="p-new-pass" placeholder="Bỏ trống nếu giữ mật khẩu cũ" style="width:100%; padding:10px; border:1px solid #ddd;">
+            </div>
+            <button class="btn" style="background:#d9534f; color:#fff; margin-top:20px; border:none; padding:10px 25px; border-radius:3px;">
+                <i class="fas fa-edit"></i> Cập nhật
+            </button>
+        </div>
+
+        <div style="background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <h4 style="color: #d9534f; margin-bottom: 20px;"><i class="fas fa-file-invoice-dollar"></i> Lịch sử biến động số dư</h4>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                    <thead>
+                        <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                            <th style="padding: 12px; text-align: left;">Thời gian</th>
+                            <th style="padding: 12px; text-align: left;">Số tiền</th>
+                            <th style="padding: 12px; text-align: left;">Số dư trước</th>
+                            <th style="padding: 12px; text-align: left;">Số dư sau</th>
+                            <th style="padding: 12px; text-align: left;">Loại</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wallet-history-body">
+                        <tr><td colspan="5" style="text-align:center; padding:20px; color:#999;">Không có dữ liệu</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
     <footer style="background: #0a0a0a; border-top: 2px solid var(--primary); padding: 50px 0 20px; margin-top: 50px;">
