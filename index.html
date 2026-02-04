@@ -518,12 +518,25 @@ async function spinWheel() {
     let freeSpins = userData.freeSpins || 0;
     let balance = userData.balance || 0;
 
-    // Kiểm tra lượt quay
+   // Kiểm tra lượt quay: Chỉ cho phép quay khi có freeSpins (nạp 50k tặng 1)
     if (freeSpins > 0) {
-        freeSpins -= 1;
+        freeSpins -= 1; 
     } else {
-        if (balance < 10000) return Swal.fire("Thiếu tiền", "Bạn cần 10.000đ cho 1 lượt quay!", "warning");
-        balance -= 10000;
+        isSpinning = false; // Reset trạng thái để có thể bấm lại
+        return Swal.fire({
+            title: "Hết lượt quay!",
+            html: `Bạn không còn lượt quay nào.<br><br><b style="color:#e91e63">Quy định:</b> Mỗi <b>50.000đ</b> nạp vào tài khoản sẽ được tặng <b>1 lượt quay</b> miễn phí!`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#6e08c1',
+            confirmButtonText: "Nạp tiền để lấy lượt",
+            cancelButtonText: "Đóng"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                toggleWheelModal(false); // Đóng vòng quay
+                // Nếu bạn có hàm mở nạp tiền thì gọi ở đây, ví dụ: showModal('rechargeModal');
+            }
+        });
     }
 
     isSpinning = true;
@@ -626,13 +639,28 @@ function updateWheelUI(user) {
                 status: "Thành công"
             });
 
-            // Cập nhật tiền
-            db.ref('users/' + user).update({ balance: newBal }).then(() => {
-                Swal.fire("Thành công!", "Sản phẩm đã được thêm vào lịch sử bên dưới.", "success");
-            });
-        }
-    });
-}
+// TẶNG LƯỢT QUAY: Cứ mỗi 50.000đ của giá trị món hàng sẽ được 1 lượt
+            let bonusSpins = Math.floor(price / 50000); 
+
+            if (bonusSpins > 0) {
+                db.ref('users/' + user).once('value').then(snapshot => {
+                    let userData = snapshot.val() || {};
+                    let currentFreeSpins = userData.freeSpins || 0;
+                    
+                    // Cập nhật số dư mới và cộng thêm lượt quay
+                    db.ref('users/' + user).update({
+                        balance: newBal,
+                        freeSpins: currentFreeSpins + bonusSpins
+                    });
+                    
+                    Swal.fire("Thành công", `Bạn đã mua ${name} và được tặng ${bonusSpins} lượt quay!`, "success");
+                });
+            } else {
+                // Nếu giá trị thấp hơn 50k thì chỉ cập nhật số dư
+                db.ref('users/' + user).update({ balance: newBal });
+                Swal.fire("Thành công", `Bạn đã mua ${name} thành công!`, "success");
+            }
+            
   function loadHistory(user) {
     db.ref('history/' + user).on('value', snap => {
         const historyBody = document.getElementById('history-body');
