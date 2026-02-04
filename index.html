@@ -432,8 +432,23 @@ const prizes = [
 ];
 
 function toggleWheelModal(show) {
-    document.getElementById('wheelModal').style.display = show ? 'flex' : 'none';
-    if(show) drawWheel();
+    const modal = document.getElementById('wheelModal');
+    if (modal) {
+        modal.style.display = show ? 'flex' : 'none';
+        if (show) {
+            // 1. Vẽ ngay lập tức
+            drawWheel();
+            
+            // 2. Vẽ lại sau 200ms (Phòng trường hợp máy lag, modal chưa hiện xong)
+            setTimeout(() => {
+                drawWheel();
+            }, 200);
+            
+            // 3. Cập nhật số lượt quay từ Firebase khi mở modal
+            const user = localStorage.getItem('hoangUser');
+            if(user) updateWheelUI(user); 
+        }
+    }
 }
 
 async function spinWheel() {
