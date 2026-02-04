@@ -481,7 +481,7 @@ function drawWheel() {
     ctx.clearRect(0, 0, size, size); // Xóa sạch để vẽ lại từ đầu
 
     prizes.forEach((prize, i) => {
-        const angle = i * arc;
+       const angle = i * arc - Math.PI / 2;
         
         // Vẽ ô màu (Rất quan trọng)
         ctx.fillStyle = prize.color;
@@ -550,7 +550,8 @@ async function spinWheel() {
 
     // Tính toán góc quay (Quay ít nhất 10 vòng + góc dừng)
     const sectorAngle = 360 / prizes.length; 
-    const stopAngle = 360 - (prizeIndex * sectorAngle) - (sectorAngle / 2);
+   // Thêm -90 vào cuối để bù đắp góc lệch giữa Canvas và Kim chỉ
+const stopAngle = 360 - (prizeIndex * sectorAngle) - (sectorAngle / 2) - 90;
     const spinAngle = 3600 + stopAngle; 
 
     const canvas = document.getElementById('wheelCanvas');
