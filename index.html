@@ -639,7 +639,7 @@ function updateWheelUI(user) {
                 status: "Thành công"
             });
 
-// TẶNG LƯỢT QUAY: Cứ mỗi 50.000đ của giá trị món hàng sẽ được 1 lượt
+// TẶNG LƯỢT QUAY: Cứ mỗi 50.000đ giá trị món hàng được 1 lượt
             let bonusSpins = Math.floor(price / 50000); 
 
             if (bonusSpins > 0) {
@@ -647,7 +647,6 @@ function updateWheelUI(user) {
                     let userData = snapshot.val() || {};
                     let currentFreeSpins = userData.freeSpins || 0;
                     
-                    // Cập nhật số dư mới và cộng thêm lượt quay
                     db.ref('users/' + user).update({
                         balance: newBal,
                         freeSpins: currentFreeSpins + bonusSpins
@@ -656,10 +655,12 @@ function updateWheelUI(user) {
                     Swal.fire("Thành công", `Bạn đã mua ${name} và được tặng ${bonusSpins} lượt quay!`, "success");
                 });
             } else {
-                // Nếu giá trị thấp hơn 50k thì chỉ cập nhật số dư
                 db.ref('users/' + user).update({ balance: newBal });
                 Swal.fire("Thành công", `Bạn đã mua ${name} thành công!`, "success");
             }
+        } // Kết thúc if (result.isConfirmed)
+    }); // Kết thúc .then của Swal
+} // Kết thúc function buyItem
             
   function loadHistory(user) {
     db.ref('history/' + user).on('value', snap => {
