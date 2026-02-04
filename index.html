@@ -418,7 +418,18 @@ const products = [
             document.getElementById('auth-section').style.display = 'none';
             document.getElementById('user-section').style.display = 'flex';
             document.getElementById('history-section').style.display = 'block';
-            document.getElementById('display-name').innerText = user;
+            // Thêm nút Trang cá nhân vào giao diện người dùng
+const userSection = document.getElementById('user-section');
+if (userSection && !document.getElementById('btn-profile')) {
+    const profileBtn = document.createElement('button');
+    profileBtn.id = 'btn-profile';
+    profileBtn.innerHTML = '<i class="fas fa-user"></i> Trang cá nhân';
+    profileBtn.style = "background: #333; color: #fff; border: 1px solid #555; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 5px;";
+    profileBtn.onclick = openProfile;
+    
+    // Chèn nút vào trước nút NAP hoặc trước tên hiển thị
+    userSection.insertBefore(profileBtn, userSection.firstChild);
+}
             document.getElementById('ck-name').innerText = user.toUpperCase();
             
             // Lắng nghe số dư thực tế từ Firebase
@@ -999,6 +1010,40 @@ function closeProfile() {
     </div>
 </div>
 
+<div id="profile-page" style="display: none; background: #f4f6f9; min-height: 100vh; padding: 20px 0; position: fixed; top: 0; left: 0; width: 100%; z-index: 10000; overflow-y: auto;">
+    <div class="container" style="max-width: 1000px; margin: auto; font-family: sans-serif;">
+        <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px;">
+            <h4 style="border-left: 5px solid #d9534f; padding-left: 15px; color: #333; margin: 0; text-align: left;">THÔNG TIN TÀI KHOẢN</h4>
+            <hr style="border: 0.5px solid #eee; margin: 15px 0;">
+            <p style="font-size: 16px; color: #555; text-align: left;">Tên tài khoản: <b id="p-username-display" style="color: #d9534f;">---</b></p>
+        </div>
+
+        <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h4 style="border-left: 5px solid #d9534f; padding-left: 15px; color: #333; margin-bottom: 20px; text-align: left;">LỊCH SỬ BIẾN ĐỘNG SỐ DƯ</h4>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                    <thead>
+                        <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                            <th style="padding: 12px; text-align: left; color: #444;">Thời gian</th>
+                            <th style="padding: 12px; text-align: left; color: #444;">Số tiền</th>
+                            <th style="padding: 12px; text-align: left; color: #444;">Số dư cuối</th>
+                            <th style="padding: 12px; text-align: left; color: #444;">Nội dung</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wallet-history-body" style="color: #333;">
+                        <tr><td colspan="4" style="text-align:center; padding:30px; color: #999;">Đang tải lịch sử...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <button onclick="closeProfile()" style="padding: 12px 30px; cursor: pointer; background: #333; color: #fff; border: none; border-radius: 5px; font-weight: bold;">
+                <i class="fas fa-arrow-left"></i> QUAY LẠI CỬA HÀNG
+            </button>
+        </div>
+    </div>
+</div>
+    
 <style>
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
