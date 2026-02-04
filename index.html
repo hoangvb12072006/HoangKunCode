@@ -450,21 +450,60 @@ function toggleWheelModal(show) {
     if (modal) {
         modal.style.display = show ? 'flex' : 'none';
         if (show) {
-            // 1. Vẽ ngay lập tức
-            drawWheel();
-            
-            // 2. Vẽ lại sau 200ms (Phòng trường hợp máy lag, modal chưa hiện xong)
+            // Đợi 150ms để Modal hiện ra xong rồi mới bắt đầu vẽ màu
             setTimeout(() => {
                 drawWheel();
-            }, 200);
+                console.log("Đã vẽ lại vòng quay!");
+            }, 150);
             
-            // 3. Cập nhật số lượt quay từ Firebase khi mở modal
+            // Cập nhật lượt free từ Firebase
             const user = localStorage.getItem('hoangUser');
-            if(user) updateWheelUI(user); 
+            if(user) {
+                db.ref('users/' + user).once('value', s => {
+                    if(s.exists()) document.getElementById('free-spins').innerText = s.val().freeSpins || 0;
+                });
+            }
         }
     }
 }
 
+function drawWheel() {
+    const canvas = document.getElementById('wheelCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const size = canvas.width;
+    const center = size / 2;
+    const arc = Math.PI / (prizes.length / 2);
+
+    ctx.clearRect(0, 0, size, size); // Xóa sạch để vẽ lại từ đầu
+
+    prizes.forEach((prize, i) => {
+        const angle = i * arc;
+        
+        // Vẽ ô màu (Rất quan trọng)
+        ctx.fillStyle = prize.color;
+        ctx.beginPath();
+        ctx.moveTo(center, center);
+        ctx.arc(center, center, center - 5, angle, angle + arc, false);
+        ctx.lineTo(center, center);
+        ctx.fill(); // Phải có lệnh này mới hiện màu
+        
+        // Vẽ viền trắng
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Vẽ chữ phần thưởng
+        ctx.save();
+        ctx.fillStyle = "#ffffff";
+        ctx.translate(center + Math.cos(angle + arc/2) * (center * 0.65), center + Math.sin(angle + arc/2) * (center * 0.65));
+        ctx.rotate(angle + arc/2 + Math.PI/2);
+        ctx.font = "bold 13px Arial";
+        ctx.fillText(prize.label, -ctx.measureText(prize.label).width/2, 0);
+        ctx.restore();
+    });
+}
+    
 async function spinWheel() {
     const user = localStorage.getItem('hoangUser');
     if(!user) return Swal.fire("Lỗi", "Đăng nhập để quay!", "error");
