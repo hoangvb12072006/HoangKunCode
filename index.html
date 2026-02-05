@@ -333,10 +333,19 @@
             <button class="btn-red" style="width:100%; padding:15px; border-radius:8px; border:none; background:#ff4747; color:#fff; font-weight:bold; cursor:pointer;" onclick="sendCard()">Nạp Ngay</button>
         </div>
 
-        <div id="con-top" style="padding: 20px; display: none; max-height: 350px; overflow-y: auto;">
-            <div id="top-recharge-list">
-                </div>
-        </div>
+       <div id="con-top" style="padding: 15px; display: none; max-height: 300px; overflow-y: auto;">
+    <table style="width: 100%; border-collapse: collapse; color: #333; font-size: 14px;">
+        <thead>
+            <tr style="border-bottom: 2px solid #eee; color: #888;">
+                <th style="padding: 10px; text-align: left;">Hạng</th>
+                <th style="padding: 10px; text-align: left;">Người dùng</th>
+                <th style="padding: 10px; text-align: right;">Số tiền</th>
+            </tr>
+        </thead>
+        <tbody id="top-recharge-modal-body">
+            </tbody>
+    </table>
+</div>
 
         <div id="con-reward" style="padding: 20px; display: none; text-align: left;">
             <div style="background: #fff5f5; border-left: 4px solid #ff4747; padding: 15px; border-radius: 5px;">
@@ -398,6 +407,38 @@
 
     <script>
 
+        function loadTopRechargeModal() {
+    const topBody = document.getElementById('top-recharge-modal-body');
+    if (!topBody) return;
+
+    // Lấy danh sách user, sắp xếp theo balance hoặc một trường 'total_nạp' nếu bạn có
+    db.ref('users').orderByChild('balance').limitToLast(10).on('value', snapshot => {
+        let html = '';
+        let rank = 1;
+        let users = [];
+
+        snapshot.forEach(child => {
+            users.push(child.val());
+        });
+        
+        // Đảo ngược danh sách để người cao nhất lên đầu
+        users.reverse().forEach(user => {
+            let color = rank <= 3 ? '#ff4747' : '#555'; // Top 3 để màu đỏ cho nổi
+            html += `
+                <tr style="border-bottom: 1px solid #f9f9f9;">
+                    <td style="padding: 10px; font-weight: bold; color: ${color};">#${rank}</td>
+                    <td style="padding: 10px;">${user.username}</td>
+                    <td style="padding: 10px; text-align: right; font-weight: bold; color: #28a745;">
+                        ${(user.balance || 0).toLocaleString()}đ
+                    </td>
+                </tr>
+            `;
+            rank++;
+        });
+        topBody.innerHTML = html;
+    });
+}
+
     let isSpinning = false; // Thêm dòng này ở đầu file Script
     
     // --- 1. KẾT NỐI FIREBASE ---
@@ -422,6 +463,12 @@ function switchRechargeTab(tab) {
         }
     });
 } // <--- Phải có dấu đóng này
+
+        // Thêm đoạn này để khi bấm vào tab 'top' nó mới bắt đầu tải dữ liệu
+    if (tab === 'top') {
+        loadTopRechargeModal();
+    }
+}
 
         // --- 2. Hàm mở Modal nạp tiền ---
 function showRecharge() {
