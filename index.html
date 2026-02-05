@@ -12,6 +12,12 @@
     
     <style>
 
+        .logo:hover {
+    filter: brightness(1.2); /* Làm logo sáng hơn khi di chuột */
+    text-shadow: 0 0 8px var(--primary); /* Tạo hiệu ứng hào quang */
+    transition: 0.3s;
+}
+
         footer a:hover {
     color: var(--primary) !important;
     transition: 0.3s;
@@ -191,7 +197,11 @@
 
 <nav>
     <div class="container nav-content">
-        <a href="#" class="logo">HOANGKUN<span>STORE</span></a>
+       <div class="logo">
+    <a href="index.html" style="text-decoration: none; color: inherit;">
+        <h1 style="margin: 0; cursor: pointer;">HOANGKUNSTORE</h1>
+    </a>
+</div>
         <div id="auth-section">
             <button class="btn btn-red" onclick="showAuth(false)">ĐĂNG NHẬP / ĐĂNG KÝ</button>
         </div>
