@@ -449,11 +449,10 @@ function showRecharge() {
     switchRechargeTab('atm'); // Tự động mở tab ATM khi nhấn nạp
 
     // --- ĐOẠN CODE ĐỔI TÊN KHÁCH ---
-    const memoElement = document.querySelector('#con-atm b:last-of-type');
+    const memoElement = document.getElementById('nap-memo');
     if (memoElement) {
         memoElement.innerText = `nap ${user}`;
     }
-}
         
 function sendCard() {
     const user = localStorage.getItem('hoangUser');
