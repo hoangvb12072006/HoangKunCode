@@ -439,7 +439,7 @@
             html += `
                 <tr style="border-bottom: 1px solid #f9f9f9;">
                     <td style="padding: 10px; font-weight: bold; color: ${color};">#${rank}</td>
-                    <td style="padding: 10px;">${user.username}</td>
+                    <td style="padding: 10px;">${user.username || user.name || 'Khách'}</td>
                     <td style="padding: 10px; text-align: right; font-weight: bold; color: #28a745;">
                         ${(user.balance || 0).toLocaleString()}đ
                     </td>
