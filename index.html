@@ -462,58 +462,7 @@ function sendCard() {
         document.getElementById('cardPin').value = '';
     }).catch(err => Swal.fire("Lỗi", err.message, "error"));
 }
-        
-        function updateProfile() {
-    const user = localStorage.getItem('hoangUser');
-    const email = document.getElementById('updateEmail').value.trim();
-    const phone = document.getElementById('updatePhone').value.trim();
-    const oldP = document.getElementById('oldPass').value;
-    const newP = document.getElementById('newPass').value;
-    const confirmP = document.getElementById('confirmNewPass').value;
-
-    if(!user) return;
-
-    db.ref('users/' + user).once('value', snapshot => {
-        const userData = snapshot.val();
-        let updates = {};
-
-        // Cập nhật Gmail và SĐT
-        if(email) updates.email = email;
-        if(phone) updates.phone = phone;
-
-        if(Object.keys(updates).length > 0) {
-            db.ref('users/' + user).update(updates)
-            .then(() => {
-                Swal.fire("Thành công", "Thông tin hồ sơ đã được cập nhật!", "success");
-                closeModal('profileModal');
-            });
-        } else {
-            Swal.fire("Thông báo", "Vui lòng nhập thông tin cần thay đổi!", "info");
-        }
-    });
-}
-
-        function showProfile() {
-    const user = localStorage.getItem('hoangUser');
-    if (!user) return showAuth(false); // Nếu chưa đăng nhập thì hiện bảng đăng nhập
-
-    // Lấy dữ liệu từ Firebase để đổ vào bảng Profile
-    db.ref('users/' + user).once('value', snapshot => {
-        const data = snapshot.val();
-        if (data) {
-            // Đổ dữ liệu vào các thẻ ID trong Modal
-            document.getElementById('p-username').innerText = user.toUpperCase();
-            document.getElementById('p-balance').innerText = (data.balance || 0).toLocaleString() + "đ";
-            document.getElementById('p-email').innerText = data.email || "Chưa cập nhật";
-            document.getElementById('p-phone').innerText = data.phone || "Chưa cập nhật";
-            
-            // Hiện Modal
-            document.getElementById('profileModal').style.display = 'flex';
-            // Luôn hiển thị mặt "Thông tin" trước khi mở
-            switchTab('info');
-        }
-    });
-}
+    
 
    // Thay thế đoạn cũ bằng đoạn này:
 const products = [
