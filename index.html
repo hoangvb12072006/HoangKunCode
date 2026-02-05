@@ -305,6 +305,20 @@
     </div>
 </div>
 
+    <div id="profileModal" class="modal">
+    <div class="modal-content" style="border: 1px solid var(--primary);">
+        <h2 style="color:var(--primary); text-transform: uppercase;">Thông tin tài khoản</h2>
+        <div style="background: #000; padding: 20px; border-radius: 15px; text-align: left;">
+            <p><i class="fas fa-user"></i> Tài khoản: <b id="p-username" style="color:var(--primary)">...</b></p>
+            <p><i class="fas fa-wallet"></i> Số dư: <b id="p-balance" style="color:#00ff00">0đ</b></p>
+            <p><i class="fas fa-calendar-alt"></i> Ngày tham gia: <span id="p-date" style="font-size: 13px; color: #888;">...</span></p>
+        </div>
+        <button class="btn btn-red" style="width: 100%; margin-top: 15px;" onclick="closeModal('profileModal')">ĐÓNG</button>
+    </div>
+</div>
+
+<script>
+    
 <div id="fakeNoti" class="fake-noti">
     <i class="fas fa-check-circle" style="color: #00ff00;"></i>
     <span id="fakeNotiText"></span>
@@ -847,67 +861,60 @@ function updateWheelUI(user) {
 // Chạy hàm
 loadTopTen();
 
-        function openProfile() {
+function openProfile() {
     const user = localStorage.getItem('hoangUser');
-    if(!user) return showAuth(false);
+    if (!user) return typeof showAuth === 'function' ? showAuth(false) : alert("Vui lòng đăng nhập!");
 
-    // Ẩn tất cả các phần nội dung chính của shop
-    document.querySelectorAll('section, .container-fluid, #main-content').forEach(el => el.style.display = 'none');
-    document.getElementById('profile-page').style.display = 'block';
-    document.getElementById('p-username').value = user;
-    
-    // Load lịch sử từ Firebase (Bảng wallet_history bạn tự tạo thêm)
+    // 1. Ẩn tất cả nội dung chính của shop để hiện trang cá nhân
+    const mainElements = document.querySelectorAll('section, .container-fluid, #main-content, .banner, .shop-title, .grid');
+    mainElements.forEach(el => el.style.display = 'none');
+
+    // 2. Hiện khung profile-page
+    const profilePage = document.getElementById('profile-page');
+    if (profilePage) {
+        profilePage.style.display = 'block';
+    } else {
+        return console.error("Không tìm thấy ID 'profile-page' trong HTML!");
+    }
+
+    // 3. Hiển thị tên (hỗ trợ cả thẻ input và thẻ text)
+    const pInput = document.getElementById('p-username');
+    const pDisplay = document.getElementById('p-username-display');
+    if (pInput) pInput.value = user;
+    if (pDisplay) pDisplay.innerText = user;
+
+    // 4. Load lịch sử từ Firebase
     db.ref('wallet_history/' + user).limitToLast(20).on('value', snap => {
         const body = document.getElementById('wallet-history-body');
+        if (!body) return;
+        
         body.innerHTML = '';
         const data = snap.val();
-        if(!data) {
-            body.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Không có dữ liệu</td></tr>';
+        
+        if (!data) {
+            body.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#888;">Không có dữ liệu lịch sử</td></tr>';
             return;
         }
+
         Object.values(data).reverse().forEach(item => {
+            const amountColor = item.amount > 0 ? '#00ff00' : '#ff4444';
+            const amountPrefix = item.amount > 0 ? '+' : '';
+            
             body.innerHTML += `
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 12px;">${item.date}</td>
-                    <td style="padding: 12px; color:${item.amount > 0 ? 'green' : 'red'}; font-weight:bold;">${item.amount > 0 ? '+' : ''}${item.amount.toLocaleString()}đ</td>
-                    <td style="padding: 12px;">${(item.balanceBefore || 0).toLocaleString()}đ</td>
-                    <td style="padding: 12px;">${(item.balanceAfter || 0).toLocaleString()}đ</td>
-                    <td style="padding: 12px;"><span style="background:#eee; padding:2px 8px; border-radius:10px; font-size:12px;">${item.note}</span></td>
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 12px; font-size:12px;">${item.date || '---'}</td>
+                    <td style="padding: 12px; color:${amountColor}; font-weight:bold;">${amountPrefix}${(item.amount || 0).toLocaleString()}đ</td>
+                    <td style="padding: 12px; color:#aaa;">${(item.balanceBefore || 0).toLocaleString()}đ</td>
+                    <td style="padding: 12px; color:#fff;">${(item.balanceAfter || 0).toLocaleString()}đ</td>
+                    <td style="padding: 12px;"><span style="background:#333; padding:2px 8px; border-radius:10px; font-size:11px;">${item.note || 'Giao dịch'}</span></td>
                 </tr>`;
         });
     });
 }
 
 function closeProfile() {
-    location.reload(); // Cách nhanh nhất để quay lại trang chủ mà không bị lỗi giao diện
-}
-
-        // Dán cái này vào dòng 834
-function openProfile() {
-    const user = localStorage.getItem('hoangUser');
-    if(!user) return;
-    document.getElementById('profile-page').style.display = 'block';
-    document.getElementById('p-username-display').innerText = user;
-    
-    // Load lịch sử (nếu có)
-    db.ref('wallet_history/' + user).limitToLast(10).on('value', snap => {
-        const body = document.getElementById('wallet-history-body');
-        if(body) {
-            body.innerHTML = '';
-            const data = snap.val();
-            if(!data) {
-                body.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Chưa có biến động số dư</td></tr>';
-                return;
-            }
-            Object.values(data).reverse().forEach(item => {
-                body.innerHTML += `<tr><td style="padding:10px;">${item.date}</td><td style="padding:10px;">${item.amount.toLocaleString()}đ</td><td style="padding:10px;">${item.balanceAfter.toLocaleString()}đ</td><td style="padding:10px;">${item.note}</td></tr>`;
-            });
-        }
-    });
-}
-
-function closeProfile() {
-    document.getElementById('profile-page').style.display = 'none';
+    // Cách an toàn nhất: Reload trang để giao diện shop quay về trạng thái ban đầu
+    location.reload(); 
 }
         
 </script>
