@@ -383,6 +383,66 @@
     }
 }
 
+        function updateProfile() {
+    const user = localStorage.getItem('hoangUser');
+    const email = document.getElementById('updateEmail').value.trim();
+    const phone = document.getElementById('updatePhone').value.trim();
+    const oldP = document.getElementById('oldPass').value;
+    const newP = document.getElementById('newPass').value;
+    const confirmP = document.getElementById('confirmNewPass').value;
+
+    if(!user) return;
+
+    db.ref('users/' + user).once('value', snapshot => {
+        const userData = snapshot.val();
+        let updates = {};
+
+        // Xử lý đổi mật khẩu
+        if(oldP || newP) {
+            if(oldP !== userData.pass) return Swal.fire("Lỗi", "Mật khẩu cũ không chính xác!", "error");
+            if(newP.length < 6) return Swal.fire("Lỗi", "Mật khẩu mới quá ngắn!", "warning");
+            if(newP !== confirmP) return Swal.fire("Lỗi", "Nhập lại mật khẩu không khớp!", "error");
+            updates.pass = newP;
+        }
+
+        // Cập nhật Gmail và SĐT
+        if(email) updates.email = email;
+        if(phone) updates.phone = phone;
+
+        if(Object.keys(updates).length > 0) {
+            db.ref('users/' + user).update(updates)
+            .then(() => {
+                Swal.fire("Thành công", "Thông tin hồ sơ đã được cập nhật!", "success");
+                closeModal('profileModal');
+            });
+        } else {
+            Swal.fire("Thông báo", "Vui lòng nhập thông tin cần thay đổi!", "info");
+        }
+    });
+}
+
+        function showProfile() {
+    const user = localStorage.getItem('hoangUser');
+    if (!user) return showAuth(false); // Nếu chưa đăng nhập thì hiện bảng đăng nhập
+
+    // Lấy dữ liệu từ Firebase để đổ vào bảng Profile
+    db.ref('users/' + user).once('value', snapshot => {
+        const data = snapshot.val();
+        if (data) {
+            // Đổ dữ liệu vào các thẻ ID trong Modal
+            document.getElementById('p-username').innerText = user.toUpperCase();
+            document.getElementById('p-balance').innerText = (data.balance || 0).toLocaleString() + "đ";
+            document.getElementById('p-email').innerText = data.email || "Chưa cập nhật";
+            document.getElementById('p-phone').innerText = data.phone || "Chưa cập nhật";
+            
+            // Hiện Modal
+            document.getElementById('profileModal').style.display = 'flex';
+            // Luôn hiển thị mặt "Thông tin" trước khi mở
+            switchTab('info');
+        }
+    });
+}
+
    // Thay thế đoạn cũ bằng đoạn này:
 const products = [
     { id: 1, name: "CODE TRAITYM 1", price: 22000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-3.jpg", link: "https://www.mediafire.com/file/x82cfpep8576y2m/Code_tr%25C3%25A1i_tym_1.zip/file" },
