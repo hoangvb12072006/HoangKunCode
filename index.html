@@ -299,19 +299,54 @@
 </div>
 
 <div id="rechargeModal" class="modal">
-    <div class="modal-content">
-        <h2 style="color:var(--primary)">NẠP TIỀN</h2>
-        <div style="background: #000; padding: 15px; border-radius: 10px; text-align: left; font-size: 14px; line-height: 1.8;">
-            <div>Ngân hàng: <b>TECHCOMBANK</b></div>
-            <div>Số tài khoản: <b style="color: #00ff00;">3120720060</b></div>
-            <div>Chủ TK: <b>NGUYEN VIET HOANG</b></div>
-            <div style="border-top: 1px dashed #333; margin-top: 10px; padding-top: 10px;">
-                Nội dung chuyển khoản:<br>
-                <b style="color: var(--primary); font-size: 18px;">NAP <span id="ck-name">...</span></b>
+    <div class="modal-content" style="max-width: 500px; padding: 0; overflow: hidden; background: #fff; border: none; border-radius: 15px;">
+        <div style="display: flex; background: #f8f9fa; border-bottom: 1px solid #ddd;">
+            <div id="re-tab1" onclick="switchRechargeTab('card')" style="flex: 1; padding: 15px; cursor: pointer; color: #ff4747; font-weight: bold; border-bottom: 3px solid #ff4747; text-align: center;">
+                Nạp thẻ
+            </div>
+            <div id="re-tab2" onclick="switchRechargeTab('top')" style="flex: 1; padding: 15px; cursor: pointer; color: #555; font-weight: bold; text-align: center;">
+                Top nạp
+            </div>
+            <div id="re-tab3" onclick="switchRechargeTab('reward')" style="flex: 1; padding: 15px; cursor: pointer; color: #555; font-weight: bold; text-align: center;">
+                Phần thưởng
             </div>
         </div>
-        <p style="font-size: 12px; color: #666; margin-top: 15px;">Vui lòng chuyển đúng nội dung. Tiền sẽ được cộng sau 1-5 phút.</p>
-        <button class="btn btn-red" style="width: 100%;" onclick="closeModal('rechargeModal')">TÔI ĐÃ CHUYỂN</button>
+
+        <div id="con-card" style="padding: 20px; display: block;">
+            <select id="cardType" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+                <option value="">Chọn nhà mạng</option>
+                <option value="VIETTEL">Viettel</option>
+                <option value="VINAPHONE">Vinaphone</option>
+                <option value="MOBIFONE">Mobifone</option>
+            </select>
+            <select id="cardValue" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+                <option value="">Chọn mệnh giá</option>
+                <option value="10000">10,000đ</option>
+                <option value="50000">50,000đ</option>
+                <option value="100000">100,000đ</option>
+            </select>
+            <input type="text" id="cardSeri" placeholder="Nhập số Seri" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+            <input type="text" id="cardPin" placeholder="Nhập mã thẻ" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid #ddd;">
+            <button class="btn-red" style="width:100%; padding:15px; border-radius:8px; border:none; background:#ff4747; color:#fff; font-weight:bold; cursor:pointer;" onclick="sendCard()">Nạp Ngay</button>
+        </div>
+
+        <div id="con-top" style="padding: 20px; display: none; max-height: 350px; overflow-y: auto;">
+            <div id="top-recharge-list">
+                </div>
+        </div>
+
+        <div id="con-reward" style="padding: 20px; display: none; text-align: left;">
+            <div style="background: #fff5f5; border-left: 4px solid #ff4747; padding: 15px; border-radius: 5px;">
+                <p style="color: #d9534f; font-weight: bold; margin-bottom: 5px;">Đua top nạp tháng 02</p>
+                <p style="font-size: 14px; margin: 5px 0;">Top 1: 500.000 VNĐ</p>
+                <p style="font-size: 14px; margin: 5px 0;">Top 2: 200.000 VNĐ</p>
+                <p style="font-size: 14px; margin: 5px 0;">Top 3: 100.000 VNĐ</p>
+            </div>
+        </div>
+
+        <div style="padding: 15px; border-top: 1px solid #eee;">
+            <button class="btn" style="width: 100%; background: #666; color:#fff;" onclick="closeModal('rechargeModal')">Đóng</button>
+        </div>
     </div>
 </div>
 
@@ -369,30 +404,65 @@
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+        
 
-        function switchTab(tab) {
-    const infoTab = document.getElementById('tab-info');
-    const secTab = document.getElementById('tab-security');
-    const infoBtn = document.getElementById('tab1-btn');
-    const secBtn = document.getElementById('tab2-btn');
+     // --- 1. Hàm chuyển Tab nạp tiền ---
+function switchRechargeTab(tab) {
+    const tabs = ['card', 'top', 'reward'];
+    tabs.forEach(t => {
+        const content = document.getElementById('con-' + t);
+        const btn = document.getElementById('re-tab' + (tabs.indexOf(t) + 1));
+        if(content) content.style.display = (t === tab) ? 'block' : 'none';
+        if (btn) {
+            btn.style.color = (t === tab) ? '#ff4747' : '#555';
+            btn.style.borderBottom = (t === tab) ? '3px solid #ff4747' : 'none';
+        }
+    });
+} // <--- Phải có dấu đóng này
 
-    if (tab === 'info') {
-        infoTab.style.display = 'block';
-        secTab.style.display = 'none';
-        infoBtn.style.background = '#111';
-        infoBtn.style.color = 'var(--primary)';
-        secBtn.style.background = 'transparent';
-        secBtn.style.color = '#888';
-    } else {
-        infoTab.style.display = 'none';
-        secTab.style.display = 'block';
-        secBtn.style.background = '#111';
-        secBtn.style.color = 'var(--primary)';
-        infoBtn.style.background = 'transparent';
-        infoBtn.style.color = '#888';
+        // --- 2. Hàm mở Modal nạp tiền ---
+function showRecharge() {
+    const user = localStorage.getItem('hoangUser');
+    if (!user) return showAuth(false);
+    document.getElementById('rechargeModal').style.display = 'flex';
+    switchRechargeTab('card');
+} // <--- Phải có dấu đóng này
+        
+function sendCard() {
+    const user = localStorage.getItem('hoangUser');
+    const type = document.getElementById('cardType').value;
+    const value = document.getElementById('cardValue').value;
+    const seri = document.getElementById('cardSeri').value.trim();
+    const pin = document.getElementById('cardPin').value.trim();
+    
+    if(!type || !value || !seri || !pin) {
+        return Swal.fire("Lỗi", "Vui lòng nhập đầy đủ thông tin thẻ!", "error");
     }
-}
 
+    // Hiệu ứng "Đang gửi" cho xịn
+    Swal.fire({
+        title: 'Đang gửi thẻ...',
+        didOpen: () => { Swal.showLoading(); }
+    });
+
+    // Lưu thông tin thẻ vào nhánh 'card_requests' trên Firebase
+    db.ref('card_requests').push({
+        username: user,
+        cardType: type,
+        cardValue: value,
+        seri: seri,
+        pin: pin,
+        status: "pending",
+        time: new Date().toLocaleString()
+    }).then(() => {
+        Swal.fire("Thành công", "Thẻ đã được gửi! Chờ Admin duyệt nhé.", "success");
+        closeModal('rechargeModal');
+        // Xóa trắng ô nhập để lần sau nạp tiếp
+        document.getElementById('cardSeri').value = '';
+        document.getElementById('cardPin').value = '';
+    }).catch(err => Swal.fire("Lỗi", err.message, "error"));
+}
+        
         function updateProfile() {
     const user = localStorage.getItem('hoangUser');
     const email = document.getElementById('updateEmail').value.trim();
@@ -837,8 +907,7 @@ function updateWheelUI(user) {
 
     function logout() { localStorage.removeItem('hoangUser'); location.reload(); }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function showRecharge() { document.getElementById('rechargeModal').style.display = 'flex'; }
-
+  
     // --- 5. HIỆU ỨNG VÀ TRANG TRÍ ---
     function initParticles() {
         const canvas = document.getElementById('particleCanvas');
