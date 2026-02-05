@@ -473,14 +473,12 @@ function switchRechargeTab(tab) {
             btn.style.color = (t === tab) ? '#ff4747' : '#555';
             btn.style.borderBottom = (t === tab) ? '3px solid #ff4747' : 'none';
         }
-    });
-} // <--- Phải có dấu đóng này
+   }); // Kết thúc tabs.forEach
 
-        // Thêm đoạn này để khi bấm vào tab 'top' nó mới bắt đầu tải dữ liệu
     if (tab === 'top') {
         loadTopRechargeModal();
     }
-}
+} // Kết thúc hàm switchRechargeTab tại đây (Dòng 482)
 
         // --- 2. Hàm mở Modal nạp tiền ---
 function showRecharge() {
