@@ -419,14 +419,14 @@ function showRecharge() {
     if (!user) return showAuth(false);
     
     document.getElementById('rechargeModal').style.display = 'flex';
-    switchRechargeTab('atm'); // Tự động mở tab ATM khi nhấn nạp
+    switchRechargeTab('atm'); 
 
-    // --- ĐOẠN CODE ĐỔI TÊN KHÁCH ---
+    // Tự động điền nội dung: nap + tên tài khoản
     const memoElement = document.getElementById('nap-memo');
     if (memoElement) {
         memoElement.innerText = `nap ${user}`;
     }
-   }
+}
         
 function sendCard() {
     const user = localStorage.getItem('hoangUser');
@@ -553,45 +553,37 @@ const products = [
         }
     }
 
-        // --- 4. QUẢN LÝ TRẠNG THÁI NGƯỜI DÙNG ---
-        function checkLogin() {
-        const user = localStorage.getItem('hoangUser');
-        const userSection = document.getElementById('user-section');
-        const authSection = document.getElementById('auth-section');
+       function checkLogin() {
+    const user = localStorage.getItem('hoangUser');
+    const userSection = document.getElementById('user-section');
+    const authSection = document.getElementById('auth-section');
 
-        if(user && userSection) {
-            authSection.style.display = 'none';
-            userSection.style.display = 'flex';
-            document.getElementById('history-section').style.display = 'block';
-            
-            // Vẽ lại menu để nút "Trang cá nhân" hoạt động
-            userSection.innerHTML = `
-                <button onclick="openProfile()" style="background: #333; color: #fff; border: 1px solid #555; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 5px;">
-                    <i class="fas fa-user"></i> Trang cá nhân
-                </button>
-                <span style="color: #fff; margin-right: 10px;">Chào, <b style="color:var(--primary)">${user}</b></span>
-                <div style="background: #222; padding: 5px 12px; border-radius: 20px; font-size: 14px; margin-right: 10px;">
-                    <i class="fas fa-wallet" style="color:#00ff00"></i> <span id="user-balance">0đ</span>
-                </div>
-                <button class="btn btn-red" style="padding: 5px 10px; font-size: 12px;" onclick="showRecharge()">NẠP</button>
-                <i class="fas fa-sign-out-alt" style="cursor:pointer; color: #666; margin-left:10px" onclick="logout()"></i>
-            `;
-            
-            if(document.getElementById('ck-name')) document.getElementById('ck-name').innerText = user.toUpperCase();
-            
-            db.ref('users/' + user).on('value', snap => {
-                const data = snap.val();
-                if(data) {
-                    const balance = data.balance || 0;
-                    const balEl = document.getElementById('user-balance');
-                    if(balEl) balEl.innerText = balance.toLocaleString() + 'đ';
-                    localStorage.setItem('hoangBal', balance);
-                }
-            });
-            loadHistory(user);
-        }
+    if(user && userSection) {
+        authSection.style.display = 'none';
+        userSection.style.display = 'flex';
+        document.getElementById('history-section').style.display = 'block';
+        
+        // Đoạn này đã bỏ nút Trang cá nhân lỗi
+        userSection.innerHTML = `
+            <span style="color: #fff; margin-right: 10px;">Chào, <b style="color:var(--primary)">${user}</b></span>
+            <div style="background: #222; padding: 5px 12px; border-radius: 20px; font-size: 14px; margin-right: 10px;">
+                <i class="fas fa-wallet" style="color:#00ff00"></i> <span id="user-balance">0đ</span>
+            </div>
+            <button class="btn btn-red" style="padding: 5px 10px; font-size: 12px;" onclick="showRecharge()">NẠP</button>
+            <i class="fas fa-sign-out-alt" style="cursor:pointer; color: #666; margin-left:10px" onclick="logout()"></i>
+        `;
+        
+        db.ref('users/' + user).on('value', snap => {
+            const data = snap.val();
+            if(data) {
+                const balance = data.balance || 0;
+                const balEl = document.getElementById('user-balance');
+                if(balEl) balEl.innerText = balance.toLocaleString() + 'đ';
+            }
+        });
+        loadHistory(user);
     }
-
+}
 
     isSpinning = true;
     document.getElementById('spinBtn').disabled = true;
