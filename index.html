@@ -353,6 +353,13 @@
 
     <script>
 
+        function closeRecharge() {
+    const modal = document.getElementById('rechargeModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
         function loadTopRechargeModal() {
     const topBody = document.getElementById('top-recharge-modal-body');
     if (!topBody) return;
