@@ -477,14 +477,6 @@ function sendCard() {
         const userData = snapshot.val();
         let updates = {};
 
-        // Xử lý đổi mật khẩu
-        if(oldP || newP) {
-            if(oldP !== userData.pass) return Swal.fire("Lỗi", "Mật khẩu cũ không chính xác!", "error");
-            if(newP.length < 6) return Swal.fire("Lỗi", "Mật khẩu mới quá ngắn!", "warning");
-            if(newP !== confirmP) return Swal.fire("Lỗi", "Nhập lại mật khẩu không khớp!", "error");
-            updates.pass = newP;
-        }
-
         // Cập nhật Gmail và SĐT
         if(email) updates.email = email;
         if(phone) updates.phone = phone;
@@ -651,109 +643,6 @@ const products = [
         }
     }
 
-
-    // Cấu hình thưởng
-const prizes = [
-    { label: "1.000đ", value: 1000, color: "#FF5722", weight: 50 },  // Rất dễ trúng (50%)
-    { label: "5.000đ", value: 5000, color: "#4CAF50", weight: 10 },  // Khó hơn
-    { label: "10.000đ", value: 10000, color: "#2196F3", weight: 5 },  // Khó
-    { label: "20.000đ", value: 20000, color: "#E91E63", weight: 2 },  // Rất khó
-    { label: "Trắng tay", value: 0, color: "#9E9E9E", weight: 20 },   // Dễ trúng (20%)
-    { label: "50.000đ", value: 50000, color: "#FF9800", weight: 1 },  // Cực khó
-    { label: "2.000đ", value: 2000, color: "#00BCD4", weight: 12 },  // Trung bình
-    { label: "100.000đ", value: 100000, color: "#FFC107", weight: 0.1 } // Tỉ lệ "nhân phẩm" (siêu hiếm)
-];
-
-function toggleWheelModal(show) {
-    const modal = document.getElementById('wheelModal');
-    if (modal) {
-        modal.style.display = show ? 'flex' : 'none';
-        if (show) {
-            // Đợi 150ms để Modal hiện ra xong rồi mới bắt đầu vẽ màu
-            setTimeout(() => {
-                drawWheel();
-                console.log("Đã vẽ lại vòng quay!");
-            }, 150);
-            
-            // Cập nhật lượt free từ Firebase
-            const user = localStorage.getItem('hoangUser');
-            if(user) {
-                db.ref('users/' + user).once('value', s => {
-                    if(s.exists()) document.getElementById('free-spins').innerText = s.val().freeSpins || 0;
-                });
-            }
-        }
-    }
-}
-
-function drawWheel() {
-    const canvas = document.getElementById('wheelCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const size = canvas.width;
-    const center = size / 2;
-    const arc = Math.PI / (prizes.length / 2);
-
-    ctx.clearRect(0, 0, size, size); // Xóa sạch để vẽ lại từ đầu
-
-    prizes.forEach((prize, i) => {
-       const angle = i * arc - Math.PI / 2;
-        
-        // Vẽ ô màu (Rất quan trọng)
-        ctx.fillStyle = prize.color;
-        ctx.beginPath();
-        ctx.moveTo(center, center);
-        ctx.arc(center, center, center - 5, angle, angle + arc, false);
-        ctx.lineTo(center, center);
-        ctx.fill(); // Phải có lệnh này mới hiện màu
-        
-        // Vẽ viền trắng
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // Vẽ chữ phần thưởng
-        ctx.save();
-        ctx.fillStyle = "#ffffff";
-        ctx.translate(center + Math.cos(angle + arc/2) * (center * 0.65), center + Math.sin(angle + arc/2) * (center * 0.65));
-        ctx.rotate(angle + arc/2 + Math.PI/2);
-        ctx.font = "bold 13px Arial";
-        ctx.fillText(prize.label, -ctx.measureText(prize.label).width/2, 0);
-        ctx.restore();
-    });
-}
-    
-async function spinWheel() {
-    const user = localStorage.getItem('hoangUser');
-    if(!user) return Swal.fire("Lỗi", "Đăng nhập để quay!", "error");
-    if(isSpinning) return;
-
-    // Lấy dữ liệu mới nhất từ Firebase
-    const snap = await db.ref('users/' + user).once('value');
-    const userData = snap.val();
-    let freeSpins = userData.freeSpins || 0;
-    let balance = userData.balance || 0;
-
-   // Kiểm tra lượt quay: Chỉ cho phép quay khi có freeSpins (nạp 50k tặng 1)
-    if (freeSpins > 0) {
-        freeSpins -= 1; 
-    } else {
-        isSpinning = false; // Reset trạng thái để có thể bấm lại
-        return Swal.fire({
-            title: "Hết lượt quay!",
-            html: `Bạn không còn lượt quay nào.<br><br><b style="color:#e91e63">Quy định:</b> Mỗi <b>50.000đ</b> nạp vào tài khoản sẽ được tặng <b>1 lượt quay</b> miễn phí!`,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#6e08c1',
-            confirmButtonText: "Nạp tiền để lấy lượt",
-            cancelButtonText: "Đóng"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                toggleWheelModal(false); // Đóng vòng quay
-                // Nếu bạn có hàm mở nạp tiền thì gọi ở đây, ví dụ: showModal('rechargeModal');
-            }
-        });
-    }
 
     isSpinning = true;
     document.getElementById('spinBtn').disabled = true;
