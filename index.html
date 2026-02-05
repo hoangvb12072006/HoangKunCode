@@ -305,15 +305,41 @@
     </div>
 </div>
 
-    <div id="profileModal" class="modal">
-    <div class="modal-content" style="border: 1px solid var(--primary);">
-        <h2 style="color:var(--primary); text-transform: uppercase;">Thông tin tài khoản</h2>
-        <div style="background: #000; padding: 20px; border-radius: 15px; text-align: left;">
-            <p><i class="fas fa-user"></i> Tài khoản: <b id="p-username" style="color:var(--primary)">...</b></p>
-            <p><i class="fas fa-wallet"></i> Số dư: <b id="p-balance" style="color:#00ff00">0đ</b></p>
-            <p><i class="fas fa-calendar-alt"></i> Ngày tham gia: <span id="p-date" style="font-size: 13px; color: #888;">...</span></p>
+   <div id="profileModal" class="modal">
+    <div class="modal-content" style="max-width: 550px; padding: 0; overflow: hidden; border: none; background: #151515;">
+        <div style="display: flex; background: #222; border-bottom: 2px solid var(--primary);">
+            <div id="tab1-btn" onclick="switchTab('info')" style="flex: 1; padding: 15px; cursor: pointer; color: var(--primary); font-weight: bold; background: #111; text-align: center;">
+                <i class="fas fa-user-circle"></i> THÔNG TIN
+            </div>
+            <div id="tab2-btn" onclick="switchTab('security')" style="flex: 1; padding: 15px; cursor: pointer; color: #888; font-weight: bold; text-align: center;">
+                <i class="fas fa-shield-alt"></i> BẢO MẬT
+            </div>
         </div>
-        <button class="btn btn-red" style="width: 100%; margin-top: 15px;" onclick="closeModal('profileModal')">ĐÓNG</button>
+
+        <div id="tab-info" style="padding: 30px; display: block; animation: slideIn 0.3s forwards;">
+            <div style="background: #000; padding: 20px; border-radius: 15px; text-align: left; border: 1px solid #333;">
+                <p><i class="fas fa-user" style="color:var(--primary); width: 20px;"></i> Tài khoản: <b id="p-username" style="float:right; color:#fff;">...</b></p>
+                <p><i class="fas fa-wallet" style="color:#00ff00; width: 20px;"></i> Số dư: <b id="p-balance" style="float:right; color:#00ff00;">0đ</b></p>
+                <p><i class="fas fa-envelope" style="color:#5bc0de; width: 20px;"></i> Gmail: <span id="p-email" style="float:right; color:#888;">Chưa cập nhật</span></p>
+                <p><i class="fas fa-phone" style="color:#f0ad4e; width: 20px;"></i> SĐT: <span id="p-phone" style="float:right; color:#888;">Chưa cập nhật</span></p>
+            </div>
+        </div>
+
+        <div id="tab-security" style="padding: 30px; display: none; animation: slideIn 0.3s forwards;">
+            <div class="input-group"><input type="email" id="updateEmail" placeholder="Gmail mới (ví dụ: abc@gmail.com)"></div>
+            <div class="input-group"><input type="text" id="updatePhone" placeholder="Số điện thoại mới"></div>
+            <div style="height: 1px; background: #333; margin: 15px 0;"></div>
+            <div class="input-group"><input type="password" id="oldPass" placeholder="Mật khẩu hiện tại"></div>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <input type="password" id="newPass" style="flex:1; padding:12px; background:#000; border:1px solid #333; color:#fff; border-radius:8px;" placeholder="Mật khẩu mới">
+                <input type="password" id="confirmNewPass" style="flex:1; padding:12px; background:#000; border:1px solid #333; color:#fff; border-radius:8px;" placeholder="Nhập lại">
+            </div>
+            <button class="btn btn-red" style="width:100%;" onclick="updateProfile()">CẬP NHẬT NGAY</button>
+        </div>
+
+        <div style="padding: 0 30px 30px 30px;">
+            <button class="btn" style="width: 100%; background: #222; color: #888; border: 1px solid #333;" onclick="closeModal('profileModal')">ĐÓNG HỒ SƠ</button>
+        </div>
     </div>
 </div>
     
@@ -333,6 +359,29 @@
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+
+        function switchTab(tab) {
+    const infoTab = document.getElementById('tab-info');
+    const secTab = document.getElementById('tab-security');
+    const infoBtn = document.getElementById('tab1-btn');
+    const secBtn = document.getElementById('tab2-btn');
+
+    if (tab === 'info') {
+        infoTab.style.display = 'block';
+        secTab.style.display = 'none';
+        infoBtn.style.background = '#111';
+        infoBtn.style.color = 'var(--primary)';
+        secBtn.style.background = 'transparent';
+        secBtn.style.color = '#888';
+    } else {
+        infoTab.style.display = 'none';
+        secTab.style.display = 'block';
+        secBtn.style.background = '#111';
+        secBtn.style.color = 'var(--primary)';
+        infoBtn.style.background = 'transparent';
+        infoBtn.style.color = '#888';
+    }
+}
 
    // Thay thế đoạn cũ bằng đoạn này:
 const products = [
