@@ -666,9 +666,13 @@ const products = [
     });
 }
 
-    function logout() { localStorage.removeItem('hoangUser'); location.reload(); }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-  
+  function logout() {
+    localStorage.removeItem('hoangUser');
+    Swal.fire("Thông báo", "Đã đăng xuất thành công!", "success").then(() => {
+        location.reload(); // Tải lại trang để cập nhật giao diện
+    });
+}
+        
     // --- 5. HIỆU ỨNG VÀ TRANG TRÍ ---
     function initParticles() {
         const canvas = document.getElementById('particleCanvas');
