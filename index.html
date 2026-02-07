@@ -324,27 +324,51 @@
     </div>
 </div>
 
-        <div id="con-card" style="padding: 20px; display: none;">
-            <select id="cardType" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
-                <option value="">Chọn nhà mạng</option>
-                <option value="VIETTEL">Viettel</option>
-                <option value="VINAPHONE">Vinaphone</option>
-                <option value="MOBIFONE">Mobifone</option>
-            </select>
-            <select id="cardValue" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
-                <option value="">Chọn mệnh giá</option>
-                <option value="10000">10,000đ</option>
-                <option value="20000">20,000đ</option>
-                <option value="50000">50,000đ</option>
-                <option value="100000">100,000đ</option>
-                <option value="200000">200,000đ</option>
-                <option value="500000">500,000đ</option>
-            </select>
-            <input type="text" id="cardSeri" placeholder="Nhập số Seri" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
-            <input type="text" id="cardPin" placeholder="Nhập mã thẻ" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid #ddd;">
-            <button class="btn-red" style="width:100%; padding:15px; border-radius:8px; border:none; background:#ff4747; color:#fff; font-weight:bold; cursor:pointer;" onclick="sendCard()">Nạp Ngay</button>
-        </div>
+       <div id="con-card" style="padding: 20px; display: none;">
+    
+    <div style="background: #fffcf5; border: 1px dashed #f59f00; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+        <p style="color: #f59f00; font-size: 13px; margin: 0;">
+            <i class="fas fa-exclamation-triangle"></i> <b>Lưu ý quan trọng:</b><br>
+            Sai mệnh giá sẽ bị phạt <b>-50%</b> tiền nhận. Vui lòng kiểm tra kỹ.
+        </p>
+    </div>
 
+    <label style="font-size: 12px; font-weight: bold; color: #555;">Chọn nhà mạng:</label>
+    <div style="display: flex; gap: 10px; margin-bottom: 15px; margin-top: 5px;">
+        <div class="telco-btn active" onclick="selectTelco(this, 'VIETTEL')" style="flex: 1; border: 1px solid #ff9900; background: #fffbe6; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #ee0033;">VIETTEL</div>
+        <div class="telco-btn" onclick="selectTelco(this, 'VINAPHONE')" style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #0085cf;">VINA</div>
+        <div class="telco-btn" onclick="selectTelco(this, 'MOBIFONE')" style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #005a8b;">MOBI</div>
+    </div>
+    <input type="hidden" id="card-telco" value="VIETTEL"> <label style="font-size: 12px; font-weight: bold; color: #555;">Chọn mệnh giá:</label>
+    <select id="card-amount" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; outline: none;">
+        <option value="">-- Chọn đúng mệnh giá --</option>
+        <option value="10000">10.000đ</option>
+        <option value="20000">20.000đ</option>
+        <option value="50000">50.000đ</option>
+        <option value="100000">100.000đ</option>
+        <option value="200000">200.000đ</option>
+        <option value="500000">500.000đ</option>
+    </select>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <div style="flex: 1;">
+            <label style="font-size: 12px; font-weight: bold; color: #555;">Mã thẻ (Pin):</label>
+            <input type="number" id="card-pin" placeholder="Mã số sau lớp bạc" 
+                   style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; outline: none;">
+        </div>
+        <div style="flex: 1;">
+            <label style="font-size: 12px; font-weight: bold; color: #555;">Số Seri:</label>
+            <input type="number" id="card-serial" placeholder="Dãy số seri" 
+                   style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; outline: none;">
+        </div>
+    </div>
+
+<button onclick="sendCardAuto()" 
+            style="width: 100%; padding: 14px; background: linear-gradient(90deg, #ff9900, #ffcc00); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 15px;">
+        <i class="fas fa-paper-plane"></i> Gửi thẻ ngay
+    </button>
+</div>
+        
         <div id="con-top" style="padding: 15px; display: none; max-height: 300px; overflow-y: auto;">
             <table style="width: 100%; border-collapse: collapse; color: #333; font-size: 14px;">
                 <thead>
@@ -1137,6 +1161,128 @@ function closeProfile() {
         50% { bottom: 40px; } /* Hiệu ứng bay lên xuống nhẹ */
     }
 </style>
+
+    <script>
+// --- XỬ LÝ NẠP TIỀN AUTO MB BANK ---
+function createPaymentQR() {
+    const amountInput = document.getElementById('auto-amount').value;
+    const amount = parseInt(amountInput);
+    const user = localStorage.getItem('hoangUser');
+
+    // Kiểm tra đăng nhập
+    if (!user) {
+        closeRecharge();
+        if(typeof showAuth === 'function') showAuth(false);
+        return Swal.fire("Thông báo", "Vui lòng đăng nhập để nạp tiền!", "warning");
+    }
+
+    // Kiểm tra số tiền
+    if (!amount || amount < 10000) {
+        return Swal.fire("Lỗi", "Vui lòng nạp tối thiểu 10.000đ", "error");
+    }
+
+    // Tạo nội dung chuyển khoản: nap + tên tài khoản
+    const memo = "nap " + user;
+
+    // Tạo link QR VietQR cho MB Bank (STK: 88812072006888)
+    const qrSource = `https://img.vietqr.io/image/MB-88812072006888-compact2.jpg?amount=${amount}&addInfo=${encodeURIComponent(memo)}`;
+
+    // Hiển thị lên giao diện
+    document.getElementById('qr-image').src = qrSource;
+    document.getElementById('display-amount').innerText = amount.toLocaleString() + 'đ';
+    document.getElementById('display-memo').innerText = memo;
+
+    // Chuyển sang màn hình hiện QR
+    document.getElementById('step-1-input').style.display = 'none';
+    document.getElementById('step-2-qr').style.display = 'block';
+
+    // Bắt đầu lắng nghe tiền về
+    listenForMoney(user);
+}
+
+function resetRecharge() {
+    document.getElementById('step-1-input').style.display = 'block';
+    document.getElementById('step-2-qr').style.display = 'none';
+    document.getElementById('auto-amount').value = '';
+}
+
+function listenForMoney(user) {
+    // Lắng nghe nhánh 'deposit_requests'
+    db.ref('deposit_requests').orderByChild('user').equalTo(user).limitToLast(1).on('child_added', snapshot => {
+        const data = snapshot.val();
+        // Kiểm tra xem giao dịch có phải mới không (logic đơn giản)
+        if (data) {
+            Swal.fire({
+                title: "Thành công!",
+                text: `Đã nhận được +${parseInt(data.amount).toLocaleString()}đ`,
+                icon: "success",
+                confirmButtonText: "Tuyệt vời"
+            }).then(() => {
+                location.reload(); 
+            });
+        }
+    });
+}
+
+        // --- XỬ LÝ NẠP THẺ CÀO (TIẾNG VIỆT) ---
+
+function selectTelco(element, telcoName) {
+    document.querySelectorAll('.telco-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.border = "1px solid #ddd";
+        btn.style.background = "transparent";
+    });
+    element.classList.add('active');
+    element.style.border = "1px solid #ff9900";
+    element.style.background = "#fffbe6";
+    document.getElementById('card-telco').value = telcoName;
+}
+
+function sendCardAuto() {
+    const user = localStorage.getItem('hoangUser');
+    if(!user) return Swal.fire("Lỗi", "Vui lòng đăng nhập trước!", "error");
+
+    const telco = document.getElementById('card-telco').value;
+    const amount = document.getElementById('card-amount').value;
+    const pin = document.getElementById('card-pin').value;
+    const serial = document.getElementById('card-serial').value;
+
+    if(!amount) return Swal.fire("Thiếu thông tin", "Bạn chưa chọn mệnh giá thẻ!", "warning");
+    if(pin.length < 9 || serial.length < 9) return Swal.fire("Sai mã thẻ", "Mã thẻ hoặc Seri quá ngắn, vui lòng kiểm tra lại!", "warning");
+
+    Swal.fire({
+        title: 'Đang gửi thẻ...',
+        html: 'Hệ thống đang kiểm tra thẻ <b>' + telco + '</b>...',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
+    });
+
+    setTimeout(() => {
+        db.ref('card_requests').push({
+            username: user,
+            telco: telco,
+            amount: parseInt(amount),
+            pin: pin,
+            serial: serial,
+            status: "pending",
+            time: new Date().toLocaleString('vi-VN')
+        }).then(() => {
+            Swal.fire({
+                title: "Gửi thành công!",
+                text: "Thẻ đang được duyệt. Tiền sẽ về sau 1-5 phút nếu thẻ đúng.",
+                icon: "success",
+                confirmButtonColor: "#ff9900",
+                confirmButtonText: "Đã hiểu"
+            });
+            document.getElementById('card-pin').value = "";
+            document.getElementById('card-serial').value = "";
+        }).catch(err => {
+            Swal.fire("Lỗi kết nối", "Không thể gửi thẻ lúc này: " + err.message, "error");
+        });
+    }, 1500); 
+}
+        
+</script>
     
 </body>
 </html>
