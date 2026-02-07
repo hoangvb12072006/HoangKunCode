@@ -270,6 +270,7 @@
             <div id="re-tab1" onclick="switchRechargeTab('card')" style="flex: 1; padding: 15px; cursor: pointer; color: #555; font-weight: bold; text-align: center;">Nạp thẻ</div>
             <div id="re-tab2" onclick="switchRechargeTab('top')" style="flex: 1; padding: 15px; cursor: pointer; color: #555; font-weight: bold; text-align: center;">Top nạp</div>
             <div id="re-tab3" onclick="switchRechargeTab('reward')" style="flex: 1; padding: 15px; cursor: pointer; color: #555; font-weight: bold; text-align: center;">Phần thưởng</div>
+            <div id="re-tab4" onclick="switchRechargeTab('history')" style="flex: 1; padding: 15px; cursor: pointer; color: #555; font-weight: bold; text-align: center;">Lịch sử</div>
         </div>
 
       <div id="con-atm" style="padding: 20px; display: block;">
@@ -402,6 +403,21 @@
                 <p style="font-size: 11px; color: #888; margin-top: 10px; font-style: italic;">* Phần thưởng cộng vào tài khoản cuối tháng</p>
             </div>
         </div>
+
+        <div id="con-history" style="padding: 10px; display: none; max-height: 350px; overflow-y: auto;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <thead>
+            <tr style="background: #f8f9fa; color: #555; border-bottom: 2px solid #ddd;">
+                <th style="padding: 10px; text-align: left;">Thời gian</th>
+                <th style="padding: 10px; text-align: left;">Loại</th>
+                <th style="padding: 10px; text-align: right;">Số tiền</th>
+                <th style="padding: 10px; text-align: center;">Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody id="deposit-history-body">
+            <tr><td colspan="4" style="text-align:center; padding:20px; color:#999;">Đang tải dữ liệu...</td></tr>
+        </tbody>
+    </table>
 
         <div style="padding: 15px; border-top: 1px solid #eee;">
             <button onclick="document.getElementById('rechargeModal').style.display='none'" style="width: 100%; padding: 14px; border: none; border-radius: 12px; background: #666; color: #fff; cursor: pointer; font-weight: bold;">ĐÓNG</button>
@@ -1281,6 +1297,102 @@ function sendCardAuto() {
         });
     }, 1500); 
 }
+
+        // --- CODE XỬ LÝ LỊCH SỬ ---
+
+function switchRechargeTab(tab) {
+
+    // Ẩn hiện các tab
+
+    const tabs = ['atm', 'card', 'top', 'reward', 'history'];
+
+    tabs.forEach((t, index) => {
+
+        const content = document.getElementById('con-' + t);
+
+        const btn = document.getElementById('re-tab' + index);
+
+        if(content) content.style.display = (t === tab) ? 'block' : 'none';
+
+        if (btn) {
+
+            btn.style.color = (t === tab) ? '#ff4747' : '#555';
+
+            btn.style.borderBottom = (t === tab) ? '3px solid #ff4747' : 'none';
+
+        }
+
+    });
+
+
+    // Nếu bấm tab lịch sử thì tải dữ liệu
+
+    if (tab === 'history') loadUserHistory();
+
+    if (tab === 'top') loadTopRechargeModal();
+
+}
+
+
+function loadUserHistory() {
+
+    const user = localStorage.getItem('hoangUser');
+
+    const tbody = document.getElementById('deposit-history-body');
+
+    if(!user) return tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Vui lòng đăng nhập</td></tr>';
+
+
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:10px;">Đang tải...</td></tr>';
+
+
+    db.ref('card_requests').orderByChild('username').equalTo(user).limitToLast(20).once('value').then(snap => {
+
+        if(!snap.exists()) {
+
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:#999;">Chưa có giao dịch nào</td></tr>';
+
+            return;
+
+        }
+
+        let html = '';
+
+        // Lấy dữ liệu và đảo ngược để cái mới nhất lên đầu
+
+        let list = [];
+
+        snap.forEach(c => list.push(c.val()));
+
+        list.reverse().forEach(h => {
+
+            let statusBadge = h.status === 'success' ? '<span style="color:green; font-weight:bold;">Thành công</span>' 
+
+                            : h.status === 'pending' ? '<span style="color:#ff9900; font-weight:bold;">Chờ duyệt</span>' 
+
+                            : '<span style="color:red; font-weight:bold;">Thất bại</span>';
+
+            
+
+            html += `<tr style="border-bottom:1px solid #eee;">
+
+                <td style="padding:10px; color:#666;">${h.time}</td>
+
+                <td style="padding:10px; font-weight:bold;">Thẻ ${h.telco}</td>
+
+                <td style="padding:10px; text-align:right; font-weight:bold;">${parseInt(h.amount).toLocaleString()}đ</td>
+
+                <td style="padding:10px; text-align:center;">${statusBadge}</td>
+
+            </tr>`;
+
+        });
+
+        tbody.innerHTML = html;
+
+    });
+
+} 
         
 </script>
     
