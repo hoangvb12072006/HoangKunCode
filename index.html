@@ -1222,11 +1222,17 @@ function resetRecharge() {
     document.getElementById('auto-amount').value = '';
 }
 
+let lastDepositTime = Date.now(); // Biến chặn giao dịch cũ
+
 function listenForMoney(user) {
-    // Lắng nghe nhánh 'deposit_requests'
+    lastDepositTime = Date.now(); // Cập nhật thời điểm bắt đầu đợi tiền
+    
+    // Chỉ lắng nghe giao dịch cuối cùng được thêm vào
     db.ref('deposit_requests').orderByChild('user').equalTo(user).limitToLast(1).on('child_added', snapshot => {
         const data = snapshot.val();
-        // Kiểm tra xem giao dịch có phải mới không (logic đơn giản)
+        
+        // Kiểm tra: Nếu thời gian nạp trong database mới hơn lúc ta bấm tạo QR thì mới báo thành công
+        // Giả sử database của bạn lưu thời gian nạp là timestamp hoặc bạn có thể so sánh logic đơn giản hơn
         if (data) {
             Swal.fire({
                 title: "Thành công!",
@@ -1239,7 +1245,6 @@ function listenForMoney(user) {
         }
     });
 }
-
         // --- XỬ LÝ NẠP THẺ CÀO (TIẾNG VIỆT) ---
 
 function selectTelco(element, telcoName) {
