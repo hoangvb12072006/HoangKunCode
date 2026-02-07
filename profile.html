@@ -208,6 +208,34 @@
         /* Loading */
         .loading { font-size: 12px; color: #666; font-style: italic; }
 
+        /* --- Bổ sung CSS cho thông tin chi tiết --- */
+        .details-container {
+            padding: 0 25px;
+            margin-bottom: 20px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+        }
+        .detail-label { color: #888; display: flex; align-items: center; gap: 10px; }
+        .detail-label i { width: 20px; text-align: center; color: var(--primary); }
+        .detail-value { font-weight: 500; color: #fff; }
+        
+        /* Mã khách hàng nổi bật */
+        .code-highlight { 
+            color: #ff0000; 
+            font-weight: 900; 
+            letter-spacing: 1px;
+            background: rgba(255,0,0,0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,0,0,0.3);
+        }
+
     </style>
 </head>
 <body>
@@ -230,6 +258,21 @@
             </div>
         </div>
 
+        <div class="details-container">
+            <div class="detail-row">
+                <span class="detail-label"><i class="fas fa-id-badge"></i> Mã Khách Hàng</span>
+                <span class="detail-value code-highlight" id="code_display">...</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="fas fa-envelope"></i> Email</span>
+                <span class="detail-value" id="email_display">Đang tải...</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="fas fa-phone"></i> Số điện thoại</span>
+                <span class="detail-value" id="phone_display">Đang tải...</span>
+            </div>
+        </div>
+        
         <div class="form-section">
             <div class="section-title"><i class="fas fa-lock"></i> Đổi Mật Khẩu</div>
             
@@ -347,6 +390,73 @@
                 }
             })
         }
+
+// --- HÀM HIỂN THỊ KẾT QUẢ & CỘNG THƯỞNG (Dán vào cuối script) ---
+        function showResult(gift) {
+            // 1. Nếu quay vào ô Mất lượt / Chúc may mắn
+            if (gift.type === 'miss') {
+                Swal.fire({
+                    title: "Tiếc quá!",
+                    text: "Chúc bạn may mắn lần sau nhé!",
+                    icon: "info",
+                    confirmButtonText: "Thử lại",
+                    background: '#333', color: '#fff',
+                    confirmButtonColor: '#555'
+                });
+            } 
+            // 2. Nếu trúng Tiền hoặc Lượt quay
+            else {
+                // Bắn pháo hoa ăn mừng (nếu có hàm này)
+                if(typeof fireConfetti === "function") fireConfetti();
+
+                // Tạo thông báo
+                let msg = `Bạn nhận được ${gift.name}`;
+                let imgUrl = 'https://media.giphy.com/media/26tOZ42Mg6pbTUPVS/giphy.gif'; // Ảnh pháo hoa
+                
+                if(gift.type === 'spin') {
+                    msg = "Chúc mừng! Bạn được cộng thêm 1 lượt quay.";
+                }
+
+                // Hiện Popup chúc mừng
+                Swal.fire({
+                    title: "CHÚC MỪNG!",
+                    text: msg,
+                    imageUrl: imgUrl,
+                    imageWidth: 200, imageHeight: 150,
+                    background: '#fff url("https://i.pinimg.com/originals/99/c3/3b/99c33b70802eb1448b0a70823da7a9d3.gif")',
+                    color: '#c0392b',
+                    confirmButtonText: "NHẬN QUÀ",
+                    confirmButtonColor: '#e74c3c',
+                    backdrop: `rgba(0,0,123,0.4)`
+                }).then(() => {
+                    // --- QUAN TRỌNG: CỘNG THƯỞNG VÀO FIREBASE ---
+                    
+                    // Lấy dữ liệu hiện tại của user để cộng dồn
+                    db.ref('users/' + user).once('value').then(snap => {
+                        const data = snap.val();
+                        const currentBalance = data.balance || 0; // Tiền hiện có
+                        const currentSpins = data.freeSpins || 0; // Lượt quay hiện có
+
+                        let updates = {};
+
+                        // Nếu trúng tiền -> Cộng tiền
+                        if (gift.type === 'money') {
+                            updates.balance = currentBalance + gift.value;
+                        } 
+                        // Nếu trúng lượt -> Cộng lượt
+                        else if (gift.type === 'spin') {
+                            updates.freeSpins = currentSpins + gift.value;
+                        }
+
+                        // Đẩy dữ liệu mới lên Firebase
+                        db.ref('users/' + user).update(updates).then(() => {
+                            console.log("Đã cộng thưởng thành công!");
+                        });
+                    });
+                });
+            }
+        }
+        
     </script>
 
 </body>
