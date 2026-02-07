@@ -22,15 +22,27 @@
         /* Khung vòng quay */
         .wheel-outer { position: relative; width: 500px; height: 500px; border-radius: 50%; padding: 15px; background: linear-gradient(45deg, #111, #333, #111); box-shadow: 0 0 60px rgba(255, 0, 0, 0.4), inset 0 0 30px rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; }
         .wheel-container { position: relative; width: 100%; height: 100%; border: var(--wheel-border); border-radius: 50%; box-sizing: border-box; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .wheel { width: 100%; height: 100%; border-radius: 50%; position: relative; transition: transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67); background: #fff; border: 5px solid #fff; box-sizing: border-box; }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; position: relative; transition: transform 4s cubic-bezier(0.15, 0, 0.2, 1); background: #fff; border: 5px solid #fff; box-sizing: border-box; overflow: hidden; }
         
         /* Kim chỉ */
         .pointer-container { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); z-index: 20; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); }
         .pointer { width: 60px; height: 70px; background: linear-gradient(to bottom, var(--accent), var(--primary)); clip-path: polygon(50% 100%, 0% 0%, 100% 0%); box-shadow: 0 0 20px var(--accent); }
         
-        /* Các ô thưởng */
-        .segment { position: absolute; width: 50%; height: 50%; transform-origin: 100% 100%; top: 0; left: 0; clip-path: polygon(0 0, 100% 0, 100% 100%); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); }
-        .segment-content { position: absolute; transform: rotate(45deg); top: 40px; right: 50px; text-align: center; width: 140px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        /* Các ô thưởng - FIX LỖI CẮT CHỮ */
+        .segment {
+            position: absolute;
+            width: 50%; height: 50%;
+            top: 50%; left: 50%;
+            transform-origin: 0% 0%;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .segment-content {
+            position: absolute;
+            top: 35%; left: 35%;
+            transform: translate(-50%, -50%) rotate(-22.5deg); /* Xoay chữ lại cho thẳng */
+            text-align: center; width: 140px;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+        }
         .segment-content i { font-size: 24px; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .segment-content span { font-weight: bold; font-size: 15px; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); white-space: nowrap; }
         
@@ -40,15 +52,15 @@
         .seg-lose { background: linear-gradient(135deg, #1a1a1a, #333); }
         .seg-lose i, .seg-lose span { color: #aaa; }
 
-        /* Ô cụ thể */
-        .seg-1 { transform: rotate(0deg); } /* 10k */
-        .seg-2 { transform: rotate(45deg); } /* Miss */
-        .seg-3 { transform: rotate(90deg); } /* 20k */
-        .seg-4 { transform: rotate(135deg); } /* Spin */
-        .seg-5 { transform: rotate(180deg); } /* 50k */
-        .seg-6 { transform: rotate(225deg); } /* Miss */
-        .seg-7 { transform: rotate(270deg); } /* 100k */
-        .seg-8 { transform: rotate(315deg); } /* Miss */
+        /* Góc quay các ô */
+        .seg-1 { transform: rotate(0deg) skewY(-45deg); }
+        .seg-2 { transform: rotate(45deg) skewY(-45deg); }
+        .seg-3 { transform: rotate(90deg) skewY(-45deg); }
+        .seg-4 { transform: rotate(135deg) skewY(-45deg); }
+        .seg-5 { transform: rotate(180deg) skewY(-45deg); }
+        .seg-6 { transform: rotate(225deg) skewY(-45deg); }
+        .seg-7 { transform: rotate(270deg) skewY(-45deg); }
+        .seg-8 { transform: rotate(315deg) skewY(-45deg); }
 
         /* Nút quay trung tâm */
         .spin-btn-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 30; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 50%; }
@@ -126,6 +138,18 @@
             });
         }
 
+        // --- CẤU HÌNH TỈ LỆ (TỔNG = 100) ---
+        const rewards = [
+            { type: 'miss', angle: 315, chance: 20 }, // Hụt (Seg 2)
+            { type: 'miss', angle: 135, chance: 20 }, // Hụt (Seg 6)
+            { type: 'miss', angle: 45,  chance: 20 }, // Hụt (Seg 8)
+            { type: '10k',  angle: 0,   chance: 20 }, // 10k (Seg 1)
+            { type: 'spin', angle: 225, chance: 10 }, // Thêm lượt (Seg 4)
+            { type: '20k',  angle: 270, chance: 9 },  // 20k (Seg 3)
+            { type: '50k',  angle: 180, chance: 0.9 },// 50k (Seg 5) - Siêu khó
+            { type: '100k', angle: 90,  chance: 0.1 } // 100k (Seg 7) - Cực phẩm
+        ];
+
         function spin() {
             if(currentSpins <= 0) return Swal.fire({ title: "Hết lượt quay!", text: "Mua thêm sản phẩm (>50k) để nhận lượt quay nhé!", icon: "info", confirmButtonColor: "#ff0000" });
             if(isSpinning) return;
@@ -134,19 +158,42 @@
             document.getElementById('btnSpin').disabled = true;
             db.ref('users/' + user).update({ freeSpins: currentSpins - 1 });
 
-            const randomDeg = Math.floor(Math.random() * 360) + (2160 + Math.floor(Math.random() * 1440)); 
+            // Random giải thưởng dựa trên tỉ lệ (Weighted Random)
+            let rand = Math.random() * 100;
+            let cumulative = 0;
+            let target = rewards[0];
+
+            for(let item of rewards) {
+                cumulative += item.chance;
+                if(rand <= cumulative) {
+                    target = item;
+                    break;
+                }
+            }
+
+            // Tính góc quay (quay ít nhất 10 vòng)
+            // Thêm random +/- 15 độ để kim không chỉ thẳng đuột vào giữa ô
+            const extraDeg = Math.floor(Math.random() * 30) - 15; 
+            const totalDeg = 3600 + target.angle + extraDeg;
+
             const wheel = document.getElementById('wheel');
-            wheel.style.transform = `rotate(${randomDeg}deg)`;
+            wheel.style.transform = `rotate(${totalDeg}deg)`;
 
             setTimeout(() => {
                 isSpinning = false;
                 document.getElementById('btnSpin').disabled = false;
-                checkReward(randomDeg % 360);
+                
+                // Chuẩn hóa góc về 0-360 để kiểm tra kết quả
+                let finalDeg = totalDeg % 360;
+                if(finalDeg < 0) finalDeg += 360;
+                checkReward(finalDeg);
             }, 4000);
         }
 
         function checkReward(deg) {
             let prize = "", money = 0, bonusSpin = 0, icon = "";
+            
+            // Logic mapping góc quay ra giải thưởng (dựa trên góc kim chỉ)
             if (deg >= 0 && deg < 22.5) { prize = "10.000đ"; money = 10000; icon = "coins"; }
             else if (deg >= 22.5 && deg < 67.5) { prize = "Chúc may mắn lần sau"; icon = "sad-tear"; }
             else if (deg >= 67.5 && deg < 112.5) { prize = "100.000đ"; money = 100000; icon = "gem"; }
@@ -155,18 +202,4 @@
             else if (deg >= 202.5 && deg < 247.5) { prize = "Thêm 1 lượt quay"; bonusSpin = 1; icon = "sync-alt"; }
             else if (deg >= 247.5 && deg < 292.5) { prize = "20.000đ"; money = 20000; icon = "coins"; }
             else if (deg >= 292.5 && deg < 337.5) { prize = "Chúc may mắn lần sau"; icon = "sad-tear"; }
-            else if (deg >= 337.5 && deg <= 360) { prize = "10.000đ"; money = 10000; icon = "coins"; }
-            
-            if(money > 0) {
-                db.ref('users/' + user).once('value', s => { db.ref('users/' + user).update({ balance: (s.val().balance || 0) + money }); });
-                Swal.fire({ title: "CHÚC MỪNG!", html: `Bạn nhận được <b>${prize}</b>! <br><i class="fas fa-${icon}" style="font-size: 40px; color: gold; margin-top: 10px;"></i>`, icon: "success", confirmButtonColor: "#ff0000", confirmButtonText: "TUYỆT VỜI" });
-            } else if (bonusSpin > 0) {
-                 db.ref('users/' + user).once('value', s => { db.ref('users/' + user).update({ freeSpins: (s.val().freeSpins || 0) + 1 }); });
-                Swal.fire({ title: "MAY MẮN QUÁ!", html: `Bạn được tặng thêm <b>1 lượt quay</b>! <br><i class="fas fa-${icon}" style="font-size: 40px; color: #ffcc00; margin-top: 10px;"></i>`, icon: "success", confirmButtonColor: "#ff0000" });
-            } else {
-                Swal.fire({ title: "TIẾC QUÁ!", text: prize, icon: "info", confirmButtonColor: "#555", confirmButtonText: "Thử lại" });
-            }
-        }
-    </script>
-</body>
-</html>
+            else if (deg >=
