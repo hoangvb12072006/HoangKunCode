@@ -13,16 +13,14 @@
 
     <style>
         :root {
-            --primary: #e74c3c;
-            --secondary: #2c3e50;
-            --gold: #f1c40f;
-            --text-color: #ffffff;
+            --primary: #d32f2f;
+            --gold: #ffd700;
             --wheel-size: 450px;
         }
 
         body {
             background: radial-gradient(circle at center, #2b0000 0%, #000000 100%);
-            color: var(--text-color);
+            color: #fff;
             font-family: 'Roboto', sans-serif;
             margin: 0;
             min-height: 100vh;
@@ -35,93 +33,72 @@
 
         /* Nút quay lại */
         .back-btn {
-            position: absolute;
-            top: 20px; left: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            text-decoration: none;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: 0.3s;
-            z-index: 10;
+            position: absolute; top: 20px; left: 20px;
+            background: rgba(255, 255, 255, 0.1); color: white;
+            padding: 10px 20px; border-radius: 50px; text-decoration: none;
+            backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);
+            transition: 0.3s; z-index: 10;
         }
         .back-btn:hover { background: var(--primary); transform: translateX(5px); }
 
         h1.title {
-            text-transform: uppercase;
-            font-size: 2.5rem;
-            color: var(--gold);
+            text-transform: uppercase; font-size: 2.5rem; color: var(--gold);
             text-shadow: 0 0 10px var(--primary), 0 0 20px var(--gold);
-            margin-bottom: 20px;
-            font-weight: 900;
-            letter-spacing: 2px;
+            margin-bottom: 20px; font-weight: 900; letter-spacing: 2px;
             text-align: center;
         }
 
-        /* Container chứa vòng quay */
+        /* KHUNG VÒNG QUAY */
         .wheel-wrapper {
             position: relative;
-            width: var(--wheel-size);
-            height: var(--wheel-size);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: var(--wheel-size); height: var(--wheel-size);
+            display: flex; justify-content: center; align-items: center;
         }
 
-        /* Khung viền ngoài cùng có đèn */
         .wheel-border {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 15px solid #333;
+            position: absolute; width: 100%; height: 100%;
+            border-radius: 50%; border: 15px solid #222;
             box-shadow: 0 0 30px rgba(255, 0, 0, 0.5), inset 0 0 20px rgba(0,0,0,0.8);
-            background: #111;
-            z-index: 1;
+            background: #111; z-index: 1;
         }
 
-        /* Vòng quay chính */
         .wheel {
-            width: calc(100% - 40px);
-            height: calc(100% - 40px);
-            border-radius: 50%;
-            position: relative;
-            overflow: hidden;
+            width: calc(100% - 40px); height: calc(100% - 40px);
+            border-radius: 50%; position: relative; overflow: hidden;
             transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1);
-            border: 2px solid var(--gold);
-            z-index: 2;
+            border: 2px solid var(--gold); z-index: 2;
             background: #fff;
         }
 
-        /* Các ô thưởng (Segment) - Đã sửa lại chuẩn */
+        .wheel-inner {
+            position: relative; width: 100%; height: 100%;
+            border-radius: 50%; overflow: hidden;
+        }
+
+        /* CÁC Ô THƯỞNG (SEGMENT) - CHUẨN KHÔNG CẦN CHỈNH */
         .segment {
-            position: absolute;
-            top: 0; right: 0;
+            position: absolute; top: 0; right: 0;
             width: 50%; height: 50%;
             transform-origin: 0% 100%; /* Tâm xoay chuẩn */
             border: 1px solid rgba(255,255,255,0.1);
             box-sizing: border-box;
         }
 
-        /* Màu sắc VIP (Gradient bóng bẩy) */
-        /* Ô Tiền (Đỏ) */
+        /* MÀU SẮC Ô */
+        /* Ô Tiền & Quà: Đỏ Gradient */
         .segment:nth-child(1), .segment:nth-child(3), .segment:nth-child(5) {
             background: linear-gradient(135deg, #b71c1c 0%, #f44336 100%);
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
         }
-        /* Ô Chúc may mắn (Xanh) */
+        /* Ô Thường/Xui: Xanh Gradient */
         .segment:nth-child(2), .segment:nth-child(6), .segment:nth-child(8) {
             background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
         }
-        /* Ô Đặc biệt (Vàng) */
+        /* Ô VIP (Vàng): Vàng Gradient */
         .segment:nth-child(4), .segment:nth-child(7) {
             background: linear-gradient(135deg, #fbc02d 0%, #fff176 80%, #fbc02d 100%);
-            box-shadow: inset 0 0 15px rgba(255,255,255,0.5);
         }
 
-        /* Logic xoay 8 ô (Chuẩn từng độ) */
+        /* GÓC XOAY 8 Ô */
         .segment:nth-child(1) { transform: rotate(0deg)   skewY(-45deg); }
         .segment:nth-child(2) { transform: rotate(45deg)  skewY(-45deg); }
         .segment:nth-child(3) { transform: rotate(90deg)  skewY(-45deg); }
@@ -131,197 +108,83 @@
         .segment:nth-child(7) { transform: rotate(270deg) skewY(-45deg); }
         .segment:nth-child(8) { transform: rotate(315deg) skewY(-45deg); }
 
-       .segment-content {
-            position: absolute;
-            /* QUAN TRỌNG: Để px nhỏ thôi để chữ nằm gần tâm, không bị bay ra ngoài */
-            bottom: 20px; 
-            left: 20px;
-            
-            /* Tăng chiều rộng để chữ "Chúc may mắn" không bị ngắt dòng xấu */
-            width: 120px; 
-            text-align: center;
-            
-            /* Góc xoay chuẩn giữ nguyên */
-            transform: skewY(45deg) rotate(22.5deg);
-            
-            /* Font chữ nhỏ lại xíu cho vừa ô */
-            font-size: 11px; 
-            font-weight: bold;
-            line-height: 1.2;
-            color: #fff;
-        }
-
-        /* Chỉnh icon nằm trên chữ */
-        .segment-content i {
-            font-size: 20px;
-            margin-bottom: 5px;
-            display: block;
-            color: #ffd700;
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
-        }
-
-        /* Chữ màu đỏ cho ô Vàng để dễ đọc */
-        .segment:nth-child(4) .segment-content span,
-        .segment:nth-child(7) .segment-content span { color: #b71c1c; text-shadow: none; }
-        .segment:nth-child(4) .segment-content i,
-        .segment:nth-child(7) .segment-content i { color: #b71c1c; }
-
-/* --- KẾT THÚC ĐOẠN CODE MỚI --- */
-        
-        /* --- VIẾT LẠI CSS WHEEL CHO CHUẨN 8 Ô --- */
-        .wheel-inner {
-            position: relative;
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-        
-        .segment {
-            position: absolute;
-            top: 0; left: 50%;
-            width: 50%; height: 50%;
-            transform-origin: bottom left;
-            border-left: 1px solid rgba(255,255,255,0.2);
-            box-sizing: border-box;
-        }
-
-        /* 360 / 8 = 45do. Skew = 90 - 45 = 45do */
-        .segment {
-            transform: translateX(-50%) rotate(var(--i)) skewY(-45deg); 
-            /* Cần chỉnh lại logic màu */
-        }
-        
+        /* NỘI DUNG BÊN TRONG */
         .segment-content {
             position: absolute;
-            left: 20%; bottom: 20%;
-            width: 100px;
-            transform: skewY(45deg) rotate(22.5deg); /* Bù lại góc skew */
-            text-align: center;
-            font-weight: bold;
-            font-size: 14px;
-            color: #fff;
-            text-shadow: 1px 1px 2px #000;
+            bottom: 25px; left: 25px; /* Căn chỉnh vị trí so với tâm */
+            width: 120px; text-align: center;
+            transform: skewY(45deg) rotate(22.5deg); /* Xoay ngược lại cho thẳng chữ */
+            font-weight: 900; font-size: 13px; text-transform: uppercase;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
         }
-        
-        .segment-content i { font-size: 20px; margin-bottom: 5px; display: block; }
-        .segment:nth-child(odd) .segment-content i { color: var(--gold); }
-        
-        /* Kim chỉ (Pointer) */
+        .segment-content span { color: #fff; display: block; }
+        .segment-content i {
+            font-size: 24px; display: block; margin-bottom: 5px;
+            color: #ffd700; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+        }
+
+        /* Màu riêng cho ô Vàng (Chữ đỏ) */
+        .segment:nth-child(4) .segment-content span, .segment:nth-child(4) .segment-content i,
+        .segment:nth-child(7) .segment-content span, .segment:nth-child(7) .segment-content i {
+            color: #b71c1c; text-shadow: none;
+        }
+
+        /* KIM CHỈ & NÚT QUAY */
         .pointer {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 60px;
+            position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+            width: 50px; height: 60px;
             background: linear-gradient(to bottom, var(--gold), #d35400);
             clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
-            z-index: 10;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            z-index: 10; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
         }
 
-        /* Nút Quay ở giữa */
         .center-circle {
-            position: absolute;
-            width: 80px; height: 80px;
+            position: absolute; width: 80px; height: 80px;
             background: radial-gradient(circle, #fff 30%, #ddd 100%);
-            border-radius: 50%;
-            z-index: 5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            cursor: pointer;
-            border: 4px solid var(--primary);
-            transition: 0.3s;
+            border-radius: 50%; z-index: 5;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5); cursor: pointer;
+            border: 4px solid var(--primary); transition: 0.3s;
         }
         .center-circle:hover { transform: scale(1.1); box-shadow: 0 0 25px var(--gold); }
-        .center-circle:active { transform: scale(0.95); }
         .center-circle i { font-size: 30px; color: var(--primary); }
 
-        /* Thông tin lượt quay */
         .footer-info {
-            margin-top: 30px;
-            background: rgba(0,0,0,0.6);
-            padding: 10px 30px;
-            border-radius: 30px;
-            border: 1px solid var(--gold);
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin-top: 30px; background: rgba(0,0,0,0.6);
+            padding: 10px 30px; border-radius: 30px; border: 1px solid var(--gold);
+            font-size: 1.2rem; display: flex; align-items: center; gap: 10px;
         }
         .spin-num { color: var(--gold); font-weight: bold; font-size: 1.5rem; }
 
-        /* Responsive Mobile */
         @media (max-width: 500px) {
             :root { --wheel-size: 320px; }
             h1.title { font-size: 1.8rem; }
-            .segment-content { font-size: 10px; width: 70px; left: 15%; bottom: 15%; }
-            .segment-content i { font-size: 16px; }
+            .segment-content { font-size: 10px; bottom: 15px; left: 15px; width: 80px; }
+            .segment-content i { font-size: 18px; }
         }
     </style>
 </head>
 <body>
 
     <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> VỀ SHOP</a>
-    <h1 class="title">VÒNG QUAY MAY MẮN</h1>
+    <h1 class="title">VÒNG QUAY TỶ PHÚ</h1>
 
     <div class="wheel-wrapper">
         <div class="pointer"></div>
         <div class="wheel-border"></div>
         
         <div class="wheel" id="wheel">
-           <div class="wheel-inner">
-                <div class="segment">
-                    <div class="segment-content">
-                        <i class="fas fa-coins"></i>
-                        <span>10.000đ</span>
-                    </div>
-                </div>
-                <div class="segment">
-                    <div class="segment-content">
-                        <i class="fas fa-sync-alt spin-icon"></i>
-                        <span>Thêm 1 lượt</span>
-                    </div>
-                </div>
-                <div class="segment">
-                    <div class="segment-content">
-                        <i class="fas fa-coins"></i>
-                        <span>20.000đ</span>
-                    </div>
-                </div>
-                <div class="segment">
-                    <div class="segment-content">
-                        <i class="fas fa-forward" style="color: #b71c1c;"></i>
-                        <span>Chúc Bạn May Mắn Lần Sau</span>
-                    </div>
-                </div>
-                <div class="segment">
-                    <div class="segment-content">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span>50.000đ</span>
-                    </div>
-                </div>
-                <div class="segment">
-                    <div class="segment-content">
-                        <i class="fas fa-coins"></i>
-                        <span>5.000đ</span>
-                    </div>
-                </div>
-                <div class="segment">
-                    <div class="segment-content">
-                        <i class="fas fa-gem" style="color: #b71c1c;"></i>
-                        <span>100.000đ</span>
-                    </div>
-                </div>
-                <div class="segment">
-                    <div class="segment-content">
-                        <i class="far fa-sad-tear"></i>
-                        <span>Xui quá</span>
-                    </div>
-                </div>
+            <div class="wheel-inner">
+                <div class="segment"><div class="segment-content"><i class="fas fa-coins"></i><span>10.000đ</span></div></div>
+                <div class="segment"><div class="segment-content"><i class="fas fa-sync-alt spin-icon"></i><span>Thêm 1 lượt</span></div></div>
+                <div class="segment"><div class="segment-content"><i class="fas fa-coins"></i><span>20.000đ</span></div></div>
+                <div class="segment"><div class="segment-content"><i class="fas fa-forward"></i><span>Thêm 2 lượt</span></div></div>
+                <div class="segment"><div class="segment-content"><i class="fas fa-money-bill-wave"></i><span>50.000đ</span></div></div>
+                <div class="segment"><div class="segment-content"><i class="fas fa-coins"></i><span>5.000đ</span></div></div>
+                <div class="segment"><div class="segment-content"><i class="fas fa-gem"></i><span>100.000đ</span></div></div>
+                <div class="segment"><div class="segment-content"><i class="far fa-sad-tear"></i><span>Xui quá</span></div></div>
             </div>
+        </div>
 
         <button class="center-circle" id="btnSpin" onclick="spinUser()">
             <i class="fas fa-play"></i>
@@ -333,11 +196,8 @@
         Bạn còn: <span class="spin-num" id="spin-count">...</span> lượt
     </div>
 
-    <audio id="sound-spin" src="https://assets.mixkit.co/sfx/preview/mixkit-click-melodic-tone-1129.mp3"></audio>
-    <audio id="sound-win" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
-
     <script>
-        // --- CẤU HÌNH ---
+        // --- CẤU HÌNH FIREBASE ---
         const firebaseConfig = { 
             apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g", 
             databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com" 
@@ -345,43 +205,29 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Danh sách giải thưởng
-        // angle: là góc của ô đó trên vòng tròn (Lưu ý: CSS build từ 0 độ ở đỉnh, đi theo chiều kim đồng hồ)
-        // 0-45: Ô 1 (10k), 45-90: Ô 2 (Miss)... 
-        // Nhưng do thuộc tính skew và rotate, tâm ô sẽ lệch. Ta map theo index (0-7).
-        // 1 vòng 360 độ / 8 = 45 độ mỗi ô.
-        // Index 0: 0-45 độ (Tâm ~22.5) -> 10k
-        // Index 1: 45-90 độ (Tâm ~67.5) -> Miss
+        // --- CẤU HÌNH TỈ LỆ (KỊCH TÍNH) ---
         const rewards = [
-            { id: 1, name: "10.000đ",     value: 10000,  type: 'money', percent: 20 }, // Index 0
-            { id: 2, name: "Chúc may mắn",value: 0,      type: 'miss',  percent: 20 }, // Index 1
-            { id: 3, name: "20.000đ",     value: 20000,  type: 'money', percent: 10 }, // Index 2
-            { id: 4, name: "Thêm lượt",   value: 1,      type: 'spin',  percent: 15 }, // Index 3
-            { id: 5, name: "50.000đ",     value: 50000,  type: 'money', percent: 5 },  // Index 4
-            { id: 6, name: "Chúc may mắn",value: 0,      type: 'miss',  percent: 20 }, // Index 5
-            { id: 7, name: "100.000đ",    value: 100000, type: 'money', percent: 1 },  // Index 6
-            { id: 8, name: "Chúc may mắn",value: 0,      type: 'miss',  percent: 9 }   // Index 7
+            { id: 1, name: "10.000đ",     value: 10000,  type: 'money', percent: 20 },
+            { id: 2, name: "Thêm 1 lượt", value: 1,      type: 'spin',  percent: 30 },
+            { id: 3, name: "20.000đ",     value: 20000,  type: 'money', percent: 10 },
+            { id: 4, name: "Thêm 2 lượt", value: 2,      type: 'spin',  percent: 5 },
+            { id: 5, name: "50.000đ",     value: 50000,  type: 'money', percent: 2 },
+            { id: 6, name: "5.000đ",      value: 5000,   type: 'money', percent: 25 },
+            { id: 7, name: "100.000đ",    value: 100000, type: 'money', percent: 0.5 },
+            { id: 8, name: "Chúc may mắn",value: 0,      type: 'miss',  percent: 7.5 } 
         ];
 
         let currentSpins = 0;
         let isSpinning = false;
-        let currentRotation = 0; // Lưu góc quay hiện tại để quay tiếp
+        let currentRotation = 0;
         const user = localStorage.getItem('hoangUser');
 
-        // Khởi tạo
         function init() {
             if(!user) {
-                Swal.fire({
-                    title: "Chưa đăng nhập!",
-                    text: "Vui lòng đăng nhập để quay thưởng.",
-                    icon: "warning",
-                    confirmButtonText: "Đăng nhập ngay",
-                    background: '#222', color: '#fff'
-                }).then(() => window.location.href='index.html');
+                Swal.fire({title: "Chưa đăng nhập", text: "Vui lòng đăng nhập để quay!", icon: "warning"})
+                .then(() => window.location.href='index.html');
                 return;
             }
-
-            // Lắng nghe số lượt quay từ Firebase
             db.ref('users/' + user).on('value', snap => {
                 const data = snap.val();
                 currentSpins = (data && data.freeSpins) ? data.freeSpins : 0;
@@ -393,78 +239,44 @@
         function toggleSpinButton(enable) {
             const btn = document.getElementById('btnSpin');
             if(enable && !isSpinning) {
-                btn.style.opacity = "1";
-                btn.style.pointerEvents = "auto";
-                btn.style.filter = "grayscale(0%)";
+                btn.style.opacity = "1"; btn.style.pointerEvents = "auto"; btn.style.filter = "none";
             } else {
-                btn.style.opacity = "0.5";
-                btn.style.pointerEvents = "none";
-                btn.style.filter = "grayscale(100%)";
+                btn.style.opacity = "0.5"; btn.style.pointerEvents = "none"; btn.style.filter = "grayscale(100%)";
             }
         }
 
-        // Logic Random có trọng số
         function getRandomReward() {
             const rand = Math.random() * 100;
             let cumulative = 0;
             for (let i = 0; i < rewards.length; i++) {
                 cumulative += rewards[i].percent;
-                if (rand <= cumulative) {
-                    return { ...rewards[i], index: i };
-                }
+                if (rand <= cumulative) return { ...rewards[i], index: i };
             }
-            return { ...rewards[0], index: 0 }; // Fallback
+            return { ...rewards[0], index: 0 };
         }
 
-        // Hàm quay
         function spinUser() {
             if (isSpinning || currentSpins <= 0) return;
-
-            // Trừ lượt quay ngay lập tức để tránh spam
             isSpinning = true;
             toggleSpinButton(false);
+            
+            // Trừ lượt quay trước
             db.ref('users/' + user).update({ freeSpins: currentSpins - 1 });
 
-            // 1. Chọn quà
             const gift = getRandomReward();
-            
-            // 2. Tính toán góc quay
-            // Mỗi ô 45 độ. Tâm ô thứ i nằm ở: i * 45 + 22.5
-            // Muốn kim (ở góc 0/360) chỉ vào tâm ô đó, vòng quay phải xoay sao cho ô đó lên đỉnh.
-            // Công thức: Tổng góc = (Góc hiện tại) + (Vài vòng * 360) + (Góc lệch để đưa ô mục tiêu lên đỉnh)
-            
-            // Góc của ô trúng thưởng so với điểm bắt đầu (0 độ)
+            // Tính góc quay (Mỗi ô 45 độ, index * 45)
+            // Cần trừ thêm 22.5 để kim chỉ vào giữa ô
             const segmentAngle = gift.index * 45; 
-            // Góc bù để đưa ô đó về vị trí 0 độ (Kim chỉ) -> Quay ngược chiều kim đồng hồ hoặc tính toán phần bù
-            // Thực tế CSS rotate quay theo chiều kim đồng hồ.
-            // Để ô ở góc X đến vị trí 0: Cần quay: 360 - X.
-            // Trừ đi 22.5 độ để căn giữa ô (do dùng skew).
-            
             const stopAngle = 360 - segmentAngle - 22.5; 
-            
-            // Random thêm một chút trong khoảng ô để trông tự nhiên (+/- 15 độ)
-            const randomOffset = Math.floor(Math.random() * 20) - 10;
-            
-            // Quay thêm ít nhất 5 vòng (1800 độ)
-            const spinRounds = 360 * 8; 
-            
-            // Tổng góc quay đích
-            // Lưu ý: Phải cộng dồn vào currentRotation để nó quay tiếp chứ không giật lại
-            const targetRotation = currentRotation + spinRounds + stopAngle + randomOffset;
-            
-            // Hack nhỏ: Đảm bảo targetRotation luôn lớn hơn currentRotation và chia hết khớp logic
-            // Đơn giản hóa: Tính toán góc tuyệt đối mới
-            const finalRotate = Math.ceil(currentRotation / 360) * 360 + spinRounds + (360 - segmentAngle - 22.5) + randomOffset;
-            currentRotation = finalRotate;
+            const spinRounds = 360 * 10; // Quay 10 vòng
+            const randomOffset = Math.floor(Math.random() * 20) - 10; // Lệch tí cho tự nhiên
 
-            // 3. Thực hiện Animation CSS
+            // Tính tổng góc quay cộng dồn
+            currentRotation += spinRounds + stopAngle - (currentRotation % 360) + randomOffset;
+            
             const wheel = document.getElementById('wheel');
             wheel.style.transform = `rotate(${currentRotation}deg)`;
-            
-            // Chơi âm thanh quay (nếu có)
-            // document.getElementById('sound-spin').play().catch(e => {});
 
-            // 4. Xử lý sau khi quay xong (5 giây khớp với CSS transition)
             setTimeout(() => {
                 showResult(gift);
                 isSpinning = false;
@@ -475,71 +287,47 @@
         function showResult(gift) {
             if (gift.type === 'miss') {
                 Swal.fire({
-                    title: "Tiếc quá!",
-                    text: "Chúc bạn may mắn lần sau nhé!",
-                    icon: "info",
-                    confirmButtonText: "Thử lại",
-                    background: '#333', color: '#fff',
-                    confirmButtonColor: '#555'
+                    title: "Tiếc quá!", text: "Chúc bạn may mắn lần sau!", icon: "info",
+                    background: '#222', color: '#fff'
                 });
             } else {
-                // Hiệu ứng pháo hoa
                 fireConfetti();
-                // document.getElementById('sound-win').play().catch(e => {});
-
                 let msg = `Bạn nhận được ${gift.name}`;
-                if(gift.type === 'spin') msg = "Bạn được cộng thêm 1 lượt quay!";
+                if(gift.type === 'spin') msg = `Chúc mừng! Bạn được ${gift.name}`;
 
                 Swal.fire({
-                    title: "CHÚC MỪNG!",
-                    text: msg,
-                    imageUrl: 'https://media.giphy.com/media/26tOZ42Mg6pbTUPVS/giphy.gif', // Ảnh động pháo hoa
-                    imageWidth: 200,
-                    imageHeight: 150,
-                    confirmButtonText: "Nhận Quà",
-                    background: '#fff url("https://i.pinimg.com/originals/99/c3/3b/99c33b70802eb1448b0a70823da7a9d3.gif")', // Nền động nhẹ
-                    color: '#c0392b',
-                    confirmButtonColor: '#e74c3c',
-                    backdrop: `rgba(0,0,123,0.4)`
+                    title: "CHÚC MỪNG!", text: msg, icon: "success",
+                    background: '#fff', color: '#d32f2f',
+                    confirmButtonText: "NHẬN QUÀ", confirmButtonColor: '#d32f2f'
                 }).then(() => {
-                    // Logic cộng thưởng vào Firebase
-                    if (gift.type === 'money') {
-                        // Gọi hàm cộng tiền ở đây (nếu bạn có trường balance)
-                        // db.ref('users/' + user).update({ balance: currentBalance + gift.value });
-                        console.log("Cộng tiền: " + gift.value);
-                    } else if (gift.type === 'spin') {
-                        db.ref('users/' + user).update({ freeSpins: currentSpins + 1 });
-                    }
+                    // CỘNG THƯỞNG VÀO FIREBASE
+                    db.ref('users/' + user).once('value').then(snap => {
+                        const data = snap.val();
+                        let updates = {};
+                        if (gift.type === 'money') {
+                            updates.balance = (data.balance || 0) + gift.value;
+                        } else if (gift.type === 'spin') {
+                            updates.freeSpins = (data.freeSpins || 0) + gift.value;
+                        }
+                        db.ref('users/' + user).update(updates);
+                    });
                 });
             }
         }
 
-        // Hiệu ứng pháo hoa bắn tung tóe
         function fireConfetti() {
-            var duration = 3 * 1000;
+            var duration = 3000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
-
             var interval = setInterval(function() {
                 var timeLeft = animationEnd - Date.now();
-
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
-
+                if (timeLeft <= 0) return clearInterval(interval);
                 var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
             }, 250);
         }
 
-        function randomInRange(min, max) {
-            return Math.random() * (max - min) + min;
-        }
-
-        // Chạy khởi tạo
         init();
-
     </script>
 </body>
 </html>
