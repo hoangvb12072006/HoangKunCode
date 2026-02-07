@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HỒ SƠ CÁ NHÂN - VIP</title>
+    <title>HỒ SƠ CÁ NHÂN - VIP SYSTEM</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,120 +13,138 @@
     <style>
         :root {
             --primary: #ff0000;
-            --dark-bg: #000000;
-            --card-bg: #111;
+            --bg-dark: #050505;
+            --card-bg: #121212;
+            --gold: #ffd700;
         }
 
         body {
             background: radial-gradient(circle at center, #220000 0%, #000000 100%);
             color: #fff;
             font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; padding: 15px;
         }
 
         .profile-card {
-            background: rgba(20, 20, 20, 0.95);
-            width: 100%;
-            max-width: 400px;
+            background: rgba(18, 18, 18, 0.95);
+            width: 100%; max-width: 420px;
             border-radius: 20px;
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
-            overflow: hidden;
-            position: relative;
+            border: 1px solid #333;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.1);
+            overflow: hidden; position: relative;
         }
 
-        /* Avatar Section */
+        /* --- PHẦN HEADER & VIP --- */
         .profile-header {
-            padding: 30px 20px;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(100,0,0,0.2) 0%, rgba(0,0,0,0) 100%);
+            padding: 25px 20px; text-align: center;
+            background: linear-gradient(180deg, rgba(200,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
             border-bottom: 1px solid #222;
         }
 
+        .avatar-area { position: relative; width: 90px; margin: 0 auto 15px; }
         .avatar {
-            width: 80px; height: 80px;
-            background: linear-gradient(135deg, #ff0000, #990000);
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 35px; font-weight: bold; color: white;
-            border: 3px solid #333;
-            box-shadow: 0 0 15px var(--primary);
+            width: 90px; height: 90px;
+            background: linear-gradient(135deg, #ff3333, #800000);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 40px; font-weight: 900; color: white;
+            border: 3px solid #222; box-shadow: 0 0 15px var(--primary);
+            position: relative; z-index: 1;
         }
+        
+        /* Khung viền VIP quay quanh avatar */
+        .vip-border {
+            position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border-radius: 50%; border: 2px dashed #444;
+            animation: spin 10s linear infinite; z-index: 0;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         .username {
-            font-size: 22px; font-weight: 900;
-            text-transform: uppercase; margin: 0; color: #fff;
-            text-shadow: 0 0 10px rgba(255,0,0,0.6);
+            font-size: 24px; font-weight: 900; text-transform: uppercase;
+            margin: 0; text-shadow: 0 0 10px rgba(255,0,0,0.5);
         }
 
-        .user-rank {
-            font-size: 11px; background: #333; color: #aaa;
-            padding: 3px 10px; border-radius: 20px; margin-top: 5px;
-            display: inline-block;
+        /* BADGE VIP */
+        .vip-badge {
+            display: inline-block; padding: 4px 12px; border-radius: 20px;
+            font-size: 11px; font-weight: bold; text-transform: uppercase;
+            margin-top: 8px; background: #333; color: #aaa;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5); border: 1px solid #444;
+        }
+        /* Các cấp độ màu sắc VIP */
+        .vip-1 { background: linear-gradient(90deg, #cd7f32, #a05a2c); color: #fff; border: 1px solid #cd7f32; } /* Đồng */
+        .vip-2 { background: linear-gradient(90deg, #c0c0c0, #999); color: #000; border: 1px solid #fff; } /* Bạc */
+        .vip-3 { background: linear-gradient(90deg, #ffd700, #ffb300); color: #000; border: 1px solid #ffeb3b; box-shadow: 0 0 10px #fc0; } /* Vàng */
+        .vip-4 { background: linear-gradient(90deg, #00c6ff, #0072ff); color: #fff; border: 1px solid #00c6ff; box-shadow: 0 0 10px #00c6ff; } /* Kim Cương */
+        .vip-5, .vip-6, .vip-7 { background: linear-gradient(90deg, #ff00cc, #333399); color: #fff; border: 1px solid #f0c; box-shadow: 0 0 15px #f0c; } /* Tím mộng mơ */
+        .vip-8, .vip-9, .vip-10 { background: linear-gradient(90deg, #ff0000, #ff9900); color: #fff; border: 1px solid #f00; box-shadow: 0 0 20px #f00; animation: glow 1s infinite alternate; } /* Chí Tôn */
+        @keyframes glow { from { box-shadow: 0 0 10px #f00; } to { box-shadow: 0 0 25px #f00; } }
+
+        /* THANH TIẾN ĐỘ VIP */
+        .vip-progress-container {
+            margin-top: 15px; padding: 0 20px; text-align: left;
+        }
+        .progress-info {
+            display: flex; justify-content: space-between; font-size: 11px; color: #888; margin-bottom: 5px;
+        }
+        .progress-bar-bg {
+            width: 100%; height: 6px; background: #333; border-radius: 10px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), #ff6b6b);
+            border-radius: 10px; transition: width 1s ease-in-out;
+            box-shadow: 0 0 10px var(--primary);
         }
 
-        /* Stats Box */
-        .stats-row {
-            display: flex; gap: 10px; padding: 20px;
-        }
+        /* --- THỐNG KÊ & CHI TIẾT --- */
+        .stats-row { display: flex; gap: 10px; padding: 20px; }
         .stat-box {
-            background: #1a1a1a; flex: 1; padding: 10px;
-            border-radius: 10px; text-align: center;
-            border: 1px solid #333;
+            background: #1a1a1a; flex: 1; padding: 12px; border-radius: 10px;
+            text-align: center; border: 1px solid #333;
         }
         .stat-val { font-size: 16px; font-weight: bold; display: block; margin-top: 5px; }
         .text-money { color: #0f0; }
         .text-spin { color: #fc0; }
         .stat-label { font-size: 10px; color: #777; text-transform: uppercase; }
 
-        /* Details List */
-        .details-list { padding: 0 20px; }
+        .details-list { padding: 0 20px; margin-bottom: 10px; }
         .detail-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 0; border-bottom: 1px solid #222; font-size: 13px;
+            display: flex; justify-content: space-between; padding: 12px 0;
+            border-bottom: 1px solid #222; font-size: 13px;
         }
-        .d-label { color: #888; display: flex; align-items: center; gap: 8px; }
-        .d-label i { width: 15px; color: var(--primary); }
+        .d-label { color: #888; gap: 8px; display: flex; align-items: center; }
+        .d-label i { width: 18px; color: var(--primary); text-align: center; }
         .d-val { color: #fff; font-weight: 500; }
-        
-        .code-tag { 
-            background: rgba(255,0,0,0.15); color: #ff3333; 
-            padding: 2px 6px; border-radius: 4px; font-weight: bold;
-        }
+        .code-tag { background: rgba(255,0,0,0.15); color: #f55; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
         .not-set { color: #444; font-style: italic; }
 
-        /* Action Buttons */
         .btn-edit {
-            background: none; border: none; color: var(--primary);
+            background: none; border: none; color: var(--primary); width: 100%;
             font-size: 12px; cursor: pointer; text-decoration: underline;
-            width: 100%; text-align: right; padding: 10px 20px;
+            text-align: right; padding: 5px 20px 15px;
         }
 
-        .form-area { padding: 20px; }
+        /* --- FORM ĐỔI MẬT KHẨU --- */
+        .form-area { padding: 20px; background: #0a0a0a; border-top: 1px solid #222; }
         .input-box {
-            width: 100%; padding: 12px; margin-bottom: 10px;
-            background: #111; border: 1px solid #333; color: white;
-            border-radius: 8px; box-sizing: border-box; outline: none;
+            width: 100%; padding: 12px; margin-bottom: 10px; background: #151515;
+            border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; outline: none;
         }
         .input-box:focus { border-color: var(--primary); }
         
         .btn-main {
-            width: 100%; padding: 12px; border: none; border-radius: 8px;
-            background: var(--primary); color: white; font-weight: bold;
-            cursor: pointer; text-transform: uppercase; margin-bottom: 10px;
+            width: 100%; padding: 12px; background: var(--primary); color: white;
+            border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
+            text-transform: uppercase; margin-bottom: 10px;
         }
         .btn-group { display: flex; gap: 10px; }
         .btn-sub {
-            flex: 1; padding: 10px; border: 1px solid #333; background: #111;
-            color: #ccc; border-radius: 8px; cursor: pointer;
+            flex: 1; padding: 10px; background: #222; color: #ccc;
+            border: 1px solid #333; border-radius: 8px; cursor: pointer; font-size: 13px;
         }
         .btn-logout { border-color: #500; color: #f55; }
+        .btn-logout:hover { background: #300; }
 
     </style>
 </head>
@@ -134,14 +152,31 @@
 
     <div class="profile-card">
         <div class="profile-header">
-            <div class="avatar" id="avatar-char">?</div>
+            <div class="avatar-area">
+                <div class="vip-border" id="vip-border-anim"></div>
+                <div class="avatar" id="avatar-char">?</div>
+            </div>
             <h2 class="username" id="username_display">...</h2>
-            <span class="user-rank">Thành Viên VIP</span>
+            
+            <div id="vip-badge" class="vip-badge">Thành Viên Thường</div>
+
+            <div class="vip-progress-container">
+                <div class="progress-info">
+                    <span id="vip-current-text">VIP 0</span>
+                    <span id="vip-next-text">Mục tiêu: VIP 1</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="vip-progress-fill"></div>
+                </div>
+                <div style="text-align: right; font-size: 10px; color: #666; margin-top: 3px;" id="money-needed">
+                    Cần thêm 200.000đ
+                </div>
+            </div>
         </div>
 
         <div class="stats-row">
             <div class="stat-box">
-                <span class="stat-label"><i class="fas fa-wallet"></i> Số dư</span>
+                <span class="stat-label"><i class="fas fa-wallet"></i> Số dư hiện tại</span>
                 <span class="stat-val text-money" id="balance_display">0đ</span>
             </div>
             <div class="stat-box">
@@ -164,20 +199,18 @@
                 <span class="d-val" id="phone_display">...</span>
             </div>
         </div>
-        
         <button class="btn-edit" onclick="openUpdateModal()">
             <i class="fas fa-pen"></i> Cập nhật thông tin
         </button>
 
         <div class="form-area">
-            <h4 style="margin: 0 0 15px 0; color: #ff0000; font-size: 14px; text-transform: uppercase;">
-                <i class="fas fa-lock"></i> Đổi mật khẩu
+            <h4 style="margin: 0 0 15px 0; color: #f55; font-size: 13px; text-transform: uppercase;">
+                <i class="fas fa-lock"></i> Bảo mật
             </h4>
             <input type="password" id="oldPass" class="input-box" placeholder="Mật khẩu cũ">
             <input type="password" id="newPass" class="input-box" placeholder="Mật khẩu mới">
             
             <button class="btn-main" onclick="changePass()">Lưu Thay Đổi</button>
-            
             <div class="btn-group">
                 <button class="btn-sub" onclick="window.location.href='index.html'">Về Shop</button>
                 <button class="btn-sub btn-logout" onclick="logout()">Đăng Xuất</button>
@@ -194,7 +227,22 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // 2. LOGIC CHÍNH
+        // 2. CẤU HÌNH CẤP ĐỘ VIP (Dựa trên số dư/tổng nạp)
+        // Đây là mốc tiền cần đạt để lên cấp
+        const vipLevels = [
+            { level: 0, min: 0, name: "Thành Viên" },
+            { level: 1, min: 200000, name: "VIP 1 - Đồng" },        // 200k
+            { level: 2, min: 700000, name: "VIP 2 - Bạc" },         // 700k
+            { level: 3, min: 1500000, name: "VIP 3 - Vàng" },       // 1.5tr
+            { level: 4, min: 3000000, name: "VIP 4 - Bạch Kim" },   // 3tr
+            { level: 5, min: 5000000, name: "VIP 5 - Kim Cương" },  // 5tr
+            { level: 6, min: 8000000, name: "VIP 6 - Tinh Anh" },   // 8tr
+            { level: 7, min: 12000000, name: "VIP 7 - Cao Thủ" },   // 12tr (Trên 10tr)
+            { level: 8, min: 18000000, name: "VIP 8 - Đại Sư" },    // 18tr
+            { level: 9, min: 25000000, name: "VIP 9 - Thách Đấu" }, // 25tr
+            { level: 10, min: 50000000, name: "VIP 10 - CHÍ TÔN" }  // 50tr
+        ];
+
         const user = localStorage.getItem('hoangUser');
 
         function init() {
@@ -208,23 +256,23 @@
             document.getElementById('username_display').innerText = user;
             document.getElementById('avatar-char').innerText = user.charAt(0).toUpperCase();
 
-            // Lắng nghe dữ liệu Realtime
+            // Lắng nghe dữ liệu
             db.ref('users/' + user).on('value', snap => {
                 const data = snap.val();
                 if(data) {
-                    // Tiền & Lượt
                     const bal = data.balance || 0;
                     const spins = data.freeSpins || 0;
+                    
                     document.getElementById('balance_display').innerText = bal.toLocaleString('vi-VN') + 'đ';
                     document.getElementById('spins_display').innerText = spins;
 
-                    // Email & Phone
-                    const email = data.email ? data.email : '<span class="not-set">Chưa cập nhật</span>';
-                    const phone = data.phone ? data.phone : '<span class="not-set">Chưa cập nhật</span>';
+                    // Thông tin cá nhân
+                    const email = data.email || '<span class="not-set">Chưa cập nhật</span>';
+                    const phone = data.phone || '<span class="not-set">Chưa cập nhật</span>';
                     document.getElementById('email_display').innerHTML = email;
                     document.getElementById('phone_display').innerHTML = phone;
 
-                    // Xử lý MÃ KHÁCH HÀNG (Tự tạo nếu chưa có)
+                    // Mã KH
                     let mkh = data.customerId;
                     if(!mkh) {
                         const randomId = Math.floor(1000 + Math.random() * 9000);
@@ -232,74 +280,96 @@
                         db.ref('users/' + user).update({ customerId: mkh });
                     }
                     document.getElementById('code_display').innerText = mkh;
+
+                    // --- TÍNH TOÁN VIP ---
+                    calculateVIP(bal); 
                 }
             });
         }
 
-        // 3. HÀM CẬP NHẬT THÔNG TIN (Email, SĐT)
-        async function openUpdateModal() {
-            const snap = await db.ref('users/' + user).once('value');
-            const data = snap.val() || {};
-            
-            const { value: formValues } = await Swal.fire({
-                title: 'CẬP NHẬT HỒ SƠ',
-                html:
-                    '<input id="swal-email" class="swal2-input" placeholder="Nhập Email" value="' + (data.email || "") + '">' +
-                    '<input id="swal-phone" class="swal2-input" placeholder="Nhập SĐT" value="' + (data.phone || "") + '">',
-                focusConfirm: false,
-                background: '#222', color: '#fff',
-                confirmButtonText: 'Lưu Ngay',
-                confirmButtonColor: '#ff0000',
-                preConfirm: () => {
-                    return [
-                        document.getElementById('swal-email').value,
-                        document.getElementById('swal-phone').value
-                    ]
-                }
-            });
+        function calculateVIP(currentMoney) {
+            // 1. Tìm cấp hiện tại
+            let currentLevel = vipLevels[0];
+            let nextLevel = vipLevels[1];
 
-            if (formValues) {
-                db.ref('users/' + user).update({
-                    email: formValues[0],
-                    phone: formValues[1]
-                }).then(() => Swal.fire({title: "Thành công", icon: "success"}));
+            for (let i = 0; i < vipLevels.length; i++) {
+                if (currentMoney >= vipLevels[i].min) {
+                    currentLevel = vipLevels[i];
+                    nextLevel = vipLevels[i+1] || null; // Cấp tiếp theo
+                }
+            }
+
+            // 2. Cập nhật giao diện Huy hiệu
+            const badge = document.getElementById('vip-badge');
+            badge.className = `vip-badge vip-${currentLevel.level}`; // Đổi màu theo class vip-x
+            badge.innerText = currentLevel.name.toUpperCase();
+            
+            // Đổi màu viền avatar nếu là VIP cao
+            const border = document.getElementById('vip-border-anim');
+            if(currentLevel.level >= 8) border.style.borderColor = 'red';
+            else if(currentLevel.level >= 5) border.style.borderColor = '#00c6ff';
+            else border.style.borderColor = '#444';
+
+            // 3. Cập nhật Thanh Tiến Độ
+            document.getElementById('vip-current-text').innerText = `VIP ${currentLevel.level}`;
+            
+            if (nextLevel) {
+                document.getElementById('vip-next-text').innerText = `Lên ${nextLevel.name}`;
+                
+                // Tính %: (Tiền hiện có - Mốc hiện tại) / (Mốc tiếp theo - Mốc hiện tại)
+                // Lưu ý: Logic này để thanh chạy từ 0-100% trong khoảng cấp đó
+                const range = nextLevel.min - currentLevel.min;
+                const progress = currentMoney - currentLevel.min;
+                // Nếu đang ở VIP 0 (min=0) thì tính trực tiếp trên nextLevel
+                const percentage = Math.min(100, Math.max(0, (progress / range) * 100));
+                
+                document.getElementById('vip-progress-fill').style.width = `${percentage}%`;
+                
+                const needed = nextLevel.min - currentMoney;
+                document.getElementById('money-needed').innerText = `Nạp thêm ${needed.toLocaleString('vi-VN')}đ để lên cấp`;
+            } else {
+                // Đã Max cấp
+                document.getElementById('vip-next-text').innerText = "Đẳng cấp tối thượng";
+                document.getElementById('vip-progress-fill').style.width = "100%";
+                document.getElementById('money-needed').innerText = "Bạn là Vua của trò chơi!";
             }
         }
 
-        // 4. ĐỔI MẬT KHẨU
+        // POPUP CẬP NHẬT
+        async function openUpdateModal() {
+            const snap = await db.ref('users/' + user).once('value');
+            const data = snap.val() || {};
+            const { value: formValues } = await Swal.fire({
+                title: 'CẬP NHẬT HỒ SƠ',
+                html: '<input id="swal-email" class="swal2-input" placeholder="Email" value="'+(data.email||"")+'">' +
+                      '<input id="swal-phone" class="swal2-input" placeholder="SĐT" value="'+(data.phone||"")+'">',
+                focusConfirm: false, background: '#222', color: '#fff',
+                confirmButtonText: 'Lưu', preConfirm: () => [
+                    document.getElementById('swal-email').value,
+                    document.getElementById('swal-phone').value
+                ]
+            });
+            if (formValues) db.ref('users/' + user).update({ email: formValues[0], phone: formValues[1] })
+                .then(() => Swal.fire({title: "Xong!", icon: "success", timer: 1500, showConfirmButton: false}));
+        }
+
+        // ĐỔI MK & LOGOUT
         function changePass() {
             const oldP = document.getElementById('oldPass').value;
             const newP = document.getElementById('newPass').value;
-            if(!oldP || !newP) return Swal.fire("Lỗi", "Vui lòng nhập đủ thông tin!", "warning");
-
+            if(!oldP || !newP) return Swal.fire("Lỗi", "Nhập thiếu!", "warning");
             db.ref('users/' + user).once('value').then(snap => {
-                const data = snap.val();
-                if(data.pass == oldP) {
+                if(snap.val().pass == oldP) {
                     db.ref('users/' + user).update({ pass: newP });
-                    Swal.fire("Thành công", "Đổi mật khẩu thành công!", "success");
-                    document.getElementById('oldPass').value = '';
-                    document.getElementById('newPass').value = '';
-                } else {
-                    Swal.fire("Lỗi", "Mật khẩu cũ không đúng!", "error");
-                }
+                    Swal.fire("Thành công", "", "success");
+                } else Swal.fire("Lỗi", "Sai mật khẩu cũ!", "error");
             });
         }
-
-        // 5. ĐĂNG XUẤT
         function logout() {
-            Swal.fire({
-                title: 'Đăng xuất?', icon: 'question',
-                showCancelButton: true, confirmButtonText: 'Thoát',
-                background: '#222', color: '#fff'
-            }).then((res) => {
-                if(res.isConfirmed) {
-                    localStorage.removeItem('hoangUser');
-                    window.location.href = 'index.html';
-                }
-            });
+            Swal.fire({title: 'Thoát?', icon: 'question', showCancelButton: true, confirmButtonText: 'OK', background: '#222', color: '#fff'})
+            .then((res) => { if(res.isConfirmed) { localStorage.removeItem('hoangUser'); window.location.href='index.html'; }});
         }
 
-        // CHẠY HÀM KHỞI TẠO
         init();
     </script>
 </body>
