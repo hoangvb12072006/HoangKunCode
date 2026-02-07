@@ -236,6 +236,22 @@
             border: 1px solid rgba(255,0,0,0.3);
         }
 
+        /* Nút chỉnh sửa nhỏ */
+        .btn-edit-small {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+            text-decoration: underline;
+            padding: 0;
+        }
+        .btn-edit-small:hover { color: #fff; }
+
+        /* Màu cho chữ Chưa cập nhật */
+        .not-updated { color: #555; font-style: italic; font-size: 13px; }
+
     </style>
 </head>
 <body>
@@ -257,19 +273,26 @@
                 <span class="stat-value text-spin" id="spins_display">0</span>
             </div>
         </div>
-
-        <div class="details-container">
+<div class="details-container">
             <div class="detail-row">
                 <span class="detail-label"><i class="fas fa-id-badge"></i> Mã Khách Hàng</span>
-                <span class="detail-value code-highlight" id="code_display">...</span>
+                <span class="detail-value code-highlight" id="code_display">Đang tạo...</span>
             </div>
+            
             <div class="detail-row">
                 <span class="detail-label"><i class="fas fa-envelope"></i> Email</span>
                 <span class="detail-value" id="email_display">Đang tải...</span>
             </div>
+
             <div class="detail-row">
                 <span class="detail-label"><i class="fas fa-phone"></i> Số điện thoại</span>
                 <span class="detail-value" id="phone_display">Đang tải...</span>
+            </div>
+
+            <div style="text-align: right; margin-top: 10px;">
+                <button class="btn-edit-small" onclick="openUpdateModal()">
+                    <i class="fas fa-edit"></i> Cập nhật thông tin
+                </button>
             </div>
         </div>
         
@@ -327,20 +350,86 @@
             document.getElementById('username_display').innerText = user;
             // Lấy chữ cái đầu làm avatar
             document.getElementById('avatar-char').innerText = user.charAt(0).toUpperCase();
-
-            // 3. Lấy dữ liệu Realtime (Tiền & Lượt quay)
+// 3. Lấy dữ liệu Realtime & Xử lý Mã KH
             db.ref('users/' + user).on('value', snap => {
                 const val = snap.val();
                 if(val) {
                     const bal = val.balance || 0;
                     const spins = val.freeSpins || 0;
+                    
+                    // --- XỬ LÝ MÃ KHÁCH HÀNG (MKH) ---
+                    let myCode = val.customerId; 
+                    if (!myCode) {
+                        // Nếu chưa có mã, tự động tạo mã ngẫu nhiên (VD: MKH8392)
+                        // Tại sao dùng Random? Vì đếm số thứ tự ở client rất khó chính xác.
+                        const randomNum = Math.floor(1000 + Math.random() * 9000); 
+                        myCode = "MKH" + randomNum;
+                        
+                        // Lưu mã này lại vào Firebase để dùng cố định về sau
+                        db.ref('users/' + user).update({ customerId: myCode });
+                    }
+                    document.getElementById('code_display').innerText = myCode;
 
-                    // Format tiền tệ (VD: 100000 -> 100.000đ)
+                    // --- XỬ LÝ EMAIL & SĐT ---
+                    // Nếu có dữ liệu thì hiện, không có thì hiện "Chưa cập nhật"
+                    const email = val.email ? val.email : '<span class="not-updated">Chưa cập nhật</span>';
+                    const phone = val.phone ? val.phone : '<span class="not-updated">Chưa cập nhật</span>';
+
+                    // Hiển thị ra màn hình (dùng innerHTML để nhận thẻ span)
+                    document.getElementById('email_display').innerHTML = email;
+                    document.getElementById('phone_display').innerHTML = phone;
+
+                    // Cập nhật số dư và lượt quay
                     document.getElementById('balance_display').innerText = bal.toLocaleString('vi-VN') + 'đ';
                     document.getElementById('spins_display').innerText = spins;
                 }
             });
-        }
+
+            // --- HÀM MỞ POPUP CẬP NHẬT THÔNG TIN ---
+            async function openUpdateModal() {
+                // Lấy dữ liệu hiện tại để điền sẵn vào ô (nếu có)
+                const snap = await db.ref('users/' + user).once('value');
+                const data = snap.val() || {};
+                const currentEmail = data.email || "";
+                const currentPhone = data.phone || "";
+
+                // Hiển thị Popup nhập liệu
+                const { value: formValues } = await Swal.fire({
+                    title: 'Cập nhật hồ sơ',
+                    html:
+                        '<input id="swal-email" class="swal2-input" placeholder="Nhập Email" value="' + currentEmail + '">' +
+                        '<input id="swal-phone" class="swal2-input" placeholder="Nhập Số điện thoại" value="' + currentPhone + '">',
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu Lại',
+                    cancelButtonText: 'Hủy',
+                    background: '#222', color: '#fff',
+                    preConfirm: () => {
+                        return [
+                            document.getElementById('swal-email').value,
+                            document.getElementById('swal-phone').value
+                        ]
+                    }
+                });
+
+                // Nếu người dùng bấm Lưu
+                if (formValues) {
+                    const [newEmail, newPhone] = formValues;
+                    
+                    // Lưu lên Firebase
+                    db.ref('users/' + user).update({
+                        email: newEmail,
+                        phone: newPhone
+                    }).then(() => {
+                        Swal.fire({
+                            title: "Thành công",
+                            text: "Đã cập nhật thông tin!",
+                            icon: "success",
+                            background: '#222', color: '#fff'
+                        });
+                    });
+                }
+            }
 
         // 4. Hàm đổi mật khẩu
         function changePass() {
