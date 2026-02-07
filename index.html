@@ -1039,6 +1039,71 @@ function closeProfile() {
 }
     
 </style>
+
+    <a href="spin.html" class="spin-sticker">
+    <div class="sticker-content">
+        <i class="fas fa-dharmachakra"></i> </div>
+    <span class="sticker-tag">QUAY NGAY</span>
+</a>
+
+<style>
+    /* Sticker nằm góc trái dưới */
+    .spin-sticker {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        width: 70px;
+        height: 70px;
+        background: radial-gradient(circle, #ff0000, #800000);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+        border: 3px solid #fff;
+        z-index: 9999;
+        transition: transform 0.3s;
+        animation: floatSticker 3s ease-in-out infinite;
+    }
+
+    .spin-sticker:hover {
+        transform: scale(1.1) rotate(10deg);
+        box-shadow: 0 0 30px #ff0000;
+    }
+
+    /* Icon bánh xe xoay tròn mãi mãi */
+    .sticker-content i {
+        font-size: 35px;
+        color: #fff;
+        animation: spinInfinite 4s linear infinite;
+    }
+
+    /* Chữ "QUAY NGAY" nhỏ ở dưới */
+    .sticker-tag {
+        position: absolute;
+        bottom: -12px;
+        background: #ffff00;
+        color: #ff0000;
+        font-size: 10px;
+        font-weight: 900;
+        padding: 2px 8px;
+        border-radius: 10px;
+        border: 1px solid #ff0000;
+        white-space: nowrap;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    @keyframes spinInfinite {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes floatSticker {
+        0%, 100% { bottom: 30px; }
+        50% { bottom: 40px; } /* Hiệu ứng bay lên xuống nhẹ */
+    }
+</style>
     
 </body>
 </html>
