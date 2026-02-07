@@ -272,21 +272,54 @@
             <div id="re-tab3" onclick="switchRechargeTab('reward')" style="flex: 1; padding: 15px; cursor: pointer; color: #555; font-weight: bold; text-align: center;">Phần thưởng</div>
         </div>
 
-       <div id="con-atm" style="padding: 20px; display: block; text-align: left;">
-    <div style="background: #fdf2f2; border: 1px solid #ff4747; padding: 15px; border-radius: 10px; display: flex; align-items: center; gap: 15px;">
-        <div style="flex: 1;">
-            <p style="margin-bottom: 8px; color: #333;">🏦 <b>Ngân hàng: TECHCOMBANK</b></p>
-            <p style="margin-bottom: 8px; color: #333;">💳 <b>Số tài khoản:</b> <b style="color: #ff4747; font-size: 16px;">3120720060</b></p>
-            <p style="margin-bottom: 8px; color: #333;">👤 <b>Chủ TK:</b> NGUYEN VIET HOANG</p>
-            <p style="margin-bottom: 10px; color: #333;">📝 <b>Nội dung:</b> <b id="nap-memo" style="background: #fff3cd; padding: 2px 5px;">nap "tendangnhap"</b></p>
-            <p style="font-size: 11px; color: #666; font-style: italic;">* Hệ thống tự động cộng tiền sau 1-5 phút.</p>
+      <div id="con-atm" style="padding: 20px; display: block;">
+    
+    <div id="step-1-input">
+        <div style="background: #e8f0fe; border: 1px dashed #1877f2; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="color: #1877f2; font-size: 13px; margin: 0;">
+                <i class="fas fa-bolt"></i> <b>Nạp tự động MB Bank:</b><br>
+                Nhập đúng số tiền cần nạp để hệ thống tự động cộng sau 10s.
+            </p>
+        </div>
+
+        <label style="font-weight: bold; color: #333; display: block; margin-bottom: 5px;">Nhập số tiền muốn nạp:</label>
+        <input type="number" id="auto-amount" placeholder="Ví dụ: 10000, 20000..." 
+               style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; margin-bottom: 5px; outline: none;">
+        <p style="font-size: 11px; color: #888; margin-bottom: 15px;">* Tối thiểu 10.000đ</p>
+
+        <button onclick="createPaymentQR()" 
+                style="width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase;">
+            <i class="fas fa-qrcode"></i> Tạo Mã QR Nạp Tiền
+        </button>
+    </div>
+
+    <div id="step-2-qr" style="display: none; text-align: center;">
+        <div style="background: #fff; padding: 10px; border: 2px solid #1877f2; border-radius: 10px; display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative;">
+            <img id="qr-image" src="" alt="QR Code" style="width: 200px; display: block;">
+            
+            <img src="https://img.mservice.io/momo_app_v2/new_version/img/app/logo-mb-bank.png" 
+                 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; border: 2px solid #fff; border-radius: 50%;">
         </div>
         
-        <div style="width: 140px; text-align: center; background: #fff; padding: 5px; border-radius: 8px; border: 1px solid #eee;">
-            <img src="https://sf-static.upanhlaylink.com/img/image_20260205f3c1d35d1bea8ccfc990947f98624b14.jpg" 
-                 alt="QR Nạp Tiền" 
-                 style="width: 100%; display: block; border-radius: 5px;">
-            <span style="font-size: 10px; color: #ff4747; font-weight: bold; display: block; margin-top: 5px;">QUÉT MÃ NẠP</span>
+        <div style="margin-top: 15px; text-align: left; background: #f9f9f9; padding: 10px; border-radius: 8px; border: 1px solid #eee;">
+            <p style="margin: 5px 0;">🏦 Ngân hàng: <b style="color:#1877f2">MB BANK (Quân Đội)</b></p>
+            <p style="margin: 5px 0;">💳 Số tài khoản: <b>88812072006888</b></p>
+            <p style="margin: 5px 0;">👤 Chủ TK: <b>NGUYEN VIET HOANG</b></p>
+            <p style="margin: 5px 0; border-top: 1px dashed #ccc; padding-top: 5px; margin-top: 5px;">
+                💰 Số tiền: <b id="display-amount" style="color: #00aa00; font-size: 16px;">0đ</b>
+            </p>
+            <p style="margin: 5px 0;">
+                📝 Nội dung: <b id="display-memo" style="color: #d9534f; background: #ffeded; padding: 2px 5px;">...</b>
+            </p>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">
+                <i class="fas fa-sync fa-spin"></i> Đang chờ tiền về (10-30 giây)...
+            </div>
+            <button onclick="resetRecharge()" style="background: none; border: none; color: #666; text-decoration: underline; cursor: pointer;">
+                ← Quay lại nhập tiền khác
+            </button>
         </div>
     </div>
 </div>
