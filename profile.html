@@ -3,148 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HỒ SƠ CÁ NHÂN</title>
+    <title>TRANG CÁ NHÂN - VIP MEMBER</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
+        :root {
+            --primary: #ff0000;
+            --dark-bg: #0a0a0a;
+            --card-bg: #151515;
+            --text-gray: #b0b0b0;
+        }
+
         body {
-            background-color: #050505;
+            background: radial-gradient(circle at center, #1a0000 0%, #000000 100%);
             color: #fff;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Roboto', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
-        .container {
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 15px;
-            border: 1px solid #333;
+
+        /* Khung hồ sơ chính */
+        .profile-card {
+            background: rgba(20, 20, 20, 0.9);
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+            max-width: 450px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.15);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            position: relative;
         }
-        h2 {
+
+        /* Phần Header (Avatar + Tên) */
+        .profile-header {
+            background: linear-gradient(180deg, rgba(255,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+            padding: 30px 20px;
             text-align: center;
-            color: #ff0000;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            border-bottom: 2px solid #ff0000;
-            padding-bottom: 10px;
-        }
-        .info-row {
-            margin-bottom: 20px;
             border-bottom: 1px solid #333;
-            padding-bottom: 10px;
         }
-        .label { color: #888; font-size: 14px; display: block; margin-bottom: 5px; }
-        .value { font-size: 18px; font-weight: bold; }
-        
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            background: #000;
-            border: 1px solid #444;
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #ff3333, #990000);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            font-weight: bold;
             color: white;
-            border-radius: 5px;
+            border: 3px solid #222;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .username {
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+
+        .user-rank {
+            font-size: 13px;
+            background: #333;
+            color: #ccc;
+            padding: 4px 12px;
+            border-radius: 10px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        /* Phần thống kê (Tiền + Lượt quay) */
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: #1f1f1f;
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .text-money { color: #00ff00; text-shadow: 0 0 5px rgba(0,255,0,0.3); }
+        .text-spin { color: #ffcc00; text-shadow: 0 0 5px rgba(255,204,0,0.3); }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+        }
+
+        /* Phần Form đổi mật khẩu */
+        .form-section {
+            padding: 20px 30px;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            transition: 0.3s;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px 12px 40px; /* Chừa chỗ cho icon */
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
             box-sizing: border-box;
             outline: none;
+            transition: 0.3s;
         }
-        input:focus { border-color: #ff0000; }
-        
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.2);
+        }
+        .form-input:focus + i { color: var(--primary); }
+
+        /* Buttons */
         .btn {
             width: 100%;
             padding: 12px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save {
+            background: linear-gradient(90deg, #cc0000, #ff0000);
+            color: white;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(255,0,0,0.3);
+        }
+        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(255,0,0,0.5); }
+
+        .btn-group-bottom {
+            display: flex;
+            gap: 10px;
             margin-top: 10px;
         }
-        .btn-save { background: #ff0000; color: white; }
-        .btn-save:hover { background: #cc0000; }
-        .btn-back { background: #333; color: white; }
-        .btn-back:hover { background: #555; }
+
+        .btn-back { background: #333; color: white; flex: 1; }
+        .btn-back:hover { background: #444; }
+
+        .btn-logout { background: #222; color: #ff4444; border: 1px solid #ff4444; flex: 1; }
+        .btn-logout:hover { background: #ff4444; color: white; }
+
+        /* Loading */
+        .loading { font-size: 12px; color: #666; font-style: italic; }
+
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2><i class="fas fa-id-card"></i> Thông Tin Khách Hàng</h2>
-
-        <div class="info-row">
-            <span class="label">Tên tài khoản:</span>
-            <span class="value" id="username_display" style="color: #fff;">Đang tải...</span>
-        </div>
-        <div class="info-row">
-            <span class="label">Số dư hiện tại:</span>
-            <span class="value" id="balance_display" style="color: #00ff00;">0đ</span>
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="avatar" id="avatar-char">?</div>
+            <h2 class="username" id="username_display"><span class="loading">Đang tải...</span></h2>
+            <span class="user-rank">Thành Viên VIP</span>
         </div>
 
-        <h4 style="margin-top: 30px; color: #ff0000;">ĐỔI MẬT KHẨU</h4>
-        <input type="password" id="oldPass" placeholder="Nhập mật khẩu cũ">
-        <input type="password" id="newPass" placeholder="Nhập mật khẩu mới">
+        <div class="stats-container">
+            <div class="stat-box">
+                <span class="stat-label"><i class="fas fa-wallet"></i> Số dư</span>
+                <span class="stat-value text-money" id="balance_display">0đ</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label"><i class="fas fa-ticket-alt"></i> Lượt quay</span>
+                <span class="stat-value text-spin" id="spins_display">0</span>
+            </div>
+        </div>
 
-        <button class="btn btn-save" onclick="changePass()">LƯU THAY ĐỔI</button>
-        <button class="btn btn-back" onclick="window.location.href='index.html'">
-            <i class="fas fa-arrow-left"></i> QUAY VỀ SHOP
-        </button>
+        <div class="form-section">
+            <div class="section-title"><i class="fas fa-lock"></i> Đổi Mật Khẩu</div>
+            
+            <div class="input-group">
+                <input type="password" id="oldPass" class="form-input" placeholder="Mật khẩu cũ">
+                <i class="fas fa-key"></i>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="newPass" class="form-input" placeholder="Mật khẩu mới">
+                <i class="fas fa-unlock-alt"></i>
+            </div>
+
+            <button class="btn btn-save" onclick="changePass()">
+                <i class="fas fa-save"></i> Lưu Thay Đổi
+            </button>
+
+            <div class="btn-group-bottom">
+                <button class="btn btn-back" onclick="window.location.href='index.html'">
+                    <i class="fas fa-arrow-left"></i> Về Shop
+                </button>
+                <button class="btn btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Đăng Xuất
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // 1. Cấu hình Firebase (Y hệt file index.html)
+        // 1. Cấu hình Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g",
             databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com",
         };
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // 2. Kiểm tra đăng nhập
+        // 2. Logic Kiểm tra đăng nhập
         const user = localStorage.getItem('hoangUser');
+
         if (!user) {
-            Swal.fire("Lỗi", "Bạn chưa đăng nhập!", "error").then(() => {
+            Swal.fire({
+                title: "Chưa đăng nhập",
+                text: "Vui lòng đăng nhập để xem hồ sơ!",
+                icon: "warning",
+                background: '#222', color: '#fff'
+            }).then(() => {
                 window.location.href = 'index.html';
             });
         } else {
-            // Hiển thị tên
+            // Hiển thị tên & Avatar
             document.getElementById('username_display').innerText = user;
-            
-            // Lấy số dư realtime từ Firebase
+            // Lấy chữ cái đầu làm avatar
+            document.getElementById('avatar-char').innerText = user.charAt(0).toUpperCase();
+
+            // 3. Lấy dữ liệu Realtime (Tiền & Lượt quay)
             db.ref('users/' + user).on('value', snap => {
                 const val = snap.val();
                 if(val) {
                     const bal = val.balance || 0;
-                    document.getElementById('balance_display').innerText = bal.toLocaleString() + 'đ';
+                    const spins = val.freeSpins || 0;
+
+                    // Format tiền tệ (VD: 100000 -> 100.000đ)
+                    document.getElementById('balance_display').innerText = bal.toLocaleString('vi-VN') + 'đ';
+                    document.getElementById('spins_display').innerText = spins;
                 }
             });
         }
 
-        // 3. Xử lý đổi mật khẩu
+        // 4. Hàm đổi mật khẩu
         function changePass() {
             const oldP = document.getElementById('oldPass').value;
             const newP = document.getElementById('newPass').value;
 
-            if(!oldP || !newP) return Swal.fire("Thiếu thông tin", "Vui lòng nhập đủ mật khẩu!", "warning");
+            if(!oldP || !newP) {
+                return Swal.fire({title: "Thiếu thông tin", text: "Vui lòng điền đầy đủ mật khẩu!", icon: "warning", background: '#222', color: '#fff'});
+            }
 
+            if(newP.length < 6) {
+                return Swal.fire({title: "Mật khẩu yếu", text: "Mật khẩu mới phải từ 6 ký tự trở lên!", icon: "warning", background: '#222', color: '#fff'});
+            }
+
+            // Kiểm tra mật khẩu cũ trên Firebase
             db.ref('users/' + user).once('value').then(snap => {
                 const data = snap.val();
+                // Lưu ý: Trường pass trong DB của bạn tên là 'pass' hay 'password'? 
+                // Dựa trên code cũ của bạn là 'pass'. Mình giữ nguyên.
                 if(data.pass === oldP) {
                     db.ref('users/' + user).update({ pass: newP });
-                    Swal.fire("Thành công", "Đổi mật khẩu thành công!", "success");
+                    Swal.fire({title: "Thành công", text: "Đổi mật khẩu thành công!", icon: "success", background: '#222', color: '#fff'});
                     document.getElementById('oldPass').value = '';
                     document.getElementById('newPass').value = '';
                 } else {
-                    Swal.fire("Thất bại", "Mật khẩu cũ không đúng!", "error");
+                    Swal.fire({title: "Thất bại", text: "Mật khẩu cũ không chính xác!", icon: "error", background: '#222', color: '#fff'});
                 }
             });
         }
+
+        // 5. Hàm Đăng xuất
+        function logout() {
+            Swal.fire({
+                title: 'Đăng xuất?',
+                text: "Bạn có chắc chắn muốn thoát tài khoản?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Đăng xuất',
+                cancelButtonText: 'Hủy',
+                background: '#222', color: '#fff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('hoangUser');
+                    window.location.href = 'index.html';
+                }
+            })
+        }
     </script>
+
 </body>
 </html>
