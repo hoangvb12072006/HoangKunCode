@@ -95,61 +95,69 @@
             background: #fff;
         }
 
-        /* Các ô thưởng (Segment) */
+        /* Các ô thưởng (Segment) - Đã sửa lại chuẩn */
         .segment {
             position: absolute;
             top: 0; right: 0;
             width: 50%; height: 50%;
-            transform-origin: 0% 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Góc 45 độ cho 8 ô: clip-path để cắt hình rẻ quạt chuẩn */
-            clip-path: polygon(0 0, 100% 0, 100% 100%); 
+            transform-origin: 0% 100%; /* Tâm xoay chuẩn */
+            border: 1px solid rgba(255,255,255,0.1);
+            box-sizing: border-box;
         }
 
-        /* Màu sắc các ô xen kẽ */
-        .segment:nth-child(odd) { background: #c0392b; } /* Đỏ đậm */
-        .segment:nth-child(even) { background: #2c3e50; } /* Xám đen */
+        /* Màu sắc VIP (Gradient bóng bẩy) */
+        /* Ô Tiền (Đỏ) */
+        .segment:nth-child(1), .segment:nth-child(3), .segment:nth-child(5) {
+            background: linear-gradient(135deg, #b71c1c 0%, #f44336 100%);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+        }
+        /* Ô Chúc may mắn (Xanh) */
+        .segment:nth-child(2), .segment:nth-child(6), .segment:nth-child(8) {
+            background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+        }
+        /* Ô Đặc biệt (Vàng) */
+        .segment:nth-child(4), .segment:nth-child(7) {
+            background: linear-gradient(135deg, #fbc02d 0%, #fff176 80%, #fbc02d 100%);
+            box-shadow: inset 0 0 15px rgba(255,255,255,0.5);
+        }
 
-        /* Logic xoay các ô vào vị trí */
-        .segment:nth-child(1) { transform: rotate(45deg) skewY(0); }
-        .segment:nth-child(2) { transform: rotate(90deg) skewY(0); }
-        .segment:nth-child(3) { transform: rotate(135deg) skewY(0); }
-        .segment:nth-child(4) { transform: rotate(180deg) skewY(0); }
-        .segment:nth-child(5) { transform: rotate(225deg) skewY(0); }
-        .segment:nth-child(6) { transform: rotate(270deg) skewY(0); }
-        .segment:nth-child(7) { transform: rotate(315deg) skewY(0); }
-        .segment:nth-child(8) { transform: rotate(360deg) skewY(0); }
+        /* Logic xoay 8 ô (Chuẩn từng độ) */
+        .segment:nth-child(1) { transform: rotate(0deg)   skewY(-45deg); }
+        .segment:nth-child(2) { transform: rotate(45deg)  skewY(-45deg); }
+        .segment:nth-child(3) { transform: rotate(90deg)  skewY(-45deg); }
+        .segment:nth-child(4) { transform: rotate(135deg) skewY(-45deg); }
+        .segment:nth-child(5) { transform: rotate(180deg) skewY(-45deg); }
+        .segment:nth-child(6) { transform: rotate(225deg) skewY(-45deg); }
+        .segment:nth-child(7) { transform: rotate(270deg) skewY(-45deg); }
+        .segment:nth-child(8) { transform: rotate(315deg) skewY(-45deg); }
 
-        /* Nội dung bên trong ô (Chữ + Icon) */
+        /* Nội dung bên trong (Chữ + Icon) */
         .segment-content {
             position: absolute;
-            bottom: 50%; /* Căn chỉnh vị trí */
-            right: 20%;
-            transform: rotate(45deg); /* Xoay chữ cho thẳng hướng tâm */
+            bottom: 30px; left: 30px; /* Căn vị trí chuẩn */
+            width: 110px;
             text-align: center;
-            width: 120px;
-            transform-origin: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
+            transform: skewY(45deg) rotate(22.5deg); /* Xoay chữ thẳng lại */
+            
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
         }
         
-        /* Chỉnh lại góc chữ cho từng ô để nó hướng tâm đẹp nhất */
-        /* Với cấu trúc polygon này, ta cần chỉnh transform content một chút */
-        .segment {
-             /* Reset lại cách vẽ segment bằng conic-gradient giả lập bằng HTML div xoay */
-             transform-origin: bottom left;
-             width: 50%;
-             height: 50%;
-             top: 0;
-             left: 50%;
-             clip-path: none; /* Bỏ clip path cũ gây lỗi */
-             /* Sử dụng kỹ thuật transform origin bottom left cho 1/4 vòng tròn rồi cắt? 
-                Cách tốt nhất là dùng skew */
+        .segment-content span { color: #fff; }
+        .segment-content i {
+            font-size: 24px; display: block; margin-bottom: 8px;
+            color: #ffd700; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
         }
+
+        /* Chữ màu đỏ cho ô Vàng để dễ đọc */
+        .segment:nth-child(4) .segment-content span,
+        .segment:nth-child(7) .segment-content span { color: #b71c1c; text-shadow: none; }
+        .segment:nth-child(4) .segment-content i,
+        .segment:nth-child(7) .segment-content i { color: #b71c1c; }
+
+/* --- KẾT THÚC ĐOẠN CODE MỚI --- */
         
         /* --- VIẾT LẠI CSS WHEEL CHO CHUẨN 8 Ô --- */
         .wheel-inner {
