@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VÒNG QUAY MAY MẮN</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body { background: #050505; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
+        .back-btn { position: absolute; top: 20px; left: 20px; text-decoration: none; color: white; background: #333; padding: 10px 20px; border-radius: 5px; font-weight: bold; z-index: 100; }
+        .title { color: #ff0000; text-transform: uppercase; margin-top: 30px; text-shadow: 0 0 10px #ff0000; font-size: 32px; font-weight: 900; }
+        
+        /* Khung vòng quay */
+        .wheel-container { position: relative; width: 400px; height: 400px; margin-top: 50px; }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 10px solid #fff; position: relative; transition: transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67); overflow: hidden; background: #333; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
+        .pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 40px; height: 50px; background: #ff0000; clip-path: polygon(50% 100%, 0% 0%, 100% 0%); z-index: 10; filter: drop-shadow(0 0 5px #ff0000); }
+        
+        /* Các ô thưởng (Dùng CSS tạo hình rẻ quạt) */
+        .segment { position: absolute; width: 50%; height: 50%; background: transparent; transform-origin: 100% 100%; top: 0; left: 0; clip-path: polygon(0 0, 100% 0, 100% 100%); display: flex; align-items: center; justify-content: center; }
+        .segment span { position: absolute; transform: rotate(45deg); top: 40px; right: 50px; font-weight: bold; font-size: 14px; text-align: center; color: #fff; width: 100px; }
+        
+        /* Màu nền các ô */
+        .seg-1 { background: #cc0000; transform: rotate(0deg); }
+        .seg-2 { background: #111; transform: rotate(45deg); }
+        .seg-3 { background: #cc0000; transform: rotate(90deg); }
+        .seg-4 { background: #111; transform: rotate(135deg); }
+        .seg-5 { background: #cc0000; transform: rotate(180deg); }
+        .seg-6 { background: #111; transform: rotate(225deg); }
+        .seg-7 { background: #cc0000; transform: rotate(270deg); }
+        .seg-8 { background: #111; transform: rotate(315deg); }
+
+        .spin-btn { margin-top: 50px; padding: 15px 50px; font-size: 24px; font-weight: bold; background: #ff0000; color: #fff; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 0 20px #ff0000; transition: 0.3s; }
+        .spin-btn:hover { transform: scale(1.1); background: #fff; color: #ff0000; }
+        .spin-btn:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
+        
+        .info { margin-top: 20px; font-size: 18px; color: #ccc; }
+        #spin-count { color: #00ff00; font-weight: bold; font-size: 22px; }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> VỀ SHOP</a>
+    <h1 class="title">VÒNG QUAY MAY MẮN</h1>
+
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel">
+            <div class="segment seg-1"><span>10.000đ</span></div>
+            <div class="segment seg-2"><span>Chúc may mắn</span></div>
+            <div class="segment seg-3"><span>20.000đ</span></div>
+            <div class="segment seg-4"><span>Thêm lượt</span></div>
+            <div class="segment seg-5"><span>50.000đ</span></div>
+            <div class="segment seg-6"><span>Chúc may mắn</span></div>
+            <div class="segment seg-7"><span>100.000đ</span></div>
+            <div class="segment seg-8"><span>Chúc may mắn</span></div>
+        </div>
+    </div>
+
+    <button class="spin-btn" id="btnSpin" onclick="spin()">QUAY NGAY</button>
+    <div class="info">Bạn còn: <span id="spin-count">...</span> lượt quay</div>
+
+    <script>
+        // 1. Kết nối Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g",
+            databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com",
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentSpins = 0;
+        let isSpinning = false;
+        const user = localStorage.getItem('hoangUser');
+
+        // 2. Load số lượt quay
+        if(!user) {
+            Swal.fire("Lỗi", "Vui lòng đăng nhập!", "error").then(() => window.location.href='index.html');
+        } else {
+            db.ref('users/' + user).on('value', snap => {
+                const data = snap.val();
+                currentSpins = data.freeSpins || 0;
+                document.getElementById('spin-count').innerText = currentSpins;
+                document.getElementById('btnSpin').disabled = (currentSpins <= 0 || isSpinning);
+            });
+        }
+
+        // 3. Logic Quay
+        function spin() {
+            if(currentSpins <= 0) return Swal.fire("Hết lượt", "Mua thêm hàng (50k/món) để nhận lượt quay!", "warning");
+            if(isSpinning) return;
+
+            isSpinning = true;
+            document.getElementById('btnSpin').disabled = true;
+
+            // Trừ 1 lượt trước khi quay
+            db.ref('users/' + user).update({ freeSpins: currentSpins - 1 });
+
+            // Random góc quay (tối thiểu 5 vòng = 1800 độ)
+            // Danh sách góc cho 8 ô (mỗi ô 45 độ):
+            // 0-45: Ô 1 (10k), 45-90: Ô 8 (Tạch), ...
+            // Tính toán logic hơi ngược do CSS rotate, ta dùng random đơn giản:
+            const randomDeg = Math.floor(Math.random() * 360) + 1800; 
+            const wheel = document.getElementById('wheel');
+            wheel.style.transform = `rotate(${randomDeg}deg)`;
+
+            // Đợi quay xong (4 giây)
+            setTimeout(() => {
+                isSpinning = false;
+                document.getElementById('btnSpin').disabled = false;
+                
+                // Tính phần thưởng dựa trên góc dừng
+                // Lấy phần dư của góc chia 360 để biết nó dừng ở đâu
+                const actualDeg = randomDeg % 360;
+                checkReward(actualDeg);
+            }, 4000);
+        }
+
+        function checkReward(deg) {
+            // Mapping góc quay ra phần thưởng (Do kim chỉ ở trên cùng là 0 độ)
+            // Lưu ý: CSS quay theo chiều kim đồng hồ, nên góc càng lớn thì ô bên trái kim càng đi qua
+            let prize = "";
+            let money = 0;
+            let bonusSpin = 0;
+
+            // Góc 0 ở trên cùng (Ô 1). Quay 45 độ thì Ô 8 (bên trái ô 1) sẽ lên đỉnh.
+            // Danh sách ô theo thứ tự ngược chiều kim đồng hồ từ đỉnh:
+            // 1 (10k) -> 8 (Tạch) -> 7 (100k) -> 6 (Tạch) -> 5 (50k) -> 4 (Thêm lượt) -> 3 (20k) -> 2 (Tạch)
+            
+            if (deg >= 0 && deg < 22.5) prize = "10.000đ"; // Ô 1 (một nửa)
+            else if (deg >= 22.5 && deg < 67.5) { prize = "Chúc may mắn"; } // Ô 8
+            else if (deg >= 67.5 && deg < 112.5) { prize = "100.000đ"; money = 100000; } // Ô 7
+            else if (deg >= 112.5 && deg < 157.5) { prize = "Chúc may mắn"; } // Ô 6
+            else if (deg >= 157.5 && deg < 202.5) { prize = "50.000đ"; money = 50000; } // Ô 5
+            else if (deg >= 202.5 && deg < 247.5) { prize = "Thêm 1 lượt"; bonusSpin = 1; } // Ô 4
+            else if (deg >= 247.5 && deg < 292.5) { prize = "20.000đ"; money = 20000; } // Ô 3
+            else if (deg >= 292.5 && deg < 337.5) { prize = "Chúc may mắn"; } // Ô 2
+            else if (deg >= 337.5 && deg <= 360) prize = "10.000đ"; // Ô 1 (nửa còn lại)
+            
+            if (prize === "10.000đ") money = 10000;
+
+            // Xử lý thưởng
+            if(money > 0) {
+                db.ref('users/' + user).once('value', s => {
+                    let bal = s.val().balance || 0;
+                    db.ref('users/' + user).update({ balance: bal + money });
+                });
+                Swal.fire("Chúc mừng!", `Bạn nhận được ${prize}`, "success");
+            } else if (bonusSpin > 0) {
+                 db.ref('users/' + user).once('value', s => {
+                    let spin = s.val().freeSpins || 0;
+                    db.ref('users/' + user).update({ freeSpins: spin + 1 });
+                });
+                Swal.fire("May mắn!", "Bạn được tặng thêm 1 lượt quay!", "success");
+            } else {
+                Swal.fire("Tiếc quá", "Chúc bạn may mắn lần sau!", "info");
+            }
+        }
+    </script>
+</body>
+</html>
