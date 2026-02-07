@@ -1185,34 +1185,31 @@ function createPaymentQR() {
     const amount = parseInt(amountInput);
     const user = localStorage.getItem('hoangUser');
 
-    // Kiểm tra đăng nhập
     if (!user) {
         closeRecharge();
         if(typeof showAuth === 'function') showAuth(false);
         return Swal.fire("Thông báo", "Vui lòng đăng nhập để nạp tiền!", "warning");
     }
 
-    // Kiểm tra số tiền
     if (!amount || amount < 10000) {
         return Swal.fire("Lỗi", "Vui lòng nạp tối thiểu 10.000đ", "error");
     }
 
-    // Tạo nội dung chuyển khoản: nap + tên tài khoản
-    const memo = "nap " + user;
+    // --- QUAN TRỌNG: Dòng này để ngắt các bộ lắng nghe cũ, giúp tạo nhiều mã không bị lỗi ---
+    db.ref('deposit_requests').off(); 
 
-    // Tạo link QR VietQR cho MB Bank (STK: 88812072006888)
+    const memo = "nap " + user;
     const qrSource = `https://img.vietqr.io/image/MB-88812072006888-compact2.jpg?amount=${amount}&addInfo=${encodeURIComponent(memo)}`;
 
-    // Hiển thị lên giao diện
     document.getElementById('qr-image').src = qrSource;
-    document.getElementById('display-amount').innerText = amount.toLocaleString() + 'đ';
-    document.getElementById('display-memo').innerText = memo;
+    const amountEl = document.getElementById('display-amount');
+    if(amountEl) amountEl.innerText = amount.toLocaleString() + 'đ';
+    const memoEl = document.getElementById('display-memo');
+    if(memoEl) memoEl.innerText = memo;
 
-    // Chuyển sang màn hình hiện QR
     document.getElementById('step-1-input').style.display = 'none';
     document.getElementById('step-2-qr').style.display = 'block';
 
-    // Bắt đầu lắng nghe tiền về
     listenForMoney(user);
 }
 
@@ -1225,15 +1222,19 @@ function resetRecharge() {
 let lastDepositTime = Date.now(); // Biến chặn giao dịch cũ
 
 function listenForMoney(user) {
-    lastDepositTime = Date.now(); // Cập nhật thời điểm bắt đầu đợi tiền
-    
-    // Chỉ lắng nghe giao dịch cuối cùng được thêm vào
-    db.ref('deposit_requests').orderByChild('user').equalTo(user).limitToLast(1).on('child_added', snapshot => {
+    // Chỉ lắng nghe bản ghi mới nhất vừa được thêm vào
+    db.ref('deposit_requests')
+      .orderByChild('user')
+      .equalTo(user)
+      .limitToLast(1)
+      .on('child_added', snapshot => {
         const data = snapshot.val();
         
-        // Kiểm tra: Nếu thời gian nạp trong database mới hơn lúc ta bấm tạo QR thì mới báo thành công
-        // Giả sử database của bạn lưu thời gian nạp là timestamp hoặc bạn có thể so sánh logic đơn giản hơn
-        if (data) {
+        // Kiểm tra nếu trạng thái trong database đã đổi thành Thành công
+        if (data && data.status === "Thành công") {
+            // Ngắt kết nối ngay lập tức để lần tạo mã sau không bị báo lặp
+            db.ref('deposit_requests').off(); 
+            
             Swal.fire({
                 title: "Thành công!",
                 text: `Đã nhận được +${parseInt(data.amount).toLocaleString()}đ`,
