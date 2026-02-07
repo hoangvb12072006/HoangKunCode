@@ -131,24 +131,33 @@
         .segment:nth-child(7) { transform: rotate(270deg) skewY(-45deg); }
         .segment:nth-child(8) { transform: rotate(315deg) skewY(-45deg); }
 
-        /* Nội dung bên trong (Chữ + Icon) */
-        .segment-content {
+       .segment-content {
             position: absolute;
-            bottom: 30px; left: 30px; /* Căn vị trí chuẩn */
-            width: 110px;
-            text-align: center;
-            transform: skewY(45deg) rotate(22.5deg); /* Xoay chữ thẳng lại */
+            /* QUAN TRỌNG: Để px nhỏ thôi để chữ nằm gần tâm, không bị bay ra ngoài */
+            bottom: 20px; 
+            left: 20px;
             
-            font-weight: 900;
-            font-size: 14px;
-            text-transform: uppercase;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            /* Tăng chiều rộng để chữ "Chúc may mắn" không bị ngắt dòng xấu */
+            width: 120px; 
+            text-align: center;
+            
+            /* Góc xoay chuẩn giữ nguyên */
+            transform: skewY(45deg) rotate(22.5deg);
+            
+            /* Font chữ nhỏ lại xíu cho vừa ô */
+            font-size: 11px; 
+            font-weight: bold;
+            line-height: 1.2;
+            color: #fff;
         }
-        
-        .segment-content span { color: #fff; }
+
+        /* Chỉnh icon nằm trên chữ */
         .segment-content i {
-            font-size: 24px; display: block; margin-bottom: 8px;
-            color: #ffd700; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+            font-size: 20px;
+            margin-bottom: 5px;
+            display: block;
+            color: #ffd700;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
         }
 
         /* Chữ màu đỏ cho ô Vàng để dễ đọc */
