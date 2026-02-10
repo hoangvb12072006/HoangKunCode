@@ -1407,6 +1407,38 @@ function sendCardAuto() {
     // Bắt đầu chạy
     loopNotification();
 </script>
+
+<script>
+    document.addEventListener('click', function(e) {
+        const amount = document.createElement('div');
+        amount.innerHTML = '<i class="fas fa-dollar-sign" style="color:#ffd700"></i>'; 
+        // Hoặc thích chữ thì dùng: amount.innerText = "+1";
+        
+        amount.style.position = 'absolute';
+        amount.style.left = e.pageX + 'px';
+        amount.style.top = e.pageY + 'px';
+        amount.style.color = '#ffd700';
+        amount.style.fontWeight = 'bold';
+        amount.style.fontSize = '20px';
+        amount.style.pointerEvents = 'none';
+        amount.style.animation = 'floatUp 1s ease-out forwards';
+        amount.style.zIndex = '10000';
+        
+        document.body.appendChild(amount);
+
+        setTimeout(() => { amount.remove(); }, 1000);
+    });
+
+    // Thêm style cho animation vào thẻ style có sẵn hoặc tạo mới
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+</script>
     
 </body>
 </html>
