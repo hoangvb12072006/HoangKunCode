@@ -1600,6 +1600,25 @@ function sendCardAuto() {
     function toggleChat() {
         chatBox.classList.toggle('minimized');
     }
+
+    // Hàm gửi tin nhắn của bạn
+    function sendMyMessage(event) {
+        if (event.key === "Enter") {
+            const input = document.getElementById('myMsg');
+            const text = input.value.trim();
+            
+            if (text !== "") {
+                // Tự mình chat thì hiện tên là "Bạn" hoặc "Admin" cho oai
+                addMessage("Hoàng Chủ Shop", text, true); // True là để hiện màu VIP
+                input.value = ""; // Xóa ô nhập sau khi gửi
+                
+                // Cuộn xuống cuối
+                const chatBody = document.getElementById('chat-content');
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+        }
+    }
+    
 </script>
     
 </body>
