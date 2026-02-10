@@ -1520,8 +1520,8 @@ function sendCardAuto() {
         <div class="chat-line"><span class="c-tag" style="background:red;color:#fff">Hệ thống</span> Chào mừng bạn đến với HoangKun Store!</div>
     </div>
     <div class="chat-input">
-        <input type="text" placeholder="Đăng nhập để chat..." disabled style="cursor: not-allowed; opacity: 0.7;">
-    </div>
+    <input type="text" id="myMsg" placeholder="Nhập tin nhắn..." onkeypress="sendMyMessage(event)">
+</div>
 </div>
 
 <script>
