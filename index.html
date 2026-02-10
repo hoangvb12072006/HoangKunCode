@@ -1601,18 +1601,19 @@ function sendCardAuto() {
         chatBox.classList.toggle('minimized');
     }
 
-    // Hàm gửi tin nhắn của bạn
+   // Hàm gửi tin nhắn của bạn (Đã sửa để lấy đúng tên nick đang đăng nhập)
     function sendMyMessage(event) {
         if (event.key === "Enter") {
             const input = document.getElementById('myMsg');
             const text = input.value.trim();
             
+            // Lấy tên người dùng từ bộ nhớ (nếu chưa đăng nhập thì hiện là Khách)
+            const currentUser = localStorage.getItem('hoangUser') || "Khách";
+
             if (text !== "") {
-                // Tự mình chat thì hiện tên là "Bạn" hoặc "Admin" cho oai
-                addMessage("Hoàng Chủ Shop", text, true); // True là để hiện màu VIP
-                input.value = ""; // Xóa ô nhập sau khi gửi
-                
-                // Cuộn xuống cuối
+                // Thay "Hoàng Chủ Shop" bằng biến currentUser
+                addMessage(currentUser, text, true); 
+                input.value = ""; 
                 const chatBody = document.getElementById('chat-content');
                 chatBody.scrollTop = chatBody.scrollHeight;
             }
