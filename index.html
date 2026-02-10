@@ -1451,6 +1451,156 @@ function sendCardAuto() {
     `;
     document.head.appendChild(styleSheet);
 </script>
+
+    <style>
+    #live-chat {
+        position: fixed; bottom: 80px; left: 20px; /* Góc trái dưới, trên cái thông báo ảo */
+        width: 300px; height: 350px;
+        background: rgba(0, 0, 0, 0.9);
+        border: 1px solid #d32f2f;
+        border-radius: 10px;
+        z-index: 9998;
+        display: flex; flex-direction: column;
+        box-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
+        font-family: 'Roboto', sans-serif;
+        overflow: hidden;
+        transition: 0.3s;
+    }
+
+    /* Tiêu đề chat */
+    .chat-header {
+        background: linear-gradient(90deg, #d32f2f, #b71c1c);
+        padding: 10px 15px;
+        color: white; font-weight: bold; font-size: 0.9rem;
+        display: flex; justify-content: space-between; align-items: center;
+        cursor: pointer;
+    }
+    .online-count { font-size: 0.7rem; color: #ffd700; }
+
+    /* Nội dung chat */
+    .chat-body {
+        flex: 1; padding: 10px;
+        overflow-y: auto;
+        display: flex; flex-direction: column; gap: 8px;
+    }
+    /* Tùy chỉnh thanh cuộn */
+    .chat-body::-webkit-scrollbar { width: 5px; }
+    .chat-body::-webkit-scrollbar-thumb { background: #555; }
+
+    .chat-line { font-size: 0.85rem; color: #ddd; line-height: 1.4; animation: fadeIn 0.3s ease; }
+    .c-name { color: #ffd700; font-weight: bold; margin-right: 5px; }
+    .c-name.admin { color: #ff0000; text-shadow: 0 0 5px red; }
+    .c-tag { background: #333; padding: 1px 4px; border-radius: 3px; font-size: 0.6rem; color: #aaa; margin-right: 5px; }
+    .c-vip { background: #ffd700; color: #000; font-weight: bold; }
+
+    /* Ô nhập liệu (giả) */
+    .chat-input {
+        padding: 10px; border-top: 1px solid #333;
+        background: #111;
+    }
+    .chat-input input {
+        width: 100%; background: #222; border: none;
+        padding: 8px; border-radius: 5px; color: #fff;
+        outline: none; font-size: 0.8rem;
+    }
+
+    /* Nút thu nhỏ */
+    .minimized { height: 40px !important; }
+    .toggle-btn { transition: 0.3s; }
+    .minimized .toggle-btn { transform: rotate(180deg); }
+
+</style>
+
+<div id="live-chat">
+    <div class="chat-header" onclick="toggleChat()">
+        <span><i class="fas fa-comment-dots"></i> KÊNH THẾ GIỚI <span class="online-count">● 142 Online</span></span>
+        <i class="fas fa-chevron-down toggle-btn"></i>
+    </div>
+    <div class="chat-body" id="chat-content">
+        <div class="chat-line"><span class="c-tag" style="background:red;color:#fff">Hệ thống</span> Chào mừng bạn đến với HoangKun Store!</div>
+    </div>
+    <div class="chat-input">
+        <input type="text" placeholder="Đăng nhập để chat..." disabled style="cursor: not-allowed; opacity: 0.7;">
+    </div>
+</div>
+
+<script>
+    const chatContent = document.getElementById('chat-content');
+    const chatBox = document.getElementById('live-chat');
+    
+    // Danh sách tên bot
+    const botNames = ["Hùng Dũng", "Nam Cao", "Thánh Quay", "Bá Đạo", "Gamer Thủ Đô", "Mèo Béo", "Chúa Hề", "Rick Kid", "Tuấn Hưng", "Khách Vãng Lai"];
+    
+    // Kịch bản chat (Content)
+    const messages = [
+        "Web này nạp thẻ Viettel được không ae?",
+        "Vừa quay ra 50k thẻ cào, ngon choét :v",
+        "Admin ơi check hộ mình cái thẻ nạp lúc nãy với",
+        "Uy tín nha, tui mới rút xong.",
+        "Web mượt đấy, giao diện đẹp.",
+        "Có ai biết cách nhận thêm lượt quay free ko?",
+        "Hôm nay đen quá, quay toàn vào ô 5k :(",
+        "Nạp 100k được bao nhiêu lượt thế mn?",
+        "Anh em nạp Momo cho nhanh, đỡ bị nuốt thẻ.",
+        "Ông nào vừa trúng 500k đấy, xin cái card 20k đi!",
+        "Lừa đảo không đấy ae?",
+        "Lừa cái đầu ông, tôi chơi từ tháng trước rồi.",
+        "Admin rep tin nhắn nhanh vãi."
+    ];
+
+    function addMessage(name, msg, isVip = false) {
+        const div = document.createElement('div');
+        div.className = 'chat-line';
+        
+        let tagHtml = '<span class="c-tag">Member</span>';
+        if(isVip) tagHtml = '<span class="c-tag c-vip">VIP</span>';
+        if(name === 'Admin') tagHtml = '<span class="c-tag" style="background:red;color:white">ADMIN</span>';
+
+        div.innerHTML = `${tagHtml}<span class="c-name ${name==='Admin'?'admin':''}">${name}:</span> ${msg}`;
+        
+        chatContent.appendChild(div);
+        chatContent.scrollTop = chatContent.scrollHeight; // Tự cuộn xuống dưới
+    }
+
+    function autoChat() {
+        const randomName = botNames[Math.floor(Math.random() * botNames.length)];
+        const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+        const isVip = Math.random() > 0.8; // 20% cơ hội là VIP
+
+        addMessage(randomName, randomMsg, isVip);
+    }
+
+    // Admin thỉnh thoảng vào nói 1 câu
+    function adminChat() {
+        const adminMsgs = [
+            "Các bạn nạp thẻ vui lòng giữ lại seri để đối soát nhé.",
+            "Hệ thống vừa cập nhật thêm thẻ Garena nhé ae.",
+            "Chúc mừng bạn **Hùng** vừa trúng giải đặc biệt!",
+            "Anh em chú ý không spam kênh chat nhé."
+        ];
+        addMessage("Admin", adminMsgs[Math.floor(Math.random() * adminMsgs.length)]);
+    }
+
+    // Chạy random chat
+    function loopChat() {
+        const randTime = Math.floor(Math.random() * 4000) + 2000; // 2-6 giây 1 tin
+        setTimeout(() => {
+            autoChat();
+            loopChat();
+        }, randTime);
+    }
+
+    // Chạy Admin chat (lâu lâu mới hiện)
+    setInterval(adminChat, 25000); 
+
+    // Bắt đầu
+    loopChat();
+
+    // Hàm thu nhỏ chat
+    function toggleChat() {
+        chatBox.classList.toggle('minimized');
+    }
+</script>
     
 </body>
 </html>
