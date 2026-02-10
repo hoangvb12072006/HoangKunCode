@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VÒNG QUAY TỶ PHÚ - VIP EDITION</title>
+    <title>VÒNG QUAY TỶ PHÚ - GLOBAL SERVER</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,11 +27,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Đổi thành flex-start để cuộn được nếu lịch sử dài */
-            padding-top: 50px; /* Thêm khoảng cách trên */
+            padding-top: 50px;
             padding-bottom: 50px;
             overflow-x: hidden;
-            overflow-y: auto; /* Cho phép cuộn dọc */
         }
 
         /* Nút quay lại */
@@ -57,7 +55,7 @@
             width: var(--wheel-size); height: var(--wheel-size);
             display: flex; justify-content: center; align-items: center;
             margin-bottom: 30px;
-            flex-shrink: 0; /* Không bị co lại trên mobile */
+            flex-shrink: 0;
         }
 
         .wheel-border {
@@ -148,62 +146,69 @@
         }
         .spin-num { color: var(--gold); font-weight: bold; font-size: 1.5rem; }
 
-        /* --- STYLE LỊCH SỬ QUAY (MỚI THÊM) --- */
+        /* --- STYLE LỊCH SỬ CỘNG ĐỒNG --- */
         .history-container {
-            width: 90%;
-            max-width: 500px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            width: 95%;
+            max-width: 600px;
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 12px;
+            border: 1px solid #444;
             padding: 15px;
             box-sizing: border-box;
-            margin-top: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
         
         .history-title {
             text-align: center;
             color: var(--gold);
             margin: 0 0 15px 0;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             text-transform: uppercase;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid #444;
             padding-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
         }
+        
+        /* Hiệu ứng nhấp nháy cho chữ LIVE */
+        .live-dot {
+            display: inline-block; width: 8px; height: 8px; background: #00ff00;
+            border-radius: 50%; margin-right: 5px;
+            box-shadow: 0 0 5px #00ff00;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         .history-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 200px;
-            overflow-y: auto;
+            list-style: none; padding: 0; margin: 0;
+            max-height: 250px; overflow-y: auto;
         }
 
-        /* Thanh cuộn đẹp hơn */
-        .history-list::-webkit-scrollbar { width: 5px; }
-        .history-list::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-        .history-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        .history-list::-webkit-scrollbar { width: 4px; }
+        .history-list::-webkit-scrollbar-thumb { background: #555; border-radius: 10px; }
 
         .history-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 10px;
+            border-bottom: 1px solid #333;
             font-size: 0.9rem;
-            animation: fadeIn 0.5s ease;
+            animation: slideIn 0.3s ease;
         }
-
-        .history-item:last-child { border-bottom: none; }
         
-        .h-time { color: #aaa; font-size: 0.8rem; }
-        .h-reward { color: #fff; font-weight: bold; }
-        .h-reward.money { color: var(--gold); }
-        .h-reward.spin { color: #4CAF50; }
-        .h-reward.bad { color: #999; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
+
+        .h-left { display: flex; flex-direction: column; gap: 3px; }
+        .h-user { color: #fff; font-weight: bold; font-size: 0.95rem; }
+        .h-time { color: #777; font-size: 0.75rem; }
+        
+        .h-right { text-align: right; }
+        .h-reward { font-weight: bold; font-size: 1rem; }
+        
+        .h-reward.money { color: var(--gold); text-shadow: 0 0 5px rgba(255, 215, 0, 0.3); }
+        .h-reward.spin { color: #00e676; }
+        .h-reward.bad { color: #9e9e9e; font-size: 0.9rem; font-style: italic; }
 
         @media (max-width: 500px) {
             :root { --wheel-size: 320px; }
@@ -246,9 +251,12 @@
     </div>
 
     <div class="history-container">
-        <h3 class="history-title"><i class="fas fa-history"></i> Lịch sử trúng thưởng</h3>
+        <div class="history-title">
+            <span><span class="live-dot"></span> ĐANG TRÚNG THƯỞNG</span>
+            <span style="font-size: 0.8rem; opacity: 0.7">Toàn server</span>
+        </div>
         <ul class="history-list" id="historyList">
-            <li class="history-item" style="justify-content: center; color: #aaa;">Đang tải...</li>
+            <li class="history-item" style="justify-content:center; color:#555">Đang kết nối máy chủ...</li>
         </ul>
     </div>
 
@@ -261,7 +269,7 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-       // --- CẤU HÌNH TỈ LỆ KHÓ (Tổng = 100) ---
+        // --- CẤU HÌNH TỈ LỆ KHÓ ---
         const rewards = [
             { id: 1, name: "10.000đ",     value: 10000,  type: 'money', percent: 5 },
             { id: 2, name: "Thêm 1 lượt", value: 1,      type: 'spin',  percent: 15 },
@@ -284,7 +292,7 @@
                 .then(() => window.location.href='index.html');
                 return;
             }
-            // Lấy số lượt quay
+            // Lấy lượt quay cá nhân
             db.ref('users/' + user).on('value', snap => {
                 const data = snap.val();
                 currentSpins = (data && data.freeSpins) ? data.freeSpins : 0;
@@ -292,8 +300,8 @@
                 toggleSpinButton(currentSpins > 0);
             });
 
-            // Lấy lịch sử quay
-            loadHistory();
+            // KÍCH HOẠT LỊCH SỬ TOÀN SERVER
+            loadGlobalHistory();
         }
 
         function toggleSpinButton(enable) {
@@ -320,13 +328,12 @@
             isSpinning = true;
             toggleSpinButton(false);
            
-            // Trừ lượt quay trước
             db.ref('users/' + user).update({ freeSpins: currentSpins - 1 });
 
             const gift = getRandomReward();
             const segmentAngle = gift.index * 45; 
             const stopAngle = 360 - segmentAngle - 22.5; 
-            const spinRounds = 360 * 10; // Quay 10 vòng
+            const spinRounds = 360 * 10;
             const randomOffset = Math.floor(Math.random() * 20) - 10; 
 
             currentRotation += spinRounds + stopAngle - (currentRotation % 360) + randomOffset;
@@ -342,18 +349,20 @@
         }
 
         function showResult(gift) {
-            // LƯU LỊCH SỬ VÀO FIREBASE
+            // --- QUAN TRỌNG: LƯU VÀO GLOBAL HISTORY ---
             const now = new Date();
-            const timeString = now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit', day:'2-digit', month:'2-digit'});
+            const timeString = now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
             
-            // Chỉ lưu những cái trúng (hoặc lưu cả xui tùy bạn, code này lưu tất cả)
-            const historyData = {
-                name: gift.name,
+            // Lưu vào 'global_history' thay vì 'users/.../history'
+            // Để tất cả mọi người cùng xem được
+            const globalHistoryData = {
+                username: user, // Tên người chơi
+                rewardName: gift.name,
                 type: gift.type,
                 time: timeString,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
-            db.ref('users/' + user + '/history').push(historyData);
+            db.ref('global_history').push(globalHistoryData);
 
 
             if (gift.type === 'miss') {
@@ -371,7 +380,6 @@
                     background: '#fff', color: '#d32f2f',
                     confirmButtonText: "NHẬN QUÀ", confirmButtonColor: '#d32f2f'
                 }).then(() => {
-                    // CỘNG THƯỞNG VÀO FIREBASE
                     db.ref('users/' + user).once('value').then(snap => {
                         const data = snap.val();
                         let updates = {};
@@ -386,34 +394,45 @@
             }
         }
 
-        function loadHistory() {
-            // Lấy 10 lịch sử gần nhất
-            db.ref('users/' + user + '/history').limitToLast(10).on('value', snap => {
+        // --- HÀM TẢI LỊCH SỬ CHUNG ---
+        function loadGlobalHistory() {
+            // Lấy 20 lượt quay mới nhất từ toàn server
+            db.ref('global_history').limitToLast(20).on('value', snap => {
                 const list = document.getElementById('historyList');
-                list.innerHTML = ""; // Xóa cũ
+                list.innerHTML = ""; 
                 
                 if(!snap.exists()) {
-                    list.innerHTML = '<li class="history-item" style="justify-content:center; color:#aaa">Chưa có lịch sử quay</li>';
+                    list.innerHTML = '<li class="history-item" style="justify-content:center; color:#555">Chưa có ai quay. Mở hàng đi bạn!</li>';
                     return;
                 }
 
-                // Dữ liệu firebase trả về dạng object, cần chuyển sang mảng để sắp xếp
                 let items = [];
                 snap.forEach(child => {
                     items.push(child.val());
                 });
 
-                // Đảo ngược để cái mới nhất lên đầu
+                // Đảo ngược để mới nhất lên đầu
                 items.reverse().forEach(item => {
                     let colorClass = 'bad';
-                    if(item.type === 'money') colorClass = 'money';
-                    if(item.type === 'spin') colorClass = 'spin';
+                    let icon = '';
+                    if(item.type === 'money') { colorClass = 'money'; icon = '<i class="fas fa-coins"></i>'; }
+                    if(item.type === 'spin') { colorClass = 'spin'; icon = '<i class="fas fa-sync"></i>'; }
 
                     const li = document.createElement('li');
                     li.className = 'history-item';
+                    
+                    // Che bớt tên người dùng cho bảo mật (VD: hoang... -> hoa***)
+                    // Hoặc để nguyên cũng được. Ở đây mình để nguyên cho uy tín.
+                    const displayName = item.username.length > 10 ? item.username.substring(0,8) + '...' : item.username;
+
                     li.innerHTML = `
-                        <span class="h-time">${item.time}</span>
-                        <span class="h-reward ${colorClass}">${item.name}</span>
+                        <div class="h-left">
+                            <span class="h-user"><i class="fas fa-user-circle"></i> ${displayName}</span>
+                            <span class="h-time">${item.time}</span>
+                        </div>
+                        <div class="h-right">
+                            <span class="h-reward ${colorClass}">${icon} ${item.rewardName}</span>
+                        </div>
                     `;
                     list.appendChild(li);
                 });
