@@ -27,8 +27,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            justify-content: flex-start; /* Đổi thành flex-start để cuộn được nếu lịch sử dài */
+            padding-top: 50px; /* Thêm khoảng cách trên */
+            padding-bottom: 50px;
+            overflow-x: hidden;
+            overflow-y: auto; /* Cho phép cuộn dọc */
         }
 
         /* Nút quay lại */
@@ -53,6 +56,8 @@
             position: relative;
             width: var(--wheel-size); height: var(--wheel-size);
             display: flex; justify-content: center; align-items: center;
+            margin-bottom: 30px;
+            flex-shrink: 0; /* Không bị co lại trên mobile */
         }
 
         .wheel-border {
@@ -75,30 +80,19 @@
             border-radius: 50%; overflow: hidden;
         }
 
-        /* CÁC Ô THƯỞNG (SEGMENT) - CHUẨN KHÔNG CẦN CHỈNH */
+        /* CÁC Ô THƯỞNG */
         .segment {
             position: absolute; top: 0; right: 0;
             width: 50%; height: 50%;
-            transform-origin: 0% 100%; /* Tâm xoay chuẩn */
+            transform-origin: 0% 100%;
             border: 1px solid rgba(255,255,255,0.1);
             box-sizing: border-box;
         }
 
-        /* MÀU SẮC Ô */
-        /* Ô Tiền & Quà: Đỏ Gradient */
-        .segment:nth-child(1), .segment:nth-child(3), .segment:nth-child(5) {
-            background: linear-gradient(135deg, #b71c1c 0%, #f44336 100%);
-        }
-        /* Ô Thường/Xui: Xanh Gradient */
-        .segment:nth-child(2), .segment:nth-child(6), .segment:nth-child(8) {
-            background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
-        }
-        /* Ô VIP (Vàng): Vàng Gradient */
-        .segment:nth-child(4), .segment:nth-child(7) {
-            background: linear-gradient(135deg, #fbc02d 0%, #fff176 80%, #fbc02d 100%);
-        }
+        .segment:nth-child(1), .segment:nth-child(3), .segment:nth-child(5) { background: linear-gradient(135deg, #b71c1c 0%, #f44336 100%); }
+        .segment:nth-child(2), .segment:nth-child(6), .segment:nth-child(8) { background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%); }
+        .segment:nth-child(4), .segment:nth-child(7) { background: linear-gradient(135deg, #fbc02d 0%, #fff176 80%, #fbc02d 100%); }
 
-        /* GÓC XOAY 8 Ô */
         .segment:nth-child(1) { transform: rotate(0deg)   skewY(-45deg); }
         .segment:nth-child(2) { transform: rotate(45deg)  skewY(-45deg); }
         .segment:nth-child(3) { transform: rotate(90deg)  skewY(-45deg); }
@@ -108,12 +102,11 @@
         .segment:nth-child(7) { transform: rotate(270deg) skewY(-45deg); }
         .segment:nth-child(8) { transform: rotate(315deg) skewY(-45deg); }
 
-        /* NỘI DUNG BÊN TRONG */
         .segment-content {
             position: absolute;
-            bottom: 25px; left: 25px; /* Căn chỉnh vị trí so với tâm */
+            bottom: 25px; left: 25px;
             width: 120px; text-align: center;
-            transform: skewY(45deg) rotate(22.5deg); /* Xoay ngược lại cho thẳng chữ */
+            transform: skewY(45deg) rotate(22.5deg);
             font-weight: 900; font-size: 13px; text-transform: uppercase;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
         }
@@ -123,13 +116,11 @@
             color: #ffd700; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
         }
 
-        /* Màu riêng cho ô Vàng (Chữ đỏ) */
         .segment:nth-child(4) .segment-content span, .segment:nth-child(4) .segment-content i,
         .segment:nth-child(7) .segment-content span, .segment:nth-child(7) .segment-content i {
             color: #b71c1c; text-shadow: none;
         }
 
-        /* KIM CHỈ & NÚT QUAY */
         .pointer {
             position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
             width: 50px; height: 60px;
@@ -150,11 +141,69 @@
         .center-circle i { font-size: 30px; color: var(--primary); }
 
         .footer-info {
-            margin-top: 30px; background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.6);
             padding: 10px 30px; border-radius: 30px; border: 1px solid var(--gold);
             font-size: 1.2rem; display: flex; align-items: center; gap: 10px;
+            margin-bottom: 20px;
         }
         .spin-num { color: var(--gold); font-weight: bold; font-size: 1.5rem; }
+
+        /* --- STYLE LỊCH SỬ QUAY (MỚI THÊM) --- */
+        .history-container {
+            width: 90%;
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 15px;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+        
+        .history-title {
+            text-align: center;
+            color: var(--gold);
+            margin: 0 0 15px 0;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* Thanh cuộn đẹp hơn */
+        .history-list::-webkit-scrollbar { width: 5px; }
+        .history-list::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        .history-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .history-item:last-child { border-bottom: none; }
+        
+        .h-time { color: #aaa; font-size: 0.8rem; }
+        .h-reward { color: #fff; font-weight: bold; }
+        .h-reward.money { color: var(--gold); }
+        .h-reward.spin { color: #4CAF50; }
+        .h-reward.bad { color: #999; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         @media (max-width: 500px) {
             :root { --wheel-size: 320px; }
@@ -196,6 +245,13 @@
         Bạn còn: <span class="spin-num" id="spin-count">...</span> lượt
     </div>
 
+    <div class="history-container">
+        <h3 class="history-title"><i class="fas fa-history"></i> Lịch sử trúng thưởng</h3>
+        <ul class="history-list" id="historyList">
+            <li class="history-item" style="justify-content: center; color: #aaa;">Đang tải...</li>
+        </ul>
+    </div>
+
     <script>
         // --- CẤU HÌNH FIREBASE ---
         const firebaseConfig = { 
@@ -207,28 +263,13 @@
 
        // --- CẤU HÌNH TỈ LỆ KHÓ (Tổng = 100) ---
         const rewards = [
-            // 1. Ô 10k (Giảm còn 5%)
             { id: 1, name: "10.000đ",     value: 10000,  type: 'money', percent: 5 },
-            
-            // 2. Ô Thêm 1 lượt (Vẫn cho trúng nhiều tí để khách còn quay tiếp - 15%)
             { id: 2, name: "Thêm 1 lượt", value: 1,      type: 'spin',  percent: 15 },
-            
-            // 3. Ô 20k (Khó hơn - 3%)
             { id: 3, name: "20.000đ",     value: 20000,  type: 'money', percent: 3 },
-            
-            // 4. Ô Thêm 2 lượt (Siêu khó - 1%)
             { id: 4, name: "Thêm 2 lượt", value: 2,      type: 'spin',  percent: 1 },
-            
-            // 5. Ô 50k (Cực hiếm - 0.9%)
             { id: 5, name: "50.000đ",     value: 50000,  type: 'money', percent: 0.9 },
-            
-            // 6. Ô 5k (Giải khuyến khích - 15%)
             { id: 6, name: "5.000đ",      value: 5000,   type: 'money', percent: 15 },
-            
-            // 7. Ô 100k (Mồi nhử - 0.1% - Gần như không thể trúng)
             { id: 7, name: "100.000đ",    value: 100000, type: 'money', percent: 0.1 },
-            
-            // 8. Ô XUI QUÁ (Tăng lên 60% - Quay là dính)
             { id: 8, name: "Xui quá",     value: 0,      type: 'miss',  percent: 60 } 
         ];
 
@@ -243,12 +284,16 @@
                 .then(() => window.location.href='index.html');
                 return;
             }
+            // Lấy số lượt quay
             db.ref('users/' + user).on('value', snap => {
                 const data = snap.val();
                 currentSpins = (data && data.freeSpins) ? data.freeSpins : 0;
                 document.getElementById('spin-count').innerText = currentSpins;
                 toggleSpinButton(currentSpins > 0);
             });
+
+            // Lấy lịch sử quay
+            loadHistory();
         }
 
         function toggleSpinButton(enable) {
@@ -274,21 +319,18 @@
             if (isSpinning || currentSpins <= 0) return;
             isSpinning = true;
             toggleSpinButton(false);
-            
+           
             // Trừ lượt quay trước
             db.ref('users/' + user).update({ freeSpins: currentSpins - 1 });
 
             const gift = getRandomReward();
-            // Tính góc quay (Mỗi ô 45 độ, index * 45)
-            // Cần trừ thêm 22.5 để kim chỉ vào giữa ô
             const segmentAngle = gift.index * 45; 
             const stopAngle = 360 - segmentAngle - 22.5; 
             const spinRounds = 360 * 10; // Quay 10 vòng
-            const randomOffset = Math.floor(Math.random() * 20) - 10; // Lệch tí cho tự nhiên
+            const randomOffset = Math.floor(Math.random() * 20) - 10; 
 
-            // Tính tổng góc quay cộng dồn
             currentRotation += spinRounds + stopAngle - (currentRotation % 360) + randomOffset;
-            
+           
             const wheel = document.getElementById('wheel');
             wheel.style.transform = `rotate(${currentRotation}deg)`;
 
@@ -300,6 +342,20 @@
         }
 
         function showResult(gift) {
+            // LƯU LỊCH SỬ VÀO FIREBASE
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit', day:'2-digit', month:'2-digit'});
+            
+            // Chỉ lưu những cái trúng (hoặc lưu cả xui tùy bạn, code này lưu tất cả)
+            const historyData = {
+                name: gift.name,
+                type: gift.type,
+                time: timeString,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+            db.ref('users/' + user + '/history').push(historyData);
+
+
             if (gift.type === 'miss') {
                 Swal.fire({
                     title: "Tiếc quá!", text: "Chúc bạn may mắn lần sau!", icon: "info",
@@ -328,6 +384,40 @@
                     });
                 });
             }
+        }
+
+        function loadHistory() {
+            // Lấy 10 lịch sử gần nhất
+            db.ref('users/' + user + '/history').limitToLast(10).on('value', snap => {
+                const list = document.getElementById('historyList');
+                list.innerHTML = ""; // Xóa cũ
+                
+                if(!snap.exists()) {
+                    list.innerHTML = '<li class="history-item" style="justify-content:center; color:#aaa">Chưa có lịch sử quay</li>';
+                    return;
+                }
+
+                // Dữ liệu firebase trả về dạng object, cần chuyển sang mảng để sắp xếp
+                let items = [];
+                snap.forEach(child => {
+                    items.push(child.val());
+                });
+
+                // Đảo ngược để cái mới nhất lên đầu
+                items.reverse().forEach(item => {
+                    let colorClass = 'bad';
+                    if(item.type === 'money') colorClass = 'money';
+                    if(item.type === 'spin') colorClass = 'spin';
+
+                    const li = document.createElement('li');
+                    li.className = 'history-item';
+                    li.innerHTML = `
+                        <span class="h-time">${item.time}</span>
+                        <span class="h-reward ${colorClass}">${item.name}</span>
+                    `;
+                    list.appendChild(li);
+                });
+            });
         }
 
         function fireConfetti() {
