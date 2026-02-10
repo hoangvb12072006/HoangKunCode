@@ -1357,14 +1357,26 @@ function sendCardAuto() {
 <div id="fake-toast"></div>
 
 <script>
-    const names = ["Hoàng Kun", "Minh Tuấn", "Đức Bo", "Phạm Quang", "Huy Hùng", "Tiến Bịp", "Linh Ka", "Sơn Tùng", "Độ Mixi", "Thầy Giáo Ba"];
+   // Danh sách tên khách hàng (Random cho tự nhiên)
+    const names = ["Hoàng Dev", "Minh Tuấn", "Thanh Tùng", "Phạm Quang", "Huy Code", "Tiến Đạt", "Linh PHP", "Sơn Tùng", "Đức Anh", "Thầy Ba", "Nam Coder", "Dũng JS"];
+    
+    // DANH SÁCH HÀNH ĐỘNG (Lấy đúng tên sản phẩm trên shop bạn)
     const actions = [
-        { msg: "vừa nạp thành công 50.000đ", icon: "fas fa-money-bill-wave" },
-        { msg: "vừa quay trúng 100.000đ", icon: "fas fa-gift" },
-        { msg: "vừa mua acc Free Fire VIP", icon: "fas fa-shopping-cart" },
-        { msg: "vừa nạp thành công 100.000đ", icon: "fas fa-money-bill-wave" },
-        { msg: "vừa rút thưởng thẻ Viettel 20k", icon: "fas fa-exchange-alt" },
-        { msg: "vừa nhận thêm 5 lượt quay", icon: "fas fa-sync" }
+        // Mua Code Trái Tim (Sản phẩm hot)
+        { msg: "vừa mua Code Trái Tim 1 - 22k", icon: "fas fa-heart", color: "#e91e63" },
+        { msg: "vừa mua Code Trái Tim 3 (VIP) - 32k", icon: "fas fa-heart", color: "#e91e63" },
+        { msg: "vừa tải Source Code Trái Tim 2", icon: "fas fa-download", color: "#2ecc71" },
+
+        // Mua Code Game/Web
+        { msg: "vừa mua Code Game Bắn Cung - 60k", icon: "fas fa-gamepad", color: "#f39c12" },
+        { msg: "vừa mua Code Web Mèo Cute - 75k", icon: "fas fa-cat", color: "#9b59b6" },
+        { msg: "vừa rinh ngay Code Web Shop - 350k", icon: "fas fa-shopping-cart", color: "#3498db" },
+        { msg: "vừa mua Code Hiệu Ứng Rồng - 69k", icon: "fas fa-dragon", color: "#c0392b" },
+
+        // Nạp tiền & Hoạt động khác
+        { msg: "vừa nạp thành công 50.000đ", icon: "fas fa-money-bill-wave", color: "#27ae60" },
+        { msg: "vừa nạp thành công 100.000đ", icon: "fas fa-university", color: "#27ae60" },
+        { msg: "vừa đánh giá 5 sao cho Shop", icon: "fas fa-star", color: "#f1c40f" }
     ];
 
     function showFakeNotification() {
