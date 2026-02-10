@@ -1305,6 +1305,108 @@ function sendCardAuto() {
 }
         
 </script>
+
+    <style>
+    #fake-toast {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 9999;
+        font-family: 'Roboto', sans-serif;
+        pointer-events: none; /* Để khách không bấm nhầm */
+    }
+    
+    .toast-item {
+        background: rgba(0, 0, 0, 0.85);
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 50px;
+        margin-top: 10px;
+        border: 1px solid #d32f2f; /* Viền đỏ theo tông web */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideInLeft 0.5s ease, fadeOut 0.5s 4s forwards;
+        min-width: 250px;
+    }
+
+    .toast-item i {
+        color: #ffd700; /* Màu vàng kim */
+        font-size: 1.2rem;
+    }
+
+    .toast-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .toast-name { font-weight: bold; color: #d32f2f; font-size: 0.9rem; }
+    .toast-msg { font-size: 0.85rem; color: #eee; }
+
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-100px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; transform: translateY(-20px); }
+    }
+</style>
+
+<div id="fake-toast"></div>
+
+<script>
+    const names = ["Hoàng Kun", "Minh Tuấn", "Đức Bo", "Phạm Quang", "Huy Hùng", "Tiến Bịp", "Linh Ka", "Sơn Tùng", "Độ Mixi", "Thầy Giáo Ba"];
+    const actions = [
+        { msg: "vừa nạp thành công 50.000đ", icon: "fas fa-money-bill-wave" },
+        { msg: "vừa quay trúng 100.000đ", icon: "fas fa-gift" },
+        { msg: "vừa mua acc Free Fire VIP", icon: "fas fa-shopping-cart" },
+        { msg: "vừa nạp thành công 100.000đ", icon: "fas fa-money-bill-wave" },
+        { msg: "vừa rút thưởng thẻ Viettel 20k", icon: "fas fa-exchange-alt" },
+        { msg: "vừa nhận thêm 5 lượt quay", icon: "fas fa-sync" }
+    ];
+
+    function showFakeNotification() {
+        const container = document.getElementById('fake-toast');
+        
+        // Random dữ liệu
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        const randomAction = actions[Math.floor(Math.random() * actions.length)];
+        
+        // Che tên cho uy tín (Ví dụ: Hoàng Kun -> Hoàn***)
+        const maskedName = randomName.substring(0, 3) + "***";
+
+        const toast = document.createElement('div');
+        toast.className = 'toast-item';
+        toast.innerHTML = `
+            <i class="${randomAction.icon}"></i>
+            <div class="toast-content">
+                <span class="toast-name">${maskedName}</span>
+                <span class="toast-msg">${randomAction.msg}</span>
+            </div>
+        `;
+
+        container.appendChild(toast);
+
+        // Xóa thông báo sau 4.5 giây
+        setTimeout(() => {
+            toast.remove();
+        }, 4500);
+    }
+
+    // Chạy ngẫu nhiên từ 3 đến 8 giây một lần
+    function loopNotification() {
+        const randTime = Math.floor(Math.random() * 5000) + 3000;
+        setTimeout(() => {
+            showFakeNotification();
+            loopNotification();
+        }, randTime);
+    }
+
+    // Bắt đầu chạy
+    loopNotification();
+</script>
     
 </body>
 </html>
