@@ -334,22 +334,50 @@
         </p>
     </div>
 
-    <label style="font-size: 12px; font-weight: bold; color: #555;">Chọn nhà mạng:</label>
-    <div style="display: flex; gap: 10px; margin-bottom: 15px; margin-top: 5px;">
-        <div class="telco-btn active" onclick="selectTelco(this, 'VIETTEL')" style="flex: 1; border: 1px solid #ff9900; background: #fffbe6; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #ee0033;">VIETTEL</div>
-        <div class="telco-btn" onclick="selectTelco(this, 'VINAPHONE')" style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #0085cf;">VINA</div>
-        <div class="telco-btn" onclick="selectTelco(this, 'MOBIFONE')" style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #005a8b;">MOBI</div>
-    </div>
-    <input type="hidden" id="card-telco" value="VIETTEL"> <label style="font-size: 12px; font-weight: bold; color: #555;">Chọn mệnh giá:</label>
-    <select id="card-amount" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; outline: none;">
-        <option value="">-- Chọn đúng mệnh giá --</option>
-        <option value="10000">10.000đ</option>
-        <option value="20000">20.000đ</option>
-        <option value="50000">50.000đ</option>
-        <option value="100000">100.000đ</option>
-        <option value="200000">200.000đ</option>
-        <option value="500000">500.000đ</option>
-    </select>
+   <label style="font-size: 12px; font-weight: bold; color: #555;">Chọn loại thẻ:</label>
+<div style="display: flex; gap: 10px; margin-bottom: 15px; margin-top: 5px; flex-wrap: wrap;">
+    <div class="telco-btn active" onclick="selectTelco(this, 'VIETTEL')" style="flex: 1 0 25%; min-width: 70px; border: 1px solid #ff9900; background: #fffbe6; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #ee0033;">VIETTEL</div>
+    
+    <div class="telco-btn" onclick="selectTelco(this, 'VINAPHONE')" style="flex: 1 0 25%; min-width: 70px; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #0085cf;">VINA</div>
+    
+    <div class="telco-btn" onclick="selectTelco(this, 'MOBIFONE')" style="flex: 1 0 25%; min-width: 70px; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #005a8b;">MOBI</div>
+
+    <div class="telco-btn" onclick="selectTelco(this, 'GARENA')" style="flex: 1 0 40%; border: 1px solid #e74c3c; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #c0392b;">GARENA</div>
+
+    <div class="telco-btn" onclick="selectTelco(this, 'ZING')" style="flex: 1 0 40%; border: 1px solid #f39c12; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #d35400;">ZING</div>
+</div>
+
+<input type="hidden" id="card-telco" value="VIETTEL"> 
+
+<label style="font-size: 12px; font-weight: bold; color: #555;">Chọn mệnh giá:</label>
+<select id="card-amount" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; outline: none;">
+    <option value="">-- Chọn đúng mệnh giá --</option>
+    <option value="10000">10.000đ</option>
+    <option value="20000">20.000đ</option>
+    <option value="50000">50.000đ</option>
+    <option value="100000">100.000đ</option>
+    <option value="200000">200.000đ</option>
+    <option value="500000">500.000đ</option>
+</select>
+
+<script>
+    function selectTelco(element, value) {
+        // Xóa class active và reset style các nút khác
+        document.querySelectorAll('.telco-btn').forEach(btn => {
+            btn.classList.remove('active');
+            btn.style.background = 'transparent';
+            btn.style.borderColor = '#ddd';
+        });
+
+        // Thêm active cho nút được chọn
+        element.classList.add('active');
+        document.getElementById('card-telco').value = value;
+        
+        // Đổi màu nền nút được chọn cho đẹp
+        element.style.background = '#fffbe6';
+        element.style.borderColor = '#ff9900';
+    }
+</script>
 
     <div style="display: flex; gap: 10px; margin-bottom: 15px;">
         <div style="flex: 1;">
