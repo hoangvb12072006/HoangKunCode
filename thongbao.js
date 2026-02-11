@@ -1,164 +1,186 @@
-// --- CẤU HÌNH NỘI DUNG TẾT (Sửa lời chúc ở đây) ---
+// --- CẤU HÌNH NỘI DUNG THÔNG BÁO TẾT (Sửa thông tin liên hệ ở đây) ---
 const tetConfig = {
     tieuDe: "🎉 CHÚC MỪNG NĂM MỚI 2026 🎉",
-    loiChuc1: "Nhân dịp năm mới, HOANGKUN STORE chúc anh em:",
-    loiChuc2: "AN KHANG THỊNH VƯỢNG - VẠN SỰ NHƯ Ý",
-    uuDaiTitle: "🧧 LÌ XÌ ĐẦU XUÂN CỰC KHỦNG 🧧",
-    dong1: "🌸 X2 Giá trị nạp tiền cho đơn đầu tiên",
-    dong2: "🌸 Giảm giá 50% toàn bộ Source Code",
-    dong3: "🌸 Tặng thêm lượt quay Free mỗi ngày",
-    nutTat: "Đóng thông báo (Tắt trong 2h)"
+    
+    // Phần lời chúc & Ưu đãi
+    loiChuc: "Nhân dịp Xuân 2026, <b>HOANGKUN STORE</b> kính chúc quý khách hàng một năm mới <b>AN KHANG - THỊNH VƯỢNG - VẠN SỰ NHƯ Ý</b>.",
+    uuDai1: "🌸 <b>X2 GIÁ TRỊ NẠP</b> cho thẻ cào đầu tiên.",
+    uuDai2: "🌸 Giảm giá <b>50%</b> toàn bộ Source Code tại shop.",
+    uuDai3: "🌸 Tặng Code <b>LÌ XÌ 20K</b> khi mua đơn trên 100k.",
+
+    // Phần thông tin liên hệ (Quan trọng)
+    hotline: "0788.265.513",
+    zalo: "0788.265.513 (Hoàng Kun)",
+    facebook: "Nguyễn Việt Hoàng",
+    linkFacebook: "https://facebook.com/nvh12072006", // Thay link FB của bạn
+    linkZalo: "https://zalo.me/0788265513", // Thay link Zalo của bạn
+
+    nutTat: "Đã hiểu (Tắt trong 2h)"
 };
 
 // ---------------------------------------------------------
-// CODE XỬ LÝ GIAO DIỆN TẾT + HIỆU ỨNG HOA RƠI
+// CODE XỬ LÝ GIAO DIỆN (KHÔNG CẦN SỬA)
 // ---------------------------------------------------------
 
-// 1. CSS (Giao diện Tết + Animation Hoa Rơi)
+// 1. CSS (Giao diện dài, đẹp, chuẩn Shop Game)
 const styleTet = document.createElement('style');
 styleTet.innerHTML = `
-    /* Khung nền mờ */
     .tet-overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.7); z-index: 99999;
+        background: rgba(0, 0, 0, 0.75); z-index: 99999;
         display: flex; justify-content: center; align-items: center;
         opacity: 0; visibility: hidden; transition: 0.4s ease;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        backdrop-filter: blur(3px); font-family: 'Segoe UI', sans-serif;
     }
     
-    /* Hộp thông báo */
     .tet-box {
-        background: #fff url('https://i.pinimg.com/originals/78/e8/26/78e826ca1b9351214dfdd5e47f7e2024.png') no-repeat bottom right; /* Hình cành đào góc (nếu có) */
-        background-size: 150px;
-        width: 95%; max-width: 500px;
-        border-radius: 15px;
-        border: 2px solid #d32f2f;
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); /* Viền vàng sáng */
+        background: #fff; 
+        width: 95%; max-width: 550px; /* Làm rộng hơn chút */
+        border-radius: 12px;
+        border: 3px solid #d32f2f; /* Viền đỏ Tết */
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
         transform: scale(0.8); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        text-align: center; position: relative;
-        overflow: hidden;
+        text-align: center; position: relative; overflow: hidden;
+        max-height: 90vh; overflow-y: auto; /* Nếu dài quá thì cuộn */
     }
 
     .tet-overlay.active { opacity: 1; visibility: visible; }
     .tet-overlay.active .tet-box { transform: scale(1); }
 
-    /* Header Đỏ rực */
+    /* Header */
     .tet-header {
-        background: linear-gradient(to right, #d32f2f, #b71c1c);
-        color: #ffd700; /* Chữ vàng kim */
-        padding: 15px;
-        font-size: 20px; font-weight: 900;
-        text-transform: uppercase;
+        background: linear-gradient(135deg, #b71c1c, #d32f2f);
+        color: #ffd700; padding: 15px;
+        font-size: 22px; font-weight: 900; text-transform: uppercase;
         border-bottom: 3px solid #ffd700;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
 
-    /* Nội dung bên trong */
-    .tet-body { padding: 20px; color: #333; font-size: 15px; line-height: 1.6; }
-    .tet-wish { color: #d32f2f; font-weight: bold; font-size: 18px; margin: 10px 0; text-shadow: 1px 1px 0 #ffd700; }
-    .tet-promo-title { background: #ffebee; color: #d32f2f; display: inline-block; padding: 5px 15px; border-radius: 20px; font-weight: bold; margin-bottom: 10px; border: 1px dashed #d32f2f; }
-    .tet-list { text-align: left; margin-left: 10%; font-weight: 600; color: #555; }
-
-    /* Nút đóng */
-    .tet-close-btn {
-        background: #d32f2f; color: #fff; border: none;
-        padding: 10px 20px; border-radius: 5px;
-        font-weight: bold; cursor: pointer; margin-bottom: 20px;
-        transition: 0.3s; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    /* Body */
+    .tet-body { padding: 20px; color: #333; font-size: 15px; line-height: 1.6; text-align: left; }
+    
+    /* Khung ưu đãi */
+    .tet-promo-box {
+        background: #fff8e1; border: 1px dashed #ffd700;
+        padding: 15px; border-radius: 8px; margin: 15px 0;
     }
-    .tet-close-btn:hover { background: #b71c1c; transform: scale(1.05); }
+    .tet-promo-item { margin-bottom: 5px; color: #d32f2f; }
 
-    /* Nút X nhỏ */
-    .tet-x { position: absolute; top: 10px; right: 15px; color: #ffd700; font-size: 24px; cursor: pointer; font-weight: bold; }
-    .tet-x:hover { color: #fff; }
+    /* Khung liên hệ (Cái mới thêm) */
+    .tet-contact-box {
+        background: #e3f2fd; border-left: 4px solid #2196f3;
+        padding: 15px; border-radius: 4px; margin-bottom: 15px;
+    }
+    .tet-contact-row { margin-bottom: 8px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+    .tet-contact-row i { width: 20px; text-align: center; }
+    
+    .c-zalo { color: #0068ff; }
+    .c-fb { color: #1877f2; }
+    .c-hotline { color: #d32f2f; }
 
-    /* Hiệu ứng hoa rơi */
-    .flower {
-        position: fixed; top: -10vh;
-        z-index: 99998; /* Nằm dưới popup 1 chút */
-        pointer-events: none;
-        animation: fall linear forwards;
+    /* Nút tắt */
+    .tet-btn-close {
+        background: #d32f2f; color: white; border: none;
+        padding: 12px 40px; border-radius: 50px;
+        font-weight: bold; font-size: 16px; cursor: pointer;
+        margin-bottom: 20px; transition: 0.3s;
+        box-shadow: 0 4px 10px rgba(211, 47, 47, 0.4);
     }
-    @keyframes fall {
-        to { transform: translateY(110vh) rotate(360deg); }
-    }
+    .tet-btn-close:hover { background: #b71c1c; transform: translateY(-2px); }
+
+    .tet-x { position: absolute; top: 10px; right: 15px; color: #ffd700; font-size: 26px; cursor: pointer; font-weight: bold; }
+    
+    /* Hoa rơi */
+    .flower { position: fixed; top: -10vh; z-index: 99998; pointer-events: none; animation: fall linear forwards; }
+    @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 `;
 document.head.appendChild(styleTet);
 
-// 2. Tạo HTML Popup
+// 2. Tạo HTML
 const htmlTet = `
     <div class="tet-overlay" id="tetPopup">
         <div class="tet-box">
             <span class="tet-x" onclick="dongTet(false)">&times;</span>
             
             <div class="tet-header">
-                ${tetConfig.tieuDe}
+                <i class="fas fa-dragon"></i> ${tetConfig.tieuDe} <i class="fas fa-dragon"></i>
             </div>
 
             <div class="tet-body">
-                <div>${tetConfig.loiChuc1}</div>
-                <div class="tet-wish">${tetConfig.loiChuc2}</div>
-                
-                <hr style="border: 0; border-top: 1px dashed #ccc; margin: 15px 0;">
-                
-                <div class="tet-promo-title">${tetConfig.uuDaiTitle}</div>
-                <div class="tet-list">
-                    <div>${tetConfig.dong1}</div>
-                    <div>${tetConfig.dong2}</div>
-                    <div>${tetConfig.dong3}</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    ${tetConfig.loiChuc}
+                </div>
+
+                <div class="tet-promo-box">
+                    <div style="font-weight:bold; color:#d32f2f; text-align:center; margin-bottom:10px; text-transform:uppercase">🧧 LÌ XÌ ĐẦU XUÂN 🧧</div>
+                    <div class="tet-promo-item">${tetConfig.uuDai1}</div>
+                    <div class="tet-promo-item">${tetConfig.uuDai2}</div>
+                    <div class="tet-promo-item">${tetConfig.uuDai3}</div>
+                </div>
+
+                <div class="tet-contact-box">
+                    <div style="font-weight:bold; color:#333; margin-bottom:10px; text-transform:uppercase">☎️ THÔNG TIN HỖ TRỢ 24/7:</div>
+                    
+                    <div class="tet-contact-row c-hotline">
+                        <i class="fas fa-phone-alt"></i> Hotline: ${tetConfig.hotline}
+                    </div>
+                    
+                    <div class="tet-contact-row c-zalo">
+                        <i class="fas fa-comment-dots"></i> Zalo: <a href="${tetConfig.linkZalo}" target="_blank" style="color:inherit; text-decoration:none">${tetConfig.zalo}</a>
+                    </div>
+                    
+                    <div class="tet-contact-row c-fb">
+                        <i class="fab fa-facebook-square"></i> FB Admin: <a href="${tetConfig.linkFacebook}" target="_blank" style="color:inherit; text-decoration:none">${tetConfig.facebook}</a>
+                    </div>
+                </div>
+
+                <div style="font-size: 13px; color: #777; font-style: italic; text-align: center;">
+                    ⚠️ Lưu ý: Shop chỉ giao dịch qua các kênh trên. Tuyệt đối không giao dịch với các tài khoản giả mạo!
                 </div>
             </div>
 
-            <button class="tet-close-btn" onclick="dongTet(true)">${tetConfig.nutTat}</button>
+            <button class="tet-btn-close" onclick="dongTet(true)">${tetConfig.nutTat}</button>
         </div>
     </div>
 `;
 document.body.insertAdjacentHTML('beforeend', htmlTet);
 
-// 3. Logic: Tắt trong 2 giờ
+// 3. Logic hiển thị
 function checkHienThiTet() {
-    const timeClose = localStorage.getItem('tetPopupTime');
+    const timeClose = localStorage.getItem('tetPopupTime2026');
     const now = new Date().getTime();
 
-    // Nếu chưa tắt hoặc đã qua 2 tiếng
     if (!timeClose || (now - timeClose > 2 * 60 * 60 * 1000)) {
         setTimeout(() => {
             document.getElementById('tetPopup').classList.add('active');
-            taoHieuUngHoaRoi(); // Kích hoạt hoa rơi khi hiện popup
+            taoHieuUngHoaRoi();
         }, 1000);
     } else {
-        // Kể cả không hiện popup thì vẫn cho hoa rơi cho đẹp (nếu thích)
-        // taoHieuUngHoaRoi(); 
+        // taoHieuUngHoaRoi(); // Nếu muốn lúc nào cũng rơi hoa thì bỏ comment dòng này
     }
 }
 
 function dongTet(luuTime) {
     document.getElementById('tetPopup').classList.remove('active');
     if (luuTime) {
-        localStorage.setItem('tetPopupTime', new Date().getTime());
+        localStorage.setItem('tetPopupTime2026', new Date().getTime());
     }
 }
 
-// 4. Hàm tạo hiệu ứng Hoa Đào / Hoa Mai rơi
+// 4. Hiệu ứng hoa rơi
 function taoHieuUngHoaRoi() {
-    const symbols = ['🌸', '🌼', '🧧', '✨']; // Hoa đào, hoa mai, bao lì xì
-    
+    const symbols = ['🌸', '🌼', '🧧', '💰']; 
     setInterval(() => {
         const flower = document.createElement('div');
         flower.classList.add('flower');
         flower.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-        
-        // Random vị trí và kích thước
         flower.style.left = Math.random() * 100 + 'vw';
-        flower.style.fontSize = Math.random() * 15 + 15 + 'px'; // Kích thước 15px - 30px
-        flower.style.animationDuration = Math.random() * 3 + 4 + 's'; // Rơi trong 4-7s
+        flower.style.fontSize = Math.random() * 20 + 10 + 'px';
+        flower.style.animationDuration = Math.random() * 3 + 5 + 's';
         flower.style.opacity = Math.random();
-        
         document.body.appendChild(flower);
-
-        // Xóa bớt khi rơi xong để nhẹ máy
-        setTimeout(() => { flower.remove(); }, 7000);
-    }, 400); // Cứ 0.4s rơi 1 bông
+        setTimeout(() => { flower.remove(); }, 8000);
+    }, 300);
 }
 
-// Chạy luôn
 checkHienThiTet();
