@@ -104,12 +104,17 @@ function xulyNhapCode() {
                 // KÍCH HOẠT PHÁO HOA
                 banPhaoHoa();
 
+               // HIỆN THÔNG BÁO THÀNH CÔNG (SẠCH SẼ - KHÔNG LỖI)
                 Swal.fire({
                     title: "NHẬN THƯỞNG THÀNH CÔNG!",
                     html: `Bạn vừa nhập mã <b>${code}</b><br>Nhận được: <b style="color:red; font-size:24px;">+${rewardAmount.toLocaleString()}đ</b>`,
                     icon: "success",
-                    backdrop: `rgba(0,0,0,0.8) url("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueW9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/26tOZ4GO9G4v9n9S0/giphy.gif") center top no-repeat`,
-                    didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
+                    confirmButtonColor: "#ff0000",
+                    confirmButtonText: "XÁC NHẬN",
+                    backdrop: `rgba(0,0,0,0.8)`, // Đã xóa sạch link ảnh lỗi
+                    didOpen: () => {
+                        Swal.getContainer().style.zIndex = "1000000";
+                    }
                 });
             });
         }
