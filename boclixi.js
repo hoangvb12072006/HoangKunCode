@@ -35,7 +35,7 @@ async function startBocLixi(el) {
     const data = snap.val() || {};
     
     let turns = data.freeTurns || 0;
-    if (turns <= 0 && data.balance < 20000) return Swal.fire("Hết lượt", "Bạn cần 20k để bốc lẻ!", "warning");
+    if (turns <= 0 && data.balance < 20000) return ("Hết lượt", "Bạn cần 20k để bốc lẻ!", "warning");
 
     isRunning = true;
     el.classList.add('shaking');
@@ -59,11 +59,14 @@ async function startBocLixi(el) {
         // Hiệu ứng pháo hoa
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
-        Swal.fire({
-            title: '🎉 CHÚC MỪNG!',
-            html: `Bạn nhận được lì xì <b>${winVal.toLocaleString()}đ</b><br><br>Mã code: <b style="color:red; font-size:20px;">${code}</b><br><br><small>Bấm copy và nạp tại mục Nạp Code nhé!</small>`,
-            confirmButtonText: 'SAO CHÉP MÃ'
-        }).then(() => {
+       Swal.fire({
+    title: '🎉 CHÚC MỪNG!',
+    html: `Bạn nhận được lì xì <b>${winVal.toLocaleString()}đ</b>...`,
+    confirmButtonText: 'SAO CHÉP MÃ',
+    // THÊM DÒNG NÀY:
+    target: document.getElementById('modalBocLixi'), 
+    allowOutsideClick: false,
+   }).then(() => {
             navigator.clipboard.writeText(code);
             alert("Đã copy mã!");
         });
