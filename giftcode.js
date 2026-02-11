@@ -27,16 +27,19 @@ function banPhaoHoa() {
         if (timeLeft <= 0) return clearInterval(interval);
 
         const particleCount = 50 * (timeLeft / duration);
-        // Bắn pháo hoa hai bên
         confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
     }, 250);
 }
 
-// --- 2. LOGIC MỞ/ĐÓNG MODAL (Đã sửa lỗi viết hoa) ---
-// Đổi chữ m thành M ở tên hàm moModalCode
+// --- 2. LOGIC MỞ/ĐÓNG MODAL ---
 function moModalCode() {
     const user = localStorage.getItem('hoangUser');
-    if(!user) return Swal.fire("Lỗi", "Vui lòng đăng nhập để nhập Code!", "error");
+    if(!user) return Swal.fire({
+        title: "Lỗi",
+        text: "Vui lòng đăng nhập để nhập Code!",
+        icon: "error",
+        didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
+    });
     
     const modal = document.getElementById('modalGiftcode');
     if(modal) {
@@ -55,15 +58,31 @@ function xulyNhapCode() {
     const code = codeInput.value.trim().toUpperCase();
     const user = localStorage.getItem('hoangUser');
 
-    if (!code) return Swal.fire("Lỗi", "Vui lòng nhập mã Code!", "warning");
-    if (!validCodes[code]) return Swal.fire("Thất bại", "Mã không đúng hoặc đã hết hạn!", "error");
+    if (!code) return Swal.fire({
+        title: "Lỗi",
+        text: "Vui lòng nhập mã Code!",
+        icon: "warning",
+        didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
+    });
+
+    if (!validCodes[code]) return Swal.fire({
+        title: "Thất bại",
+        text: "Mã không đúng hoặc đã hết hạn!",
+        icon: "error",
+        didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
+    });
 
     const rewardAmount = validCodes[code];
     const codeRef = db.ref('users/' + user + '/used_codes/' + code);
     
     codeRef.once('value').then(snapshot => {
         if (snapshot.exists()) {
-            Swal.fire("Tiếc quá", "Bạn đã sử dụng mã này rồi!", "info");
+            Swal.fire({
+                title: "Tiếc quá",
+                text: "Bạn đã sử dụng mã này rồi!",
+                icon: "info",
+                didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
+            });
         } else {
             db.ref('users/' + user).once('value').then(userSnap => {
                 const currentBal = userSnap.val().balance || 0;
@@ -89,8 +108,8 @@ function xulyNhapCode() {
                     title: "NHẬN THƯỞNG THÀNH CÔNG!",
                     html: `Bạn vừa nhập mã <b>${code}</b><br>Nhận được: <b style="color:red; font-size:24px;">+${rewardAmount.toLocaleString()}đ</b>`,
                     icon: "success",
-                    // SỬA DÒNG NÀY: Đổi từ màu xanh sang màu đen mờ
-                    backdrop: `rgba(0,0,0,0.8) url("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueW9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/26tOZ4GO9G4v9n9S0/giphy.gif") center top no-repeat`
+                    backdrop: `rgba(0,0,0,0.8) url("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueW9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/26tOZ4GO9G4v9n9S0/giphy.gif") center top no-repeat`,
+                    didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
                 });
             });
         }
