@@ -229,13 +229,13 @@
         
         <div class="wheel" id="wheel">
             <div class="wheel-inner">
-                <div class="segment"><div class="segment-content"><i class="fas fa-coins"></i><span>10.000đ</span></div></div>
+                <div class="segment"><div class="segment-content"><i class="fas fa-coins"></i><span>100.000đ</span></div></div>
                 <div class="segment"><div class="segment-content"><i class="fas fa-sync-alt spin-icon"></i><span>Thêm 1 lượt</span></div></div>
                 <div class="segment"><div class="segment-content"><i class="fas fa-coins"></i><span>20.000đ</span></div></div>
                 <div class="segment"><div class="segment-content"><i class="fas fa-forward"></i><span>Thêm 2 lượt</span></div></div>
                 <div class="segment"><div class="segment-content"><i class="fas fa-money-bill-wave"></i><span>50.000đ</span></div></div>
-                <div class="segment"><div class="segment-content"><i class="fas fa-coins"></i><span>5.000đ</span></div></div>
-                <div class="segment"><div class="segment-content"><i class="fas fa-gem"></i><span>100.000đ</span></div></div>
+                <div class="segment"><div class="segment-content"><i class="fas fa-coins"></i><span>10.000đ</span></div></div>
+                <div class="segment"><div class="segment-content"><i class="fas fa-gem"></i><span>500.000đ</span></div></div>
                 <div class="segment"><div class="segment-content"><i class="far fa-sad-tear"></i><span>Xui quá</span></div></div>
             </div>
         </div>
@@ -269,18 +269,57 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // --- CẤU HÌNH TỈ LỆ KHÓ ---
-        const rewards = [
-            { id: 1, name: "10.000đ",     value: 10000,  type: 'money', percent: 5 },
-            { id: 2, name: "Thêm 1 lượt", value: 1,      type: 'spin',  percent: 15 },
-            { id: 3, name: "20.000đ",     value: 20000,  type: 'money', percent: 3 },
-            { id: 4, name: "Thêm 2 lượt", value: 2,      type: 'spin',  percent: 1 },
-            { id: 5, name: "50.000đ",     value: 50000,  type: 'money', percent: 0.9 },
-            { id: 6, name: "5.000đ",      value: 5000,   type: 'money', percent: 15 },
-            { id: 7, name: "100.000đ",    value: 100000, type: 'money', percent: 0.1 },
-            { id: 8, name: "Xui quá",     value: 0,      type: 'miss',  percent: 60 } 
-        ];
+       // CẤU HÌNH TỈ LỆ TRÚNG THƯỞNG (Tổng tỉ lệ phải = 100%)
+const listGiaiThuong = [
+  { 
+    text: "100.000đ", 
+    tiLe: 0.5 // 0.1% (Cực hiếm)
+  },
+  { 
+    text: "Thêm 1 lượt", 
+    tiLe: 15 // 15% (Dễ)
+  },
+  { 
+    text: "20.000đ", 
+    tiLe: 10 // 10% (Vừa)
+  },
+  { 
+    text: "Thêm 2 lượt", 
+    tiLe: 5 // 5% (Hơi hiếm)
+  },
+  { 
+    text: "50.000đ", 
+    tiLe: 2 // 2% (Khó)
+  },
+  { 
+    text: "10.000đ", 
+    tiLe: 30 // 30% (Rất dễ - Tiền nhỏ)
+  },
+  { 
+    text: "500.000đ", 
+    tiLe: 0.1 // 0% (Không bao giờ trúng - hoặc để 0.01 nếu muốn có tí hy vọng)
+  },
+  { 
+    text: "Xui quá", 
+    tiLe: 37.9 // 37.9% (Dễ nhất - Xịt)
+  }
+];
 
+// Hàm tính toán kết quả dựa trên tỉ lệ
+function quaySo() {
+    const tongTiLe = 100;
+    let random = Math.random() * tongTiLe; // Random từ 0 đến 100
+    let currentTotal = 0;
+
+    for (let i = 0; i < listGiaiThuong.length; i++) {
+        currentTotal += listGiaiThuong[i].tiLe;
+        if (random <= currentTotal) {
+            return i; // Trả về vị trí giải thưởng trúng (0 đến 7)
+        }
+    }
+    return 7; // Nếu lỗi thì trả về ô "Xui quá"
+}
+        
         let currentSpins = 0;
         let isSpinning = false;
         let currentRotation = 0;
