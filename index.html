@@ -1081,14 +1081,20 @@ function closeProfile() {
     </div>
 </div>
 
-<div id="modalBocLixi" class="modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center;">
-    <div class="modal-content" style="background: #151515; padding: 25px; border: 2px solid #ffea00; width: 90%; max-width: 450px; border-radius: 15px; text-align: center; position: relative; box-shadow: 0 0 30px #ff0000;">
+<div onclick="moModalBoc()" style="position: fixed; bottom: 180px; left: 20px; width: 65px; height: 65px; background: radial-gradient(circle, #ff0000, #b71c1c); border-radius: 50%; border: 2px solid #ffea00; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; cursor: pointer; box-shadow: 0 0 15px #ff0000; animation: bounce 2s infinite;">
+    <i class="fas fa-envelope-open-text" style="color: #ffea00; font-size: 28px;"></i>
+    <span style="font-size: 8px; color: #fff; font-weight: bold; margin-top: -2px;">BỐC LÌ XÌ</span>
+</div>
+
+<div id="modalBocLixi" style="display: none; position: fixed; z-index: 2000000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center;">
+    <div style="background: #1a1a1a; padding: 25px; border: 2px solid #ffea00; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; position: relative; box-shadow: 0 0 30px #ff0000;">
         <span onclick="dongModalBoc()" style="position: absolute; right: 15px; top: 10px; color: #fff; font-size: 30px; cursor: pointer;">&times;</span>
         <h2 style="color: #ffea00; margin-bottom: 5px; text-shadow: 0 0 10px #ff0000;">🧧 LÌ XÌ MAY MẮN 🧧</h2>
         <p style="color: #ccc; font-size: 13px;">Phí: <b style="color: #00ff00;">20.000đ</b> / Lượt bốc mã Giftcode</p>
         
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px;">
             <script>
+                // Tạo nhanh 9 bao lì xì
                 for(let i=1; i<=9; i++) {
                     document.write(`
                         <div onclick="bocLixi(this)" style="height: 110px; background: linear-gradient(135deg, #d32f2f, #b71c1c); border-radius: 10px; border: 1px solid #ffea00; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; transition: 0.3s;">
@@ -1101,6 +1107,7 @@ function closeProfile() {
         </div>
     </div>
 </div>
+
 
     <div onclick="moModalBoc()" style="position: fixed; bottom: 120px; left: 20px; width: 65px; height: 65px; background: radial-gradient(circle, #ff0000, #b71c1c); border-radius: 50%; border: 2px solid #ffea00; display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer; box-shadow: 0 0 15px #ff0000;">
     <i class="fas fa-envelope-open-text" style="color: #ffea00; font-size: 30px;"></i>
