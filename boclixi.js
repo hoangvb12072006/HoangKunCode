@@ -3,7 +3,7 @@
 // ============================================================
 
 // Giá vé mua lẻ (nếu hết lượt Free). Để 0 nếu muốn miễn phí.
-const GIA_VE_LE = 20000; 
+const Vong quay lixi ; 
 
 // Danh sách mã quà tặng (Sửa mã của bạn vào đây)
 const DANH_SACH_QUA = {
