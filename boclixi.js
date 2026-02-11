@@ -19,36 +19,35 @@ const DANH_SACH_QUA = {
 // 2️⃣ HÀM TÍCH LŨY (GỌI KHI KHÁCH MUA HÀNG Ở NGOÀI SẢNH)
 // ============================================================
 
-/**
- * Hàm này dùng để cộng dồn tiền mua hàng.
- * Nếu đủ 100k sẽ tự động cộng lượt và hiện thông báo chúc mừng NGAY LẬP TỨC.
- * @param {string} user - Tên tài khoản người mua
- * @param {number} amount - Số tiền món hàng vừa mua
- */
+// Hàm tích lũy lượt bốc khi mua hàng (Bắt buộc phải có)
 async function tichLuyLuotBoc(user, amount) {
     if(!user) return;
-    
-    // Lấy dữ liệu cũ
     const snapshot = await db.ref('users/' + user).once('value');
-    const data = snapshot.val();
+    const data = snapshot.val() || {};
     
-    let daTieuTruocDo = data.totalSpent || 0; // Tổng tiền đã tiêu trước đó
-    let luotFreeHienCo = data.freeTurns || 0; // Số lượt đang có
-
-    let tongTieuMoi = daTieuTruocDo + amount; // Cộng thêm tiền vừa mua
+    let currentSpent = data.totalSpent || 0; 
+    let currentTurns = data.freeTurns || 0; 
+    let newSpent = currentSpent + amount;
     
-    // LOGIC TÍNH TOÁN: Lấy phần nguyên của (Tổng Mới / 100k) - (Tổng Cũ / 100k)
-    // Ví dụ: Cũ 90k (0), Mới 110k (1) -> 1 - 0 = Được 1 lượt
-    let mocCu = Math.floor(daTieuTruocDo / 100000);
-    let mocMoi = Math.floor(tongTieuMoi / 100000);
-    let luotDuocTang = mocMoi - mocCu;
+    let oldLevel = Math.floor(currentSpent / 100000);
+    let newLevel = Math.floor(newSpent / 100000);
+    let gainedTurns = newLevel - oldLevel;
 
-    // Cập nhật vào Database
-    if (luotDuocTang > 0) {
+    if (gainedTurns > 0) {
         await db.ref('users/' + user).update({
-            totalSpent: tongTieuMoi,
-            freeTurns: luotFreeHienCo + luotDuocTang
+            totalSpent: newSpent,
+            freeTurns: currentTurns + gainedTurns
         });
+        Swal.fire({
+            title: "QUÀ TẶNG 🎁",
+            html: `Tổng chi tiêu đạt mốc!<br>Bạn nhận được <b>${gainedTurns}</b> lượt bốc Lì Xì Free!`,
+            icon: "success",
+            confirmButtonColor: "#d33"
+        });
+    } else {
+        await db.ref('users/' + user).update({ totalSpent: newSpent });
+    }
+}
 
         // 🔥 HIỆN THÔNG BÁO CHÚC MỪNG NGAY LẬP TỨC (Khi đang ở ngoài sảnh)
         Swal.fire({
