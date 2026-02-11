@@ -176,6 +176,9 @@
                 <i class="fas fa-wallet" style="color:#00ff00"></i> <span id="user-balance">0đ</span>
             </div>
             <button class="btn btn-red" style="padding: 5px 10px; font-size: 12px;" onclick="showRecharge()">NẠP</button>
+            <button class="btn" style="background: #9c27b0; color: white; padding: 5px 10px; font-size: 12px; margin-left: 5px; box-shadow: 0 0 10px #9c27b0;" onclick="moModalCode()">
+    <i class="fas fa-gift"></i> CODE
+</button>
             <i class="fas fa-sign-out-alt" style="cursor:pointer; color: #666;" onclick="logout()"></i>
         </div>
     </div>
@@ -1688,6 +1691,106 @@ function sendCardAuto() {
             }
         }
     }
+
+ // --- DANH SÁCH MÃ GIFTCODE ---
+const validCodes = {
+    // Code Lì Xì - Tết
+    "LIXI20K": 20000,
+    "TET2026": 10000,
+    "LIXITET": 15000,
+    "NAMMOI": 20000,
+    "KHAISUAN": 50000,
+
+    // Code Thương Hiệu Shop
+    "HOANGKUN": 50000,
+    "HOANGKUNVIP": 100000,  // Code tiền to
+    "HOANGDEPTRAI": 20000,  // Code nịnh Admin :v
+    "SHOPUYTI": 10000,
+
+    // Code Tân Thủ / Free
+    "TANTHU": 5000,
+    "CODEFREE": 5000,
+    "TESTNV": 10000,
+
+    // Code VIP / Sự Kiện
+    "VIPMEMBER": 50000,
+    "SUPERVIP": 200000,     // Code Siêu khủng (200k)
+    "TRIAN": 30000,
+    "LOVEHOANGKUN": 25000,
+    
+    // Code bạn vừa thêm
+    "LIXI30K": 30000
+};
+
+// Hàm mở/đóng Modal
+function moModalCode() {
+    const user = localStorage.getItem('hoangUser');
+    if(!user) return Swal.fire("Lỗi", "Vui lòng đăng nhập để nhập Code!", "error");
+    document.getElementById('modalGiftcode').style.display = 'flex';
+}
+function dongModalCode() {
+    document.getElementById('modalGiftcode').style.display = 'none';
+}
+
+// Hàm Xử lý khi bấm nút Xác Nhận
+function xulyNhapCode() {
+    const code = document.getElementById('inputGiftCode').value.trim().toUpperCase();
+    const user = localStorage.getItem('hoangUser');
+
+    // 1. Kiểm tra nhập
+    if (!code) return Swal.fire("Lỗi", "Vui lòng nhập mã Code!", "warning");
+    
+    // 2. Kiểm tra mã có tồn tại không
+    if (!validCodes[code]) {
+        return Swal.fire("Thất bại", "Mã Giftcode không đúng hoặc đã hết hạn!", "error");
+    }
+
+    const rewardAmount = validCodes[code];
+
+    // 3. Kiểm tra xem User đã dùng mã này chưa (Trên Firebase)
+    const codeRef = db.ref('users/' + user + '/used_codes/' + code);
+    
+    codeRef.once('value').then(snapshot => {
+        if (snapshot.exists()) {
+            // Nếu đã có dữ liệu -> Đã dùng rồi
+            Swal.fire("Tiếc quá", "Bạn đã sử dụng mã này rồi!", "info");
+        } else {
+            // 4. Nếu chưa dùng -> Cộng tiền & Đánh dấu đã dùng
+            db.ref('users/' + user).once('value').then(userSnap => {
+                const userData = userSnap.val();
+                const currentBal = userData.balance || 0;
+                const newBal = currentBal + rewardAmount;
+
+                // Cập nhật số dư mới
+                db.ref('users/' + user).update({
+                    balance: newBal
+                });
+
+                // Đánh dấu là đã dùng code này
+                codeRef.set(true); 
+
+                // Lưu lịch sử nhận quà
+                const timeString = new Date().toLocaleString('vi-VN');
+                db.ref('history/' + user).push({
+                    product: "🎁 Giftcode: " + code,
+                    price: 0,
+                    date: timeString,
+                    link: "#",
+                    status: "Đã nhận +" + rewardAmount.toLocaleString() + "đ"
+                });
+
+                // Thông báo thành công
+                dongModalCode();
+                Swal.fire({
+                    title: "NHẬN THƯỞNG THÀNH CÔNG!",
+                    html: `Bạn vừa nhập mã <b>${code}</b><br>Nhận được: <b style="color:red; font-size:20px;">+${rewardAmount.toLocaleString()}đ</b>`,
+                    icon: "success",
+                    confirmButtonText: "QUÁ ĐÃ"
+                });
+            });
+        }
+    });
+}
     
 </script>
 <script src="thongbao.js"></script>
