@@ -1,203 +1,120 @@
 // --- CẤU HÌNH ---
-const Bốc Lì Xì Ngẫu Nhiên;
+const GIA_BOC = 0; // Giá = 0đ (Miễn phí)
+
+// Danh sách mã Code (Bạn hãy sửa lại mã của bạn vào đây)
 const GIFT_MAP = {
-    5000: "TANTHU",
-    10000: "LIXITET",
-    20000: "NAMMOI",
-    50000: "HOANGKUN",
+    5000: "LIXIFREE5K",
+    10000: "LIXIFREE10K",
+    20000: "LIXIFREE20K",
+    50000: "LIXIVIP50K",
     100000: "HOANGKUNVIP",
-    500000: "CHUTICH"
+    500000: "SUPERVIP"
 };
 
-// 1. Hàm mở bảng & Hiển thị số lượt Free
+// 1. HÀM MỞ BẢNG
 async function moModalBoc() {
     const user = localStorage.getItem('hoangUser');
-    if(!user) return Swal.fire("Lỗi", "Vui lòng đăng nhập!", "error");
-
-    // Lấy thông tin lượt Free từ Firebase
-    const snapshot = await db.ref('users/' + user).once('value');
-    const userData = snapshot.val();
-    const freeTurns = userData.freeTurns || 0;
-
-    // Cập nhật giao diện hiển thị
-    const infoText = document.getElementById('infoLuotBoc');
-    if(infoText) {
-        if(freeTurns > 0) {
-            infoText.innerHTML = `Bạn có <b style="color:#00ff00; font-size:16px;">${freeTurns}</b> lượt MIỄN PHÍ!`;
-        } else {
-            infoText.innerHTML = `Phí: <b style="color:#ff0000;">20.000đ</b> / Lượt`;
-        }
-    }
-
+    
+    // Hiện bảng
     const modal = document.getElementById('modalBocLixi');
     if (modal) {
         modal.style.display = 'flex';
         modal.style.zIndex = "9999999"; 
+    } 
+
+    // Nếu đã đăng nhập thì hiện thông báo Free
+    if(user) {
+        const infoText = document.getElementById('infoLuotBoc');
+        if(infoText) {
+            infoText.innerHTML = `
+                <span style="color:#00ff00; font-weight:bold; font-size: 16px;">✨ LÌ XÌ MIỄN PHÍ 100% ✨</span> 
+                <br>
+                <span style="font-size:11px; color:#ccc;">(Không giới hạn lượt chơi)</span>
+            `;
+        }
     }
 }
 
+// 2. HÀM ĐÓNG BẢNG
 function dongModalBoc() {
     document.getElementById('modalBocLixi').style.display = 'none';
 }
 
-// 2. Hàm Bốc Lì Xì (Xử lý ưu tiên lượt Free)
+// 3. HÀM XỬ LÝ BỐC (Có rung lắc + hiện code)
 async function bocLixi(el) {
+    // Nếu bao này đã mở rồi thì không bấm được nữa
     if(el.querySelector('.lixi-back').style.display === 'flex') return;
 
     const user = localStorage.getItem('hoangUser');
-    const snapshot = await db.ref('users/' + user).once('value');
-    const userData = snapshot.val();
-    
-    const currentBal = userData.balance || 0;
-    const freeTurns = userData.freeTurns || 0; // Lấy số lượt Free
+    if(!user) return Swal.fire("Yêu cầu", "Vui lòng đăng nhập để nhận quà!", "warning");
 
-    let isFree = false;
+    // --- GIAI ĐOẠN 1: RUNG LẮC (0.8 giây) ---
+    el.classList.add('lixi-shaking'); // Thêm rung
+    await new Promise(resolve => setTimeout(resolve, 800)); // Đợi
+    el.classList.remove('lixi-shaking'); // Hết rung
 
-    // --- LOGIC QUYẾT ĐỊNH TRỪ TIỀN HAY TRỪ LƯỢT ---
-    if (freeTurns > 0) {
-        // Nếu có lượt Free -> Hỏi dùng lượt
-        const confirmFree = await Swal.fire({
-            title: 'DÙNG LƯỢT MIỄN PHÍ?',
-            html: `Bạn đang có <b>${freeTurns}</b> lượt bốc free.<br>Dùng ngay nhé?`,
-            icon: 'star',
-            showCancelButton: true,
-            confirmButtonText: 'DÙNG LUÔN',
-            confirmButtonColor: '#ffea00',
-            cancelButtonText: 'Để dành',
-            background: '#000',
-            color: '#fff'
-        });
-        if(!confirmFree.isConfirmed) return;
-        isFree = true;
-    } else {
-        // Nếu không có lượt Free -> Trừ tiền 20k
-        if(currentBal < GIA_BOC) {
-            return Swal.fire({
-                title: "THIẾU TIỀN",
-                text: `Cần ${GIA_BOC.toLocaleString()}đ để bốc!`,
-                icon: "warning"
-            });
-        }
-        const confirm = await Swal.fire({
-            title: 'XÁC NHẬN MUA?',
-            text: `Phí bốc là ${GIA_BOC.toLocaleString()}đ. Chơi không?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'CHƠI LUÔN',
-            confirmButtonColor: '#d33'
-        });
-        if(!confirm.isConfirmed) return;
-    }
-
-    // --- CẬP NHẬT DATABASE ---
-    if (isFree) {
-        // Trừ 1 lượt Free
-        await db.ref('users/' + user).update({ freeTurns: freeTurns - 1 });
-    } else {
-        // Trừ tiền
-        await db.ref('users/' + user).update({ balance: currentBal - GIA_BOC });
-    }
-
-    // --- RANDOM KẾT QUẢ ---
+    // --- GIAI ĐOẠN 2: TÍNH KẾT QUẢ ---
     let random = Math.random() * 100;
     let winVal = 5000;
+    
+    // Tỉ lệ trúng (Chỉnh ở đây)
     if(random < 60) winVal = 5000;
     else if(random < 85) winVal = 10000;
-    else if(random < 98) winVal = 50000;
+    else if(random < 95) winVal = 20000;
+    else if(random < 99) winVal = 50000;
     else winVal = 500000;
 
-    let giftCode = GIFT_MAP[winVal] || "TANTHU";
+    let giftCode = GIFT_MAP[winVal] || "LIXIFREE";
 
-    // Hiệu ứng
+    // --- GIAI ĐOẠN 3: HIỆN QUÀ ---
+    
+    // Đổi giao diện bao lì xì thành chữ GIFT
     const lixiBack = el.querySelector('.lixi-back');
     lixiBack.innerText = "GIFT";
-    lixiBack.style.display = 'flex';
-    if(winVal >= 50000) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-
-    // Hiện quà
-    setTimeout(() => {
-        Swal.fire({
-            title: `<span style="color:#ffd700">🎁 QUÀ CỦA BẠN 🎁</span>`,
-            html: `
-                <div style="background:#000; padding:15px; border-radius:10px; border:1px solid #333;">
-                    <p style="color:#fff;">Giá trị: <b style="color:red; font-size:20px;">${winVal.toLocaleString()}đ</b></p>
-                    <div style="margin:15px 0; padding:10px; border:2px dashed #ffd700; color:#ffd700; font-size:28px; font-weight:bold; cursor:pointer;" 
-                         onclick="navigator.clipboard.writeText('${giftCode}'); alert('Đã copy mã!')">
-                        ${giftCode}
-                    </div>
-                    <p style="font-size:12px; color:#888;">(Bạn còn: <b>${isFree ? freeTurns - 1 : freeTurns}</b> lượt free)</p>
-                </div>
-            `,
-            backdrop: `rgba(0,0,0,0.9)`,
-            confirmButtonText: "ĐÓNG",
-            confirmButtonColor: "#d33"
-        }).then(() => {
-            dongModalBoc();
-            lixiBack.style.display = 'none';
-        });
-    }, 500);
-}
-
-// 3. HÀM TÍCH LŨY (Gắn hàm này vào nút Mua code của bạn)
-// Khi khách mua code 20k, gọi: tichLuyLuotBoc(username, 20000)
-async function tichLuyLuotBoc(user, amount) {
-    if(!user) return;
-    const snapshot = await db.ref('users/' + user).once('value');
-    const data = snapshot.val();
+    lixiBack.style.display = 'flex'; 
     
-    let currentSpent = data.totalSpent || 0; // Tổng tiền đã tiêu từ trước
-    let currentTurns = data.freeTurns || 0; // Số lượt free hiện có
-
-    let newSpent = currentSpent + amount;
-    
-    // Logic: Cứ mỗi 100k tiêu thêm thì được 1 lượt
-    // Ví dụ: Cũ 90k, mua 20k -> Mới 110k -> Đủ 100k -> Cộng 1 lượt
-    let gainedTurns = Math.floor(newSpent / 100000) - Math.floor(currentSpent / 100000);
-
-    if (gainedTurns > 0) {
-        await db.ref('users/' + user).update({
-            totalSpent: newSpent,
-            freeTurns: currentTurns + gainedTurns
-        });
-        Swal.fire("QUÀ TẶNG", `Bạn nhận được ${gainedTurns} lượt bốc lì xì miễn phí do mua hàng!`, "success");
-    } else {
-        await db.ref('users/' + user).update({ totalSpent: newSpent });
+    // Bắn pháo hoa nếu trúng to
+    if(winVal >= 50000 && typeof confetti === 'function') {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
-}
 
-// --- HÀM HIỆN BẢNG THỂ LỆ ---
-function xemTheLe() {
+    // Hiện bảng CHÚC MỪNG to đẹp
     Swal.fire({
-        title: '📜 LUẬT CHƠI & QUY ĐỊNH',
+        title: `<span style="color:#ffd700; text-transform:uppercase;">🎉 CHÚC MỪNG BẠN 🎉</span>`,
         html: `
-            <div style="text-align: left; font-size: 14px; color: #333;">
-                <p>1️⃣ <b>CÁCH NHẬN LƯỢT FREE:</b></p>
-                <ul style="margin-top:5px; margin-bottom:15px; padding-left:20px;">
-                    <li>Khách hàng mua Source Code với tổng giá trị đơn hàng <b style="color:red">≥ 100.000đ</b>.</li>
-                    <li>Hệ thống tự động tặng <b>1 lượt bốc</b> ngay sau khi thanh toán.</li>
-                </ul>
+            <div style="background: linear-gradient(135deg, #1a1a1a, #000); padding:20px; border-radius:15px; border:1px solid #ffea00;">
+                
+                <div style="margin-bottom:15px;">
+                    <i class="fas fa-gift" style="font-size:50px; color:#ff0000; text-shadow:0 0 10px #ffea00;"></i>
+                </div>
 
-                <hr style="border-top: 1px dashed #ccc;">
+                <p style="color:#fff; font-size:16px;">Bạn vừa nhận được Giftcode trị giá:</p>
+                <p style="color:#00ff00; font-size:28px; font-weight:bold; margin: 10px 0;">${winVal.toLocaleString()}đ</p>
+                
+                <div style="margin:20px 0;">
+                    <p style="color:#aaa; font-size:12px; margin-bottom:5px;">Mã quà tặng của bạn:</p>
+                    <div onclick="navigator.clipboard.writeText('${giftCode}'); Swal.showValidationMessage('Đã sao chép mã!');" 
+                         style="background:#333; padding:12px; border:2px dashed #ffd700; border-radius:8px; color:#ffd700; font-size:24px; font-weight:bold; cursor:pointer; letter-spacing: 1px;">
+                        ${giftCode} <i class="fas fa-copy" style="font-size:16px; margin-left:10px; color:#fff;"></i>
+                    </div>
+                    <p style="font-size:11px; color:#666; margin-top:5px;">(Bấm vào ô trên để Copy mã)</p>
+                </div>
 
-                <p>2️⃣ <b>MUA VÉ LẺ:</b></p>
-                <ul style="margin-top:5px; margin-bottom:15px; padding-left:20px;">
-                    <li>Nếu chưa đủ 100k, bạn có thể mua lượt chơi bằng số dư.</li>
-                    <li>Giá vé: <b style="color:red">20.000đ / lượt</b>.</li>
-                </ul>
-
-                <hr style="border-top: 1px dashed #ccc;">
-
-                <p>3️⃣ <b>GIẢI THƯỞNG:</b></p>
-                <ul style="margin-top:5px; padding-left:20px;">
-                    <li>100% trúng mã Giftcode tiền mặt.</li>
-                    <li>Giải thưởng từ: <b>5k, 10k, 50k... đến 500k</b>.</li>
-                    <li>Mã trúng dùng để nhập vào mục Giftcode đổi ra tiền thật.</li>
-                </ul>
             </div>
         `,
+        background: 'transparent',
+        showConfirmButton: true,
+        confirmButtonText: "NHẬN TIẾP",
+        confirmButtonColor: "#d32f2f"
+    });
+}
+
+// HÀM XEM THỂ LỆ
+function xemTheLe() {
+    Swal.fire({
+        title: '📜 LUẬT CHƠI',
+        html: `<p>Bốc thăm trúng thưởng miễn phí 100% dành cho tất cả thành viên shop!</p>`,
         icon: 'info',
-        confirmButtonText: 'ĐÃ HIỂU LUẬT CHƠI',
-        confirmButtonColor: '#d32f2f', // Màu đỏ cho nút
-        backdrop: `rgba(0,0,0,0.8)`
+        confirmButtonColor: '#d32f2f'
     });
 }
