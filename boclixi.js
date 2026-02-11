@@ -1,8 +1,14 @@
-// --- CẤU HÌNH TRÒ CHƠI ---
+// --- CẤU HÌNH MÃ QUÀ TẶNG (Phải khớp với file giftcode.js) ---
 const GIA_BOC = 20000;
-const CAC_GIA_TRI = [5000, 10000, 15000, 20000, 30000, 50000, 100000, 200000, 500000];
+const GIFT_MAP = {
+    5000: "TANTHU",
+    10000: "LIXITET",
+    20000: "NAMMOI",
+    50000: "HOANGKUN",
+    100000: "HOANGKUNVIP",
+    500000: "CHUTICH"
+};
 
-// 1. Hàm mở bảng bốc lì xì
 function moModalBoc() {
     const user = localStorage.getItem('hoangUser');
     if(!user) return Swal.fire({
@@ -14,84 +20,84 @@ function moModalBoc() {
     document.getElementById('modalBocLixi').style.display = 'flex';
 }
 
-// 2. Hàm đóng bảng
 function dongModalBoc() {
     document.getElementById('modalBocLixi').style.display = 'none';
 }
 
-// 3. Xử lý bốc lì xì (9 bao lixi)
 async function bocLixi(el) {
-    // Nếu bao này đã lật rồi thì không cho bấm nữa
     if(el.querySelector('.lixi-back').style.display === 'flex') return;
 
     const user = localStorage.getItem('hoangUser');
-    
-    // Kiểm tra số dư từ Firebase
     const snapshot = await db.ref('users/' + user).once('value');
     const userData = snapshot.val();
     const currentBal = userData.balance || 0;
 
     if(currentBal < GIA_BOC) {
         return Swal.fire({
-            title: "Thiếu tiền",
+            title: "THIẾU TIỀN",
             text: `Bạn cần ${GIA_BOC.toLocaleString()}đ để bốc lì xì!`,
             icon: "warning",
+            confirmButtonColor: "#ff0000",
             didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
         });
     }
 
-    // Xác nhận trừ tiền
     const confirm = await Swal.fire({
-        title: 'Xác nhận bốc?',
-        text: `Hệ thống sẽ trừ ${GIA_BOC.toLocaleString()}đ trong tài khoản!`,
+        title: 'XÁC NHẬN BỐC?',
+        html: `Phí bốc là <b style="color:#ff0000">${GIA_BOC.toLocaleString()}đ</b>`,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#d32f2f',
-        confirmButtonText: 'BỐC LUÔN!',
+        confirmButtonColor: '#ff0000',
+        confirmButtonText: 'BỐC NGAY',
+        cancelButtonText: 'HỦY',
         didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
     });
 
     if(!confirm.isConfirmed) return;
 
-    // Tính toán kết quả ngẫu nhiên
+    // 1. Trừ tiền tham gia
+    await db.ref('users/' + user).update({ balance: currentBal - GIA_BOC });
+
+    // 2. Tính toán tỷ lệ rơi mã (Hơi khó trúng 500k cho uy tín)
     let random = Math.random() * 100;
-    let winAmount = 5000;
-    if(random < 50) winAmount = CAC_GIA_TRI[Math.floor(Math.random() * 3)]; // Trúng 5k-15k (50%)
-    else if(random < 90) winAmount = CAC_GIA_TRI[Math.floor(Math.random() * 4) + 3]; // Trúng 20k-50k (40%)
-    else winAmount = CAC_GIA_TRI[Math.floor(Math.random() * 2) + 7]; // Trúng 200k-500k (10%)
+    let winValue = 5000;
+    if(random < 50) winValue = 5000; 
+    else if(random < 85) winValue = 10000;
+    else if(random < 97) winValue = 50000;
+    else winValue = 500000;
 
-    // Cập nhật Database
-    const newBal = currentBal - GIA_BOC + winAmount;
-    await db.ref('users/' + user).update({ balance: newBal });
-    
-    // Lưu lịch sử vào history
-    db.ref('history/' + user).push({
-        product: "🧧 Bốc lì xì may mắn",
-        price: GIA_BOC,
-        date: new Date().toLocaleString('vi-VN'),
-        link: "#",
-        status: "Trúng +" + winAmount.toLocaleString() + "đ"
-    });
+    let giftCode = GIFT_MAP[winValue] || "TANTHU";
 
-    // Hiệu ứng lật bao tại chỗ
+    // 3. Hiệu ứng lật bao tại chỗ
     const lixiBack = el.querySelector('.lixi-back');
-    lixiBack.innerText = winAmount.toLocaleString() + "đ";
+    lixiBack.innerHTML = `<i class="fas fa-gift"></i>`;
     lixiBack.style.display = 'flex';
 
-    // Bắn pháo hoa nếu trúng từ huề vốn trở lên
-    if(winAmount >= GIA_BOC) {
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    // Bắn pháo hoa nếu trúng mã từ 50k trở lên
+    if(winValue >= 50000) {
+        confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors: ['#ff0000', '#ffd700'] });
     }
 
-    // Thông báo kết quả
+    // 4. Thông báo hiện mã Code siêu đẹp
     setTimeout(() => {
         Swal.fire({
-            title: winAmount >= GIA_BOC ? "CHÚC MỪNG!" : "TIẾC QUÁ!",
-            html: `Bạn nhận được: <b style="color:red; font-size:25px;">${winAmount.toLocaleString()}đ</b>`,
-            icon: winAmount >= GIA_BOC ? 'success' : 'info',
+            title: `<span style="color:#ffd700; font-weight:900;">🧧 KẾT QUẢ BỐC LÌ XÌ 🧧</span>`,
+            html: `
+                <div style="padding: 15px; background: #111; border-radius: 10px; border: 1px solid #333;">
+                    <p style="color:#fff; margin-bottom:10px;">Chúc mừng! Bạn đã bốc được gói quà:</p>
+                    <h2 style="color:#ff0000; margin: 5px 0;">${winValue.toLocaleString()}đ</h2>
+                    <div style="margin: 20px 0; padding: 15px; border: 2px dashed #ffd700; background: #000; color: #ffd700; font-size: 28px; font-weight: 900; letter-spacing: 2px; cursor: pointer;" onclick="navigator.clipboard.writeText('${giftCode}'); alert('Đã copy mã!')">
+                        ${giftCode}
+                    </div>
+                    <p style="font-size: 12px; color: #888;">(Bấm vào mã để Copy nhanh)</p>
+                    <p style="font-size: 14px; color: #00ff00; margin-top: 15px; font-weight: bold;">HÃY NHẬP MÃ TẠI MỤC GIFTCODE ĐỂ NHẬN TIỀN!</p>
+                </div>
+            `,
+            confirmButtonColor: "#ff0000",
+            confirmButtonText: "ĐÃ HIỂU",
+            backdrop: `rgba(0,0,0,0.9)`,
             didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
         }).then(() => {
-            // Sau khi bấm OK thì đóng modal và ẩn cái giá trị cũ đi để lần sau bốc lại
             dongModalBoc();
             lixiBack.style.display = 'none';
         });
