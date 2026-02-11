@@ -33,11 +33,15 @@ function banPhaoHoa() {
 }
 
 // --- 2. LOGIC MỞ/ĐÓNG MODAL (Đã sửa lỗi viết hoa) ---
+// Đổi chữ m thành M ở tên hàm moModalCode
 function moModalCode() {
     const user = localStorage.getItem('hoangUser');
     if(!user) return Swal.fire("Lỗi", "Vui lòng đăng nhập để nhập Code!", "error");
+    
     const modal = document.getElementById('modalGiftcode');
-    if(modal) modal.style.display = 'flex';
+    if(modal) {
+        modal.style.display = 'flex';
+    }
 }
 
 function dongModalCode() {
