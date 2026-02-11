@@ -150,24 +150,26 @@ function checkHienThiTet() {
     const timeClose = localStorage.getItem('tetPopupTime2026');
     const now = new Date().getTime();
 
+    // CHỖ CẦN SỬA: Đưa hàm này ra ngoài if để luôn luôn chạy hoa rơi
+    taoHieuUngHoaRoi(); 
+
     if (!timeClose || (now - timeClose > 2 * 60 * 60 * 1000)) {
         setTimeout(() => {
-            document.getElementById('tetPopup').classList.add('active');
-            taoHieuUngHoaRoi();
+            const popup = document.getElementById('tetPopup');
+            if (popup) popup.classList.add('active');
         }, 1000);
-    } else {
-        // taoHieuUngHoaRoi(); // Nếu muốn lúc nào cũng rơi hoa thì bỏ comment dòng này
     }
 }
 
 function dongTet(luuTime) {
-    document.getElementById('tetPopup').classList.remove('active');
+    const popup = document.getElementById('tetPopup');
+    if (popup) popup.classList.remove('active');
     if (luuTime) {
         localStorage.setItem('tetPopupTime2026', new Date().getTime());
     }
 }
 
-// 4. Hiệu ứng hoa rơi
+// 4. Hiệu ứng hoa rơi (Giữ nguyên phần này)
 function taoHieuUngHoaRoi() {
     const symbols = ['🌸', '🌼', '🧧', '💰']; 
     setInterval(() => {
@@ -183,4 +185,5 @@ function taoHieuUngHoaRoi() {
     }, 300);
 }
 
+// Chạy hàm khởi tạo
 checkHienThiTet();
