@@ -379,3 +379,16 @@ nav {
 .lixi-card img { width: 100%; cursor: pointer; transition: 0.3s; }
 .lixi-card:hover { transform: scale(1.1); }
 .btn-lixi { padding: 10px 15px; border-radius: 15px; border: none; cursor: pointer; font-size: 12px; }
+
+#modalBocLixi {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    z-index: 1000000; align-items: center; justify-content: center; backdrop-filter: blur(5px);
+}
+.lixi-box {
+    background: linear-gradient(145deg, #d41414, #8b0000);
+    width: 90%; max-width: 450px; padding: 25px; border-radius: 25px;
+    border: 3px solid #ffea00; text-align: center; box-shadow: 0 0 30px rgba(255,0,0,0.5);
+}
+.lixi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
+.lixi-card img { width: 100%; cursor: pointer; transition: 0.3s; }
+.btn-lixi { padding: 10px 15px; border-radius: 15px; border: none; cursor: pointer; }
