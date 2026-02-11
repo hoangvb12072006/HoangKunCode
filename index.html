@@ -1770,7 +1770,34 @@ function sendCardAuto() {
 <script src="boclixi.js"></script>
 <script src="thongbao.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div id="modalBocLixi">
+    <div class="lixi-box">
+        <h2 style="color: #ffd700; text-shadow: 0 0 10px red;">🧧 LÌ XÌ MAY MẮN 🧧</h2>
+        
+        <div class="user-info-bar">
+            <div>💰 Ví: <b id="lx-balance" style="color: #00ff00;">0đ</b></div>
+            <div>🎁 Lượt: <b id="lx-turns" style="color: #ffea00;">0</b></div>
+        </div>
+
+        <div class="lixi-grid">
+            <div class="lixi-card" onclick="startBocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+            <div class="lixi-card" onclick="startBocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+            <div class="lixi-card" onclick="startBocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+            <div class="lixi-card" onclick="startBocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+            <div class="lixi-card" onclick="startBocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+            <div class="lixi-card" onclick="startBocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+        </div>
+
+        <p id="lx-status" style="color: #ffd700; font-size: 12px;">Chọn 1 bao lì xì để thử vận may!</p>
+
+        <div style="margin-top: 15px;">
+            <button class="btn-lixi" style="background: #ffd700;" onclick="showTheLe()">THỂ LỆ</button>
+            <button class="btn-lixi" style="background: #fff;" onclick="showLichSu()">LỊCH SỬ</button>
+            <button class="btn-lixi" style="background: #000; color: #fff;" onclick="closeLixi()">ĐÓNG</button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
 </body>
