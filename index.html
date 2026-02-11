@@ -733,59 +733,74 @@ const products = [
     }
 }
 
-   function buyItem(name, price, downloadLink) {
+  function buyItem(name, price, downloadLink) {
     const user = localStorage.getItem('hoangUser');
-    if(!user) return showAuth(false);
+    if (!user) return showAuth(false);
 
     const currentBal = parseInt(localStorage.getItem('hoangBal') || 0);
-    if(currentBal < price) {
-        Swal.fire("Thiếu tiền", "Số dư không đủ!", "warning").then(() => showRecharge());
+    if (currentBal < price) {
+        Swal.fire("Thiếu tiền", "Số dư không đủ để mua sản phẩm này!", "warning").then(() => showRecharge());
         return;
     }
 
     Swal.fire({
-        title: 'Xác nhận mua?',
-        text: `Mua ${name} với giá ${price.toLocaleString()}đ?`,
+        title: 'XÁC NHẬN MUA',
+        html: `Bạn có muốn mua: <b>${name}</b><br>Với giá: <b style="color:red">${price.toLocaleString()}đ</b>?`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#ff0000',
-        confirmButtonText: 'MUA NGAY'
+        cancelButtonColor: '#666',
+        confirmButtonText: 'MUA NGAY',
+        cancelButtonText: 'HỦY'
     }).then((result) => {
         if (result.isConfirmed) {
             const newBal = currentBal - price;
-            const now = new Date().toLocaleString();
+            const now = new Date().toLocaleString('vi-VN');
 
-            // Chỉ lưu vào 1 bảng duy nhất là 'history' nhưng có thêm link
+            // 1. Ghi lịch sử mua hàng và link tải
             db.ref('history/' + user).push({
                 product: name,
                 price: price,
                 date: now,
-                link: downloadLink, // Lưu link vào đây luôn
+                link: downloadLink,
                 status: "Thành công"
             });
 
-// TẶNG LƯỢT QUAY: Cứ mỗi 50.000đ giá trị món hàng được 1 lượt
+            // 2. Xử lý tặng quà và cập nhật số dư
+            // Tặng lượt Vòng Quay (Cứ 50k tặng 1 lượt freeSpins)
             let bonusSpins = Math.floor(price / 50000); 
 
-            if (bonusSpins > 0) {
-                db.ref('users/' + user).once('value').then(snapshot => {
-                    let userData = snapshot.val() || {};
-                    let currentFreeSpins = userData.freeSpins || 0;
-                    
-                    db.ref('users/' + user).update({
-                        balance: newBal,
-                        freeSpins: currentFreeSpins + bonusSpins
-                    });
-                    
-                    Swal.fire("Thành công", `Bạn đã mua ${name} và được tặng ${bonusSpins} lượt quay!`, "success");
+            db.ref('users/' + user).once('value').then(snapshot => {
+                let userData = snapshot.val() || {};
+                let currentFreeSpins = userData.freeSpins || 0;
+                
+                // Cập nhật số dư và lượt quay vòng quay
+                db.ref('users/' + user).update({
+                    balance: newBal,
+                    freeSpins: currentFreeSpins + bonusSpins
                 });
-            } else {
-                db.ref('users/' + user).update({ balance: newBal });
-                Swal.fire("Thành công", `Bạn đã mua ${name} thành công!`, "success");
-            }
-        } // Kết thúc if (result.isConfirmed)
-    }); // Kết thúc .then của Swal
-} // Kết thúc function buyItem
+
+                // ====================================================
+                // 🔥 KÍCH HOẠT TÍCH LŨY LÌ XÌ (QUẢN LÝ LƯỢT MUA)
+                // Hàm này sẽ tự hiện thông báo nếu đủ mốc 100k tiêu dùng
+                // ====================================================
+                tichLuyLuotBoc(user, price); 
+                // ====================================================
+
+                // 3. Thông báo kết quả cho khách
+                if (bonusSpins > 0) {
+                    Swal.fire({
+                        title: "MUA THÀNH CÔNG!",
+                        html: `Bạn đã mua <b>${name}</b>.<br>Được tặng thêm: <b style="color:red">${bonusSpins}</b> lượt Vòng Quay May Mắn!`,
+                        icon: "success"
+                    });
+                } else {
+                    Swal.fire("MUA THÀNH CÔNG!", `Sản phẩm <b>${name}</b> đã được thêm vào kho của bạn.`, "success");
+                }
+            });
+        }
+    });
+}
             
   function loadHistory(user) {
     db.ref('history/' + user).on('value', snap => {
