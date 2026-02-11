@@ -1,4 +1,4 @@
-// --- CẤU HÌNH MÃ QUÀ TẶNG (Phải khớp với file giftcode.js) ---
+// --- CẤU HÌNH MÃ QUÀ TẶNG ---
 const GIA_BOC = 20000;
 const GIFT_MAP = {
     5000: "TANTHU",
@@ -10,23 +10,29 @@ const GIFT_MAP = {
 };
 
 function moModalBoc() {
+    console.log("Đang mở modal bốc lì xì...");
     const user = localStorage.getItem('hoangUser');
     if(!user) return Swal.fire({
         title: "Lỗi",
         text: "Vui lòng đăng nhập để bốc lì xì!",
         icon: "error",
-        didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
+        didOpen: () => { Swal.getContainer().style.zIndex = "10000000"; }
     });
-    document.getElementById('modalBocLixi').style.display = 'flex';
+    
+    const modal = document.getElementById('modalBocLixi');
+    if(modal) {
+        modal.style.display = 'flex';
+    } else {
+        console.error("Không tìm thấy ID modalBocLixi trong HTML!");
+    }
 }
 
 function dongModalBoc() {
-    document.getElementById('modalBocLixi').style.display = 'none';
+    const modal = document.getElementById('modalBocLixi');
+    if(modal) modal.style.display = 'none';
 }
 
 async function bocLixi(el) {
-    if(el.querySelector('.lixi-back').style.display === 'flex') return;
-
     const user = localStorage.getItem('hoangUser');
     const snapshot = await db.ref('users/' + user).once('value');
     const userData = snapshot.val();
@@ -35,71 +41,54 @@ async function bocLixi(el) {
     if(currentBal < GIA_BOC) {
         return Swal.fire({
             title: "THIẾU TIỀN",
-            text: `Bạn cần ${GIA_BOC.toLocaleString()}đ để bốc lì xì!`,
+            text: "Bạn cần 20.000đ để bốc!",
             icon: "warning",
-            confirmButtonColor: "#ff0000",
-            didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
+            didOpen: () => { Swal.getContainer().style.zIndex = "10000000"; }
         });
     }
 
     const confirm = await Swal.fire({
         title: 'XÁC NHẬN BỐC?',
-        html: `Phí bốc là <b style="color:#ff0000">${GIA_BOC.toLocaleString()}đ</b>`,
+        text: "Phí bốc là 20.000đ",
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#ff0000',
-        confirmButtonText: 'BỐC NGAY',
-        cancelButtonText: 'HỦY',
-        didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
+        confirmButtonText: 'BỐC LUÔN',
+        didOpen: () => { Swal.getContainer().style.zIndex = "10000000"; }
     });
 
     if(!confirm.isConfirmed) return;
 
-    // 1. Trừ tiền tham gia
+    // Trừ tiền
     await db.ref('users/' + user).update({ balance: currentBal - GIA_BOC });
 
-    // 2. Tính toán tỷ lệ rơi mã (Hơi khó trúng 500k cho uy tín)
+    // Tính tỷ lệ trúng mã
     let random = Math.random() * 100;
-    let winValue = 5000;
-    if(random < 50) winValue = 5000; 
-    else if(random < 85) winValue = 10000;
-    else if(random < 97) winValue = 50000;
-    else winValue = 500000;
+    let winVal = 5000;
+    if(random < 60) winVal = 5000;
+    else if(random < 90) winVal = 10000;
+    else if(random < 99) winVal = 50000;
+    else winVal = 500000;
 
-    let giftCode = GIFT_MAP[winValue] || "TANTHU";
+    let code = GIFT_MAP[winVal] || "TANTHU";
 
-    // 3. Hiệu ứng lật bao tại chỗ
-    const lixiBack = el.querySelector('.lixi-back');
-    lixiBack.innerHTML = `<i class="fas fa-gift"></i>`;
-    lixiBack.style.display = 'flex';
+    // Hiệu ứng pháo hoa
+    if(winVal >= 50000) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
-    // Bắn pháo hoa nếu trúng mã từ 50k trở lên
-    if(winValue >= 50000) {
-        confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors: ['#ff0000', '#ffd700'] });
-    }
-
-    // 4. Thông báo hiện mã Code siêu đẹp
-    setTimeout(() => {
-        Swal.fire({
-            title: `<span style="color:#ffd700; font-weight:900;">🧧 KẾT QUẢ BỐC LÌ XÌ 🧧</span>`,
-            html: `
-                <div style="padding: 15px; background: #111; border-radius: 10px; border: 1px solid #333;">
-                    <p style="color:#fff; margin-bottom:10px;">Chúc mừng! Bạn đã bốc được gói quà:</p>
-                    <h2 style="color:#ff0000; margin: 5px 0;">${winValue.toLocaleString()}đ</h2>
-                    <div style="margin: 20px 0; padding: 15px; border: 2px dashed #ffd700; background: #000; color: #ffd700; font-size: 28px; font-weight: 900; letter-spacing: 2px; cursor: pointer;" onclick="navigator.clipboard.writeText('${giftCode}'); alert('Đã copy mã!')">
-                        ${giftCode}
-                    </div>
-                    <p style="font-size: 12px; color: #888;">(Bấm vào mã để Copy nhanh)</p>
-                    <p style="font-size: 14px; color: #00ff00; margin-top: 15px; font-weight: bold;">HÃY NHẬP MÃ TẠI MỤC GIFTCODE ĐỂ NHẬN TIỀN!</p>
+    // Hiện mã Code cực đẹp
+    Swal.fire({
+        title: `<span style="color:#ffd700">🧧 QUÀ CỦA BẠN 🧧</span>`,
+        html: `
+            <div style="background:#000; padding:20px; border:2px dashed #ffd700; border-radius:10px;">
+                <p style="color:#fff;">Bạn trúng gói: <b style="color:red">${winVal.toLocaleString()}đ</b></p>
+                <div style="font-size:30px; font-weight:bold; color:#ffd700; margin:15px 0; cursor:pointer;" onclick="navigator.clipboard.writeText('${code}'); alert('Đã copy mã!')">
+                    ${code}
                 </div>
-            `,
-            confirmButtonColor: "#ff0000",
-            confirmButtonText: "ĐÃ HIỂU",
-            backdrop: `rgba(0,0,0,0.9)`,
-            didOpen: () => { Swal.getContainer().style.zIndex = "1000000"; }
-        }).then(() => {
-            dongModalBoc();
-            lixiBack.style.display = 'none';
-        });
-    }, 800);
+                <p style="font-size:12px; color:#888;">(Bấm vào mã để Copy và nhập vào mục Giftcode)</p>
+            </div>
+        `,
+        backdrop: `rgba(0,0,0,0.9)`,
+        didOpen: () => { Swal.getContainer().style.zIndex = "10000000"; }
+    }).then(() => {
+        dongModalBoc();
+    });
 }
