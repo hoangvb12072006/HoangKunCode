@@ -1,6 +1,6 @@
 // --- DANH SÁCH MÃ GIFTCODE (Update 2026) ---
 const validCodes = {
-    // === NHÓM CODE TẾT (Số lượng lớn) ===
+    // === NHÓM TẾT ĐỘC QUYỀN ===
     "LIXI20K": 20000,
     "TET2026": 10000,
     "LIXITET": 15000,
@@ -8,37 +8,52 @@ const validCodes = {
     "KHAISUAN": 50000,
     "PHATLOC": 88000,
     "DAI_CAT": 33333,
+    "AN_KHANG": 22000,
+    "THINH_VUONG": 22000,
+    "VAN_SU_NHU_Y": 45000,
+    "LIXI_MAY_MAN": 10000,
+    "BAO_LIXI_DO": 15000,
 
-    // === NHÓM CODE THƯƠNG HIỆU ===
+    // === NHÓM THƯƠNG HIỆU (PR ADMIN) ===
     "HOANGKUN": 50000,
     "HOANGKUNVIP": 100000,
     "HOANGDEPTRAI": 20000,
     "SHOPUYTI": 10000,
     "ADMIN_KUN": 50000,
+    "HOANGKUNCODE": 30000,
+    "ID_VN_FREE": 10000,
+    "KUN_MMO": 25000,
 
-    // === NHÓM CODE TÂN THỦ & MIỄN PHÍ ===
+    // === NHÓM CODE "BÀO TIỀN" SHOP (Mệnh giá cao) ===
+    "SUPERSALE": 99000,
+    "GIFT_TRI_AN": 35000,
+    "MA_VIP_PRO": 150000,
+    "CHUTICH": 500000,
+    "DAI_GIA_NAP_THE": 250000,
+    "TRUM_GIFTCODE": 300000,
+    "FREE_MONEY_99": 99999,
+
+    // === NHÓM CODE "HÊN XUI" ===
+    "MAYMAN": 12000,
+    "NHAN_PHAM": 5000,
+    "XUI_GHE": 1000,
+    "GIAU_SANG": 77000,
+    "PHAT_TAI_ROI": 88888,
+
+    // === NHÓM CODE TÂN THỦ & SỰ KIỆN ===
     "TANTHU": 5000,
     "CODEFREE": 5000,
     "TESTNV": 10000,
     "KHOINGHIEP": 15000,
     "CHAO_MUNG": 10000,
-
-    // === NHÓM CODE VIP (Mệnh giá cao) ===
-    "VIPMEMBER": 50000,
-    "SUPERVIP": 200000,
-    "TRIAN": 30000,
-    "LOVEHOANGKUN": 25000,
-    "KHACHHANGTHANTHIET": 70000,
-    "GIAM_GIA_99K": 99000,
-    "CHUTICH": 500000, // Code siêu VIP cho khách nạp nhiều
-
-    // === NHÓM CODE BỔ SUNG ===
+    "QUAY_LAI_SHOP": 20000,
+    "FOLLOW_FB": 10000,
+    "THU_THACH": 30000,
+    "CHAMPION": 100000,
+    "FAN_CUNG": 40000,
     "LIXI30K": 30000,
-    "GIFT88K": 88000,
-    "MAYMAN": 12000,
     "UP_TOP": 40000
 };
-
 // --- LOGIC XỬ LÝ (GIỮ NGUYÊN) ---
 function moModalCode() {
     const user = localStorage.getItem('hoangUser');
