@@ -260,237 +260,224 @@
         </ul>
     </div>
 
-    <script>
-        // --- CẤU HÌNH FIREBASE ---
-        const firebaseConfig = { 
-            apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g", 
-            databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com" 
-        };
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+   <script>
+    // --- 1. CẤU HÌNH FIREBASE ---
+    const firebaseConfig = { 
+        apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g", 
+        databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com" 
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-       // CẤU HÌNH TỈ LỆ TRÚNG THƯỞNG (Tổng tỉ lệ phải = 100%)
-const listGiaiThuong = [
-  { 
-    text: "100.000đ", 
-    tiLe: 0.5 // 0.1% (Cực hiếm)
-  },
-  { 
-    text: "Thêm 1 lượt", 
-    tiLe: 15 // 15% (Dễ)
-  },
-  { 
-    text: "20.000đ", 
-    tiLe: 10 // 10% (Vừa)
-  },
-  { 
-    text: "Thêm 2 lượt", 
-    tiLe: 5 // 5% (Hơi hiếm)
-  },
-  { 
-    text: "50.000đ", 
-    tiLe: 2 // 2% (Khó)
-  },
-  { 
-    text: "10.000đ", 
-    tiLe: 30 // 30% (Rất dễ - Tiền nhỏ)
-  },
-  { 
-    text: "500.000đ", 
-    tiLe: 0.1 // 0% (Không bao giờ trúng - hoặc để 0.01 nếu muốn có tí hy vọng)
-  },
-  { 
-    text: "Xui quá", 
-    tiLe: 37.9 // 37.9% (Dễ nhất - Xịt)
-  }
-];
+    // --- 2. CẤU HÌNH DANH SÁCH GIẢI THƯỞNG & TỈ LỆ ---
+    // Lưu ý: Thứ tự này phải khớp 100% với thứ tự thẻ <div class="segment"> trong HTML từ trên xuống
+    const listGiaiThuong = [
+        { name: "100.000đ",    value: 100000, type: "money", percent: 0.1 },  // Ô 1 (Góc 0)
+        { name: "Thêm 1 lượt", value: 1,      type: "spin",  percent: 15 },   // Ô 2
+        { name: "20.000đ",     value: 20000,  type: "money", percent: 10 },   // Ô 3
+        { name: "Thêm 2 lượt", value: 2,      type: "spin",  percent: 5 },    // Ô 4
+        { name: "50.000đ",     value: 50000,  type: "money", percent: 2 },    // Ô 5
+        { name: "10.000đ",     value: 10000,  type: "money", percent: 30 },   // Ô 6
+        { name: "500.000đ",    value: 500000, type: "money", percent: 0 },    // Ô 7 (Tỉ lệ 0%)
+        { name: "Xui quá",     value: 0,      type: "miss",  percent: 37.9 }  // Ô 8
+    ];
 
-// Hàm tính toán kết quả dựa trên tỉ lệ
-function quaySo() {
-    const tongTiLe = 100;
-    let random = Math.random() * tongTiLe; // Random từ 0 đến 100
-    let currentTotal = 0;
+    let currentSpins = 0;
+    let isSpinning = false;
+    let currentRotation = 0;
+    const user = localStorage.getItem('hoangUser');
 
-    for (let i = 0; i < listGiaiThuong.length; i++) {
-        currentTotal += listGiaiThuong[i].tiLe;
-        if (random <= currentTotal) {
-            return i; // Trả về vị trí giải thưởng trúng (0 đến 7)
+    // --- 3. KHỞI TẠO ---
+    function init() {
+        if(!user) {
+            Swal.fire({title: "Chưa đăng nhập", text: "Vui lòng đăng nhập để quay!", icon: "warning"})
+            .then(() => window.location.href='index.html');
+            return;
+        }
+        // Lấy lượt quay
+        db.ref('users/' + user).on('value', snap => {
+            const data = snap.val();
+            currentSpins = (data && data.freeSpins) ? data.freeSpins : 0;
+            document.getElementById('spin-count').innerText = currentSpins;
+            toggleSpinButton(currentSpins > 0);
+        });
+
+        // Tải lịch sử
+        loadGlobalHistory();
+    }
+
+    function toggleSpinButton(enable) {
+        const btn = document.getElementById('btnSpin');
+        if(enable && !isSpinning) {
+            btn.style.opacity = "1"; btn.style.pointerEvents = "auto"; btn.style.filter = "none";
+        } else {
+            btn.style.opacity = "0.5"; btn.style.pointerEvents = "none"; btn.style.filter = "grayscale(100%)";
         }
     }
-    return 7; // Nếu lỗi thì trả về ô "Xui quá"
-}
-        
-        let currentSpins = 0;
-        let isSpinning = false;
-        let currentRotation = 0;
-        const user = localStorage.getItem('hoangUser');
 
-        function init() {
-            if(!user) {
-                Swal.fire({title: "Chưa đăng nhập", text: "Vui lòng đăng nhập để quay!", icon: "warning"})
-                .then(() => window.location.href='index.html');
+    // --- 4. LOGIC TÍNH TOÁN GIẢI THƯỞNG ---
+    function getRandomReward() {
+        const rand = Math.random() * 100;
+        let cumulative = 0;
+        
+        for (let i = 0; i < listGiaiThuong.length; i++) {
+            cumulative += listGiaiThuong[i].percent;
+            if (rand <= cumulative) {
+                return { ...listGiaiThuong[i], index: i };
+            }
+        }
+        // Nếu tính toán lỗi thì trả về ô cuối cùng (Xui quá)
+        return { ...listGiaiThuong[7], index: 7 };
+    }
+
+    // --- 5. HÀM QUAY (ĐÃ SỬA LỖI) ---
+    function spinUser() {
+        if (isSpinning || currentSpins <= 0) return;
+        
+        isSpinning = true;
+        toggleSpinButton(false);
+        
+        // Trừ lượt quay ngay lập tức
+        db.ref('users/' + user).update({ freeSpins: currentSpins - 1 });
+
+        // 1. Tính kết quả
+        const gift = getRandomReward();
+        
+        // 2. Tính góc quay
+        // Mỗi ô chiếm 45 độ (360 / 8 = 45)
+        // Ô số 1 ở góc 0 độ. Muốn kim chỉ vào ô i, ta phải quay ngược lại - (i * 45)
+        const segmentAngle = 45; 
+        
+        // Tính góc để kim chỉ vào GIỮA ô đó (cộng thêm một chút random cho tự nhiên)
+        // Công thức: Quay nhiều vòng + Góc mục tiêu + Random lệch tâm chút xíu
+        const targetIndex = gift.index;
+        
+        // Điều chỉnh góc quay: Do CSS ô 1 bắt đầu từ 0 độ (góc 12h lệch phải), ta cần tính toán kỹ
+        // Cách đơn giản nhất: Quay ngược chiều kim đồng hồ để ô đó chạy đến vị trí kim (kim ở 12h)
+        const stopAngle = 360 - (targetIndex * segmentAngle) - (segmentAngle / 2); 
+        
+        const spinRounds = 360 * 8; // Quay ít nhất 8 vòng
+        const randomOffset = Math.floor(Math.random() * 30) - 15; // Lệch +/- 15 độ cho tự nhiên
+
+        // Cộng dồn vào góc quay hiện tại để nó quay tiếp chứ không giật lại từ đầu
+        // currentRotation % 360 để lấy phần dư, giúp tính toán mượt hơn
+        const additionalRotation = spinRounds + stopAngle;
+        
+        // Mẹo: Luôn cộng thêm để quay theo chiều kim đồng hồ
+        // Tìm bội số của 360 lớn hơn hiện tại để quay tiếp
+        const currentMod = currentRotation % 360;
+        currentRotation += (spinRounds + stopAngle - currentMod) + randomOffset;
+
+        // 3. Thực hiện quay
+        const wheel = document.getElementById('wheel');
+        wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+        // 4. Đợi quay xong (5 giây) thì báo kết quả
+        setTimeout(() => {
+            showResult(gift);
+            isSpinning = false;
+            // Nếu còn lượt thì bật lại nút
+            if(currentSpins > 0) toggleSpinButton(true);
+        }, 5000);
+    }
+
+    // --- 6. HIỂN THỊ KẾT QUẢ ---
+    function showResult(gift) {
+        // Lưu lịch sử chung
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
+        
+        const globalHistoryData = {
+            username: user,
+            rewardName: gift.name,
+            type: gift.type,
+            time: timeString,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        };
+        db.ref('global_history').push(globalHistoryData);
+
+        // Hiển thị thông báo
+        if (gift.type === 'miss') {
+            Swal.fire({
+                title: "Tiếc quá!", text: "Chúc bạn may mắn lần sau!", icon: "info",
+                background: '#222', color: '#fff', confirmButtonColor: '#444'
+            });
+        } else {
+            fireConfetti();
+            let msg = `Bạn nhận được ${gift.name}`;
+            if(gift.type === 'spin') msg = `Chúc mừng! Bạn được ${gift.name}`;
+
+            Swal.fire({
+                title: "CHÚC MỪNG!", text: msg, icon: "success",
+                background: '#fff', color: '#d32f2f',
+                confirmButtonText: "NHẬN QUÀ", confirmButtonColor: '#d32f2f'
+            }).then(() => {
+                // Cộng thưởng vào Database
+                db.ref('users/' + user).once('value').then(snap => {
+                    const data = snap.val();
+                    let updates = {};
+                    if (gift.type === 'money') {
+                        updates.balance = (data.balance || 0) + gift.value;
+                    } else if (gift.type === 'spin') {
+                        updates.freeSpins = (data.freeSpins || 0) + gift.value;
+                    }
+                    db.ref('users/' + user).update(updates);
+                });
+            });
+        }
+    }
+
+    // --- 7. CÁC HÀM PHỤ TRỢ ---
+    function loadGlobalHistory() {
+        db.ref('global_history').limitToLast(20).on('value', snap => {
+            const list = document.getElementById('historyList');
+            list.innerHTML = ""; 
+            
+            if(!snap.exists()) {
+                list.innerHTML = '<li class="history-item" style="justify-content:center; color:#555">Chưa có ai quay. Mở hàng đi bạn!</li>';
                 return;
             }
-            // Lấy lượt quay cá nhân
-            db.ref('users/' + user).on('value', snap => {
-                const data = snap.val();
-                currentSpins = (data && data.freeSpins) ? data.freeSpins : 0;
-                document.getElementById('spin-count').innerText = currentSpins;
-                toggleSpinButton(currentSpins > 0);
+
+            let items = [];
+            snap.forEach(child => { items.push(child.val()); });
+
+            items.reverse().forEach(item => {
+                let colorClass = 'bad';
+                let icon = '';
+                if(item.type === 'money') { colorClass = 'money'; icon = '<i class="fas fa-coins"></i>'; }
+                if(item.type === 'spin') { colorClass = 'spin'; icon = '<i class="fas fa-sync"></i>'; }
+
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                // Ẩn bớt tên người dùng
+                const displayName = item.username.length > 4 ? item.username.substring(0,3) + '***' : item.username;
+
+                li.innerHTML = `
+                    <div class="h-left">
+                        <span class="h-user"><i class="fas fa-user-circle"></i> ${displayName}</span>
+                        <span class="h-time">${item.time}</span>
+                    </div>
+                    <div class="h-right">
+                        <span class="h-reward ${colorClass}">${icon} ${item.rewardName}</span>
+                    </div>
+                `;
+                list.appendChild(li);
             });
+        });
+    }
 
-            // KÍCH HOẠT LỊCH SỬ TOÀN SERVER
-            loadGlobalHistory();
-        }
+    function fireConfetti() {
+        var duration = 3000;
+        var end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        }());
+    }
 
-        function toggleSpinButton(enable) {
-            const btn = document.getElementById('btnSpin');
-            if(enable && !isSpinning) {
-                btn.style.opacity = "1"; btn.style.pointerEvents = "auto"; btn.style.filter = "none";
-            } else {
-                btn.style.opacity = "0.5"; btn.style.pointerEvents = "none"; btn.style.filter = "grayscale(100%)";
-            }
-        }
-
-        function getRandomReward() {
-            const rand = Math.random() * 100;
-            let cumulative = 0;
-            for (let i = 0; i < rewards.length; i++) {
-                cumulative += rewards[i].percent;
-                if (rand <= cumulative) return { ...rewards[i], index: i };
-            }
-            return { ...rewards[0], index: 0 };
-        }
-
-        function spinUser() {
-            if (isSpinning || currentSpins <= 0) return;
-            isSpinning = true;
-            toggleSpinButton(false);
-           
-            db.ref('users/' + user).update({ freeSpins: currentSpins - 1 });
-
-            const gift = getRandomReward();
-            const segmentAngle = gift.index * 45; 
-            const stopAngle = 360 - segmentAngle - 22.5; 
-            const spinRounds = 360 * 10;
-            const randomOffset = Math.floor(Math.random() * 20) - 10; 
-
-            currentRotation += spinRounds + stopAngle - (currentRotation % 360) + randomOffset;
-           
-            const wheel = document.getElementById('wheel');
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-            setTimeout(() => {
-                showResult(gift);
-                isSpinning = false;
-                if(currentSpins > 0) toggleSpinButton(true);
-            }, 5000);
-        }
-
-        function showResult(gift) {
-            // --- QUAN TRỌNG: LƯU VÀO GLOBAL HISTORY ---
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
-            
-            // Lưu vào 'global_history' thay vì 'users/.../history'
-            // Để tất cả mọi người cùng xem được
-            const globalHistoryData = {
-                username: user, // Tên người chơi
-                rewardName: gift.name,
-                type: gift.type,
-                time: timeString,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
-            db.ref('global_history').push(globalHistoryData);
-
-
-            if (gift.type === 'miss') {
-                Swal.fire({
-                    title: "Tiếc quá!", text: "Chúc bạn may mắn lần sau!", icon: "info",
-                    background: '#222', color: '#fff'
-                });
-            } else {
-                fireConfetti();
-                let msg = `Bạn nhận được ${gift.name}`;
-                if(gift.type === 'spin') msg = `Chúc mừng! Bạn được ${gift.name}`;
-
-                Swal.fire({
-                    title: "CHÚC MỪNG!", text: msg, icon: "success",
-                    background: '#fff', color: '#d32f2f',
-                    confirmButtonText: "NHẬN QUÀ", confirmButtonColor: '#d32f2f'
-                }).then(() => {
-                    db.ref('users/' + user).once('value').then(snap => {
-                        const data = snap.val();
-                        let updates = {};
-                        if (gift.type === 'money') {
-                            updates.balance = (data.balance || 0) + gift.value;
-                        } else if (gift.type === 'spin') {
-                            updates.freeSpins = (data.freeSpins || 0) + gift.value;
-                        }
-                        db.ref('users/' + user).update(updates);
-                    });
-                });
-            }
-        }
-
-        // --- HÀM TẢI LỊCH SỬ CHUNG ---
-        function loadGlobalHistory() {
-            // Lấy 20 lượt quay mới nhất từ toàn server
-            db.ref('global_history').limitToLast(20).on('value', snap => {
-                const list = document.getElementById('historyList');
-                list.innerHTML = ""; 
-                
-                if(!snap.exists()) {
-                    list.innerHTML = '<li class="history-item" style="justify-content:center; color:#555">Chưa có ai quay. Mở hàng đi bạn!</li>';
-                    return;
-                }
-
-                let items = [];
-                snap.forEach(child => {
-                    items.push(child.val());
-                });
-
-                // Đảo ngược để mới nhất lên đầu
-                items.reverse().forEach(item => {
-                    let colorClass = 'bad';
-                    let icon = '';
-                    if(item.type === 'money') { colorClass = 'money'; icon = '<i class="fas fa-coins"></i>'; }
-                    if(item.type === 'spin') { colorClass = 'spin'; icon = '<i class="fas fa-sync"></i>'; }
-
-                    const li = document.createElement('li');
-                    li.className = 'history-item';
-                    
-                    // Che bớt tên người dùng cho bảo mật (VD: hoang... -> hoa***)
-                    // Hoặc để nguyên cũng được. Ở đây mình để nguyên cho uy tín.
-                    const displayName = item.username.length > 10 ? item.username.substring(0,8) + '...' : item.username;
-
-                    li.innerHTML = `
-                        <div class="h-left">
-                            <span class="h-user"><i class="fas fa-user-circle"></i> ${displayName}</span>
-                            <span class="h-time">${item.time}</span>
-                        </div>
-                        <div class="h-right">
-                            <span class="h-reward ${colorClass}">${icon} ${item.rewardName}</span>
-                        </div>
-                    `;
-                    list.appendChild(li);
-                });
-            });
-        }
-
-        function fireConfetti() {
-            var duration = 3000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
-            }, 250);
-        }
-
-        init();
-    </script>
+    // Chạy khi tải trang
+    init();
+</script>
 </body>
 </html>
