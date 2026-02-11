@@ -12,6 +12,67 @@
     
     <style>
 
+        /* Container chứa các nút chức năng bên trái */
+.action-sidebar-left {
+    position: fixed;
+    bottom: 30px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Khoảng cách giữa các nút */
+    z-index: 99999;
+}
+
+/* Nút Bốc Lì Xì */
+.lixi-trigger {
+    width: 65px;
+    height: 65px;
+    background: radial-gradient(circle, #ff0000, #b71c1c);
+    border-radius: 50%;
+    border: 2px solid #ffea00;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 15px #ff0000;
+    animation: bounce 2s infinite;
+}
+
+/* Nút Vòng Quay (Sửa lại từ .spin-sticker) */
+.spin-trigger {
+    width: 65px;
+    height: 65px;
+    background: radial-gradient(circle, #ff0000, #800000);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+    border: 2px solid #fff;
+    transition: 0.3s;
+}
+
+.spin-trigger i {
+    font-size: 30px;
+    color: #fff;
+    animation: spinInfinite 4s linear infinite;
+}
+
+.trigger-tag {
+    position: absolute;
+    bottom: -5px;
+    background: #ffff00;
+    color: #ff0000;
+    font-size: 8px;
+    font-weight: 900;
+    padding: 2px 5px;
+    border-radius: 10px;
+    border: 1px solid #ff0000;
+    white-space: nowrap;
+}
+
   #modalBocLixi {
     display: none; 
     position: fixed; 
@@ -1633,19 +1694,23 @@ function sendCardAuto() {
 </script>
 
     <style>
-    #live-chat {
-        position: fixed; bottom: 80px; left: 20px; /* Góc trái dưới, trên cái thông báo ảo */
-        width: 300px; height: 350px;
-        background: rgba(0, 0, 0, 0.9);
-        border: 1px solid #d32f2f;
-        border-radius: 10px;
-        z-index: 9998;
-        display: flex; flex-direction: column;
-        box-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
-        font-family: 'Roboto', sans-serif;
-        overflow: hidden;
-        transition: 0.3s;
-    }
+   #live-chat {
+    position: fixed; 
+    bottom: 80px; 
+    right: 20px; /* Đổi left thành right để đẩy sang bên phải */
+    width: 300px; 
+    height: 350px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #d32f2f;
+    border-radius: 10px;
+    z-index: 9998;
+    display: flex; 
+    flex-direction: column;
+    box-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+    transition: 0.3s;
+}
 
     /* Tiêu đề chat */
     .chat-header {
