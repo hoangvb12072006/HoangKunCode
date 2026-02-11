@@ -89,7 +89,8 @@ function xulyNhapCode() {
                     title: "NHẬN THƯỞNG THÀNH CÔNG!",
                     html: `Bạn vừa nhập mã <b>${code}</b><br>Nhận được: <b style="color:red; font-size:24px;">+${rewardAmount.toLocaleString()}đ</b>`,
                     icon: "success",
-                    backdrop: `rgba(0,0,123,0.4) url("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueW9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/26tOZ4GO9G4v9n9S0/giphy.gif") center top no-repeat`
+                    // SỬA DÒNG NÀY: Đổi từ màu xanh sang màu đen mờ
+                    backdrop: `rgba(0,0,0,0.8) url("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueW9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6bm9ueXN6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/26tOZ4GO9G4v9n9S0/giphy.gif") center top no-repeat`
                 });
             });
         }
