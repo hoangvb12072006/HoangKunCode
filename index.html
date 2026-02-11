@@ -1084,24 +1084,30 @@ function closeProfile() {
     <span style="font-size: 8px; color: #fff; font-weight: bold; margin-top: -2px;">BỐC LÌ XÌ</span>
 </div>
 
-<div id="modalBocLixi" style="display: none; position: fixed; z-index: 2000000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center;">
-    <div style="background: #1a1a1a; padding: 25px; border: 2px solid #ffea00; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; position: relative; box-shadow: 0 0 30px #ff0000;">
-        <span onclick="dongModalBoc()" style="position: absolute; right: 15px; top: 10px; color: #fff; font-size: 30px; cursor: pointer;">&times;</span>
-        <h2 style="color: #ffea00; margin-bottom: 5px; text-shadow: 0 0 10px #ff0000;">🧧 LÌ XÌ MAY MẮN 🧧</h2>
-        <p style="color: #ccc; font-size: 13px;">Phí: <b style="color: #00ff00;">20.000đ</b> / Lượt bốc mã Giftcode</p>
+<div id="modalBocLixi">
+    <div class="lixi-box">
+        <div class="lixi-header">
+            <h2 style="color: #ffd700; text-shadow: 0 0 15px red; margin: 0; font-size: 26px;">🧧 LÌ XÌ MAY MẮN 🧧</h2>
+            <p style="color: #fff; font-size: 12px; margin-top: 5px;">Bốc bao đỏ - Nhận mã Giftcode cực khủng!</p>
+        </div>
         
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px;">
-            <script>
-                // Tạo nhanh 9 bao lì xì
-                for(let i=1; i<=9; i++) {
-                    document.write(`
-                        <div onclick="bocLixi(this)" style="height: 110px; background: linear-gradient(135deg, #d32f2f, #b71c1c); border-radius: 10px; border: 1px solid #ffea00; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; transition: 0.3s;">
-                            <i class="fas fa-envelope" style="color: #ffea00; font-size: 35px;"></i>
-                            <div class="lixi-back" style="position: absolute; width:100%; height:100%; background:#fff; color:#d32f2f; display:none; align-items:center; justify-content:center; font-weight:bold; font-size:24px; border-radius: 8px;">?</div>
-                        </div>
-                    `);
-                }
-            </script>
+        <div id="infoLuotBoc" class="user-info-bar" style="background: rgba(0,0,0,0.4); padding: 12px; border-radius: 15px; margin: 15px 0; border: 1px solid rgba(255,215,0,0.3);">
+            <div style="color: #fff; font-size: 14px;">Đang tải dữ liệu lượt bốc...</div>
+        </div>
+
+        <div class="lixi-grid">
+            <div class="lixi-card" onclick="bocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+            <div class="lixi-card" onclick="bocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+            <div class="lixi-card" onclick="bocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+            <div class="lixi-card" onclick="bocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+            <div class="lixi-card" onclick="bocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+            <div class="lixi-card" onclick="bocLixi(this)"><img src="https://cdn-icons-png.flaticon.com/512/5169/5169142.png"></div>
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 8px; justify-content: center;">
+            <button class="btn-lixi" style="background: #ffd700; color: #000; font-weight: bold;" onclick="xemTheLe()">📜 THỂ LỆ</button>
+            <button class="btn-lixi" style="background: #fff; color: #000; font-weight: bold;" onclick="xemLichSu()">🕒 LỊCH SỬ</button>
+            <button class="btn-lixi" style="background: #000; color: #fff;" onclick="dongModalBoc()">ĐÓNG</button>
         </div>
     </div>
 </div>
