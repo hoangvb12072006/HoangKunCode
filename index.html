@@ -12,16 +12,16 @@
     
     <style>
 
-        /* --- HIỆU ỨNG LÌ XÌ PREMIUM --- */
-#modalBocLixi {
+  #modalBocLixi {
     display: none; 
     position: fixed; 
     inset: 0; 
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 100000; 
+    background: rgba(0, 0, 0, 0.85);
+    /* Sửa z-index thành 1000 để thông báo SweetAlert (thường là 1060) hiện lên trên */
+    z-index: 1000; 
     align-items: center; 
     justify-content: center;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(5px);
 }
 
 .lixi-box {
