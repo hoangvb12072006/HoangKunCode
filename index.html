@@ -869,7 +869,7 @@ const products = [
     }
 }
 
- function buyItem(name, price, downloadLink) {
+function buyItem(name, price, downloadLink) {
     const user = localStorage.getItem('hoangUser');
     if (!user) return showAuth(false);
 
@@ -889,33 +889,45 @@ const products = [
     }).then((result) => {
         if (result.isConfirmed) {
             const now = new Date().toLocaleString();
-            
-            // 1. Lưu lịch sử
-            db.ref('history/' + user).push({
-                product: name,
-                price: price,
-                date: now,
-                link: downloadLink,
-                status: "Thành công"
-            });
 
-            // 2. Cập nhật số dư và gọi tích lũy lượt bốc
+            // Lấy dữ liệu mới nhất để tính toán chính xác
             db.ref('users/' + user).once('value').then(snapshot => {
                 let userData = snapshot.val() || {};
-                let currentFreeSpins = userData.freeSpins || 0; // Lượt quay vòng quay
-                let newBal = currentBal - price;
+                let oldSpent = userData.totalSpent || 0;
+                let newSpent = oldSpent + price;
+                
+                // Tính toán lượt tặng: Cứ tiêu mỗi 100.000đ tặng 1 lượt
+                let bonus = Math.floor(newSpent / 100000) - Math.floor(oldSpent / 100000);
 
-                db.ref('users/' + user).update({
-                    balance: newBal,
-                    freeSpins: currentFreeSpins + Math.floor(price / 50000)
+                // Cập nhật tất cả các trường trong 1 lần duy nhất để tránh lỗi đồng bộ
+                let updates = {
+                    balance: (userData.balance || 0) - price,
+                    totalSpent: newSpent,
+                    freeSpins: (userData.freeSpins || 0) + bonus, // Lượt vòng quay
+                    freeTurns: (userData.freeTurns || 0) + bonus  // Lượt bốc lì xì
+                };
+
+                db.ref('users/' + user).update(updates).then(() => {
+                    // 1. Lưu lịch sử mua hàng
+                    db.ref('history/' + user).push({
+                        product: name,
+                        price: price,
+                        date: now,
+                        link: downloadLink,
+                        status: "Thành công"
+                    });
+
+                    let successMsg = `Bạn đã mua ${name} thành công!`;
+                    if(bonus > 0) {
+                        successMsg += `<br><b style="color:green">Bạn được tặng thêm ${bonus} lượt bốc & quay!</b>`;
+                    }
+
+                    Swal.fire({
+                        title: "Thành công",
+                        html: successMsg,
+                        icon: "success"
+                    });
                 });
-
-                // GỌI HÀM TÍCH LŨY LÌ XÌ (Đảm bảo hàm này có ở boclixi.js)
-                if (typeof tichLuyLuotBoc === 'function') {
-                    tichLuyLuotBoc(user, price);
-                }
-
-                Swal.fire("Thành công", `Bạn đã mua ${name} thành công!`, "success");
             });
         }
     });
