@@ -6,7 +6,7 @@ const tetConfig = {
     loiChuc: "Nhân dịp Xuân 2026, <b>HOANGKUN STORE</b> kính chúc quý khách hàng một năm mới <b>AN KHANG - THỊNH VƯỢNG - VẠN SỰ NHƯ Ý</b>.",
     uuDai1: "🌸 <b>X2 GIÁ TRỊ NẠP</b> cho thẻ cào đầu tiên.",
     uuDai2: "🌸 Giảm giá <b>50%</b> toàn bộ Source Code tại shop.",
-    uuDai3: "🌸 Tặng Code <b>LÌ XÌ 20K</b> khi mua đơn trên 100k.",
+    uuDai3: "🌸 Tặng Code <b>LÌ XÌ 5K-500k</b> khi mua đơn trên 100k.",
 
     // Phần thông tin liên hệ (Quan trọng)
     hotline: "0788.265.513",
