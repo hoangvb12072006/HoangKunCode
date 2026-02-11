@@ -1,5 +1,5 @@
 // --- CẤU HÌNH ---
-const GIA_BOC = 20000;
+Bốc Lì Xì Ngẫu Nhiên
 const GIFT_MAP = {
     5000: "TANTHU",
     10000: "LIXITET",
@@ -163,4 +163,41 @@ async function tichLuyLuotBoc(user, amount) {
     } else {
         await db.ref('users/' + user).update({ totalSpent: newSpent });
     }
+}
+
+// --- HÀM HIỆN BẢNG THỂ LỆ ---
+function xemTheLe() {
+    Swal.fire({
+        title: '📜 LUẬT CHƠI & QUY ĐỊNH',
+        html: `
+            <div style="text-align: left; font-size: 14px; color: #333;">
+                <p>1️⃣ <b>CÁCH NHẬN LƯỢT FREE:</b></p>
+                <ul style="margin-top:5px; margin-bottom:15px; padding-left:20px;">
+                    <li>Khách hàng mua Source Code với tổng giá trị đơn hàng <b style="color:red">≥ 100.000đ</b>.</li>
+                    <li>Hệ thống tự động tặng <b>1 lượt bốc</b> ngay sau khi thanh toán.</li>
+                </ul>
+
+                <hr style="border-top: 1px dashed #ccc;">
+
+                <p>2️⃣ <b>MUA VÉ LẺ:</b></p>
+                <ul style="margin-top:5px; margin-bottom:15px; padding-left:20px;">
+                    <li>Nếu chưa đủ 100k, bạn có thể mua lượt chơi bằng số dư.</li>
+                    <li>Giá vé: <b style="color:red">20.000đ / lượt</b>.</li>
+                </ul>
+
+                <hr style="border-top: 1px dashed #ccc;">
+
+                <p>3️⃣ <b>GIẢI THƯỞNG:</b></p>
+                <ul style="margin-top:5px; padding-left:20px;">
+                    <li>100% trúng mã Giftcode tiền mặt.</li>
+                    <li>Giải thưởng từ: <b>5k, 10k, 50k... đến 500k</b>.</li>
+                    <li>Mã trúng dùng để nhập vào mục Giftcode đổi ra tiền thật.</li>
+                </ul>
+            </div>
+        `,
+        icon: 'info',
+        confirmButtonText: 'ĐÃ HIỂU LUẬT CHƠI',
+        confirmButtonColor: '#d32f2f', // Màu đỏ cho nút
+        backdrop: `rgba(0,0,0,0.8)`
+    });
 }
