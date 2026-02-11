@@ -15,7 +15,7 @@ const tetConfig = {
     linkFacebook: "https://facebook.com/nvh12072006", // Thay link FB của bạn
     linkZalo: "https://zalo.me/0788265513", // Thay link Zalo của bạn
 
-    nutTat: "Đã hiểu (Tắt trong 2h)"
+    nutTat: "Đã hiểu (Tắt)"
 };
 
 // ---------------------------------------------------------
