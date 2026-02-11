@@ -1106,6 +1106,30 @@ function closeProfile() {
         </div>
     </div>
 </div>
+
+    <div onclick="moModalBoc()" style="position: fixed; bottom: 120px; left: 20px; width: 65px; height: 65px; background: radial-gradient(circle, #ff0000, #b71c1c); border-radius: 50%; border: 2px solid #ffea00; display: flex; align-items: center; justify-content: center; z-index: 9999; cursor: pointer; box-shadow: 0 0 15px #ff0000;">
+    <i class="fas fa-envelope-open-text" style="color: #ffea00; font-size: 30px;"></i>
+</div>
+
+<div id="modalBocLixi" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
+    <div style="background: #1a1a1a; padding: 25px; border: 2px solid #ffea00; border-radius: 15px; width: 90%; max-width: 400px; text-align: center;">
+        <h2 style="color: #ffea00;">🧧 CHỌN LÌ XÌ 🧧</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px;">
+            <script>
+                for(let i=1; i<=9; i++) {
+                    document.write(`
+                        <div onclick="bocLixi(this)" style="height: 80px; background: #b71c1c; border-radius: 5px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #ffea00;">
+                            <i class="fas fa-envelope" style="color:#ffea00; font-size:25px;"></i>
+                            <div class="lixi-back" style="position: absolute; width:100%; height:100%; background:#fff; color:#d32f2f; display:none; align-items:center; justify-content:center; font-weight:bold; font-size:18px; border-radius: 5px;">?</div>
+                        </div>
+                    `);
+                }
+            </script>
+        </div>
+        <button onclick="dongModalBoc()" style="margin-top: 20px; padding: 8px 25px; background: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer;">ĐÓNG</button>
+    </div>
+</div>
+
     
     <footer style="background: #0a0a0a; border-top: 2px solid var(--primary); padding: 50px 0 20px; margin-top: 50px;">
     <div class="container">
@@ -1192,6 +1216,7 @@ function closeProfile() {
         </p>
     </div>
 </footer>
+<script src="boc.js"></script>
 
 <div id="profile-page" style="display: none; background: #f4f6f9; min-height: 100vh; padding: 20px 0; position: fixed; top: 0; left: 0; width: 100%; z-index: 10000; overflow-y: auto;">
     <div class="container" style="max-width: 1000px; margin: auto; font-family: sans-serif;">
