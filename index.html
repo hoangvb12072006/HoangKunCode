@@ -1081,6 +1081,32 @@ function closeProfile() {
     </div>
 </div>
 
+    <div onclick="moModalBoc()" style="position: fixed; bottom: 110px; left: 30px; width: 70px; height: 70px; background: radial-gradient(circle, #ff0000, #800000); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; border: 3px solid #ffea00; z-index: 9999; box-shadow: 0 0 15px #ff0000; animation: bounce 2s infinite;">
+    <i class="fas fa-envelope-open-text" style="color: #ffea00; font-size: 30px;"></i>
+    <span style="font-size: 9px; color: #fff; font-weight: 900; background: #000; padding: 2px 5px; border-radius: 10px; margin-top: -5px;">BỐC LÌ XÌ</span>
+</div>
+
+<div id="modalBocLixi" class="modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center;">
+    <div class="modal-content" style="background: #151515; padding: 25px; border: 2px solid #ffea00; width: 90%; max-width: 450px; border-radius: 15px; text-align: center; position: relative; box-shadow: 0 0 30px #ff0000;">
+        <span onclick="dongModalBoc()" style="position: absolute; right: 15px; top: 10px; color: #fff; font-size: 30px; cursor: pointer;">&times;</span>
+        <h2 style="color: #ffea00; margin-bottom: 5px; text-shadow: 0 0 10px #ff0000;">🧧 LÌ XÌ MAY MẮN 🧧</h2>
+        <p style="color: #ccc; font-size: 13px;">Phí: <b style="color: #00ff00;">20.000đ</b> / Lượt bốc mã Giftcode</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px;">
+            <script>
+                for(let i=1; i<=9; i++) {
+                    document.write(`
+                        <div onclick="bocLixi(this)" style="height: 110px; background: linear-gradient(135deg, #d32f2f, #b71c1c); border-radius: 10px; border: 1px solid #ffea00; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; transition: 0.3s;">
+                            <i class="fas fa-envelope" style="color: #ffea00; font-size: 35px;"></i>
+                            <div class="lixi-back" style="position: absolute; width:100%; height:100%; background:#fff; color:#d32f2f; display:none; align-items:center; justify-content:center; font-weight:bold; font-size:24px; border-radius: 8px;">?</div>
+                        </div>
+                    `);
+                }
+            </script>
+        </div>
+    </div>
+</div>
+    
     <footer style="background: #0a0a0a; border-top: 2px solid var(--primary); padding: 50px 0 20px; margin-top: 50px;">
     <div class="container">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;">
@@ -1741,7 +1767,7 @@ function sendCardAuto() {
     
 
 <script src="giftcode.js"></script>
-
+<script src="boc.js"></script>
 <script src="thongbao.js"></script>
     
 </body>
