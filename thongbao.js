@@ -147,26 +147,20 @@ document.body.insertAdjacentHTML('beforeend', htmlTet);
 
 // 3. Logic hiển thị
 function checkHienThiTet() {
-    const timeClose = localStorage.getItem('tetPopupTime2026');
-    const now = new Date().getTime();
-
-    // CHỖ CẦN SỬA: Đưa hàm này ra ngoài if để luôn luôn chạy hoa rơi
+    // Luôn luôn gọi hoa rơi ngay lập tức
     taoHieuUngHoaRoi(); 
 
-    if (!timeClose || (now - timeClose > 2 * 60 * 60 * 1000)) {
-        setTimeout(() => {
-            const popup = document.getElementById('tetPopup');
-            if (popup) popup.classList.add('active');
-        }, 1000);
-    }
+    // Luôn luôn hiện popup sau 1 giây, không quan tâm 2 tiếng hay chưa
+    setTimeout(() => {
+        const popup = document.getElementById('tetPopup');
+        if (popup) popup.classList.add('active');
+    }, 1000);
 }
 
 function dongTet(luuTime) {
     const popup = document.getElementById('tetPopup');
     if (popup) popup.classList.remove('active');
-    if (luuTime) {
-        localStorage.setItem('tetPopupTime2026', new Date().getTime());
-    }
+    // Không cần lưu thời gian vào localStorage nữa vì mình muốn load lại là hiện
 }
 
 // 4. Hiệu ứng hoa rơi (Giữ nguyên phần này)
