@@ -1,5 +1,5 @@
 // --- CẤU HÌNH ---
-Bốc Lì Xì Ngẫu Nhiên
+const Bốc Lì Xì Ngẫu Nhiên;
 const GIFT_MAP = {
     5000: "TANTHU",
     10000: "LIXITET",
