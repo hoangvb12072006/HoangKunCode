@@ -11,7 +11,7 @@ const tetConfig = {
     // Phần thông tin liên hệ (Quan trọng)
     hotline: "0788.265.513",
     zalo: "0788.265.513 (Hoàng Kun)",
-    facebook: "Nguyễn Việt Hoàng",
+    facebook: "Ng Việt Hoàng",
     linkFacebook: "https://facebook.com/nvh12072006", // Thay link FB của bạn
     linkZalo: "https://zalo.me/0788265513", // Thay link Zalo của bạn
 
