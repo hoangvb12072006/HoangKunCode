@@ -2002,16 +2002,27 @@ function sendCardAuto() {
 // Hàm xử lý tìm kiếm sản phẩm
 function searchProduct() {
     let input = document.getElementById('productSearch').value.toLowerCase();
-    // Thay đổi mục tiêu thành swiper-slide thay vì card
     let slides = document.querySelectorAll('#productGrid .swiper-slide'); 
 
     slides.forEach(slide => {
-        let title = slide.querySelector('h3').innerText.toLowerCase();
-        
-        if (title.includes(input)) {
-            slide.style.display = ""; 
+        let cards = slide.querySelectorAll('.card'); // Tìm tất cả sản phẩm trong 1 cột
+        let slideHasVisibleCard = false;
+
+        cards.forEach(card => {
+            let title = card.querySelector('h3').innerText.toLowerCase();
+            if (title.includes(input)) {
+                card.style.display = ""; // Khớp tên thì hiện
+                slideHasVisibleCard = true;
+            } else {
+                card.style.display = "none"; // Không khớp thì ẩn
+            }
+        });
+
+        // Nếu cả 2 sản phẩm trong cột đều bị ẩn, thì ẩn luôn cả cái cột đó đi cho đẹp
+        if (slideHasVisibleCard) {
+            slide.style.display = "";
         } else {
-            slide.style.display = "none"; 
+            slide.style.display = "none";
         }
     });
 }
