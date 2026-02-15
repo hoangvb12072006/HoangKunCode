@@ -307,6 +307,11 @@
         th { color: var(--primary); }
         
     </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+</head>
+    
 </head>
 <body>
 
@@ -382,7 +387,11 @@
         <i class="fas fa-search" style="position: absolute; right: 15px; top: 12px; color: #ff0000;"></i>
     </div>
 </div>
-    <div class="grid" id="productGrid"></div>
+    <div class="swiper productSwiper" style="padding: 20px 0;">
+        <div class="swiper-wrapper" id="productGrid"></div>
+        <div class="swiper-button-next" style="color: var(--primary);"></div>
+        <div class="swiper-button-prev" style="color: var(--primary);"></div>
+    </div>
 
    <div id="history-section" class="history-box" style="display:none; border: 1px solid var(--primary); margin-top: 30px;">
     <h3 style="color: var(--primary); text-align: center;"><i class="fas fa-shopping-cart"></i> LỊCH SỬ GIAO DỊCH & KHO CODE</h3>
@@ -756,33 +765,53 @@ const products = [
         
     function renderProducts() {
     document.getElementById('productGrid').innerHTML = products.map(p => {
-        // Tự động tính giá đã giảm 50%
         const giaGiam = p.price / 2; 
 
         return `
-            <div class="card" style="position: relative;">
-                <div style="position: absolute; top: 10px; left: 10px; background: #ff0000; color: #fff; padding: 2px 8px; border-radius: 5px; font-weight: bold; font-size: 12px; z-index: 10;">-50%</div>
-                
-                <div class="thumb"><img src="${p.img}"></div>
-                <div class="card-body">
-                    <h3 style="font-size:16px; margin:0; color:#fff;">${p.name}</h3>
-                    <div class="price" style="margin: 10px 0;">
-                        <span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: normal; margin-right: 8px;">
-                            ${p.price.toLocaleString()}đ
-                        </span>
-                        <span style="color: #ff0000; font-size: 20px; font-weight: 800;">
-                            ${giaGiam.toLocaleString()}đ
-                        </span>
+            <div class="swiper-slide">
+                <div class="card" style="position: relative; height: 100%;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff0000; color: #fff; padding: 2px 8px; border-radius: 5px; font-weight: bold; font-size: 12px; z-index: 10;">-50%</div>
+                    
+                    <div class="thumb"><img src="${p.img}"></div>
+                    <div class="card-body">
+                        <h3 style="font-size:16px; margin:0; color:#fff;">${p.name}</h3>
+                        <div class="price" style="margin: 10px 0;">
+                            <span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: normal; margin-right: 8px;">
+                                ${p.price.toLocaleString()}đ
+                            </span>
+                            <span style="color: #ff0000; font-size: 20px; font-weight: 800;">
+                                ${giaGiam.toLocaleString()}đ
+                            </span>
+                        </div>
+                        <button class="btn btn-red" style="width:100%" onclick="buyItem('${p.name}', ${giaGiam}, '${p.link}')">
+                            MUA NGAY
+                        </button>
                     </div>
-                    <button class="btn btn-red" style="width:100%" onclick="buyItem('${p.name}', ${giaGiam}, '${p.link}')">
-                        MUA NGAY
-                    </button>
                 </div>
             </div>
         `;
     }).join('');
-}
 
+    // Khởi tạo hiệu ứng trượt sau khi load xong sản phẩm
+    new Swiper(".productSwiper", {
+        slidesPerView: 1, // Mặc định trên điện thoại nhỏ
+        spaceBetween: 20,
+        loop: true,
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+            640: { slidesPerView: 2 },  // Tablet
+            960: { slidesPerView: 3 },  // Laptop nhỏ
+            1200: { slidesPerView: 4 }, // Màn hình PC to (Hiện 4 sản phẩm rất sang)
+        },
+    });
+}
     // --- 3. LOGIC TÀI KHOẢN (ĐÃ FIX LỖI) ---
     let isRegisterMode = false;
 
@@ -1941,16 +1970,16 @@ function sendCardAuto() {
 // Hàm xử lý tìm kiếm sản phẩm
 function searchProduct() {
     let input = document.getElementById('productSearch').value.toLowerCase();
-    let cards = document.querySelectorAll('#productGrid .card'); 
+    // Thay đổi mục tiêu thành swiper-slide thay vì card
+    let slides = document.querySelectorAll('#productGrid .swiper-slide'); 
 
-    cards.forEach(card => {
-        let title = card.querySelector('h3').innerText.toLowerCase();
+    slides.forEach(slide => {
+        let title = slide.querySelector('h3').innerText.toLowerCase();
         
-        // Kiểm tra xem tên có chứa từ khóa khách gõ không
         if (title.includes(input)) {
-            card.style.display = ""; // Trùng khớp thì hiện
+            slide.style.display = ""; 
         } else {
-            card.style.display = "none"; // Không trùng thì ẩn đi
+            slide.style.display = "none"; 
         }
     });
 }
