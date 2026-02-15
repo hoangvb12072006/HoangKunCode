@@ -763,42 +763,74 @@ const products = [
     { id: 17, name: "MS17 - CODE Web Trường Học ", price: 200000, img: "https://sf-static.upanhlaylink.com/img/image_20260214f6fd60cb617300eefbc1b2026f2b2abd.jpg", link: "https://www.mediafire.com/file/z6opqban361ypx1/Test-code-main.zip/file" }
 ];
         
-    function renderProducts() {
-    document.getElementById('productGrid').innerHTML = products.map(p => {
-        const giaGiam = p.price / 2; 
+   function renderProducts() {
+    let html = '';
 
-        return `
-            <div class="swiper-slide">
-                <div class="card" style="position: relative; height: 100%;">
-                    <div style="position: absolute; top: 10px; left: 10px; background: #ff0000; color: #fff; padding: 2px 8px; border-radius: 5px; font-weight: bold; font-size: 12px; z-index: 10;">-50%</div>
-                    
-                    <div class="thumb"><img src="${p.img}"></div>
-                    <div class="card-body">
-                        <h3 style="font-size:16px; margin:0; color:#fff;">${p.name}</h3>
-                        <div class="price" style="margin: 10px 0;">
-                            <span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: normal; margin-right: 8px;">
-                                ${p.price.toLocaleString()}đ
-                            </span>
-                            <span style="color: #ff0000; font-size: 20px; font-weight: 800;">
-                                ${giaGiam.toLocaleString()}đ
-                            </span>
-                        </div>
-                        <button class="btn btn-red" style="width:100%" onclick="buyItem('${p.name}', ${giaGiam}, '${p.link}')">
-                            MUA NGAY
-                        </button>
+    // Vòng lặp nhảy mỗi lần 2 bước để gộp 2 sản phẩm vào 1 cột
+    for (let i = 0; i < products.length; i += 2) {
+        
+        // --- SẢN PHẨM HÀNG TRÊN ---
+        const p1 = products[i];
+        const giaGiam1 = p1.price / 2;
+        let card1 = `
+            <div class="card" style="position: relative; height: 100%;">
+                <div style="position: absolute; top: 10px; left: 10px; background: #ff0000; color: #fff; padding: 2px 8px; border-radius: 5px; font-weight: bold; font-size: 12px; z-index: 10;">-50%</div>
+                <div class="thumb"><img src="${p1.img}" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                <div class="card-body">
+                    <h3 style="font-size:16px; margin:0; color:#fff;">${p1.name}</h3>
+                    <div class="price" style="margin: 10px 0;">
+                        <span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: normal; margin-right: 8px;">${p1.price.toLocaleString()}đ</span>
+                        <span style="color: #ff0000; font-size: 20px; font-weight: 800;">${giaGiam1.toLocaleString()}đ</span>
                     </div>
+                    <button class="btn btn-red" style="width:100%" onclick="buyItem('${p1.name}', ${giaGiam1}, '${p1.link}')">MUA NGAY</button>
                 </div>
             </div>
         `;
-    }).join('');
 
-    // Khởi tạo hiệu ứng trượt sau khi load xong sản phẩm
+        // --- SẢN PHẨM HÀNG DƯỚI ---
+        let card2 = '';
+        if (products[i + 1]) { // Kiểm tra xem còn sản phẩm không (tránh lỗi nếu tổng số sp là số lẻ)
+            const p2 = products[i + 1];
+            const giaGiam2 = p2.price / 2;
+            card2 = `
+                <div class="card" style="position: relative; height: 100%;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff0000; color: #fff; padding: 2px 8px; border-radius: 5px; font-weight: bold; font-size: 12px; z-index: 10;">-50%</div>
+                    <div class="thumb"><img src="${p2.img}" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                    <div class="card-body">
+                        <h3 style="font-size:16px; margin:0; color:#fff;">${p2.name}</h3>
+                        <div class="price" style="margin: 10px 0;">
+                            <span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: normal; margin-right: 8px;">${p2.price.toLocaleString()}đ</span>
+                            <span style="color: #ff0000; font-size: 20px; font-weight: 800;">${giaGiam2.toLocaleString()}đ</span>
+                        </div>
+                        <button class="btn btn-red" style="width:100%" onclick="buyItem('${p2.name}', ${giaGiam2}, '${p2.link}')">MUA NGAY</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            // Nếu lẻ 1 sản phẩm cuối cùng, thêm 1 thẻ trống tàng hình để giữ khung không bị méo
+            card2 = `<div style="height: 100%; visibility: hidden;"></div>`;
+        }
+
+        // --- GỘP 2 HÀNG VÀO 1 CỘT (SLIDE) ---
+        html += `
+            <div class="swiper-slide">
+                <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
+                    ${card1}
+                    ${card2}
+                </div>
+            </div>
+        `;
+    }
+
+    document.getElementById('productGrid').innerHTML = html;
+
+    // Khởi tạo lại Swiper (vẫn giữ nguyên giao diện PC 4 cột, nhưng giờ mỗi cột chứa 2 sản phẩm = 8)
     new Swiper(".productSwiper", {
-        slidesPerView: 1, // Mặc định trên điện thoại nhỏ
+        slidesPerView: 1, 
         spaceBetween: 20,
         loop: true,
         autoplay: {
-            delay: 3500,
+            delay: 4000,
             disableOnInteraction: false,
         },
         navigation: {
@@ -806,9 +838,9 @@ const products = [
             prevEl: ".swiper-button-prev",
         },
         breakpoints: {
-            640: { slidesPerView: 2 },  // Tablet
-            960: { slidesPerView: 3 },  // Laptop nhỏ
-            1200: { slidesPerView: 4 }, // Màn hình PC to (Hiện 4 sản phẩm rất sang)
+            640: { slidesPerView: 2 },
+            960: { slidesPerView: 3 },
+            1200: { slidesPerView: 4 }, // Trên máy tính sẽ hiển thị 4 cột x 2 hàng
         },
     });
 }
