@@ -2155,7 +2155,7 @@ new Swiper(".bannerSwiper", {
 });
     </script>
 
-<div style="position: fixed; left: 20px; bottom: 450px; z-index: 9999; display: flex; flex-direction: column; gap: 15px;">
+<div style="position: fixed; left: 20px; bottom: 120px; z-index: 9999; display: flex; flex-direction: column; gap: 15px;">
 
     <div onclick="moHopQua()" class="btn-sidebar-left gift-theme">
         <i class="fas fa-gift"></i>
@@ -2174,17 +2174,17 @@ new Swiper(".bannerSwiper", {
 </div>
 
 <style>
-/* CSS đồng bộ với các nút liên hệ bên phải */
+/* Style đồng bộ với dàn nút bên phải */
 .btn-sidebar-left {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
     text-decoration: none;
-    font-size: 22px;
+    font-size: 20px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     transition: 0.3s;
     cursor: pointer;
@@ -2192,9 +2192,9 @@ new Swiper(".bannerSwiper", {
     border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-.gift-theme { background: #ff0000; box-shadow: 0 0 15px #ff0000; }
-.lixi-theme { background: #d32f2f; box-shadow: 0 0 15px #d32f2f; }
-.spin-theme { background: #b71c1c; box-shadow: 0 0 15px #b71c1c; }
+.gift-theme { background: #ff0000; box-shadow: 0 0 10px #ff0000; }
+.lixi-theme { background: #d32f2f; box-shadow: 0 0 10px #d32f2f; }
+.spin-theme { background: #b71c1c; box-shadow: 0 0 10px #b71c1c; }
 
 .btn-sidebar-left:hover {
     transform: scale(1.1) translateX(8px);
@@ -2202,15 +2202,15 @@ new Swiper(".bannerSwiper", {
     border-color: #fff;
 }
 
-/* Tooltip hiện tên khi di chuột vào */
+/* Tooltip hiện tên */
 .tooltip-sidebar {
     position: absolute;
-    left: 65px;
+    left: 55px;
     background: rgba(0, 0, 0, 0.8);
     color: #fff;
-    padding: 5px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: bold;
     white-space: nowrap;
     opacity: 0;
