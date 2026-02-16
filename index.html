@@ -12,6 +12,68 @@
     
     <style>
 
+        /* HIỆU ỨNG NEON & TOOLTIP CHO DÀN NÚT BÊN PHẢI */
+.contact-sidebar {
+    position: fixed;
+    right: 20px;
+    bottom: 120px; /* Cân bằng độ cao với bên trái */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-item-right {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    transition: 0.3s;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Màu Neon thương hiệu */
+.zalo-neon { background: #0068ff; box-shadow: 0 0 10px #0068ff; }
+.fb-neon { background: #1877f2; box-shadow: 0 0 10px #1877f2; }
+.tele-neon { background: #229ed9; box-shadow: 0 0 10px #229ed9; }
+
+/* Di chuột vào nhích sang trái (đối xứng bên kia nhích sang phải) */
+.contact-item-right:hover {
+    transform: scale(1.1) translateX(-8px);
+    filter: brightness(1.2);
+    border-color: #fff;
+    box-shadow: 0 0 20px #fff;
+}
+
+/* Tooltip hiện ra bên trái nút */
+.tooltip-right {
+    position: absolute;
+    right: 55px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+.contact-item-right:hover .tooltip-right {
+    opacity: 1;
+    transform: translateX(0);
+}
+
         /* Container chứa các nút chức năng bên trái */
 .action-sidebar-left {
     position: fixed;
