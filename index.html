@@ -406,6 +406,9 @@
         </thead>
         <tbody id="history-body"></tbody>
     </table>
+    
+    <div id="history-pagination" style="text-align: center; margin-top: 20px;"></div>
+</div>
        
        <div id="history-section" class="history-box" style="display:none; border: 1px solid var(--primary); margin-top: 30px;">
     <h3 style="color: var(--primary); text-align: center;"><i class="fas fa-shopping-cart"></i> LỊCH SỬ GIAO DỊCH & KHO CODE</h3>
@@ -1113,17 +1116,6 @@ function renderHistoryPage() {
 // Hàm mới để nhảy thẳng tới trang được chọn
 function goToHistoryPage(page) {
     currentHistoryPage = page;
-    renderHistoryPage();
-}
-
-// Hàm cũ giữ nguyên (chuyển trang bằng nút Trước/Tiếp)
-function changeHistoryPage(direction) {
-    const totalPages = Math.ceil(historyDataList.length / historyItemsPerPage);
-    currentHistoryPage += direction;
-    
-    if (currentHistoryPage < 1) currentHistoryPage = 1;
-    if (currentHistoryPage > totalPages) currentHistoryPage = totalPages;
-    
     renderHistoryPage();
 }
 
