@@ -2086,6 +2086,11 @@ function sendCardAuto() {
 <script src="boclixi.js"></script>
 <script src="thongbao.js"></script>
 
+    <div onclick="moHopQua()" style="position: fixed; bottom: 260px; left: 25px; width: 55px; height: 55px; background: #ff0000; border-radius: 50%; border: 2px solid #ffcc00; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 99999; box-shadow: 0 0 15px rgba(255,204,0,0.8); animation: pulseBtn 1.5s infinite;">
+    <i class="fas fa-gift" style="color: #fff; font-size: 25px;"></i>
+    <span style="position: absolute; bottom: -12px; font-size: 9px; color: #fff; font-weight: bold; white-space: nowrap; background: #000; padding: 2px 5px; border-radius: 5px; border: 1px solid #333;">HỘP QUÀ</span>
+</div>
+
 <div onclick="moModalBoc()" style="position: fixed; bottom: 180px; left: 20px; width: 65px; height: 65px; background: radial-gradient(circle, #ff0000, #b71c1c); border-radius: 50%; border: 2px solid #ffea00; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; cursor: pointer; box-shadow: 0 0 15px #ff0000; animation: bounce 2s infinite;">
     <i class="fas fa-envelope-open-text" style="color: #ffea00; font-size: 28px;"></i>
     <span style="font-size: 8px; color: #fff; font-weight: bold; margin-top: -2px;">BỐC LÌ XÌ</span>
@@ -2168,8 +2173,9 @@ new Swiper(".bannerSwiper", {
    <audio id="bg-music" loop>
     <source src="https://raw.githubusercontent.com/hoangvb12072006/HoangKunCode/main/tet.mp3" type="audio/mpeg">
 </audio>
-
 <script src="nhac.js"></script>
-    
+
+<script src="hopqua.js"></script> 
+
 </body>
 </html>
