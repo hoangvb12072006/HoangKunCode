@@ -2155,26 +2155,76 @@ new Swiper(".bannerSwiper", {
 });
     </script>
 
-<div style="position: fixed; bottom: 35px; left: 20px; display: flex; flex-direction: column; align-items: center; gap: 28px; z-index: 99999;">
+<div style="position: fixed; left: 20px; bottom: 450px; z-index: 9999; display: flex; flex-direction: column; gap: 15px;">
 
-    <div onclick="moHopQua()" style="width: 62px; height: 62px; background: #ff0000; border-radius: 50%; border: 2px solid #ffcc00; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 15px rgba(255,204,0,0.8); animation: pulseBtn 1.5s infinite; position: relative;">
-        <i class="fas fa-gift" style="color: #fff; font-size: 26px;"></i>
-        <span style="position: absolute; bottom: -12px; font-size: 9px; color: #fff; font-weight: bold; white-space: nowrap; background: #000; padding: 2px 6px; border-radius: 8px; border: 1px solid #333;">HỘP QUÀ</span>
+    <div onclick="moHopQua()" class="btn-sidebar-left gift-theme">
+        <i class="fas fa-gift"></i>
+        <span class="tooltip-sidebar">Hộp Quà</span>
     </div>
 
-    <div onclick="moModalBoc()" style="width: 62px; height: 62px; background: radial-gradient(circle, #ff0000, #b71c1c); border-radius: 50%; border: 2px solid #ffea00; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 15px #ff0000; animation: bounce 2s infinite; position: relative;">
-        <i class="fas fa-envelope-open-text" style="color: #ffea00; font-size: 26px;"></i>
-        <span style="position: absolute; bottom: -12px; font-size: 9px; color: #fff; font-weight: bold; white-space: nowrap; background: #000; padding: 2px 6px; border-radius: 8px; border: 1px solid #333;">BỐC LÌ XÌ</span>
+    <div onclick="moModalBoc()" class="btn-sidebar-left lixi-theme">
+        <i class="fas fa-envelope-open-text"></i>
+        <span class="tooltip-sidebar">Lì Xì</span>
     </div>
 
-    <a href="spin.html" style="width: 62px; height: 62px; background: radial-gradient(circle, #ff0000, #800000); border-radius: 50%; border: 2px solid #fff; display: flex; justify-content: center; align-items: center; text-decoration: none; box-shadow: 0 0 20px rgba(255, 0, 0, 0.6); animation: floatSticker 3s ease-in-out infinite; position: relative;">
-        <div style="animation: spinInfinite 4s linear infinite;">
-            <i class="fas fa-dharmachakra" style="font-size: 28px; color: #fff;"></i>
-        </div>
-        <span style="position: absolute; bottom: -12px; background: #ffff00; color: #ff0000; font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 8px; border: 1px solid #ff0000; white-space: nowrap;">QUAY NGAY</span>
+    <a href="spin.html" class="btn-sidebar-left spin-theme">
+        <i class="fas fa-dharmachakra" style="animation: spinInfinite 4s linear infinite;"></i>
+        <span class="tooltip-sidebar">Vòng Quay</span>
     </a>
-
 </div>
+
+<style>
+/* CSS đồng bộ với các nút liên hệ bên phải */
+.btn-sidebar-left {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: 0.3s;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.gift-theme { background: #ff0000; box-shadow: 0 0 15px #ff0000; }
+.lixi-theme { background: #d32f2f; box-shadow: 0 0 15px #d32f2f; }
+.spin-theme { background: #b71c1c; box-shadow: 0 0 15px #b71c1c; }
+
+.btn-sidebar-left:hover {
+    transform: scale(1.1) translateX(8px);
+    filter: brightness(1.2);
+    border-color: #fff;
+}
+
+/* Tooltip hiện tên khi di chuột vào */
+.tooltip-sidebar {
+    position: absolute;
+    left: 65px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+.btn-sidebar-left:hover .tooltip-sidebar {
+    opacity: 1;
+    transform: translateX(0);
+}
+</style>
+    
    <audio id="bg-music" loop>
     <source src="https://raw.githubusercontent.com/hoangvb12072006/HoangKunCode/main/tet.mp3" type="audio/mpeg">
 </audio>
