@@ -1,6 +1,24 @@
-// Hàm xử lý mở hộp quà và cộng tiền hiển thị
+// Hàm xử lý mở hộp quà và cộng tiền THẬT vào Database
 function moHopQua() {
-    // 1. Hiệu ứng bắn pháo hoa tung tóe
+    // 1. Kiểm tra xem khách đã đăng nhập chưa
+    const user = localStorage.getItem('hoangUser');
+    
+    // Nếu chưa đăng nhập thì bắt đăng nhập mới cho mở quà
+    if (!user) {
+        Swal.fire({
+            title: 'Khoan đã!',
+            text: 'Bạn phải Đăng Nhập tài khoản thì mới nhận được tiền thưởng nhé!',
+            icon: 'warning',
+            confirmButtonText: 'Đăng Nhập Ngay',
+            confirmButtonColor: '#ff0000'
+        }).then(() => {
+            // Gọi hàm mở bảng đăng nhập bên index.html
+            if(typeof showAuth === 'function') showAuth(false);
+        });
+        return; // Dừng lại, không cho mở hộp
+    }
+
+    // 2. Hiệu ứng bắn pháo hoa
     if (typeof confetti === 'function') {
         confetti({
             particleCount: 100,
@@ -10,11 +28,11 @@ function moHopQua() {
         });
     }
 
-    // 2. Random số tiền từ 5000 đến 10000
+    // 3. Random số tiền thưởng
     let tienThuong = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
     let tienFormat = tienThuong.toLocaleString('vi-VN');
 
-    // 3. Bật thông báo XỊN SÒ bằng SweetAlert2
+    // 4. Hiện thông báo XỊN
     Swal.fire({
         title: 'BÙM! TRÚNG MÁNH RỒI!',
         html: `
@@ -25,39 +43,29 @@ function moHopQua() {
                 +${tienFormat}đ
             </div>
             <div style="font-size: 13px; color: #888; font-style: italic;">
-                Tiền thưởng đã được tự động cộng vào ví!
+                Tiền đã được chuyển thẳng vào tài khoản của bạn!
             </div>
         `,
-        imageUrl: 'https://cdn3d.iconscout.com/3d/premium/thumb/gift-box-4993386-4159599.png', // Ảnh hộp quà 3D cực đẹp
+        imageUrl: 'https://cdn3d.iconscout.com/3d/premium/thumb/gift-box-4993386-4159599.png', 
         imageWidth: 120,
         imageHeight: 120,
         imageAlt: 'Hộp Quà 3D',
         confirmButtonText: 'BỎ TÚI NGAY',
-        confirmButtonColor: '#ff0000',
-        background: '#fff',
-        backdrop: `rgba(0,0,0,0.85)` // Nền đen mờ phía sau
+        confirmButtonColor: '#ff0000'
     });
 
-    // 4. TÌM CÁI VÍ CỦA KHÁCH ĐỂ CỘNG TIỀN (Vẫn giữ nguyên như cũ)
-    let phanHienThiTien = document.getElementById("user-balance");
-    
-    if (phanHienThiTien) {
-        // Lấy số tiền hiện tại (Xóa dấu chấm và chữ đ đi để làm toán)
-        let tienHienTai = parseInt(phanHienThiTien.innerText.replace(/\./g, '').replace('đ', '').replace(/ /g, '')) || 0;
-        
-        // Cộng tiền
-        let tienMoi = tienHienTai + tienThuong;
-        
-        // Ghi đè lại lên màn hình
-        phanHienThiTien.innerText = tienMoi.toLocaleString('vi-VN') + "đ";
-        
-        // Chớp đèn xanh lá cây ở góc phải báo hiệu cộng tiền
-        phanHienThiTien.style.color = "#fff";
-        phanHienThiTien.style.background = "#28a745";
-        phanHienThiTien.style.transition = "0.5s";
-        setTimeout(() => {
-            phanHienThiTien.style.color = "#00ff00";
-            phanHienThiTien.style.background = "transparent";
-        }, 1500);
-    }
+    // 5. CỘNG TIỀN THẬT VÀO FIREBASE
+    // Lấy số dư hiện tại trong máy (do hàm checkLogin của ông đã lưu sẵn)
+    let tienHienTai = parseInt(localStorage.getItem('hoangBal')) || 0;
+    let tienMoi = tienHienTai + tienThuong;
+
+    // Bắn lệnh cập nhật lên Firebase (Cái "db" này nó tự lấy từ file index.html qua)
+    db.ref('users/' + user).update({
+        balance: tienMoi
+    }).then(() => {
+        console.log("Đã cộng tiền thật vào DB!");
+        // Tiền tự động nhảy trên góc phải màn hình luôn, vì ông đã có hàm lắng nghe dữ liệu ở index
+    }).catch(err => {
+        console.error("Lỗi cộng tiền: ", err);
+    });
 }
