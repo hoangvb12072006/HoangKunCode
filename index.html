@@ -341,21 +341,39 @@
     </div>
 </nav>
 
-<div class="container">
-   <div class="banner" style="text-align: center; padding: 100px 0; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://i.postimg.cc/g2bY136T/Website-1024x538.png') center/cover; border-radius: 20px; margin-top: 20px; border: 1px solid #444; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-    <h1 class="glow-text" style="font-size: 65px; margin: 0; letter-spacing: 4px; font-weight: 900; text-transform: uppercase; line-height: 1.2;">
-        HOANGKUN STORE
-    </h1>
+<div class="swiper bannerSwiper" style="border-radius: 20px; margin-top: 20px; border: 1px solid #444; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
     
-    <div style="width: 120px; height: 4px; background: var(--primary); margin: 25px auto; border-radius: 10px; box-shadow: 0 0 20px var(--primary);"></div>
-    
-    <p class="sub-text" style="color: #ffffff; font-size: 18px; letter-spacing: 1px; opacity: 0.9; text-shadow: 1px 1px 5px rgba(0,0,0,0.5);">
-        <i class="fas fa-check-circle" style="color: var(--primary);"></i> 
-        HỆ THỐNG SOURCE CODE TỰ ĐỘNG - UY TÍN - BẢO MẬT
-        <i class="fas fa-check-circle" style="color: var(--primary);"></i>
-    </p>
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none;">
+        <h1 class="glow-text" style="font-size: 65px; margin: 0; letter-spacing: 4px; font-weight: 900; text-transform: uppercase; line-height: 1.2;">
+            HOANGKUN STORE
+        </h1>
+        <div style="width: 120px; height: 4px; background: var(--primary); margin: 25px auto; border-radius: 10px; box-shadow: 0 0 20px var(--primary);"></div>
+        <p class="sub-text" style="color: #ffffff; font-size: 18px; letter-spacing: 1px; opacity: 0.9; text-shadow: 1px 1px 5px rgba(0,0,0,0.5);">
+            <i class="fas fa-check-circle" style="color: var(--primary);"></i> 
+            HỆ THỐNG SOURCE CODE TỰ ĐỘNG - UY TÍN - BẢO MẬT
+            <i class="fas fa-check-circle" style="color: var(--primary);"></i>
+        </p>
+    </div>
+
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <div style="width: 100%; height: 450px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://i.postimg.cc/g2bY136T/Website-1024x538.png') center/cover;"></div>
+        </div>
+        
+        <div class="swiper-slide">
+            <div style="width: 100%; height: 450px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('LINK_ẢNH_2_CỦA_BẠN_ĐIỀN_VÀO_ĐÂY') center/cover;"></div>
+        </div>
+
+        <div class="swiper-slide">
+            <div style="width: 100%; height: 450px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('LINK_ẢNH_3_CỦA_BẠN_ĐIỀN_VÀO_ĐÂY') center/cover;"></div>
+        </div>
+    </div>
+
+    <div class="swiper-button-next banner-nav" style="color: #fff; text-shadow: 0 0 10px #ff0000; z-index: 20;"></div>
+    <div class="swiper-button-prev banner-nav" style="color: #fff; text-shadow: 0 0 10px #ff0000; z-index: 20;"></div>
 </div>
 
+    
     <div class="container" style="margin-top: 40px;">
     <div style="background: rgba(15, 15, 15, 0.95); border: 1px solid #333; border-radius: 20px; padding: 25px; box-shadow: 0 0 25px rgba(255, 0, 0, 0.15);">
         <h2 style="text-align: center; color: #fff; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 25px; font-weight: 800;">
@@ -2127,6 +2145,22 @@ function searchProduct() {
         }
     });
 }
+</script>
+
+    <script>
+// Khởi tạo Swiper cho Banner ở đầu trang
+new Swiper(".bannerSwiper", {
+    loop: true, // Lặp lại vô hạn
+    effect: "fade", // Hiệu ứng mờ dần chuyển cảnh
+    autoplay: {
+        delay: 3000, // 3 giây tự chuyển 1 lần
+        disableOnInteraction: false,
+    },
+    navigation: {
+        nextEl: ".bannerSwiper .swiper-button-next",
+        prevEl: ".bannerSwiper .swiper-button-prev",
+    },
+});
 </script>
     
 </body>
