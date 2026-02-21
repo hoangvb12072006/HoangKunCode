@@ -1,116 +1,165 @@
-// File: diemdanh.js - Tính năng Điểm danh cộng tiền
+/**
+ * HOANGKUN STORE - ĐIỂM DANH HÀNG NGÀY VERSION 5.0 (PREMIUM)
+ * Tính năng: Cộng tiền ngẫu nhiên, Pháo hoa Confetti, Lịch sử giao dịch, Check ngày thực tế.
+ */
 
-// 1. Mở Modal và check xem nay đã điểm danh chưa
+// 1. Cấu hình phần thưởng (Ông có thể sửa tỉ lệ tại đây)
+const DIEM_DANH_CONFIG = {
+    minGift: 1000,
+    maxGift: 10000,
+    rewards: [1000, 1000, 2000, 2000, 3000, 5000, 10000], // Tỉ lệ rớt tiền
+    bonusDay7: 20000, // Thưởng thêm nếu điểm danh đủ 7 ngày (tính năng mở rộng)
+};
+
+// 2. Mở Modal Điểm Danh với hiệu ứng mượt mà
 function moModalDiemDanh() {
     const user = localStorage.getItem('hoangUser');
     if (!user) {
-        return typeof showAuth === 'function' ? showAuth(false) : Swal.fire("Lỗi", "Vui lòng đăng nhập để điểm danh!", "warning");
+        return Swal.fire({
+            title: "CHƯA ĐĂNG NHẬP",
+            text: "Ông cần đăng nhập để hệ thống biết ai nhận quà nhé!",
+            icon: "warning",
+            confirmButtonColor: "#00e5ff"
+        });
     }
 
-    document.getElementById('modalDiemDanh').style.display = 'flex';
-    
-    // Check trên Firebase
+    // Hiển thị Modal
+    const modal = document.getElementById('modalDiemDanh');
+    modal.style.display = 'flex';
+    modal.style.opacity = '0';
+    setTimeout(() => { modal.style.opacity = '1'; modal.style.transition = '0.5s'; }, 10);
+
+    // Lấy dữ liệu từ Firebase để hiển thị số dư và trạng thái
     db.ref('users/' + user).once('value').then(snap => {
         const data = snap.val() || {};
         const balance = data.balance || 0;
-        document.getElementById('dd-balance').innerText = balance.toLocaleString() + 'đ';
-        
+        const lastCheckin = data.lastCheckin || "";
         const today = new Date().toLocaleDateString('vi-VN');
+
+        // Cập nhật số dư lên bảng
+        const balanceEl = document.getElementById('dd-balance');
+        if (balanceEl) {
+            let count = 0;
+            let target = balance;
+            let speed = target / 20;
+            let timer = setInterval(() => {
+                count += speed;
+                if (count >= target) {
+                    clearInterval(timer);
+                    balanceEl.innerText = target.toLocaleString() + 'đ';
+                } else {
+                    balanceEl.innerText = Math.floor(count).toLocaleString() + 'đ';
+                }
+            }, 30);
+        }
+
+        // Kiểm tra xem hôm nay đã điểm danh chưa
         const btn = document.getElementById('btn-diemdanh');
-        const status = document.getElementById('dd-status');
-        
-        // Trạng thái đã điểm danh
-        if (data.lastCheckin === today) {
-            btn.style.background = '#333';
-            btn.style.color = '#777';
-            btn.style.boxShadow = 'none';
+        const statusText = document.getElementById('dd-status');
+
+        if (lastCheckin === today) {
+            btn.innerHTML = '<i class="fas fa-calendar-check"></i> ĐÃ NHẬN HÔM NAY';
+            btn.style.background = 'linear-gradient(90deg, #444, #222)';
             btn.style.cursor = 'not-allowed';
-            btn.innerText = "ĐÃ ĐIỂM DANH HÔM NAY";
+            btn.style.boxShadow = 'none';
             btn.disabled = true;
-            status.style.display = 'block';
+            if (statusText) statusText.style.display = 'block';
         } else {
-            // Trạng thái chưa điểm danh
-            btn.style.background = '#00e5ff';
-            btn.style.color = '#000';
-            btn.style.boxShadow = '0 0 15px #00e5ff';
-            btn.style.cursor = 'pointer';
-            btn.innerHTML = '<i class="fas fa-check-circle"></i> NHẬN QUÀ NGAY';
+            btn.innerHTML = '<i class="fas fa-gift"></i> NHẬN QUÀ NGAY';
             btn.disabled = false;
-            status.style.display = 'none';
+            if (statusText) statusText.style.display = 'none';
         }
     });
 }
 
-// 2. Tắt Modal
-function dongModalDiemDanh() {
-    document.getElementById('modalDiemDanh').style.display = 'none';
-}
-
-// 3. Xử lý cộng tiền vào tài khoản
+// 3. Xử lý logic Điểm Danh & Cộng Tiền
 function thucHienDiemDanh() {
     const user = localStorage.getItem('hoangUser');
-    if (!user) return Swal.fire("Lỗi", "Vui lòng đăng nhập!", "error");
-
     const btn = document.getElementById('btn-diemdanh');
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG XỬ LÝ...';
+    
+    // Hiệu ứng đang xử lý
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG KHUI QUÀ...';
     btn.disabled = true;
 
     const today = new Date().toLocaleDateString('vi-VN');
     const nowTime = new Date().toLocaleString('vi-VN');
-
-    // Tỉ lệ rớt tiền: Ra nhiều 1k, 2k, hiếm ra 5k, siêu hiếm ra 10k cho đỡ lỗ vốn
-    const rewards = [1000, 1000, 1000, 1000, 2000, 2000, 3000, 5000, 10000];
-    const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+    const gift = DIEM_DANH_CONFIG.rewards[Math.floor(Math.random() * DIEM_DANH_CONFIG.rewards.length)];
 
     db.ref('users/' + user).once('value').then(snapshot => {
-        let userData = snapshot.val() || {};
-        let oldBalance = userData.balance || 0;
+        const userData = snapshot.val() || {};
+        const oldBalance = userData.balance || 0;
 
-        // Check đúp để chống khách dùng tool spam click
+        // Chống lách luật (check đúp trên server)
         if (userData.lastCheckin === today) {
-            Swal.fire("Ô kìa!", "Bạn đã điểm danh rồi, không spam nha!", "warning");
-            dongModalDiemDanh();
+            Swal.fire("Lỗi", "Ông đã điểm danh rồi, đừng hack nhé!", "error");
             return;
         }
 
-        let newBalance = oldBalance + randomReward;
+        const newBalance = oldBalance + gift;
 
-        // Cập nhật Firebase
+        // Cập nhật Database Firebase
         db.ref('users/' + user).update({
             balance: newBalance,
-            lastCheckin: today // Cắm mốc ngày hôm nay vào data
+            lastCheckin: today
         }).then(() => {
-            // Ghi vào lịch sử giao dịch (Phần Hồ Sơ cá nhân ông đã làm ấy)
+            
+            // --- BẮT ĐẦU CHUỖI HIỆU ỨNG ĐẸP MẮT ---
+
+            // 1. Pháo hoa Confetti 3 đợt
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#00e5ff', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff0055', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+            // 2. Ghi lịch sử giao dịch (để hiện trong profile)
             db.ref('wallet_history/' + user).push({
                 date: nowTime,
-                amount: randomReward,
+                amount: gift,
                 balanceBefore: oldBalance,
                 balanceAfter: newBalance,
-                note: "Điểm danh hàng ngày"
+                note: "Nhận quà điểm danh hàng ngày"
             });
 
-            // Nếu web ông có cài hiệu ứng pháo hoa thì bắn tung tóe cho sướng
-            if(typeof confetti === 'function') {
-                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
-            }
-
+            // 3. Hiện thông báo SweetAlert VIP
             Swal.fire({
-                title: "THÀNH CÔNG!",
-                html: `Chúc mừng bạn nhận được <b style="color:#ff0000; font-size: 22px;">+${randomReward.toLocaleString()}đ</b>`,
-                icon: "success",
-                confirmButtonText: "TUYỆT VỜI",
-                confirmButtonColor: "#00e5ff"
+                title: 'ĐIỂM DANH THÀNH CÔNG!',
+                html: `
+                    <div style="padding: 20px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/14870/14870908.png" style="width:100px; margin-bottom: 20px;">
+                        <p style="font-size: 16px;">Chúc mừng ông đã nhận được:</p>
+                        <h2 style="color: #00ff00; font-size: 35px; text-shadow: 0 0 10px rgba(0,255,0,0.5);">+${gift.toLocaleString()}đ</h2>
+                        <p style="color: #888; font-size: 12px;">Tiền đã được cộng trực tiếp vào ví của ông.</p>
+                    </div>
+                `,
+                background: '#111',
+                color: '#fff',
+                confirmButtonText: 'TUYỆT VỜI',
+                confirmButtonColor: '#00e5ff',
+                allowOutsideClick: false
             }).then(() => {
+                // Tự động đóng modal và load lại để update số dư Navbar
                 dongModalDiemDanh();
-                // Cập nhật ví tiền trên thanh Navbar ngay lập tức
-                const balEl = document.getElementById('user-balance');
-                if(balEl) balEl.innerText = newBalance.toLocaleString() + 'đ';
+                if (document.getElementById('user-balance')) {
+                    document.getElementById('user-balance').innerText = newBalance.toLocaleString() + 'đ';
+                }
                 localStorage.setItem('hoangBal', newBalance);
             });
-        }).catch(err => {
-            Swal.fire("Lỗi", "Lỗi mạng, vui lòng thử lại!", "error");
-            btn.innerHTML = '<i class="fas fa-check-circle"></i> NHẬN QUÀ NGAY';
+
+        }).catch(error => {
+            console.error("Lỗi:", error);
+            Swal.fire("Lỗi hệ thống", "Mạng lag rồi, thử lại sau nhé ông!", "error");
+            btn.innerHTML = '<i class="fas fa-gift"></i> THỬ LẠI';
             btn.disabled = false;
         });
     });
+}
+
+function dongModalDiemDanh() {
+    const modal = document.getElementById('modalDiemDanh');
+    modal.style.opacity = '0';
+    setTimeout(() => { modal.style.display = 'none'; }, 300);
 }
