@@ -2158,24 +2158,38 @@ function sendCardAuto() {
 <script src="thongbao.js"></script>
 
 
-<div id="modalDiemDanh" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
-    <div style="background: linear-gradient(145deg, #111, #1a1a1a); width: 90%; max-width: 400px; padding: 30px 20px; border-radius: 20px; border: 2px solid #00e5ff; text-align: center; position: relative; box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);">
-        <span onclick="dongModalDiemDanh()" style="position: absolute; right: 20px; top: 15px; color: #fff; font-size: 28px; cursor: pointer; transition: 0.3s;">&times;</span>
-        <h2 style="color: #00e5ff; text-shadow: 0 0 10px #00e5ff; margin-top: 0; text-transform: uppercase; letter-spacing: 2px;">📅 ĐIỂM DANH TÂN THỦ</h2>
+<div id="modalDiemDanh" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(10px); opacity: 0; transition: 0.5s;">
+    <div style="background: linear-gradient(145deg, #0f0f0f, #1a1a1a); width: 95%; max-width: 400px; padding: 40px 25px; border-radius: 30px; border: 2px solid #00e5ff; text-align: center; position: relative; box-shadow: 0 0 50px rgba(0, 229, 255, 0.4);">
         
-        <p style="color: #aaa; font-size: 14px; margin-bottom: 20px;">Đăng nhập mỗi ngày để nhận quà ngẫu nhiên từ 1.000đ - 10.000đ vào tài khoản!</p>
-
-        <div style="background: rgba(0, 229, 255, 0.1); border: 1px dashed #00e5ff; padding: 15px; border-radius: 10px; margin-bottom: 25px;">
-            <i class="fas fa-wallet" style="font-size: 24px; color: #00ff00; margin-bottom: 10px;"></i>
-            <div style="color: #fff; font-size: 16px;">Số dư hiện tại: <b id="dd-balance" style="color:#00ff00; font-size: 20px;">0đ</b></div>
+        <span onclick="dongModalDiemDanh()" style="position: absolute; right: 25px; top: 20px; color: #555; font-size: 28px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">&times;</span>
+        
+        <div style="margin-bottom: 20px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/4213/4213732.png" style="width: 100px; filter: drop-shadow(0 0 15px #ffd700); animation: floatGift 3s ease-in-out infinite;">
         </div>
 
-        <button id="btn-diemdanh" onclick="thucHienDiemDanh()" style="width: 100%; padding: 15px; background: #00e5ff; color: #000; border: none; border-radius: 10px; font-weight: 900; font-size: 18px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px #00e5ff; transition: 0.3s;">
-            <i class="fas fa-check-circle"></i> NHẬN QUÀ NGAY
+        <h2 style="color: #fff; font-size: 22px; font-weight: 900; text-transform: uppercase; margin: 0; text-shadow: 0 0 10px #00e5ff;">QUÀ TẶNG MỖI NGÀY</h2>
+        <p style="color: #00e5ff; font-size: 13px; font-weight: bold; margin-top: 10px;">CƠ HỘI NHẬN LÊN TỚI 10.000đ</p>
+
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 229, 255, 0.2); padding: 20px; border-radius: 20px; margin: 25px 0;">
+            <div style="color: #aaa; font-size: 11px; text-transform: uppercase; margin-bottom: 8px;">Số dư ví của ông</div>
+            <div id="dd-balance" style="color: #fff; font-size: 28px; font-weight: 800; font-family: 'Courier New', monospace;">0đ</div>
+        </div>
+
+        <button id="btn-diemdanh" onclick="thucHienDiemDanh()" style="width: 100%; padding: 18px; background: linear-gradient(90deg, #00e5ff, #007bff); color: #fff; border: none; border-radius: 15px; font-weight: 900; font-size: 16px; cursor: pointer; text-transform: uppercase; box-shadow: 0 10px 20px rgba(0, 229, 255, 0.3); transition: 0.4s;">
+            <i class="fas fa-gift" style="margin-right: 8px;"></i> NHẬN QUÀ NGAY
         </button>
-        <p id="dd-status" style="margin-top: 15px; font-size: 13px; color: #ff4444; font-weight: bold; display: none;">Bạn đã điểm danh hôm nay rồi. Hãy quay lại vào ngày mai!</p>
+
+        <p id="dd-status" style="margin-top: 20px; font-size: 12px; color: #ff4444; font-weight: bold; display: none; animation: fadeIn 0.5s;">Hôm nay ông nhận rồi, mai quay lại nhé!</p>
     </div>
 </div>
+
+<style>
+    @keyframes floatGift {
+        0%, 100% { transform: translateY(0) rotate(0); }
+        50% { transform: translateY(-15px) rotate(8deg); }
+    }
+    #btn-diemdanh:hover { transform: scale(1.03); box-shadow: 0 0 30px #00e5ff; }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="diemdanh.js"></script>
