@@ -1,34 +1,31 @@
-// File: nhac.js
-// Tính năng: Tự động phát nhạc nền khi người dùng tương tác với trang web (Vượt rào chặn Autoplay)
-
 document.addEventListener("DOMContentLoaded", function () {
     const bgMusic = document.getElementById("bg-music");
-    
-    if (bgMusic) {
-        bgMusic.volume = 0.6; // Chỉnh âm lượng 60% cho vừa tai, khách không bị giật mình
-        
-        let isPlaying = false;
+    if (!bgMusic) return;
 
-        // Hàm kích hoạt nhạc
-        const playAudio = () => {
-            if (!isPlaying) {
-                bgMusic.play().then(() => {
+    bgMusic.volume = 0.5; // Âm lượng 50%
+    let isPlaying = false;
+
+    // Hàm phát nhạc tốc độ cao
+    const playMusicSeamlessly = () => {
+        if (!isPlaying) {
+            let playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
                     isPlaying = true;
-                    // Khi nhạc đã phát thì gỡ bỏ các sự kiện lắng nghe cho nhẹ web
-                    document.removeEventListener("click", playAudio);
-                    document.removeEventListener("touchstart", playAudio);
-                    document.removeEventListener("scroll", playAudio);
-                    window.removeEventListener("keydown", playAudio);
-                }).catch((error) => {
-                    console.log("Đang chờ khách tương tác để phát nhạc...");
+                    // Hủy lắng nghe ngay khi nhạc đã lên để web đỡ nặng
+                    ['click', 'touchstart', 'scroll', 'keydown', 'mousemove'].forEach(evt => 
+                        document.removeEventListener(evt, playMusicSeamlessly)
+                    );
+                }).catch(error => {
+                    console.log("Trình duyệt chặn, đang đợi khách tương tác...");
                 });
             }
-        };
+        }
+    };
 
-        // Bắt mọi hành động của khách: click, lướt màn hình điện thoại, cuộn chuột, bấm phím
-        document.addEventListener("click", playAudio);
-        document.addEventListener("touchstart", playAudio);
-        document.addEventListener("scroll", playAudio);
-        window.addEventListener("keydown", playAudio);
-    }
+    // Bắt MỌI loại tương tác của khách: Click, chạm, cuộn trang, bấm phím, rê chuột
+    ['click', 'touchstart', 'scroll', 'keydown', 'mousemove'].forEach(evt => 
+        document.addEventListener(evt, playMusicSeamlessly, { once: true })
+    );
 });
