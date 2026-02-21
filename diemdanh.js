@@ -70,12 +70,18 @@ function thucHienDiemDanh() {
 
             Swal.fire({
                 title: "THÀNH CÔNG!",
-                html: `Bạn nhận được <b style="color:#00ff00; font-size:24px;">+${gift.toLocaleString()}đ</b>`,
+                html: `Chúc mừng ông nhận được <b style="color: #00ff00; font-size: 25px;">+${gift.toLocaleString()}đ</b>`,
                 icon: "success",
-                confirmButtonColor: "#00e5ff"
+                confirmButtonColor: "#00e5ff",
+                confirmButtonText: "TUYỆT VỜI",
+                // Thêm dòng này để nó không bị mờ đằng sau
+                didOpen: () => {
+                    const swalContainer = document.querySelector('.swal2-container');
+                    if (swalContainer) swalContainer.style.zIndex = "100000"; // Ép z-index cao hơn modal
+                }
             }).then(() => {
                 dongModalDiemDanh();
-                location.reload(); // Reload để cập nhật ví tiền
+                location.reload();
             });
         });
     });
