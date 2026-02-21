@@ -244,12 +244,20 @@
 }
 
         /* Hiệu ứng chữ lướt sáng Gradient */
+/* Hiệu ứng Neon Tĩnh - Sang trọng & Hiện đại */
 .glow-text {
-    background: linear-gradient(to right, #ff0000 20%, #ffffff 40%, #ff4d4d 60%, #ff0000 80%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shine-glow 4s linear infinite;
+    color: #ffffff; /* Chữ màu trắng */
+    text-shadow: 
+        0 0 5px #00e5ff,
+        0 0 10px #00e5ff,
+        0 0 20px #00e5ff,
+        0 0 40px #00e5ff,
+        0 0 80px #00e5ff; /* Tạo nhiều lớp bóng để chữ sáng rực như đèn neon */
+    /* Xóa bỏ hiệu ứng chạy màu cũ */
+    background: none;
+    -webkit-background-clip: border-box;
+    -webkit-text-fill-color: currentcolor;
+    animation: none;
 }
 
 @keyframes shine-glow {
