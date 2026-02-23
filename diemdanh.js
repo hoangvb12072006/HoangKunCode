@@ -48,7 +48,7 @@ function thucHienDiemDanh() {
     btn.disabled = true;
 
     const today = new Date().toLocaleDateString('vi-VN');
-    const rewards = [1000, 2000, 3000, 5000, 10000];
+    const rewards = [1000, 2000, 3000, 5000, 10000, 20000, 50000, 100000, 200000, 500000];
     const gift = rewards[Math.floor(Math.random() * rewards.length)];
 
     db.ref('users/' + user).once('value').then(snap => {
