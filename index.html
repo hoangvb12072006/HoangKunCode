@@ -577,12 +577,12 @@
     <button class="filter-btn" onclick="locSanPham('paid', this)">Mất phí</button>
     <button class="filter-btn" onclick="locSanPham('free', this)">Miễn phí</button>
 </div>
-    <div class="swiper productSwiper" style="padding: 20px 0;">
-        <div class="swiper-wrapper" id="productGrid"></div>
-        <div class="swiper-button-next" style="color: var(--primary);"></div>
-        <div class="swiper-button-prev" style="color: var(--primary);"></div>
-    </div>
-
+    
+   <div id="productGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px 0;">
+        </div>
+    
+    <div id="product-pagination" style="text-align: center; margin-top: 10px; margin-bottom: 40px;"></div>
+    
    <div id="history-section" class="history-box" style="display:none; border: 1px solid var(--primary); margin-top: 30px;">
     <h3 style="color: var(--primary); text-align: center;"><i class="fas fa-shopping-cart"></i> LỊCH SỬ GIAO DỊCH & KHO CODE</h3>
     <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
@@ -975,20 +975,6 @@ const products = [
     { id: 19, name: "MS19 - CODE WEB PRO ", price: 0, status: "Miễn phí", img: "https://sf-static.upanhlaylink.com/img/image_202602247c7d57fbec0e8cafe089e6da88e6bbf8.jpg", link: "https://www.mediafire.com/file/ga3rt9r4cy03752/hoangcyber-main+(1).zip/file" },
 ];
              
- let currentFilter = 'all';
-let myProductSwiper = null;
-
-// Hàm bắt sự kiện khi bấm nút Lọc
-function locSanPham(type, btnElement) {
-    currentFilter = type;
-    
-    // Đổi màu nút được bấm
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    btnElement.classList.add('active');
-
-    // Cập nhật lại danh sách sản phẩm
-    renderProducts();
-}
 
 function renderProducts() {
     let html = '';
@@ -1108,6 +1094,143 @@ function renderProducts() {
             },
         },
     });
+}
+        // --- LỌC, TÌM KIẾM VÀ PHÂN TRANG SẢN PHẨM ---
+let currentFilter = 'all';
+let currentProductPage = 1;
+const productsPerPage = 8; // Số sản phẩm muốn hiện trên 1 trang (Ông có thể đổi số này)
+
+function locSanPham(type, btnElement) {
+    currentFilter = type;
+    currentProductPage = 1; // Reset về trang 1 khi bấm lọc
+    
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    btnElement.classList.add('active');
+    
+    renderProducts();
+}
+
+function searchProduct() {
+    let input = document.getElementById('productSearch').value.toLowerCase();
+    let cards = document.querySelectorAll('#productGrid .product-card'); 
+    
+    cards.forEach(card => {
+        let title = card.querySelector('.card-title').innerText.toLowerCase();
+        card.style.display = title.includes(input) ? "" : "none";
+    });
+    
+    // Ẩn thanh phân trang nếu đang gõ tìm kiếm
+    document.getElementById('product-pagination').style.display = input.length > 0 ? 'none' : 'block';
+}
+
+function renderProducts() {
+    let html = '';
+    
+    // 1. Lọc mảng
+    let filteredProducts = [];
+    if (currentFilter === 'free') {
+        filteredProducts = products.filter(p => p.price === 0);
+    } else if (currentFilter === 'paid') {
+        filteredProducts = products.filter(p => p.price > 0);
+    } else {
+        filteredProducts = products;
+    }
+
+    if (filteredProducts.length === 0) {
+        document.getElementById('productGrid').innerHTML = `<div style="width: 100%; text-align: center; color: #888; padding: 40px; grid-column: 1 / -1;">Chưa có sản phẩm nào trong mục này.</div>`;
+        document.getElementById('product-pagination').innerHTML = '';
+        return;
+    }
+
+    // 2. Tính toán phân trang
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    const startIndex = (currentProductPage - 1) * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+    
+    const pageData = filteredProducts.slice(startIndex, endIndex);
+
+    // 3. Vẽ HTML Sản phẩm
+    pageData.forEach(p => {
+        let giaGiam, phanTram;
+        
+        if (p.price === 0) { phanTram = "FREE"; giaGiam = 0; }
+        else if (p.price < 100000) { phanTram = "-50%"; giaGiam = p.price * 0.5; } 
+        else if (p.price <= 300000) { phanTram = "-20%"; giaGiam = p.price * 0.8; } 
+        else { phanTram = "-10%"; giaGiam = p.price * 0.9; }
+
+        html += `
+            <div class="product-card">
+                <div class="discount-badge" style="background: ${p.price === 0 ? '#00e5ff' : 'linear-gradient(45deg, #ff0055, #ff0000)'}; color: ${p.price === 0 ? '#000' : '#fff'};">${phanTram}</div>
+                <div class="card-img-wrap"><img src="${p.img}"></div>
+                <div class="card-info">
+                    <h3 class="card-title">${p.name}</h3>
+                    <div class="price-box">
+                        <span class="old-price">${p.price > 0 ? p.price.toLocaleString() + 'đ' : ''}</span>
+                        <span class="new-price" style="color: ${p.price === 0 ? '#00e5ff' : '#00e5ff'};">${p.price === 0 ? 'Miễn Phí' : Math.floor(giaGiam).toLocaleString() + 'đ'}</span>
+                    </div>
+                    <button class="buy-btn" style="background: ${p.price === 0 ? 'linear-gradient(90deg, #00e5ff, #007bff)' : 'linear-gradient(90deg, #ff0055, #ff0000)'}; color: ${p.price === 0 ? '#fff' : '#fff'};" onclick="buyItem('${p.name}', ${Math.floor(giaGiam)}, '${p.link}')">
+                        <i class="fas fa-shopping-cart"></i> ${p.price === 0 ? 'NHẬN NGAY' : 'MUA NGAY'}
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+
+    document.getElementById('productGrid').innerHTML = html;
+
+    // 4. Vẽ thanh chuyển trang 1, 2, 3...
+    renderProductPagination(totalPages);
+}
+
+function renderProductPagination(totalPages) {
+    const paginationDiv = document.getElementById('product-pagination');
+    
+    if (totalPages <= 1) {
+        paginationDiv.innerHTML = '';
+        return;
+    }
+
+    let paginationHtml = `<div style="display: flex; justify-content: center; align-items: center; gap: 8px;">`;
+    
+    paginationHtml += `
+        <button onclick="changeProductPage(-1)" ${currentProductPage === 1 ? 'disabled' : ''} 
+                style="padding: 6px 15px; background: ${currentProductPage === 1 ? '#333' : 'var(--primary)'}; color: white; border: none; border-radius: 5px; cursor: ${currentProductPage === 1 ? 'not-allowed' : 'pointer'}; transition: 0.3s;">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    `;
+
+    for (let i = 1; i <= totalPages; i++) {
+        const isCurrent = (i === currentProductPage);
+        paginationHtml += `
+            <button onclick="goToProductPage(${i})" 
+                    style="padding: 6px 14px; background: ${isCurrent ? '#fff' : '#222'}; color: ${isCurrent ? '#ff0000' : '#fff'}; border: 1px solid ${isCurrent ? '#fff' : 'var(--primary)'}; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;">
+                ${i}
+            </button>
+        `;
+    }
+
+    paginationHtml += `
+        <button onclick="changeProductPage(1)" ${currentProductPage === totalPages ? 'disabled' : ''} 
+                style="padding: 6px 15px; background: ${currentProductPage === totalPages ? '#333' : 'var(--primary)'}; color: white; border: none; border-radius: 5px; cursor: ${currentProductPage === totalPages ? 'not-allowed' : 'pointer'}; transition: 0.3s;">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    `;
+
+    paginationHtml += `</div>`;
+    paginationDiv.innerHTML = paginationHtml;
+}
+
+function changeProductPage(direction) {
+    currentProductPage += direction;
+    renderProducts();
+    // Cuộn mượt mà lên đầu khu vực sản phẩm khi lật trang
+    document.querySelector('.filter-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function goToProductPage(page) {
+    currentProductPage = page;
+    renderProducts();
+    document.querySelector('.filter-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
     function showAuth(isReg) {
