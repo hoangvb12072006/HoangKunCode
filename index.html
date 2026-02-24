@@ -12,6 +12,22 @@
     
     <style>
 
+        /* --- BỐ CỤC LƯỚI SẢN PHẨM 3x3 --- */
+.grid-3x3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Ép hiển thị đúng 3 cột ngang trên máy tính */
+    gap: 25px;
+    padding: 20px 0;
+}
+
+/* Responsive: Tự động xuống 2 cột nếu là Ipad, 1 cột nếu là Điện thoại để ko bị méo ảnh */
+@media (max-width: 992px) {
+    .grid-3x3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+    .grid-3x3 { grid-template-columns: 1fr; }
+}
+
         /* CSS Nút lọc sản phẩm */
 .filter-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
 .filter-btn {
@@ -578,8 +594,7 @@
     <button class="filter-btn" onclick="locSanPham('free', this)">Miễn phí</button>
 </div>
     
-   <div id="productGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px 0;">
-        </div>
+  <div id="productGrid" class="grid-3x3"></div>
     
     <div id="product-pagination" style="text-align: center; margin-top: 10px; margin-bottom: 40px;"></div>
     
@@ -1098,7 +1113,7 @@ function renderProducts() {
         // --- LỌC, TÌM KIẾM VÀ PHÂN TRANG SẢN PHẨM ---
 let currentFilter = 'all';
 let currentProductPage = 1;
-const productsPerPage = 8; // Số sản phẩm muốn hiện trên 1 trang (Ông có thể đổi số này)
+const productsPerPage = 9; // Đổi thành 9 để hiện 3 hàng x 3 cột
 
 function locSanPham(type, btnElement) {
     currentFilter = type;
