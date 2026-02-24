@@ -11,6 +11,20 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
+
+        /* CSS Nút lọc sản phẩm */
+.filter-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+.filter-btn {
+    background: #1a1a1a; color: #fff; border: 1px solid #444;
+    padding: 8px 25px; border-radius: 20px; cursor: pointer;
+    font-weight: bold; transition: 0.3s; font-size: 13px;
+}
+.filter-btn.active {
+    background: linear-gradient(90deg, #ff0000, #b71c1c);
+    border: none; color: #fff; box-shadow: 0 0 15px rgba(255,0,0,0.5);
+}
+.filter-btn:hover:not(.active) { border-color: #ff0000; color: #ff0000; }
+        
         /* --- HIỆU ỨNG SẢN PHẨM PREMIUM --- */
 .product-card {
     background: #151515;
@@ -558,6 +572,11 @@
         <i class="fas fa-search" style="position: absolute; right: 15px; top: 12px; color: #ff0000;"></i>
     </div>
 </div>
+    <div class="filter-tabs" style="display: flex; gap: 10px; margin-bottom: 20px;">
+    <button class="filter-btn active" onclick="locSanPham('all', this)">Tất cả</button>
+    <button class="filter-btn" onclick="locSanPham('paid', this)">Mất phí</button>
+    <button class="filter-btn" onclick="locSanPham('free', this)">Miễn phí</button>
+</div>
     <div class="swiper productSwiper" style="padding: 20px 0;">
         <div class="swiper-wrapper" id="productGrid"></div>
         <div class="swiper-button-next" style="color: var(--primary);"></div>
@@ -954,31 +973,65 @@ const products = [
     { id: 17, name: "MS17 - CODE Web Trường Học ", price: 500000, img: "https://sf-static.upanhlaylink.com/img/image_20260214f6fd60cb617300eefbc1b2026f2b2abd.jpg", link: "https://www.mediafire.com/file/z6opqban361ypx1/Test-code-main.zip/file" }
 ];
         
-  function renderProducts() {
-    let html = '';
+ let currentFilter = 'all';
+let myProductSwiper = null;
 
-    for (let i = 0; i < products.length; i += 2) {
+// Hàm bắt sự kiện khi bấm nút Lọc
+function locSanPham(type, btnElement) {
+    currentFilter = type;
+    
+    // Đổi màu nút được bấm
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    // Cập nhật lại danh sách sản phẩm
+    renderProducts();
+}
+
+function renderProducts() {
+    let html = '';
+    
+    // 1. LỌC DANH SÁCH THEO TAB
+    let filteredProducts = [];
+    if (currentFilter === 'free') {
+        filteredProducts = products.filter(p => p.price === 0);
+    } else if (currentFilter === 'paid') {
+        filteredProducts = products.filter(p => p.price > 0);
+    } else {
+        filteredProducts = products; // 'all' - Lấy tất cả
+    }
+
+    // Nếu không có sản phẩm nào sau khi lọc
+    if (filteredProducts.length === 0) {
+        document.getElementById('productGrid').innerHTML = `<div style="width: 100%; text-align: center; color: #888; padding: 40px; font-size: 16px;">Chưa có sản phẩm nào trong mục này.</div>`;
+        if (myProductSwiper) { myProductSwiper.destroy(true, true); myProductSwiper = null; }
+        return;
+    }
+
+    // 2. VẼ DANH SÁCH SẢN PHẨM (Giữ nguyên giao diện của ông)
+    for (let i = 0; i < filteredProducts.length; i += 2) {
         
         // --- XỬ LÝ SẢN PHẨM 1 (HÀNG TRÊN) ---
-        const p1 = products[i];
-        let giaGiam1, phanTram1;
+        const p1 = filteredProducts[i];
+        let giaGiam1 = p1.price, phanTram1 = "";
 
-        if (p1.price < 100000) { phanTram1 = 50; giaGiam1 = p1.price * 0.5; } 
-        else if (p1.price >= 100000 && p1.price <= 300000) { phanTram1 = 20; giaGiam1 = p1.price * 0.8; } 
-        else { phanTram1 = 10; giaGiam1 = p1.price * 0.9; }
+        if (p1.price === 0) { phanTram1 = "FREE"; giaGiam1 = 0; }
+        else if (p1.price < 100000) { phanTram1 = "-50%"; giaGiam1 = p1.price * 0.5; } 
+        else if (p1.price <= 300000) { phanTram1 = "-20%"; giaGiam1 = p1.price * 0.8; } 
+        else { phanTram1 = "-10%"; giaGiam1 = p1.price * 0.9; }
 
         let card1 = `
             <div class="product-card">
-                <div class="discount-badge">-${phanTram1}%</div>
+                <div class="discount-badge" style="background: ${p1.price === 0 ? '#00e5ff' : 'linear-gradient(45deg, #ff0055, #ff0000)'}; color: ${p1.price === 0 ? '#000' : '#fff'};">${phanTram1}</div>
                 <div class="card-img-wrap"><img src="${p1.img}"></div>
                 <div class="card-info">
                     <h3 class="card-title">${p1.name}</h3>
                     <div class="price-box">
-                        <span class="old-price">${p1.price.toLocaleString()}đ</span>
-                        <span class="new-price">${Math.floor(giaGiam1).toLocaleString()}đ</span>
+                        <span class="old-price">${p1.price > 0 ? p1.price.toLocaleString() + 'đ' : ''}</span>
+                        <span class="new-price" style="color: ${p1.price === 0 ? '#00e5ff' : '#00e5ff'};">${p1.price === 0 ? 'Miễn Phí' : Math.floor(giaGiam1).toLocaleString() + 'đ'}</span>
                     </div>
-                    <button class="buy-btn" onclick="buyItem('${p1.name}', ${Math.floor(giaGiam1)}, '${p1.link}')">
-                        <i class="fas fa-shopping-cart"></i> MUA NGAY
+                    <button class="buy-btn" style="background: ${p1.price === 0 ? 'linear-gradient(90deg, #00e5ff, #007bff)' : 'linear-gradient(90deg, #ff0055, #ff0000)'}; color: ${p1.price === 0 ? '#fff' : '#fff'};" onclick="buyItem('${p1.name}', ${Math.floor(giaGiam1)}, '${p1.link}')">
+                        <i class="fas fa-shopping-cart"></i> ${p1.price === 0 ? 'NHẬN NGAY' : 'MUA NGAY'}
                     </button>
                 </div>
             </div>
@@ -986,26 +1039,27 @@ const products = [
 
         // --- XỬ LÝ SẢN PHẨM 2 (HÀNG DƯỚI) ---
         let card2 = '';
-        if (products[i + 1]) {
-            const p2 = products[i + 1];
-            let giaGiam2, phanTram2;
+        if (filteredProducts[i + 1]) {
+            const p2 = filteredProducts[i + 1];
+            let giaGiam2 = p2.price, phanTram2 = "";
 
-            if (p2.price < 100000) { phanTram2 = 50; giaGiam2 = p2.price * 0.5; } 
-            else if (p2.price >= 100000 && p2.price <= 300000) { phanTram2 = 20; giaGiam2 = p2.price * 0.8; } 
-            else { phanTram2 = 10; giaGiam2 = p2.price * 0.9; }
+            if (p2.price === 0) { phanTram2 = "FREE"; giaGiam2 = 0; }
+            else if (p2.price < 100000) { phanTram2 = "-50%"; giaGiam2 = p2.price * 0.5; } 
+            else if (p2.price <= 300000) { phanTram2 = "-20%"; giaGiam2 = p2.price * 0.8; } 
+            else { phanTram2 = "-10%"; giaGiam2 = p2.price * 0.9; }
 
             card2 = `
                 <div class="product-card">
-                    <div class="discount-badge">-${phanTram2}%</div>
+                    <div class="discount-badge" style="background: ${p2.price === 0 ? '#00e5ff' : 'linear-gradient(45deg, #ff0055, #ff0000)'}; color: ${p2.price === 0 ? '#000' : '#fff'};">${phanTram2}</div>
                     <div class="card-img-wrap"><img src="${p2.img}"></div>
                     <div class="card-info">
                         <h3 class="card-title">${p2.name}</h3>
                         <div class="price-box">
-                            <span class="old-price">${p2.price.toLocaleString()}đ</span>
-                            <span class="new-price">${Math.floor(giaGiam2).toLocaleString()}đ</span>
+                            <span class="old-price">${p2.price > 0 ? p2.price.toLocaleString() + 'đ' : ''}</span>
+                            <span class="new-price" style="color: ${p2.price === 0 ? '#00e5ff' : '#00e5ff'};">${p2.price === 0 ? 'Miễn Phí' : Math.floor(giaGiam2).toLocaleString() + 'đ'}</span>
                         </div>
-                        <button class="buy-btn" onclick="buyItem('${p2.name}', ${Math.floor(giaGiam2)}, '${p2.link}')">
-                            <i class="fas fa-shopping-cart"></i> MUA NGAY
+                        <button class="buy-btn" style="background: ${p2.price === 0 ? 'linear-gradient(90deg, #00e5ff, #007bff)' : 'linear-gradient(90deg, #ff0055, #ff0000)'}; color: ${p2.price === 0 ? '#fff' : '#fff'};" onclick="buyItem('${p2.name}', ${Math.floor(giaGiam2)}, '${p2.link}')">
+                            <i class="fas fa-shopping-cart"></i> ${p2.price === 0 ? 'NHẬN NGAY' : 'MUA NGAY'}
                         </button>
                     </div>
                 </div>
@@ -1026,13 +1080,17 @@ const products = [
 
     document.getElementById('productGrid').innerHTML = html;
 
-    // --- CẤU HÌNH SWIPER ĐỂ LẬT TRANG MƯỢT MÀ ---
-    new Swiper(".productSwiper", {
+    // 3. KHỞI TẠO LẠI SWIPER 
+    if (myProductSwiper) {
+        myProductSwiper.destroy(true, true); // Hủy Swiper cũ trước khi tạo cái mới
+    }
+    
+    myProductSwiper = new Swiper(".productSwiper", {
         slidesPerView: 1, 
         spaceBetween: 20,
-        loop: true,
+        loop: false, // Tắt loop đi để nếu khách chọn mục có ít SP thì nó không bị lỗi lặp vòng
         autoplay: {
-            delay: 5000, // Chậm lại tí cho khách kịp xem
+            delay: 5000, 
             disableOnInteraction: false,
         },
         navigation: {
@@ -1044,7 +1102,7 @@ const products = [
             960: { slidesPerView: 3, slidesPerGroup: 3 },
             1200: { 
                 slidesPerView: 4, 
-                slidesPerGroup: 4 // Bấm phát lật nguyên 4 cột (sang trang chuẩn)
+                slidesPerGroup: 4 
             },
         },
     });
