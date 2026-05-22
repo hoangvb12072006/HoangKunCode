@@ -5,51 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dịch Vụ | HOANGKUN STORE</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Bạn có thể copy lại phần :root và các style chung từ index.html vào đây */
-    /* Để rút gọn, mình để các style đặc trưng của trang dịch vụ ở dưới */
-    body { font-family: 'Inter', sans-serif; background: #030712; color: #f8fafc; }
-    .page-hero { padding: 150px 0 80px; text-align: center; }
-    .page-hero h1 { font-size: 3rem; margin-bottom: 20px; }
-    .service-container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
-    .detail-card { 
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
-      padding: 40px; border-radius: 24px; margin-bottom: 30px;
-    }
-    .detail-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: #6366f1; }
+    /* Gộp chung style để trang web mượt mà */
+    :root { --bg: #030712; --accent: #6366f1; --border: rgba(255,255,255,0.1); }
+    body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
+    
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+    
+    /* Header/Nav */
+    .navbar { padding: 30px 0; border-bottom: 1px solid var(--border); }
+    .nav-brand { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; }
+
+    /* Nội dung */
+    .hero-service { padding: 80px 0; text-align: center; }
+    .hero-service h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(to right, #fff, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    /* Lưới dịch vụ ngăn nắp */
+    .grid-services { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+    .card-service { background: rgba(255,255,255,0.03); padding: 40px; border-radius: 24px; border: 1px solid var(--border); transition: 0.3s; }
+    .card-service:hover { border-color: var(--accent); transform: translateY(-10px); }
+    .icon-box { font-size: 2rem; color: var(--accent); margin-bottom: 20px; }
   </style>
 </head>
-
 <body>
-  <nav class="navbar" style="padding: 20px 0;">
-    <div class="container" style="display:flex; justify-content:space-between;">
-      <a href="index.html" class="nav-brand"><i class="fas fa-layer-group"></i> HOANGKUN</a>
-      <div class="nav-links">
-        <a href="index.html">Trang chủ</a>
-        <a href="dichvu.html" class="active">Dịch vụ</a>
-      </div>
-    </div>
-  </nav>
 
-  <section class="page-hero">
-    <h1>Dịch Vụ & Bảng Giá</h1>
-    <p>Giải pháp website và automation với mức giá cạnh tranh nhất thị trường</p>
+  <nav class="navbar"><div class="container"><a href="index.html" class="nav-brand">HOANGKUN STORE</a></div></nav>
+
+  <section class="hero-service">
+    <div class="container">
+      <h1>Giải pháp chuyên sâu</h1>
+      <p>Tối ưu hóa công nghệ cho doanh nghiệp và game thủ</p>
+    </div>
   </section>
 
-  <div class="service-container">
-    <div class="detail-card">
-      <h3><i class="fas fa-code"></i> Thiết Kế Website</h3>
-      <p>Từ website giới thiệu đến web thương mại, học tập — tất cả được thiết kế riêng biệt, chuẩn SEO, tốc độ cao.</p>
-    </div>
-    <div class="detail-card">
-      <h3><i class="fas fa-robot"></i> Dịch Vụ Automation</h3>
-      <p>Tự động hóa mọi tác vụ từ marketing đến quản lý khách hàng giúp tiết kiệm 80% thời gian vận hành.</p>
+  <div class="container">
+    <div class="grid-services">
+      <div class="card-service">
+        <div class="icon-box"><i class="fas fa-code"></i></div>
+        <h3>Thiết Kế Web</h3>
+        <p>Landing page, shop tự động, source code sạch, tốc độ load 100/100.</p>
+      </div>
+      <div class="card-service">
+        <div class="icon-box"><i class="fas fa-robot"></i></div>
+        <h3>Automation API</h3>
+        <p>Kết nối thanh toán tự động, Webhook Telegram, xử lý giao dịch Real-time.</p>
+      </div>
+      <div class="card-service">
+        <div class="icon-box"><i class="fas fa-shield-halved"></i></div>
+        <h3>Bảo Mật & VPS</h3>
+        <p>Tường lửa, Anti-DDoS, hỗ trợ cấu hình VPS ổn định 24/7.</p>
+      </div>
     </div>
   </div>
 
-  <footer class="footer" style="margin-top:50px; text-align:center; padding: 40px;">
-    <p>© 2026 HOANGKUN STORE. All rights reserved.</p>
-  </footer>
 </body>
 </html>
