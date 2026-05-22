@@ -3,299 +3,305 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HOANGKUN STORE - Chuyên cung cấp Source Code Website và Gaming Scripts chất lượng cao, tối ưu và bảo mật.">
-  <meta name="keywords" content="source code, gaming scripts, mua code tự động, hoangkun, shop code">
-  <meta name="robots" content="index, follow">
-  
-  <meta property="og:title" content="HOANGKUN STORE | Source Code & Gaming Scripts Premium">
-  <meta property="og:description" content="Hệ thống phân phối source code website, landing page và các công cụ tối ưu hệ thống tự động hóa.">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="vi_VN">
-  
-  <title>HOANGKUN STORE | Source Code & Gaming Scripts Premium</title>
+  <meta name="description" content="HOANGKUN STORE - Chuyên cung cấp Source Code Website và Gaming Scripts.">
+  <title>HOANGKUN STORE | Cyberpunk Scripts & Source Code</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+  
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700;800&display=swap');
-
+    /* ===== CSS BIẾN MÀU CYBERPUNK ===== */
     :root {
-      /* CYBERPUNK NEON THEME */
-      --blue: #00f0ff;
-      --blue-dark: #00b3cc;
-      --blue-light: rgba(0, 240, 255, 0.1);
-      
-      --green: #00ff9d;
-      --green-light: rgba(0, 255, 157, 0.1);
-      
-      --orange: #ff007f;
-      --orange-light: rgba(255, 0, 127, 0.1);
-      
-      --red: #ff3333;
-      
-      --bg: #0a0b10;
-      --bg-off: #121420;
-      --bg-card: #161925;
-      
-      --text-dark: #ffffff;
-      --text: #f0f2f5;
-      --text-light: #9fa4b4;
-      --text-lighter: #6b7280;
-      
-      --border: #1e2235;
-      --radius: 12px;
+      --cyan: #00f0ff;
+      --pink: #ff007c;
+      --yellow: #fcee0a;
+      --bg-dark: #050505;
+      --bg-panel: #0d1117;
+      --border-color: #1f2937;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
     }
 
-    *, *::before, *::after {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: var(--bg); color: var(--text);
-      overflow-x: hidden; line-height: 1.65;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 30px 30px;
     }
 
+    h1, h2, h3, .cyber-font { font-family: 'Orbitron', sans-serif; text-transform: uppercase; }
     a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
-    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-    /* ===== HIỆU ỨNG SCROLL REVEAL MƯỢT MÀ ===== */
+    /* ===== NÚT BẤM VÁT GÓC (CYBERPUNK BUTTON) ===== */
+    .cyber-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #000;
+      background: var(--cyan);
+      border: none;
+      cursor: pointer;
+      position: relative;
+      clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+      transition: all 0.3s ease;
+    }
+    .cyber-btn:hover {
+      background: var(--yellow);
+      box-shadow: 0 0 20px rgba(252, 238, 10, 0.5);
+      transform: translateY(-2px);
+    }
+    .cyber-btn.outline {
+      background: transparent;
+      color: var(--cyan);
+      border: 2px solid var(--cyan);
+      clip-path: none;
+    }
+    .cyber-btn.outline:hover { background: rgba(0, 240, 255, 0.1); box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
+
+    /* ===== HIỆU ỨNG GLITCH ===== */
+    .glitch {
+      position: relative;
+      color: #fff;
+      font-weight: 900;
+      text-shadow: 0 0 10px var(--cyan);
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: var(--bg-dark);
+    }
+    .glitch::before {
+      left: 2px;
+      text-shadow: -2px 0 var(--pink);
+      clip: rect(24px, 550px, 90px, 0);
+      animation: glitch-anim-2 3s infinite linear alternate-reverse;
+    }
+    .glitch::after {
+      left: -2px;
+      text-shadow: -2px 0 var(--cyan);
+      clip: rect(85px, 550px, 140px, 0);
+      animation: glitch-anim 2.5s infinite linear alternate-reverse;
+    }
+    @keyframes glitch-anim {
+      0% { clip: rect(10px, 9999px, 44px, 0); }
+      20% { clip: rect(80px, 9999px, 15px, 0); }
+      40% { clip: rect(30px, 9999px, 85px, 0); }
+      60% { clip: rect(90px, 9999px, 20px, 0); }
+      80% { clip: rect(20px, 9999px, 75px, 0); }
+      100% { clip: rect(50px, 9999px, 10px, 0); }
+    }
+
+    /* ===== SCROLL REVEAL (HIỆN RA MƯỢT MÀ) ===== */
     .reveal {
       opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-      will-change: opacity, transform;
+      transform: translateY(50px) scale(0.95);
+      transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-
-    /* Delay lùi từng phần tử để tạo hiệu ứng gợn sóng */
-    .delay-1 { transition-delay: 0.1s; }
-    .delay-2 { transition-delay: 0.2s; }
-    .delay-3 { transition-delay: 0.3s; }
-
-    /* ===== TEXT GRADIENT ===== */
-    .text-gradient {
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      background: linear-gradient(45deg, var(--blue), var(--orange));
-      -webkit-background-clip: text;
-      background-clip: text;
-    }
+    .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
+    .d-1 { transition-delay: 0.1s; } .d-2 { transition-delay: 0.2s; } .d-3 { transition-delay: 0.3s; }
 
     /* ===== NAVBAR ===== */
     .navbar {
-      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-      background: rgba(10, 11, 16, 0.95);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
+      position: fixed; width: 100%; top: 0; z-index: 1000;
+      background: rgba(5, 5, 5, 0.95);
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
     }
-    .navbar.scrolled {
-      border-bottom: 1px solid var(--border);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; min-height: 80px; }
-    .nav-logo { display: flex; align-items: center; gap: 10px; }
-    .nav-brand { font-size: 1.3rem; font-weight: 800; color: var(--text-dark); letter-spacing: 1px;}
-    .nav-brand span { color: var(--blue); }
-    .nav-links { display: flex; align-items: center; gap: 15px; }
-    .nav-links a { font-size: 0.9rem; font-weight: 600; color: var(--text-light); padding: 8px 12px; transition: color 0.2s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--blue); }
-    .nav-cta { background: var(--blue); color: #000 !important; border-radius: 8px; box-shadow: 0 0 10px rgba(0,240,255,0.3); }
-    .nav-cta:hover { background: var(--blue-dark); box-shadow: 0 0 15px rgba(0,240,255,0.6); }
+    .navbar.scrolled { border-bottom: 2px solid var(--cyan); box-shadow: 0 0 20px rgba(0, 240, 255, 0.2); }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 80px; }
+    .nav-brand { font-size: 1.5rem; color: #fff; letter-spacing: 2px; }
+    .nav-brand span { color: var(--pink); text-shadow: 0 0 10px var(--pink); }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: var(--text-main); transition: 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--cyan); text-shadow: 0 0 8px var(--cyan); }
 
     /* ===== HERO ===== */
-    .hero { min-height: 100vh; display: flex; align-items: center; background: radial-gradient(circle at center, var(--bg-off) 0%, var(--bg) 100%); }
-    .hero-content { max-width: 600px; margin: 0 auto; text-align: center; padding: 120px 0 60px; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: var(--green-light); border: 1px solid rgba(0,255,157,0.3); border-radius: 20px; color: var(--green); font-weight: 600; margin-bottom: 24px; font-size: 0.85rem;}
-    .hero-badge .dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); animation: blink 2s infinite; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    .hero h1 { font-size: 3.2rem; font-weight: 800; margin-bottom: 20px; line-height: 1.2; text-shadow: 0 0 20px rgba(0,240,255,0.2); }
-    .hero-desc { font-size: 1.05rem; color: var(--text-light); margin-bottom: 40px; line-height: 1.8; }
-    .btn-white { padding: 14px 32px; background: var(--blue); color: #000; font-weight: 800; border-radius: 8px; display: inline-flex; align-items: center; gap: 10px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3); }
-    .btn-white:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 240, 255, 0.5); }
+    .hero {
+      height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: 0; width: 100%; height: 100px;
+      background: linear-gradient(to top, var(--bg-dark), transparent);
+    }
+    .hero-content { z-index: 10; max-width: 800px; }
+    .sys-badge {
+      display: inline-block; padding: 5px 15px; border: 1px solid var(--pink);
+      color: var(--pink); font-family: 'Orbitron'; font-size: 0.8rem;
+      box-shadow: inset 0 0 10px rgba(255, 0, 124, 0.2); margin-bottom: 20px;
+    }
+    .hero h1 { font-size: 3.5rem; margin-bottom: 20px; line-height: 1.2; }
+    .hero p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 30px; }
+    .hero-btns { display: flex; gap: 15px; justify-content: center; }
 
-    /* ===== SERVICES ===== */
-    .section { padding: 100px 0; border-top: 1px solid var(--border); }
-    .section-header { text-align: center; margin-bottom: 60px; }
-    .section-tag { display: inline-block; color: var(--orange); font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; font-size: 0.85rem; }
-    .section-header h2 { font-size: 2.2rem; margin-bottom: 15px; }
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+    /* ===== PRODUCTS (CARD VÁT GÓC) ===== */
+    .section { padding: 100px 0; }
+    .sec-title { text-align: center; font-size: 2.5rem; color: #fff; margin-bottom: 50px; }
+    .sec-title span { color: var(--cyan); }
     
-    .srv-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 30px; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
-    .srv-card:hover { border-color: var(--blue); box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15); transform: translateY(-5px); }
-    .srv-icon { width: 56px; height: 56px; border-radius: 12px; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 20px; box-shadow: 0 0 15px rgba(0,240,255,0.2); }
-    .srv-card h3 { font-size: 1.2rem; margin-bottom: 12px; }
-    .srv-card p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px; }
-    .srv-features li { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.85rem; }
-    .srv-features li::before { content: '⚡'; color: var(--blue); font-size: 0.9rem; }
-
-    /* ===== STATS ===== */
-    .stats-bar { background: var(--bg-card); padding: 60px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: center; }
-    .stat-number { font-size: 3rem; font-weight: 800; color: var(--blue); text-shadow: 0 0 15px rgba(0, 240, 255, 0.4); margin-bottom: 5px; }
-    .stat-text { color: var(--text-light); font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+    .card {
+      background: var(--bg-panel);
+      padding: 30px;
+      position: relative;
+      border: 1px solid var(--border-color);
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+      transition: 0.3s;
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--border-color); transition: 0.3s;
+    }
+    .card:hover { border-color: var(--cyan); transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,240,255,0.1); }
+    .card:hover::before { background: var(--cyan); box-shadow: 0 0 15px var(--cyan); }
+    
+    .card i { font-size: 2.5rem; color: var(--cyan); margin-bottom: 20px; }
+    .card h3 { font-size: 1.3rem; margin-bottom: 10px; color: #fff; }
+    .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+    .card ul { list-style: none; }
+    .card ul li { font-size: 0.85rem; padding: 5px 0; display: flex; gap: 10px; align-items: center;}
+    .card ul li::before { content: '>'; color: var(--pink); font-weight: bold; font-family: 'Orbitron'; }
 
     /* ===== FOOTER ===== */
-    .footer { background: #06070a; padding: 60px 0 30px; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-    .footer p { color: var(--text-lighter); font-size: 0.85rem; margin-top: 15px; max-width: 280px;}
-    .f-col h4 { color: #fff; margin-bottom: 20px; font-size: 0.95rem; letter-spacing: 1px; }
-    .f-col ul li { margin-bottom: 12px; font-size: 0.85rem; }
-    .f-col ul a { color: var(--text-light); transition: color 0.2s; }
-    .f-col ul a:hover { color: var(--blue); }
-    .footer-bottom { border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-lighter); }
-    .footer-socials a { color: var(--text-light); font-size: 1.2rem; margin-left: 15px; transition: color 0.2s; }
-    .footer-socials a:hover { color: var(--orange); text-shadow: 0 0 10px var(--orange); }
+    .footer { border-top: 1px solid var(--border-color); padding: 50px 0 20px; background: #020202; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 30px; }
+    .footer h4 { color: var(--cyan); margin-bottom: 15px; font-size: 1rem; }
+    .footer ul li { margin-bottom: 10px; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; transition: 0.2s;}
+    .footer ul li:hover { color: var(--cyan); padding-left: 5px; }
+    .f-bottom { border-top: 1px solid #111; padding-top: 20px; display: flex; justify-content: space-between; font-size: 0.8rem; color: #666; }
 
-    /* ===== POPUP ===== */
-    .popup-overlay { position: fixed; inset: 0; background: rgba(5, 6, 10, 0.95); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
+    /* ===== POPUP SYSTEM ALERT ===== */
+    .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; }
     .popup-overlay.active { opacity: 1; visibility: visible; }
-    .popup-box { background: var(--bg-card); border: 2px solid var(--blue); border-radius: 16px; padding: 40px; max-width: 450px; width: 90%; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 0 40px rgba(0, 240, 255, 0.2); text-align: center; }
+    .popup-box {
+      background: var(--bg-dark); border: 2px solid var(--red);
+      padding: 40px; max-width: 500px; width: 90%; text-align: center;
+      box-shadow: 0 0 30px rgba(255, 51, 51, 0.3);
+      clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+      transform: scale(0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
     .popup-overlay.active .popup-box { transform: scale(1); }
-    .popup-icon { font-size: 40px; margin-bottom: 15px; text-shadow: 0 0 15px var(--orange); }
-    .popup-box h2 { font-size: 1.4rem; color: #fff; text-shadow: 0 0 10px var(--blue); margin-bottom: 5px; }
-    .popup-subtitle { color: var(--orange); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; }
-    .popup-warning { background: rgba(255, 51, 51, 0.1); border-left: 3px solid var(--red); padding: 15px; font-size: 0.85rem; color: #ffcccc; text-align: left; margin: 20px 0; border-radius: 4px; }
-    .popup-btn { background: var(--blue); color: #000; border: none; padding: 12px 40px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 0 15px rgba(0,240,255,0.4); }
-    .popup-btn:hover { background: var(--blue-dark); transform: scale(1.05); box-shadow: 0 0 25px rgba(0,240,255,0.6); }
+    .sys-warn { color: var(--red); font-size: 3rem; margin-bottom: 10px; animation: blink 1s infinite; }
+    .popup-box h2 { color: #fff; margin-bottom: 10px; }
+    .popup-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.6; }
+    .warning-text { background: rgba(255, 51, 51, 0.1); border-left: 4px solid var(--red); padding: 15px; color: #ff9999; text-align: left; font-size: 0.85rem; margin-bottom: 20px; }
 
-    /* ===== CHAT WIDGET CYBERPUNK ===== */
-    #chat-widget { position: fixed; bottom: 25px; right: 25px; z-index: 9999; }
-    #chat-toggle { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), var(--orange)); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); transition: transform 0.2s; position: relative; }
-    #chat-toggle:hover { transform: scale(1.1); box-shadow: 0 0 30px rgba(255, 0, 127, 0.6); }
-    #chat-box { position: absolute; bottom: 80px; right: 0; width: 340px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 0 30px rgba(0, 240, 255, 0.15); display: none; flex-direction: column; overflow: hidden; transform-origin: bottom right; transform: scale(0.9); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease; }
-    #chat-box.open { display: flex; transform: scale(1); opacity: 1; }
-    #chat-header { background: linear-gradient(135deg, var(--blue), var(--orange)); padding: 15px; display: flex; align-items: center; gap: 10px; color: #000; }
-    .chat-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 18px; }
-    .chat-header-info h4 { font-weight: 800; margin: 0; font-size: 1rem;}
-    .chat-status { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-    .chat-dot { width: 8px; height: 8px; border-radius: 50%; background: #00ff00; box-shadow: 0 0 5px #00ff00; }
-    #chat-messages { height: 300px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: var(--bg-off); }
-    .chat-msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; word-wrap: break-word; }
-    .chat-msg.admin { background: var(--border); color: var(--text); align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid rgba(0,240,255,0.2); }
-    .chat-msg.visitor { background: var(--blue); color: #000; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 600;}
-    #chat-input-area { display: flex; padding: 10px; background: var(--bg-card); border-top: 1px solid var(--border); gap: 8px; }
-    #chat-input { flex: 1; background: var(--bg-off); border: 1px solid var(--border); color: #fff; padding: 10px 15px; border-radius: 8px; outline: none; font-size: 0.85rem; }
-    #chat-input:focus { border-color: var(--blue); }
-    #chat-send { background: var(--orange); color: #fff; border: none; width: 40px; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
-    #chat-send:hover { background: var(--red); }
+    /* ===== CHAT TERMINAL ===== */
+    #chat-widget { position: fixed; bottom: 30px; right: 30px; z-index: 10000; }
+    .chat-btn {
+      width: 60px; height: 60px; border-radius: 50%; background: var(--cyan); border: none; cursor: pointer;
+      font-size: 24px; box-shadow: 0 0 20px rgba(0,240,255,0.4); transition: 0.3s; color: #000;
+    }
+    .chat-btn:hover { transform: scale(1.1) rotate(15deg); }
+    
+    #chat-window {
+      position: absolute; bottom: 80px; right: 0; width: 350px;
+      background: var(--bg-dark); border: 1px solid var(--cyan);
+      box-shadow: 0 0 20px rgba(0,240,255,0.2); display: none; flex-direction: column;
+      transform-origin: bottom right; transform: scale(0.8); opacity: 0; transition: 0.3s;
+    }
+    #chat-window.open { display: flex; transform: scale(1); opacity: 1; }
+    .chat-head { background: var(--cyan); color: #000; padding: 10px 15px; font-family: 'Orbitron'; font-weight: bold; display: flex; justify-content: space-between;}
+    .chat-head span { cursor: pointer; font-size: 1.2rem;}
+    .chat-body { height: 280px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-family: monospace; font-size: 0.9rem; }
+    .msg { padding: 8px 12px; border-radius: 4px; max-width: 85%; word-wrap: break-word; }
+    .msg.bot { background: rgba(0, 240, 255, 0.1); color: var(--cyan); border-left: 2px solid var(--cyan); align-self: flex-start; }
+    .msg.user { background: rgba(255, 0, 124, 0.1); color: var(--pink); border-right: 2px solid var(--pink); align-self: flex-end; text-align: right;}
+    .chat-foot { display: flex; border-top: 1px solid #333; }
+    .chat-foot input { flex: 1; background: #000; border: none; color: #0f0; padding: 12px; font-family: monospace; outline: none; }
+    .chat-foot button { background: var(--border-color); color: #fff; border: none; padding: 0 15px; cursor: pointer; font-family: 'Orbitron'; transition: 0.2s;}
+    .chat-foot button:hover { background: var(--cyan); color: #000; }
 
-    /* Responsive */
     @media (max-width: 768px) {
       .hero h1 { font-size: 2.2rem; }
-      .stats-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; text-align: center; }
-      .footer-socials { justify-content: center; margin-top: 10px; }
-      .nav-links { display: none; } /* Giấu menu trên mobile cho gọn demo */
-      #chat-box { width: 300px; right: -10px; }
+      .nav-links { display: none; }
+      #chat-window { width: 300px; right: -10px; }
+      .footer-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="popup-overlay active" id="popupOverlay">
+  <div class="popup-overlay active" id="popupAlert">
     <div class="popup-box">
-      <div class="popup-icon">🛡️</div>
-      <h2>HỆ THỐNG THÔNG BÁO</h2>
-      <div class="popup-subtitle">Điều khoản và quy định mua hàng</div>
-      <p>Cửa hàng chuyên cung ứng mã nguồn, tài nguyên website sạch và tối ưu hóa hệ thống vận hành tự động.</p>
-      <div class="popup-warning">
-        ⚠️ Nghiêm cấm mọi hành vi lợi dụng tài nguyên để quấy phá, khai thác lỗ hổng hoặc giả mạo trục lợi. Hệ thống sẽ ghi nhận lịch sử và IP truy cập để xử lý nếu có vấn đề phát sinh.
+      <div class="sys-warn"><i class="fas fa-exclamation-triangle"></i></div>
+      <h2>SYSTEM WARNING</h2>
+      <p>Điều khoản an ninh HOANGKUN STORE</p>
+      <div class="warning-text">
+        [!] NGHIÊM CẤM hành vi lợi dụng tài nguyên để DDoS, khai thác lỗ hổng hoặc giả mạo trục lợi.<br>
+        [!] Hệ thống giám sát IP và Logs 24/7. Mọi vi phạm sẽ bị khóa tài khoản vĩnh viễn không cần báo trước.
       </div>
-      <p style="margin-bottom: 20px; font-size: 14px; color: var(--blue);">🙏 Chúc các bạn tìm được mã nguồn ưng ý!</p>
-      <button class="popup-btn" onclick="document.getElementById('popupOverlay').classList.remove('active')">Tôi Đã Hiểu</button>
+      <button class="cyber-btn" onclick="document.getElementById('popupAlert').classList.remove('active')" style="background: var(--red); color: #fff;">[ XÁC NHẬN ]</button>
     </div>
   </div>
 
   <nav class="navbar" id="navbar">
     <div class="container nav-inner">
-      <a href="#" class="nav-logo">
-        <div class="nav-brand">HOANGKUN <span style="text-shadow: 0 0 10px var(--blue);">STORE</span></div>
-      </a>
+      <a href="#" class="nav-brand">HOANGKUN<span>_OS</span></a>
       <div class="nav-links">
-        <a href="#" class="active">Trang chủ</a>
-        <a href="#products">Mã nguồn</a>
-        <a href="#products">Gaming Scripts</a>
-        <a href="#contact" class="nav-cta"><i class="fas fa-headset"></i> Kỹ Thuật</a>
+        <a href="#" class="active">/HOME</a>
+        <a href="#products">/DATABASE</a>
+        <a href="#scripts">/SCRIPTS</a>
+        <a href="#" class="cyber-btn" style="padding: 6px 15px; font-size: 0.8rem;">LOGIN_</a>
       </div>
     </div>
   </nav>
 
   <section class="hero" id="home">
-    <div class="container">
-      <div class="hero-content reveal">
-        <div class="hero-badge">
-          <span class="dot"></span> Update Version 2026
-        </div>
-        <h1>Kho <span class="text-gradient">Source Code</span><br>&amp; Gaming Scripts<br>Premium Quality</h1>
-        <p class="hero-desc">Hệ thống cung cấp mã nguồn chuyên nghiệp, UI/UX Cyberpunk, sạch 100%, tích hợp cổng thanh toán API tự động, tối ưu hóa tối đa hiệu năng máy chủ.</p>
-        <div class="hero-buttons" style="justify-content: center;">
-          <a href="#products" class="btn-white"><i class="fas fa-rocket"></i> Khám Phá Ngay</a>
-        </div>
+    <div class="container hero-content">
+      <div class="sys-badge reveal">SYSTEM.ONLINE // V.2026</div>
+      <h1 class="glitch reveal d-1" data-text="PREMIUM CODE & SCRIPTS">PREMIUM CODE & SCRIPTS</h1>
+      <p class="reveal d-2">Kho tài nguyên mã nguồn chuẩn UI/UX Cyberpunk. Tích hợp hệ thống Auto API mạnh mẽ. Vận hành mượt mà, bảo mật tuyệt đối.</p>
+      <div class="hero-btns reveal d-3">
+        <a href="#products" class="cyber-btn">ACCESS_DATABASE</a>
+        <a href="#contact" class="cyber-btn outline">SUPPORT_REQ</a>
       </div>
     </div>
   </section>
 
   <section class="section" id="products">
     <div class="container">
-      <div class="section-header reveal">
-        <div class="section-tag"><i class="fas fa-fire"></i> TÀI NGUYÊN NỔI BẬT</div>
-        <h2>Sản Phẩm <span class="text-gradient">Chính Thức</span></h2>
-        <p>Chọn lọc những mã nguồn và tool auto vận hành ổn định nhất hệ thống</p>
-      </div>
-      
-      <div class="services-grid">
-        <div class="srv-card reveal delay-1">
-          <div class="srv-icon">💻</div>
-          <h3>Source Code Website</h3>
-          <p>Mã nguồn Landing Page, Web Shop, Portfolio thiết kế chuẩn UI/UX, responsive siêu mượt.</p>
-          <ul class="srv-features">
-            <li>Code sạch không mã độc</li>
-            <li>Chuẩn SEO, Load cực nhanh</li>
-            <li>Tùy biến Cyberpunk Dark Mode</li>
+      <h2 class="sec-title reveal">SYSTEM <span>RESOURCES</span></h2>
+      <div class="grid">
+        <div class="card reveal d-1">
+          <i class="fas fa-laptop-code"></i>
+          <h3 class="cyber-font">Web Source Code</h3>
+          <p>Mã nguồn Landing Page, Shop tự động. Build chuẩn cấu trúc, dễ dàng setup và custom.</p>
+          <ul>
+            <li>Speed Optimization 100/100</li>
+            <li>Clean Code Architecture</li>
+            <li>Dark/Neon Theme Ready</li>
           </ul>
         </div>
-        
-        <div class="srv-card reveal delay-2">
-          <div class="srv-icon">🎮</div>
-          <h3>Gaming Scripts Premium</h3>
-          <p>Kịch bản bổ trợ tối ưu hóa hiệu năng, xử lý logic mượt mà, quản lý dữ liệu game bài bản.</p>
-          <ul class="srv-features">
-            <li>Thuật toán chống Anti-Cheat</li>
-            <li>Tích hợp đa nền tảng dễ dàng</li>
-            <li>Bảo mật cao, chống khai thác</li>
+        <div class="card reveal d-2">
+          <i class="fas fa-gamepad"></i>
+          <h3 class="cyber-font">Gaming Scripts</h3>
+          <p>Công cụ quản lý, tối ưu logic game. Script bảo mật chống cheat, khai thác data.</p>
+          <ul>
+            <li>Bypass Anti-cheat Systems</li>
+            <li>Low Latency Execution</li>
+            <li>Cross-platform Support</li>
           </ul>
         </div>
-        
-        <div class="srv-card reveal delay-3">
-          <div class="srv-icon">⚡</div>
-          <h3>Hệ Thống Auto (Bot)</h3>
-          <p>Giải pháp webhook đồng bộ trạng thái, tích hợp API thanh toán ngân hàng tự động.</p>
-          <ul class="srv-features">
-            <li>Auto duyệt nạp thẻ, Momo, Bank</li>
-            <li>Xử lý tức thì không delay</li>
-            <li>Log bot gửi thẳng về Telegram</li>
+        <div class="card reveal d-3">
+          <i class="fas fa-robot"></i>
+          <h3 class="cyber-font">Auto Webhooks</h3>
+          <p>Tự động hóa hệ thống thanh toán, duyệt đơn ảo. Sync data về Telegram bot ngay lập tức.</p>
+          <ul>
+            <li>Bank/Momo API Integration</li>
+            <li>Zero Delay Processing</li>
+            <li>Encrypted Log Transfers</li>
           </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="stats-bar">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="reveal delay-1">
-          <div class="stat-number">100%</div>
-          <div class="stat-text">Mã nguồn an toàn</div>
-        </div>
-        <div class="reveal delay-2">
-          <div class="stat-number">Instant</div>
-          <div class="stat-text">Giao hàng tự động</div>
-        </div>
-        <div class="reveal delay-3">
-          <div class="stat-number">24/7</div>
-          <div class="stat-text">Support kỹ thuật</div>
         </div>
       </div>
     </div>
@@ -305,27 +311,100 @@
     <div class="container">
       <div class="footer-grid reveal">
         <div>
-          <div class="nav-brand" style="font-size: 1.5rem; margin-bottom: 10px;">HOANGKUN <span style="color: var(--blue);">STORE</span></div>
-          <p>Hệ thống chuyên cung cấp giải pháp lập trình, source code web và tài nguyên số cao cấp hàng đầu cho Developer.</p>
+          <h2 class="nav-brand">HOANGKUN<span>_OS</span></h2>
+          <p style="color: #666; margin-top: 10px; font-size: 0.9rem;">Cung cấp giải pháp phần mềm, tài nguyên mã nguồn cao cấp dành cho Developer chuyên nghiệp.</p>
         </div>
-        <div class="f-col">
-          <h4>Sản Phẩm</h4>
+        <div>
+          <h4 class="cyber-font">/ DIRECTORY</h4>
           <ul>
-            <li><a href="#products">Web Source Code</a></li>
-            <li><a href="#products">Gaming Scripts</a></li>
-            <li><a href="#products">API & Webhooks</a></li>
+            <li>> Web Source</li>
+            <li>> Game Scripts</li>
+            <li>> API Tools</li>
           </ul>
         </div>
-        <div class="f-col">
-          <h4>Kết Nối</h4>
+        <div>
+          <h4 class="cyber-font">/ TERMINAL</h4>
           <ul>
-            <li><a href="#">Trang chủ</a></li>
-            <li><a href="#products">Kho Lưu Trữ</a></li>
+            <li>> Contact: Telegram</li>
+            <li>> Node: hoangkunstore.id.vn</li>
+            <li>> Status: Operational</li>
           </ul>
         </div>
-        <div class="f-col">
-          <h4>Kỹ Thuật</h4>
-          <ul>
-            <li><a href="#" style="color: var(--blue);
-                  </body>
-                  </html>
+      </div>
+      <div class="f-bottom reveal d-1">
+        <span>sys.log("© 2026 HOANGKUN STORE. ALL RIGHTS RESERVED.");</span>
+        <div>[ GitHub ] [ Telegram ]</div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="chat-widget">
+    <button class="chat-btn" id="chatToggle" onclick="toggleTerm()"><i class="fas fa-terminal"></i></button>
+    <div id="chat-window">
+      <div class="chat-head">
+        <div>HOANGKUN_TERMINAL</div>
+        <span onclick="toggleTerm()">_</span>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="msg bot">System Initialized...<br>Admin HOANGKUN online.<br>Nhập yêu cầu mã nguồn của bạn:</div>
+      </div>
+      <div class="chat-foot">
+        <input type="text" id="chatInput" placeholder="C:\Users\Client>_" onkeydown="if(event.key==='Enter') sendCMD()">
+        <button onclick="sendCMD()">EXE</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. Navbar Scroll Effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 30);
+    });
+
+    // 2. Scroll Reveal Animations (Intersection Observer - Chống lag)
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          obs.unobserve(entry.target); // Ngừng theo dõi khi đã hiện để tiết kiệm tài nguyên
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // 3. Chat Terminal Logic
+    function toggleTerm() {
+      const term = document.getElementById('chat-window');
+      const icon = document.querySelector('#chatToggle i');
+      if (term.classList.contains('open')) {
+        term.classList.remove('open');
+        icon.className = 'fas fa-terminal';
+      } else {
+        term.classList.add('open');
+        icon.className = 'fas fa-times';
+        document.getElementById('chatInput').focus();
+      }
+    }
+
+    function sendCMD() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const body = document.getElementById('chatBody');
+      
+      // Print User Command
+      body.innerHTML += `<div class="msg user">${text}</div>`;
+      input.value = '';
+      body.scrollTop = body.scrollHeight;
+
+      // Auto Reply Bot
+      setTimeout(() => {
+        body.innerHTML += `<div class="msg bot">> Lệnh [ ${text.substring(0,10)}... ] đã được ghi nhận. Admin HOANGKUN sẽ xử lý sớm.</div>`;
+        body.scrollTop = body.scrollHeight;
+      }, 800);
+    }
+  </script>
+</body>
+</html>
