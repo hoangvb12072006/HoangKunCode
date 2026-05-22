@@ -1,29 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --blue: #1a56db;
-  --blue-dark: #1340a8;
-  --blue-light: #e8effc;
-  --blue-50: #f0f5ff;
-  --green: #059669;
-  --green-light: #ecfdf5;
-  --orange: #d97706;
-  --orange-light: #fffbeb;
-  --red: #dc2626;
-  --bg: #ffffff;
-  --bg-off: #f8fafc;
-  --bg-card: #ffffff;
-  --text-dark: #111827;
-  --text: #374151;
-  --text-light: #6b7280;
-  --text-lighter: #9ca3af;
-  --border: #e5e7eb;
-  --border-light: #f3f4f6;
-  --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.03);
-  --shadow-md: 0 10px 15px rgba(0,0,0,0.04), 0 4px 6px rgba(0,0,0,0.02);
-  --shadow-lg: 0 20px 25px rgba(0,0,0,0.06), 0 8px 10px rgba(0,0,0,0.03);
+  /* HACK ĐỔI TOÀN BỘ SANG CYBERPUNK DARK THEME */
+  --blue: #00f0ff;
+  --blue-dark: #00b3cc;
+  --blue-light: rgba(0, 240, 255, 0.1);
+  --blue-50: rgba(0, 240, 255, 0.05);
+  
+  --green: #00ff9d;
+  --green-light: rgba(0, 255, 157, 0.1);
+  
+  --orange: #ff007f;
+  --orange-light: rgba(255, 0, 127, 0.1);
+  
+  --red: #ff3333;
+  
+  --bg: #0a0b10;
+  --bg-off: #121420;
+  --bg-card: #161925;
+  
+  --text-dark: #ffffff;
+  --text: #f0f2f5;
+  --text-light: #9fa4b4;
+  --text-lighter: #6b7280;
+  
+  --border: #1e2235;
+  --border-light: #2a2f45;
+  
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.5);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.6);
+  --shadow: 0 4px 15px rgba(0, 240, 255, 0.1);
+  --shadow-md: 0 10px 25px rgba(0, 240, 255, 0.15);
+  --shadow-lg: 0 20px 40px rgba(255, 0, 127, 0.15);
+  
   --radius: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
