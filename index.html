@@ -1,307 +1,380 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HOANGKUN STORE - Chuyên cung cấp Source Code Website và Gaming Scripts.">
-  <title>HOANGKUN STORE | Cyberpunk Scripts & Source Code</title>
+  <meta name="description" content="HOANGKUN STORE - Chuyên cung cấp Source Code Website và Gaming Scripts chất lượng cao, tối ưu và bảo mật.">
+  <meta name="keywords" content="source code, gaming scripts, mua code tự động, hoangkun, shop code">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:title" content="HOANGKUN STORE | Source Code & Gaming Scripts Premium">
+  <meta property="og:description" content="Hệ thống phân phối source code website, landing page và các công cụ tối ưu hệ thống tự động hóa.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="vi_VN">
+  
+  <title>HOANGKUN STORE | Source Code & Gaming Scripts Premium</title>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
   
   <style>
-    /* ===== CSS BIẾN MÀU CYBERPUNK ===== */
+    @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700;800&display=swap');
+
     :root {
-      --cyan: #00f0ff;
-      --pink: #ff007c;
-      --yellow: #fcee0a;
-      --bg-dark: #050505;
-      --bg-panel: #0d1117;
-      --border-color: #1f2937;
-      --text-main: #e2e8f0;
-      --text-muted: #94a3b8;
+      /* CYBERPUNK NEON THEME */
+      --blue: #00f0ff;
+      --blue-dark: #00b3cc;
+      --blue-light: rgba(0, 240, 255, 0.1);
+      --blue-50: rgba(0, 240, 255, 0.05);
+      
+      --green: #00ff9d;
+      --green-light: rgba(0, 255, 157, 0.1);
+      
+      --orange: #ff007f;
+      --orange-light: rgba(255, 0, 127, 0.1);
+      
+      --red: #ff3333;
+      
+      --bg: #0a0b10;
+      --bg-off: #121420;
+      --bg-card: #161925;
+      
+      --text-dark: #ffffff;
+      --text: #f0f2f5;
+      --text-light: #9fa4b4;
+      --text-lighter: #6b7280;
+      
+      --border: #1e2235;
+      --border-light: #2a2f45;
+      
+      --shadow-xs: 0 1px 2px rgba(0,0,0,0.5);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.6);
+      --shadow: 0 4px 15px rgba(0, 240, 255, 0.1);
+      --shadow-md: 0 10px 25px rgba(0, 240, 255, 0.15);
+      --shadow-lg: 0 20px 40px rgba(255, 0, 127, 0.15);
+      
+      --radius: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 999px;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     html { scroll-behavior: smooth; }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       overflow-x: hidden;
-      background-image: 
-        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-      background-size: 30px 30px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      font-size: 15px;
     }
 
-    h1, h2, h3, .cyber-font { font-family: 'Orbitron', sans-serif; text-transform: uppercase; }
-    a { text-decoration: none; color: inherit; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-
-    /* ===== NÚT BẤM VÁT GÓC (CYBERPUNK BUTTON) ===== */
-    .cyber-btn {
-      display: inline-block;
-      padding: 12px 30px;
-      font-family: 'Orbitron', sans-serif;
+    h1, h2, h3, h4, h5, h6 {
       font-weight: 700;
-      font-size: 1rem;
-      color: #000;
-      background: var(--cyan);
-      border: none;
-      cursor: pointer;
-      position: relative;
-      clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+      line-height: 1.25;
+      color: var(--text-dark);
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ===== POPUP ===== */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 11, 16, 0.9);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
       transition: all 0.3s ease;
     }
-    .cyber-btn:hover {
-      background: var(--yellow);
-      box-shadow: 0 0 20px rgba(252, 238, 10, 0.5);
-      transform: translateY(-2px);
-    }
-    .cyber-btn.outline {
-      background: transparent;
-      color: var(--cyan);
-      border: 2px solid var(--cyan);
-      clip-path: none;
-    }
-    .cyber-btn.outline:hover { background: rgba(0, 240, 255, 0.1); box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
 
-    /* ===== HIỆU ỨNG GLITCH ===== */
-    .glitch {
-      position: relative;
-      color: #fff;
-      font-weight: 900;
-      text-shadow: 0 0 10px var(--cyan);
-    }
-    .glitch::before, .glitch::after {
-      content: attr(data-text);
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: var(--bg-dark);
-    }
-    .glitch::before {
-      left: 2px;
-      text-shadow: -2px 0 var(--pink);
-      clip: rect(24px, 550px, 90px, 0);
-      animation: glitch-anim-2 3s infinite linear alternate-reverse;
-    }
-    .glitch::after {
-      left: -2px;
-      text-shadow: -2px 0 var(--cyan);
-      clip: rect(85px, 550px, 140px, 0);
-      animation: glitch-anim 2.5s infinite linear alternate-reverse;
-    }
-    @keyframes glitch-anim {
-      0% { clip: rect(10px, 9999px, 44px, 0); }
-      20% { clip: rect(80px, 9999px, 15px, 0); }
-      40% { clip: rect(30px, 9999px, 85px, 0); }
-      60% { clip: rect(90px, 9999px, 20px, 0); }
-      80% { clip: rect(20px, 9999px, 75px, 0); }
-      100% { clip: rect(50px, 9999px, 10px, 0); }
+    .popup-overlay.active { opacity: 1; visibility: visible; }
+
+    .popup-box {
+      background: var(--bg-card);
+      border: 1px solid var(--blue);
+      border-radius: var(--radius-xl);
+      padding: 40px 36px;
+      max-width: 480px;
+      width: 92%;
+      transform: scale(0.95) translateY(20px);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+      text-align: center;
     }
 
-    /* ===== SCROLL REVEAL (HIỆN RA MƯỢT MÀ) ===== */
-    .reveal {
-      opacity: 0;
-      transform: translateY(50px) scale(0.95);
-      transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    .popup-overlay.active .popup-box { transform: scale(1) translateY(0); }
+
+    .popup-icon {
+      width: 64px; height: 64px;
+      background: var(--bg-off);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; font-size: 28px;
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
     }
-    .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
-    .d-1 { transition-delay: 0.1s; } .d-2 { transition-delay: 0.2s; } .d-3 { transition-delay: 0.3s; }
+
+    .popup-box h2 {
+      font-size: 1.35rem; margin-bottom: 4px;
+      color: var(--text-dark);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .popup-box .popup-subtitle {
+      color: var(--blue); font-size: 0.8rem; font-weight: 600; margin-bottom: 16px;
+    }
+
+    .popup-box p { color: var(--text); font-size: 0.87rem; line-height: 1.7; margin-bottom: 6px; }
+
+    .popup-box .popup-warning {
+      background: rgba(255, 51, 51, 0.1);
+      border: 1px solid var(--red);
+      border-radius: 10px; padding: 14px 16px; margin: 14px 0;
+      font-size: 0.82rem; color: #ffcccc; line-height: 1.65; text-align: left;
+    }
+
+    .popup-btn {
+      display: inline-block; margin-top: 20px; padding: 12px 48px;
+      background: var(--blue); color: #000; border: none; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    }
+
+    .popup-btn:hover {
+      background: var(--blue-dark); transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
+    }
 
     /* ===== NAVBAR ===== */
     .navbar {
-      position: fixed; width: 100%; top: 0; z-index: 1000;
-      background: rgba(5, 5, 5, 0.95);
-      border-bottom: 2px solid transparent;
-      transition: all 0.3s;
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 0;
+      transition: all 0.3s ease; background: rgba(10, 11, 16, 0.98);
+      border-bottom: 1px solid transparent;
     }
-    .navbar.scrolled { border-bottom: 2px solid var(--cyan); box-shadow: 0 0 20px rgba(0, 240, 255, 0.2); }
-    .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 80px; }
-    .nav-brand { font-size: 1.5rem; color: #fff; letter-spacing: 2px; }
-    .nav-brand span { color: var(--pink); text-shadow: 0 0 10px var(--pink); }
-    .nav-links { display: flex; gap: 20px; }
-    .nav-links a { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: var(--text-main); transition: 0.2s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--cyan); text-shadow: 0 0 8px var(--cyan); }
+
+    .navbar.scrolled { border-bottom: 1px solid var(--border); box-shadow: var(--shadow-xs); }
+
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; min-height: 80px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-brand { font-size: 1.2rem; font-weight: 800; color: var(--text-dark); letter-spacing: -0.3px; }
+    .nav-brand span { color: var(--blue); }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--text-light); transition: color 0.2s; padding: 8px 14px; border-radius: 6px; }
+    .nav-links a:hover, .nav-links a.active { color: var(--blue); font-weight: 600; }
+    .nav-cta { padding: 8px 20px !important; background: var(--blue) !important; color: #000 !important; border-radius: 8px !important; font-weight: 700 !important; margin-left: 8px; }
+    .nav-cta:hover { background: var(--blue-dark) !important; }
 
     /* ===== HERO ===== */
-    .hero {
-      height: 100vh; display: flex; align-items: center; justify-content: center;
-      text-align: center; position: relative;
-    }
-    .hero::after {
-      content: ''; position: absolute; bottom: 0; width: 100%; height: 100px;
-      background: linear-gradient(to top, var(--bg-dark), transparent);
-    }
-    .hero-content { z-index: 10; max-width: 800px; }
-    .sys-badge {
-      display: inline-block; padding: 5px 15px; border: 1px solid var(--pink);
-      color: var(--pink); font-family: 'Orbitron'; font-size: 0.8rem;
-      box-shadow: inset 0 0 10px rgba(255, 0, 124, 0.2); margin-bottom: 20px;
-    }
-    .hero h1 { font-size: 3.5rem; margin-bottom: 20px; line-height: 1.2; }
-    .hero p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 30px; }
-    .hero-btns { display: flex; gap: 15px; justify-content: center; }
+    .hero { min-height: 100vh; background: var(--bg-off); position: relative; display: flex; align-items: center; border-bottom: 1px solid var(--border-light); }
+    .hero-inner { position: relative; z-index: 3; display: grid; grid-template-columns: 1fr; text-align: center; gap: 56px; padding: 155px 0 80px; }
+    .hero-content { max-width: 700px; margin: 0 auto; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--green-light); border: 1px solid rgba(0, 255, 157, 0.3); border-radius: var(--radius-full); font-size: 0.78rem; color: var(--green); font-weight: 600; margin-bottom: 20px; }
+    .hero-badge .dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); animation: blink 2s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .hero h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 16px; line-height: 1.2; }
+    .text-gradient { color: transparent; -webkit-text-fill-color: transparent; background: linear-gradient(45deg, var(--blue), var(--orange)); -webkit-background-clip: text; background-clip: text; }
+    .hero-desc { font-size: 1rem; color: var(--text-light); margin-bottom: 32px; line-height: 1.75; }
+    .hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-white { padding: 12px 28px; background: var(--blue); color: #000; border-radius: 8px; font-weight: 700; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3); }
+    .btn-white:hover { background: var(--blue-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 240, 255, 0.5); }
 
-    /* ===== PRODUCTS (CARD VÁT GÓC) ===== */
-    .section { padding: 100px 0; }
-    .sec-title { text-align: center; font-size: 2.5rem; color: #fff; margin-bottom: 50px; }
-    .sec-title span { color: var(--cyan); }
-    
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-    .card {
-      background: var(--bg-panel);
-      padding: 30px;
-      position: relative;
-      border: 1px solid var(--border-color);
-      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
-      transition: 0.3s;
-    }
-    .card::before {
-      content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--border-color); transition: 0.3s;
-    }
-    .card:hover { border-color: var(--cyan); transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,240,255,0.1); }
-    .card:hover::before { background: var(--cyan); box-shadow: 0 0 15px var(--cyan); }
-    
-    .card i { font-size: 2.5rem; color: var(--cyan); margin-bottom: 20px; }
-    .card h3 { font-size: 1.3rem; margin-bottom: 10px; color: #fff; }
-    .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
-    .card ul { list-style: none; }
-    .card ul li { font-size: 0.85rem; padding: 5px 0; display: flex; gap: 10px; align-items: center;}
-    .card ul li::before { content: '>'; color: var(--pink); font-weight: bold; font-family: 'Orbitron'; }
+    /* ===== SERVICES ===== */
+    .section { padding: 80px 0; }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-tag { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; background: var(--blue-light); border-radius: var(--radius-full); font-size: 0.72rem; color: var(--blue); font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; }
+    .section-header h2 { font-size: 2rem; margin-bottom: 10px; }
+    .section-header p { color: var(--text-light); max-width: 480px; margin: 0 auto; font-size: 0.92rem; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+    .srv-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
+    .srv-card:hover { border-color: var(--blue); box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); transform: translateY(-4px); }
+    .srv-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; background: var(--blue-light); }
+    .srv-card h3 { font-size: 1.05rem; margin-bottom: 8px; font-weight: 700; }
+    .srv-card p { color: var(--text-light); font-size: 0.85rem; line-height: 1.6; margin-bottom: 14px; }
+    .srv-features li { display: flex; align-items: center; gap: 6px; padding: 3px 0; color: var(--text); font-size: 0.82rem; }
+    .srv-features li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 0.78rem; }
+
+    /* ===== STATS BAR ===== */
+    .stats-bar { background: var(--bg-card); padding: 48px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: center; }
+    .stat-box .stat-number { font-size: 2.2rem; font-weight: 800; color: var(--blue); text-shadow: 0 0 10px rgba(0, 240, 255, 0.2); }
+    .stat-box .stat-text { font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
 
     /* ===== FOOTER ===== */
-    .footer { border-top: 1px solid var(--border-color); padding: 50px 0 20px; background: #020202; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 30px; }
-    .footer h4 { color: var(--cyan); margin-bottom: 15px; font-size: 1rem; }
-    .footer ul li { margin-bottom: 10px; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; transition: 0.2s;}
-    .footer ul li:hover { color: var(--cyan); padding-left: 5px; }
-    .f-bottom { border-top: 1px solid #111; padding-top: 20px; display: flex; justify-content: space-between; font-size: 0.8rem; color: #666; }
+    .footer { background: #06070a; padding: 52px 0 28px; border-top: 1px solid var(--border); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 36px; margin-bottom: 36px; }
+    .nav-brand span { color: var(--blue); }
+    .footer .f-brand>p { color: var(--text-light); font-size: 0.82rem; line-height: 1.65; max-width: 260px; margin-top: 10px;}
+    .footer .f-col h4 { font-size: 0.82rem; color: white; margin-bottom: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .footer .f-col ul li { margin-bottom: 8px; }
+    .footer .f-col ul a { color: var(--text-light); font-size: 0.82rem; transition: color 0.2s; }
+    .footer .f-col ul a:hover { color: var(--blue); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 20px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-bottom p { color: var(--text-lighter); font-size: 0.78rem; }
+    .footer-socials { display: flex; gap: 8px; }
+    .footer-socials a { width: 34px; height: 34px; background: var(--bg-card); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text-light); transition: all 0.2s ease; }
+    .footer-socials a:hover { background: var(--blue); color: #000; }
 
-    /* ===== POPUP SYSTEM ALERT ===== */
-    .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; }
-    .popup-overlay.active { opacity: 1; visibility: visible; }
-    .popup-box {
-      background: var(--bg-dark); border: 2px solid var(--red);
-      padding: 40px; max-width: 500px; width: 90%; text-align: center;
-      box-shadow: 0 0 30px rgba(255, 51, 51, 0.3);
-      clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
-      transform: scale(0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .popup-overlay.active .popup-box { transform: scale(1); }
-    .sys-warn { color: var(--red); font-size: 3rem; margin-bottom: 10px; animation: blink 1s infinite; }
-    .popup-box h2 { color: #fff; margin-bottom: 10px; }
-    .popup-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.6; }
-    .warning-text { background: rgba(255, 51, 51, 0.1); border-left: 4px solid var(--red); padding: 15px; color: #ff9999; text-align: left; font-size: 0.85rem; margin-bottom: 20px; }
+    /* ===== ANIMATIONS ===== */
+    .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; will-change: transform, opacity; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; } .delay-3 { transition-delay: 0.3s; }
 
-    /* ===== CHAT TERMINAL ===== */
-    #chat-widget { position: fixed; bottom: 30px; right: 30px; z-index: 10000; }
-    .chat-btn {
-      width: 60px; height: 60px; border-radius: 50%; background: var(--cyan); border: none; cursor: pointer;
-      font-size: 24px; box-shadow: 0 0 20px rgba(0,240,255,0.4); transition: 0.3s; color: #000;
-    }
-    .chat-btn:hover { transform: scale(1.1) rotate(15deg); }
-    
-    #chat-window {
-      position: absolute; bottom: 80px; right: 0; width: 350px;
-      background: var(--bg-dark); border: 1px solid var(--cyan);
-      box-shadow: 0 0 20px rgba(0,240,255,0.2); display: none; flex-direction: column;
-      transform-origin: bottom right; transform: scale(0.8); opacity: 0; transition: 0.3s;
-    }
-    #chat-window.open { display: flex; transform: scale(1); opacity: 1; }
-    .chat-head { background: var(--cyan); color: #000; padding: 10px 15px; font-family: 'Orbitron'; font-weight: bold; display: flex; justify-content: space-between;}
-    .chat-head span { cursor: pointer; font-size: 1.2rem;}
-    .chat-body { height: 280px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-family: monospace; font-size: 0.9rem; }
-    .msg { padding: 8px 12px; border-radius: 4px; max-width: 85%; word-wrap: break-word; }
-    .msg.bot { background: rgba(0, 240, 255, 0.1); color: var(--cyan); border-left: 2px solid var(--cyan); align-self: flex-start; }
-    .msg.user { background: rgba(255, 0, 124, 0.1); color: var(--pink); border-right: 2px solid var(--pink); align-self: flex-end; text-align: right;}
-    .chat-foot { display: flex; border-top: 1px solid #333; }
-    .chat-foot input { flex: 1; background: #000; border: none; color: #0f0; padding: 12px; font-family: monospace; outline: none; }
-    .chat-foot button { background: var(--border-color); color: #fff; border: none; padding: 0 15px; cursor: pointer; font-family: 'Orbitron'; transition: 0.2s;}
-    .chat-foot button:hover { background: var(--cyan); color: #000; }
-
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-      .hero h1 { font-size: 2.2rem; }
       .nav-links { display: none; }
-      #chat-window { width: 300px; right: -10px; }
-      .footer-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; text-align: center; }
+      .footer .f-brand>p { margin: 10px auto;}
+      .footer-bottom { flex-direction: column; gap: 12px; }
     }
+
+    /* ===== CHAT WIDGET ===== */
+    #chat-widget { position: fixed; bottom: 24px; right: 24px; z-index: 9999; }
+    #chat-toggle { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), var(--orange)); color: #000; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 15px rgba(0, 240, 255, 0.5); transition: transform 0.2s ease; }
+    #chat-toggle:hover { transform: scale(1.08); box-shadow: 0 0 25px rgba(255, 0, 127, 0.6); }
+    #chat-box { position: absolute; bottom: 75px; right: 0; width: 340px; background: var(--bg-card); border-radius: 12px; box-shadow: 0 0 30px rgba(0, 240, 255, 0.15); display: none; flex-direction: column; overflow: hidden; border: 1px solid var(--border); }
+    #chat-box.open { display: flex; }
+    #chat-header { background: linear-gradient(135deg, var(--blue), var(--orange)); color: #000; padding: 16px; display: flex; align-items: center; gap: 12px; }
+    .chat-avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .chat-header-info h4 { font-size: 0.95rem; font-weight: 800; margin: 0 0 2px; }
+    .chat-status { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+    .chat-dot { width: 8px; height: 8px; border-radius: 50%; background: #00ff00; box-shadow: 0 0 5px #00ff00; }
+    #chat-messages { height: 260px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
+    .chat-msg { max-width: 80%; padding: 9px 13px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; word-wrap: break-word; }
+    .chat-msg.admin { background: linear-gradient(135deg, var(--blue), var(--orange)); color: #000; align-self: flex-start; border-bottom-left-radius: 3px; font-weight: 500;}
+    .chat-msg.visitor { background: var(--border); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
+    #chat-input-area { display: flex; border-top: 1px solid var(--border); padding: 10px; gap: 8px; background: var(--bg-card); }
+    #chat-input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 8px; padding: 9px 12px; font-size: 0.85rem; outline: none; }
+    #chat-input:focus { border-color: var(--blue); }
+    #chat-send { width: 38px; height: 38px; border-radius: 8px; background: var(--orange); color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    #chat-send:hover { background: var(--red); }
   </style>
 </head>
 
 <body>
 
-  <div class="popup-overlay active" id="popupAlert">
+  <div class="popup-overlay active" id="popupOverlay">
     <div class="popup-box">
-      <div class="sys-warn"><i class="fas fa-exclamation-triangle"></i></div>
-      <h2>SYSTEM WARNING</h2>
-      <p>Điều khoản an ninh HOANGKUN STORE</p>
-      <div class="warning-text">
-        [!] NGHIÊM CẤM hành vi lợi dụng tài nguyên để DDoS, khai thác lỗ hổng hoặc giả mạo trục lợi.<br>
-        [!] Hệ thống giám sát IP và Logs 24/7. Mọi vi phạm sẽ bị khóa tài khoản vĩnh viễn không cần báo trước.
+      <div class="popup-icon">🛡️</div>
+      <h2>HỆ THỐNG THÔNG BÁO</h2>
+      <div class="popup-subtitle">Điều khoản và quy định mua hàng</div>
+      <p>Cửa hàng chuyên cung ứng mã nguồn, tài nguyên website sạch và tối ưu hóa hệ thống vận hành tự động.</p>
+      <div class="popup-warning">
+        ⚠️ Nghiêm cấm mọi hành vi lợi dụng tài nguyên để quấy phá, khai thác lỗ hổng hoặc giả mạo trục lợi. Hệ thống sẽ ghi nhận lịch sử và IP truy cập để xử lý nếu có vấn đề phát sinh.
       </div>
-      <button class="cyber-btn" onclick="document.getElementById('popupAlert').classList.remove('active')" style="background: var(--red); color: #fff;">[ XÁC NHẬN ]</button>
+      <p style="margin-bottom: 15px; font-size: 14px;">🙏 Chúc các bạn tìm được mã nguồn ưng ý!</p>
+      <button class="popup-btn" onclick="closePopup()">Tôi Đã Hiểu</button>
     </div>
   </div>
 
   <nav class="navbar" id="navbar">
     <div class="container nav-inner">
-      <a href="#" class="nav-brand">HOANGKUN<span>_OS</span></a>
-      <div class="nav-links">
-        <a href="#" class="active">/HOME</a>
-        <a href="#products">/DATABASE</a>
-        <a href="#scripts">/SCRIPTS</a>
-        <a href="#" class="cyber-btn" style="padding: 6px 15px; font-size: 0.8rem;">LOGIN_</a>
+      <a href="index.html" class="nav-logo">
+        <div class="nav-brand">HOANGKUN <span>STORE</span></div>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="active">Trang chủ</a>
+        <a href="#products">Mã nguồn</a>
+        <a href="#products">Gaming Scripts</a>
+        <a href="#contact" class="nav-cta"><i class="fas fa-headset"></i> Hỗ trợ</a>
       </div>
     </div>
   </nav>
 
   <section class="hero" id="home">
-    <div class="container hero-content">
-      <div class="sys-badge reveal">SYSTEM.ONLINE // V.2026</div>
-      <h1 class="glitch reveal d-1" data-text="PREMIUM CODE & SCRIPTS">PREMIUM CODE & SCRIPTS</h1>
-      <p class="reveal d-2">Kho tài nguyên mã nguồn chuẩn UI/UX Cyberpunk. Tích hợp hệ thống Auto API mạnh mẽ. Vận hành mượt mà, bảo mật tuyệt đối.</p>
-      <div class="hero-btns reveal d-3">
-        <a href="#products" class="cyber-btn">ACCESS_DATABASE</a>
-        <a href="#contact" class="cyber-btn outline">SUPPORT_REQ</a>
+    <div class="container hero-inner">
+      <div class="hero-content fade-up">
+        <div class="hero-badge">
+          <span class="dot"></span> Cập nhật phiên bản mới 2026
+        </div>
+        <h1>Kho <span class="text-gradient">Source Code</span><br>&amp; Gaming Scripts<br>Premium Chất Lượng</h1>
+        <p class="hero-desc">Hệ thống cung cấp mã nguồn chuyên nghiệp, giao diện đẹp mắt, sạch 100%, tích hợp sẵn cổng thanh toán tự động, tối ưu hóa tối đa hiệu năng vận hành.</p>
+        <div class="hero-buttons">
+          <a href="#products" class="btn-white"><i class="fas fa-shopping-cart"></i> Xem Sản Phẩm</a>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="section" id="products">
     <div class="container">
-      <h2 class="sec-title reveal">SYSTEM <span>RESOURCES</span></h2>
-      <div class="grid">
-        <div class="card reveal d-1">
-          <i class="fas fa-laptop-code"></i>
-          <h3 class="cyber-font">Web Source Code</h3>
-          <p>Mã nguồn Landing Page, Shop tự động. Build chuẩn cấu trúc, dễ dàng setup và custom.</p>
-          <ul>
-            <li>Speed Optimization 100/100</li>
-            <li>Clean Code Architecture</li>
-            <li>Dark/Neon Theme Ready</li>
+      <div class="section-header fade-up">
+        <div class="section-tag"><i class="fas fa-code"></i> TÀI NGUYÊN NỔI BẬT</div>
+        <h2>Sản Phẩm <span class="text-gradient">Chính Thức</span></h2>
+        <p>Chọn lọc những mã nguồn và công cụ tối ưu, vận hành ổn định nhất</p>
+      </div>
+      
+      <div class="services-grid">
+        <div class="srv-card fade-up delay-1">
+          <div class="srv-icon">💻</div>
+          <h3>Source Code Website</h3>
+          <p>Mã nguồn Landing Page, Portfolio, Web giới thiệu dịch vụ thiết kế chuẩn UI/UX, responsive mượt mà.</p>
+          <ul class="srv-features">
+            <li>Tối ưu tốc độ tải trang cực nhanh</li>
+            <li>Dễ dàng tùy biến cấu trúc cấu hình</li>
+            <li>Code sạch không mã độc dính kèm</li>
           </ul>
         </div>
-        <div class="card reveal d-2">
-          <i class="fas fa-gamepad"></i>
-          <h3 class="cyber-font">Gaming Scripts</h3>
-          <p>Công cụ quản lý, tối ưu logic game. Script bảo mật chống cheat, khai thác data.</p>
-          <ul>
-            <li>Bypass Anti-cheat Systems</li>
-            <li>Low Latency Execution</li>
-            <li>Cross-platform Support</li>
+        
+        <div class="srv-card fade-up delay-2">
+          <div class="srv-icon">🎮</div>
+          <h3>Gaming Scripts Premium</h3>
+          <p>Các đoạn mã, kịch bản bổ trợ tối ưu hóa hiệu năng, xử lý logic mượt mà và quản lý dữ liệu game bài bản.</p>
+          <ul class="srv-features">
+            <li>Cập nhật thuật toán tối ưu mới</li>
+            <li>Hỗ trợ tích hợp nền tảng nhanh chóng</li>
+            <li>Bảo mật cao, chống khai thác</li>
           </ul>
         </div>
-        <div class="card reveal d-3">
-          <i class="fas fa-robot"></i>
-          <h3 class="cyber-font">Auto Webhooks</h3>
-          <p>Tự động hóa hệ thống thanh toán, duyệt đơn ảo. Sync data về Telegram bot ngay lập tức.</p>
-          <ul>
-            <li>Bank/Momo API Integration</li>
-            <li>Zero Delay Processing</li>
-            <li>Encrypted Log Transfers</li>
+        
+        <div class="srv-card fade-up delay-3">
+          <div class="srv-icon">⚡</div>
+          <h3>Hệ Thống Tự Động Hóa</h3>
+          <p>Giải pháp phân phối tài nguyên, webhook đồng bộ trạng thái và các công cụ auto nâng cao hiệu suất làm việc.</p>
+          <ul class="srv-features">
+            <li>Tích hợp cổng thanh toán API</li>
+            <li>Xử lý tức thì không delay hóa đơn</li>
+            <li>Báo cáo trạng thái chi tiết qua bot</li>
           </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-box fade-up delay-1">
+          <div class="stat-number">100%</div>
+          <div class="stat-text">Mã nguồn sạch, an toàn</div>
+        </div>
+        <div class="stat-box fade-up delay-2">
+          <div class="stat-number">Instant</div>
+          <div class="stat-text">Giao hàng tự động sau khi nạp</div>
+        </div>
+        <div class="stat-box fade-up delay-3">
+          <div class="stat-number">24/7</div>
+          <div class="stat-text">Hỗ trợ kỹ thuật vận hành</div>
         </div>
       </div>
     </div>
@@ -309,102 +382,128 @@
 
   <footer class="footer" id="contact">
     <div class="container">
-      <div class="footer-grid reveal">
-        <div>
-          <h2 class="nav-brand">HOANGKUN<span>_OS</span></h2>
-          <p style="color: #666; margin-top: 10px; font-size: 0.9rem;">Cung cấp giải pháp phần mềm, tài nguyên mã nguồn cao cấp dành cho Developer chuyên nghiệp.</p>
+      <div class="footer-grid fade-up">
+        <div class="f-brand">
+          <div class="nav-brand">HOANGKUN <span>STORE</span></div>
+          <p>Hệ thống chuyên cung cấp giải pháp lập trình, source code web và tài nguyên số cao cấp hàng đầu.</p>
         </div>
-        <div>
-          <h4 class="cyber-font">/ DIRECTORY</h4>
+        <div class="f-col">
+          <h4>Sản Phẩm</h4>
           <ul>
-            <li>> Web Source</li>
-            <li>> Game Scripts</li>
-            <li>> API Tools</li>
+            <li><a href="#products">Source Code Web</a></li>
+            <li><a href="#products">Gaming Scripts</a></li>
+            <li><a href="#products">Auto System Tools</a></li>
           </ul>
         </div>
-        <div>
-          <h4 class="cyber-font">/ TERMINAL</h4>
+        <div class="f-col">
+          <h4>Liên Kết</h4>
           <ul>
-            <li>> Contact: Telegram</li>
-            <li>> Node: hoangkunstore.id.vn</li>
-            <li>> Status: Operational</li>
+            <li><a href="#">Trang chủ</a></li>
+            <li><a href="#products">Danh mục</a></li>
+          </ul>
+        </div>
+        <div class="f-col">
+          <h4>Liên Hệ Kỹ Thuật</h4>
+          <ul>
+            <li><a href="#"><i class="fab fa-telegram"></i> Liên hệ Telegram Support</a></li>
+            <li><a href="https://hoangkunstore.id.vn" target="_blank">🌐 hoangkunstore.id.vn</a></li>
           </ul>
         </div>
       </div>
-      <div class="f-bottom reveal d-1">
-        <span>sys.log("© 2026 HOANGKUN STORE. ALL RIGHTS RESERVED.");</span>
-        <div>[ GitHub ] [ Telegram ]</div>
+      <div class="footer-bottom">
+        <p>© 2026 HOANGKUN STORE. All rights reserved.</p>
+        <div class="footer-socials">
+          <a href="#"><i class="fab fa-telegram"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
       </div>
     </div>
   </footer>
 
   <div id="chat-widget">
-    <button class="chat-btn" id="chatToggle" onclick="toggleTerm()"><i class="fas fa-terminal"></i></button>
-    <div id="chat-window">
-      <div class="chat-head">
-        <div>HOANGKUN_TERMINAL</div>
-        <span onclick="toggleTerm()">_</span>
+    <button id="chat-toggle" onclick="toggleChat()">💬</button>
+    <div id="chat-box">
+      <div id="chat-header">
+        <div class="chat-avatar">🤖</div>
+        <div class="chat-header-info">
+          <h4>Hỗ Trợ HOANGKUN</h4>
+          <div class="chat-status"><span class="chat-dot"></span> Trực tuyến</div>
+        </div>
       </div>
-      <div class="chat-body" id="chatBody">
-        <div class="msg bot">System Initialized...<br>Admin HOANGKUN online.<br>Nhập yêu cầu mã nguồn của bạn:</div>
+      <div id="chat-messages">
+        <div class="chat-msg admin">👋 Xin chào! Cần mua source code hay cài script gì bạn cứ nhắn nhé.</div>
       </div>
-      <div class="chat-foot">
-        <input type="text" id="chatInput" placeholder="C:\Users\Client>_" onkeydown="if(event.key==='Enter') sendCMD()">
-        <button onclick="sendCMD()">EXE</button>
+      <div id="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." onkeydown="if(event.key==='Enter') sendMsg()">
+        <button id="chat-send" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
       </div>
     </div>
   </div>
 
   <script>
-    // 1. Navbar Scroll Effect
+    // 1. Đóng Popup
+    function closePopup() {
+      document.getElementById('popupOverlay').classList.remove('active');
+    }
+
+    // 2. Hiệu ứng Navbar cuộn trang
     window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 30);
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // 2. Scroll Reveal Animations (Intersection Observer - Chống lag)
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          obs.unobserve(entry.target); // Ngừng theo dõi khi đã hiện để tiết kiệm tài nguyên
-        }
-      });
-    }, { threshold: 0.1 });
-    
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    // 3. Hiệu ứng Scroll Reveal (Mượt mà không lag)
+    document.addEventListener("DOMContentLoaded", () => {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
 
-    // 3. Chat Terminal Logic
-    function toggleTerm() {
-      const term = document.getElementById('chat-window');
-      const icon = document.querySelector('#chatToggle i');
-      if (term.classList.contains('open')) {
-        term.classList.remove('open');
-        icon.className = 'fas fa-terminal';
+      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    });
+
+    // 4. Code Chat Widget cơ bản
+    function toggleChat() {
+      const box = document.getElementById('chat-box');
+      const btn = document.getElementById('chat-toggle');
+      if (box.classList.contains('open')) {
+        box.classList.remove('open');
+        btn.innerHTML = '💬';
       } else {
-        term.classList.add('open');
-        icon.className = 'fas fa-times';
-        document.getElementById('chatInput').focus();
+        box.classList.add('open');
+        btn.innerHTML = '✕';
+        document.getElementById('chat-input').focus();
       }
     }
 
-    function sendCMD() {
-      const input = document.getElementById('chatInput');
+    function sendMsg() {
+      const input = document.getElementById('chat-input');
       const text = input.value.trim();
       if (!text) return;
-
-      const body = document.getElementById('chatBody');
       
-      // Print User Command
-      body.innerHTML += `<div class="msg user">${text}</div>`;
+      const msgs = document.getElementById('chat-messages');
+      
+      // Tin nhắn khách
+      const userDiv = document.createElement('div');
+      userDiv.className = 'chat-msg visitor';
+      userDiv.innerText = text;
+      msgs.appendChild(userDiv);
       input.value = '';
-      body.scrollTop = body.scrollHeight;
+      msgs.scrollTop = msgs.scrollHeight;
 
-      // Auto Reply Bot
+      // Phản hồi tự động (Giả lập)
       setTimeout(() => {
-        body.innerHTML += `<div class="msg bot">> Lệnh [ ${text.substring(0,10)}... ] đã được ghi nhận. Admin HOANGKUN sẽ xử lý sớm.</div>`;
-        body.scrollTop = body.scrollHeight;
-      }, 800);
+        const botDiv = document.createElement('div');
+        botDiv.className = 'chat-msg admin';
+        botDiv.innerText = 'Hệ thống đã nhận thông tin. Bạn chờ một lát mình check nhé!';
+        msgs.appendChild(botDiv);
+        msgs.scrollTop = msgs.scrollHeight;
+      }, 1000);
     }
   </script>
+
 </body>
 </html>
