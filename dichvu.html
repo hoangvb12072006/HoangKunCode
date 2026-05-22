@@ -3,60 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dịch Vụ | HOANGKUN STORE</title>
+  <title>Dịch Vụ & Bảng Giá | HOANGKUN STORE</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Gộp chung style để trang web mượt mà */
-    :root { --bg: #030712; --accent: #6366f1; --border: rgba(255,255,255,0.1); }
-    body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
-    
+    :root { --bg: #030712; --accent: #6366f1; --text: #f8fafc; --muted: #94a3b8; --border: rgba(255,255,255,0.1); }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; }
     .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
-    
-    /* Header/Nav */
-    .navbar { padding: 30px 0; border-bottom: 1px solid var(--border); }
-    .nav-brand { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; }
 
-    /* Nội dung */
-    .hero-service { padding: 80px 0; text-align: center; }
-    .hero-service h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(to right, #fff, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    /* Nav */
+    nav { padding: 30px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 800; font-size: 1.5rem; }
+    .nav-links a { color: var(--muted); margin-left: 20px; font-weight: 500; transition: 0.3s; }
+    .nav-links a:hover { color: #fff; }
+
+    /* Page Header */
+    .page-header { text-align: center; padding: 80px 0; }
+    .page-header h1 { font-size: 3rem; margin-bottom: 10px; }
+    .page-header p { color: var(--muted); }
+
+    /* Service Section */
+    .service-block { display: flex; align-items: center; gap: 60px; margin-bottom: 100px; }
+    .service-block:nth-child(even) { flex-direction: row-reverse; }
+    .text-content { flex: 1; }
+    .text-content h2 { font-size: 2rem; margin-bottom: 20px; color: #fff; }
+    .text-content ul { margin: 20px 0; }
+    .text-content li { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+    .text-content li i { color: #10b981; }
     
-    /* Lưới dịch vụ ngăn nắp */
-    .grid-services { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
-    .card-service { background: rgba(255,255,255,0.03); padding: 40px; border-radius: 24px; border: 1px solid var(--border); transition: 0.3s; }
-    .card-service:hover { border-color: var(--accent); transform: translateY(-10px); }
-    .icon-box { font-size: 2rem; color: var(--accent); margin-bottom: 20px; }
+    .img-content { flex: 1; height: 350px; background: rgba(255,255,255,0.05); border-radius: 24px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: var(--accent); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .service-block, .service-block:nth-child(even) { flex-direction: column; text-align: center; gap: 30px; }
+    }
   </style>
 </head>
+
 <body>
+  <nav class="container">
+    <div class="logo">HOANGKUN STORE</div>
+    <div class="nav-links">
+      <a href="index.html">Trang chủ</a>
+      <a href="dichvu.html" style="color: #fff;">Dịch vụ</a>
+    </div>
+  </nav>
 
-  <nav class="navbar"><div class="container"><a href="index.html" class="nav-brand">HOANGKUN STORE</a></div></nav>
-
-  <section class="hero-service">
+  <section class="page-header">
     <div class="container">
-      <h1>Giải pháp chuyên sâu</h1>
-      <p>Tối ưu hóa công nghệ cho doanh nghiệp và game thủ</p>
+      <h1>Dịch Vụ & Bảng Giá</h1>
+      <p>Giải pháp website và automation với mức giá cạnh tranh nhất thị trường</p>
     </div>
   </section>
 
-  <div class="container">
-    <div class="grid-services">
-      <div class="card-service">
-        <div class="icon-box"><i class="fas fa-code"></i></div>
-        <h3>Thiết Kế Web</h3>
-        <p>Landing page, shop tự động, source code sạch, tốc độ load 100/100.</p>
+  <main class="container">
+    
+    <section class="service-block">
+      <div class="text-content">
+        <h2>Thiết Kế Website</h2>
+        <p>Từ website giới thiệu đến web thương mại, học tập — tất cả được thiết kế riêng biệt, chuẩn SEO, tốc độ cao.</p>
+        <ul>
+          <li><i class="fas fa-check"></i> Thiết kế độc quyền theo thương hiệu</li>
+          <li><i class="fas fa-check"></i> Responsive chuẩn trên mọi thiết bị</li>
+          <li><i class="fas fa-check"></i> Tốc độ tải trang nhanh (Page Speed 90+)</li>
+        </ul>
       </div>
-      <div class="card-service">
-        <div class="icon-box"><i class="fas fa-robot"></i></div>
-        <h3>Automation API</h3>
-        <p>Kết nối thanh toán tự động, Webhook Telegram, xử lý giao dịch Real-time.</p>
-      </div>
-      <div class="card-service">
-        <div class="icon-box"><i class="fas fa-shield-halved"></i></div>
-        <h3>Bảo Mật & VPS</h3>
-        <p>Tường lửa, Anti-DDoS, hỗ trợ cấu hình VPS ổn định 24/7.</p>
-      </div>
-    </div>
-  </div>
+      <div class="img-content"><i class="fas fa-laptop-code"></i></div>
+    </section>
 
+    <section class="service-block">
+      <div class="text-content">
+        <h2>Dịch Vụ Automation</h2>
+        <p>Tự động hóa mọi tác vụ từ marketing đến quản lý khách hàng giúp tiết kiệm 80% thời gian vận hành.</p>
+        <ul>
+          <li><i class="fas fa-check"></i> Auto tương tác Facebook, TikTok</li>
+          <li><i class="fas fa-check"></i> Tự động tìm kiếm khách hàng</li>
+          <li><i class="fas fa-check"></i> Báo cáo tiến độ chi tiết</li>
+        </ul>
+      </div>
+      <div class="img-content"><i class="fas fa-robot"></i></div>
+    </section>
+
+  </main>
 </body>
 </html>
