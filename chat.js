@@ -1,33 +1,32 @@
-// ===== CHAT WIDGET - TMKAA (Firebase Firestore) =====
+// ===== CHAT WIDGET - HOANGKUN STORE =====
 (function () {
-  const ADMIN_REPLY_LABEL = 'TMKAA';
-  let sessionId = localStorage.getItem('tmkaa_chat_session');
-  let visitorName = localStorage.getItem('tmkaa_chat_name') || '';
+  const ADMIN_REPLY_LABEL = 'HOANGKUN';
+  let sessionId = localStorage.getItem('hoangkun_chat_session');
+  let visitorName = localStorage.getItem('hoangkun_chat_name') || '';
   let unsubscribe = null;
 
-  // Inject HTML
   const widget = document.createElement('div');
   widget.id = 'chat-widget';
   widget.innerHTML = `
-    <button id="chat-toggle" onclick="toggleChat()" title="Chat với TMKAA">
+    <button id="chat-toggle" onclick="toggleChat()" title="Chat với Support">
       💬
       <span id="chat-badge"></span>
     </button>
     <div id="chat-box">
       <div id="chat-header">
-        <div class="chat-avatar">🧑‍💼</div>
+        <div class="chat-avatar">🤖</div>
         <div class="chat-header-info">
-          <h4>Hỗ Trợ TMKAA</h4>
+          <h4>Hỗ Trợ HOANGKUN</h4>
           <div class="chat-status"><span class="chat-dot"></span> Trực tuyến</div>
         </div>
       </div>
       <div id="chat-start" style="display:none">
-        <p>Xin chào! Nhập tên để bắt đầu chat với chúng tôi 👋</p>
-        <input type="text" id="visitor-name-input" placeholder="Họ và tên của bạn..." maxlength="40">
+        <p>Xin chào! Nhập tên để bắt đầu chat với hệ thống 👋</p>
+        <input type="text" id="visitor-name-input" placeholder="Tên của bạn..." maxlength="40">
         <button onclick="startChat()">Bắt Đầu Chat</button>
       </div>
       <div id="chat-messages" style="display:none"></div>
-      <div class="chat-typing" id="chat-typing">TMKAA đang soạn tin...</div>
+      <div class="chat-typing" id="chat-typing">Admin đang soạn tin...</div>
       <div id="chat-input-area" style="display:none">
         <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." onkeydown="if(event.key==='Enter')sendMsg()">
         <button id="chat-send" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
@@ -60,22 +59,23 @@
     const name = nameInput.value.trim();
     if (!name) { nameInput.focus(); return; }
     visitorName = name;
-    localStorage.setItem('tmkaa_chat_name', name);
+    localStorage.setItem('hoangkun_chat_name', name);
     if (!sessionId) {
       sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
-      localStorage.setItem('tmkaa_chat_session', sessionId);
-      db.collection('chats').doc(sessionId).set({
-        visitorName: name,
-        page: window.location.pathname,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        lastMessage: '',
-        unread: 0
-      });
+      localStorage.setItem('hoangkun_chat_session', sessionId);
+      if(typeof db !== 'undefined') {
+          db.collection('chats').doc(sessionId).set({
+            visitorName: name,
+            page: window.location.pathname,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastMessage: '',
+            unread: 0
+          });
+      }
     }
     showChatUI();
     listenMessages();
-    // Welcome message
-    appendSystemMsg('👋 Xin chào ' + name + '! Chúng tôi sẽ phản hồi sớm nhất có thể.');
+    appendSystemMsg('👋 Xin chào ' + name + '! Cần source code hay script gì bạn cứ nhắn nhé.');
   };
 
   function showChatUI() {
@@ -95,6 +95,7 @@
 
   function listenMessages() {
     if (unsubscribe) unsubscribe();
+    if(typeof db === 'undefined') return;
     const msgs = document.getElementById('chat-messages');
     msgs.innerHTML = '';
     unsubscribe = db.collection('chats').doc(sessionId)
@@ -123,7 +124,7 @@
   }
 
   window.sendMsg = function () {
-    if (!sessionId) return;
+    if (!sessionId || typeof db === 'undefined') return;
     const input = document.getElementById('chat-input');
     const text = input.value.trim();
     if (!text) return;
