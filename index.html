@@ -1,2601 +1,600 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOANGKUN STORE - PREMIUM SHOP</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HOANGKUN STORE - Chuyên cung cấp Source Code Website và Gaming Scripts chất lượng cao, tối ưu và bảo mật.">
+  <meta name="keywords" content="source code, gaming scripts, mua code tự động, hoangkun, shop code">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:title" content="HOANGKUN STORE | Source Code & Gaming Scripts Premium">
+  <meta property="og:description" content="Hệ thống phân phối source code website, landing page và các công cụ tối ưu hệ thống tự động hóa.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="vi_VN">
+  
+  <title>HOANGKUN STORE | Source Code & Gaming Scripts Premium</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    /* CUSTOM CYBERPUNK DARK THEME CSS */
+    :root {
+      --bg-main: #0a0b10;
+      --bg-card: #121420;
+      --text-main: #f0f2f5;
+      --text-muted: #9fa4b4;
+      --accent-neon: #00f0ff;
+      --accent-pink: #ff007f;
+      --border-color: #1e2235;
+    }
 
-        /* --- BỐ CỤC LƯỚI SẢN PHẨM 3x3 --- */
-.grid-3x3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Ép hiển thị đúng 3 cột ngang trên máy tính */
-    gap: 25px;
-    padding: 20px 0;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+    }
 
-/* Responsive: Tự động xuống 2 cột nếu là Ipad, 1 cột nếu là Điện thoại để ko bị méo ảnh */
-@media (max-width: 992px) {
-    .grid-3x3 { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) {
-    .grid-3x3 { grid-template-columns: 1fr; }
-}
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-        /* CSS Nút lọc sản phẩm */
-.filter-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-.filter-btn {
-    background: #1a1a1a; color: #fff; border: 1px solid #444;
-    padding: 8px 25px; border-radius: 20px; cursor: pointer;
-    font-weight: bold; transition: 0.3s; font-size: 13px;
-}
-.filter-btn.active {
-    background: linear-gradient(90deg, #ff0000, #b71c1c);
-    border: none; color: #fff; box-shadow: 0 0 15px rgba(255,0,0,0.5);
-}
-.filter-btn:hover:not(.active) { border-color: #ff0000; color: #ff0000; }
-        
-        /* --- HIỆU ỨNG SẢN PHẨM PREMIUM --- */
-.product-card {
-    background: #151515;
-    border-radius: 16px;
-    border: 1px solid #333;
-    overflow: hidden;
-    transition: all 0.4s ease;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-.product-card:hover {
-    transform: translateY(-10px);
-    border-color: #00e5ff;
-    box-shadow: 0 10px 30px rgba(0, 229, 255, 0.2);
-}
-.discount-badge {
-    position: absolute;
-    top: 12px; right: 12px; /* Chuyển badge sang phải cho hiện đại */
-    background: linear-gradient(45deg, #ff0055, #ff0000);
-    color: #fff;
-    padding: 5px 12px;
-    border-radius: 8px;
-    font-weight: 900;
-    font-size: 13px;
-    z-index: 10;
-    box-shadow: 0 4px 10px rgba(255,0,0,0.4);
-    border: 1px solid #ffcccc;
-}
-.card-img-wrap {
-    width: 100%;
-    height: 170px;
-    overflow: hidden;
-}
-.card-img-wrap img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.5s ease;
-}
-.product-card:hover .card-img-wrap img {
-    transform: scale(1.15); /* Zoom ảnh khi di chuột */
-}
-.card-info { 
-    padding: 20px 15px; 
-    text-align: center; 
-    flex-grow: 1; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: space-between; 
-}
-.card-title { 
-    font-size: 16px; 
-    color: #fff; 
-    margin: 0 0 10px; 
-    font-weight: bold;
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; /* Tự cắt chữ nếu dài quá */
-}
-.price-box { margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 10px;}
-.old-price { text-decoration: line-through; color: #777; font-size: 13px; }
-.new-price { color: #00e5ff; font-size: 20px; font-weight: 900; text-shadow: 0 0 10px rgba(0,229,255,0.4); }
-.buy-btn {
-    background: linear-gradient(90deg, #ff0055, #ff0000);
-    border: none; padding: 12px; border-radius: 10px;
-    color: #fff; font-weight: 900; font-size: 14px; cursor: pointer;
-    transition: 0.3s; width: 100%; text-transform: uppercase;
-}
-.buy-btn:hover { 
-    background: linear-gradient(90deg, #ff0000, #cc0000); 
-    box-shadow: 0 0 20px #ff0000; 
-    transform: scale(1.05); 
-}
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-        :root {
-    --primary: #00e5ff; /* Màu xanh neon thay cho màu đỏ Tết */
-    --secondary: #008191;
-    --dark: #121212;
-}
-        
-        /* HIỆU ỨNG NEON & TOOLTIP CHO DÀN NÚT BÊN PHẢI */
-.contact-sidebar {
-    position: fixed;
-    right: 20px;
-    bottom: 120px; /* Cân bằng độ cao với bên trái */
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+    /* POPUP OVERLAY */
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(4, 5, 10, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.contact-item-right {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-decoration: none;
-    font-size: 20px;
-    transition: 0.3s;
-    cursor: pointer;
-    position: relative;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-}
+    .popup-box {
+      background: var(--bg-card);
+      border: 2px solid var(--accent-pink);
+      box-shadow: 0 0 20px rgba(254, 0, 127, 0.3);
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+    }
 
-/* Màu Neon thương hiệu */
-.zalo-neon { background: #0068ff; box-shadow: 0 0 10px #0068ff; }
-.fb-neon { background: #1877f2; box-shadow: 0 0 10px #1877f2; }
-.tele-neon { background: #229ed9; box-shadow: 0 0 10px #229ed9; }
+    .popup-icon {
+      font-size: 40px;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px var(--accent-pink);
+    }
 
-/* Di chuột vào nhích sang trái (đối xứng bên kia nhích sang phải) */
-.contact-item-right:hover {
-    transform: scale(1.1) translateX(-8px);
-    filter: brightness(1.2);
-    border-color: #fff;
-    box-shadow: 0 0 20px #fff;
-}
+    .popup-box h2 {
+      font-size: 22px;
+      color: #fff;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
 
-/* Tooltip hiện ra bên trái nút */
-.tooltip-right {
-    position: absolute;
-    right: 55px;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: bold;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(10px);
-    transition: 0.3s;
-    pointer-events: none;
-}
+    .popup-subtitle {
+      color: var(--accent-neon);
+      font-size: 13px;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
 
-.contact-item-right:hover .tooltip-right {
-    opacity: 1;
-    transform: translateX(0);
-}
+    .popup-warning {
+      background: rgba(255, 0, 127, 0.1);
+      border-left: 4px solid var(--accent-pink);
+      padding: 12px;
+      text-align: left;
+      font-size: 13px;
+      margin: 15px 0;
+      color: #ffccd5;
+    }
 
-        /* Container chứa các nút chức năng bên trái */
-.action-sidebar-left {
-    position: fixed;
-    bottom: 30px;
-    left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Khoảng cách giữa các nút */
-    z-index: 99999;
-}
+    .popup-btn {
+      background: transparent;
+      border: 2px solid var(--accent-neon);
+      color: var(--accent-neon);
+      padding: 10px 25px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 6px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
 
-/* Nút Bốc Lì Xì */
-.lixi-trigger {
-    width: 65px;
-    height: 65px;
-    background: radial-gradient(circle, #ff0000, #b71c1c);
-    border-radius: 50%;
-    border: 2px solid #ffea00;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 0 15px #ff0000;
-    animation: bounce 2s infinite;
-}
+    .popup-btn:hover {
+      background: var(--accent-neon);
+      color: #000;
+      box-shadow: 0 0 20px var(--accent-neon);
+    }
 
-/* Nút Vòng Quay (Sửa lại từ .spin-sticker) */
-.spin-trigger {
-    width: 65px;
-    height: 65px;
-    background: radial-gradient(circle, #ff0000, #800000);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
-    border: 2px solid #fff;
-    transition: 0.3s;
-}
+    /* NAVBAR */
+    .navbar {
+      background: rgba(10, 11, 16, 0.9);
+      border-bottom: 1px solid var(--border-color);
+      position: fixed;
+      width: 100%;
+      top: 0; z-index: 100;
+      backdrop-filter: blur(5px);
+    }
 
-.spin-trigger i {
-    font-size: 30px;
-    color: #fff;
-    animation: spinInfinite 4s linear infinite;
-}
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
 
-.trigger-tag {
-    position: absolute;
-    bottom: -5px;
-    background: #ffff00;
-    color: #ff0000;
-    font-size: 8px;
-    font-weight: 900;
-    padding: 2px 5px;
-    border-radius: 10px;
-    border: 1px solid #ff0000;
-    white-space: nowrap;
-}
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
 
-  #modalBocLixi {
-    display: none; 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(0, 0, 0, 0.85);
-    /* Sửa z-index thành 1000 để thông báo SweetAlert (thường là 1060) hiện lên trên */
-    z-index: 1000; 
-    align-items: center; 
-    justify-content: center;
-    backdrop-filter: blur(5px);
-}
+    .nav-brand {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 1.5px;
+    }
 
-.lixi-box {
-    background: linear-gradient(145deg, #d41414, #8b0000);
-    width: 95%; 
-    max-width: 450px; 
-    padding: 25px; 
-    border-radius: 20px;
-    border: 3px solid #ffea00; 
-    text-align: center; 
-    position: relative;
-    box-shadow: 0 0 50px rgba(255, 0, 0, 0.6);
-    animation: zoomIn 0.3s ease-out;
-}
+    .nav-brand span {
+      color: var(--accent-neon);
+    }
 
-.lixi-grid {
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 15px; 
-    margin: 20px 0;
-}
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 25px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
 
-.lixi-card {
-    cursor: pointer; 
-    transition: transform 0.3s;
-}
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--accent-neon);
+    }
 
-.lixi-card:hover { 
-    transform: scale(1.1); 
-    filter: brightness(1.2); 
-}
+    .nav-cta {
+      border: 1px solid var(--accent-neon);
+      padding: 6px 15px;
+      border-radius: 4px;
+    }
 
-.lixi-card img { 
-    width: 100%; 
-    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5)); 
-}
+    /* HERO */
+    .hero {
+      padding: 140px 0 80px;
+      background: radial-gradient(circle at 80% 20%, rgba(0, 240, 255, 0.05), transparent 40%);
+    }
 
-@keyframes shakeLixi {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(10deg); }
-    50% { transform: rotate(-10deg); }
-    100% { transform: rotate(0deg); }
-}
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
 
-.shaking { 
-    animation: shakeLixi 0.2s infinite; 
-}
+    .hero-content {
+      flex: 1;
+    }
 
-.user-bar {
-    background: rgba(0, 0, 0, 0.4); 
-    padding: 10px;
-    border-radius: 10px; 
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    color: #fff; 
-    font-size: 14px; 
-    margin-top: 10px;
-    display: flex; 
-    justify-content: space-around;
-}
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      color: var(--accent-neon);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
 
-@keyframes zoomIn { 
-    from { transform: scale(0.8); opacity: 0; } 
-    to { transform: scale(1); opacity: 1; } 
-}
-        
-        /* Kiểu cho giá gốc bị gạch ngang */
-.old-price {
-    text-decoration: line-through;
-    color: #888;
-    font-size: 14px;
-    margin-right: 10px;
-    font-weight: normal;
-}
+    .hero-badge .dot {
+      width: 8px; height: 8px;
+      background: var(--accent-neon);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-neon);
+    }
 
-/* Làm cho giá mới nổi bật hơn */
-.new-price {
-    color: #ff0000;
-    font-size: 22px;
-    font-weight: 800;
-}
-        
-        .logo:hover {
-    filter: brightness(1.2); /* Làm logo sáng hơn khi di chuột */
-    text-shadow: 0 0 8px var(--primary); /* Tạo hiệu ứng hào quang */
-    transition: 0.3s;
-}
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
 
-        footer a:hover {
-    color: var(--primary) !important;
-    transition: 0.3s;
-}
+    .text-gradient {
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      background: linear-gradient(45deg, var(--accent-neon), var(--accent-pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
 
-        /* Hiệu ứng chữ lướt sáng Gradient */
-/* Hiệu ứng Neon Tĩnh - Sang trọng & Hiện đại */
-.glow-text {
-    color: #ffffff; /* Chữ màu trắng */
-    text-shadow: 
-        0 0 5px #00e5ff,
-        0 0 10px #00e5ff,
-        0 0 20px #00e5ff,
-        0 0 40px #00e5ff,
-        0 0 80px #00e5ff; /* Tạo nhiều lớp bóng để chữ sáng rực như đèn neon */
-    /* Xóa bỏ hiệu ứng chạy màu cũ */
-    background: none;
-    -webkit-background-clip: border-box;
-    -webkit-text-fill-color: currentcolor;
-    animation: none;
-}
+    .hero-desc {
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
 
-@keyframes shine-glow {
-    to { background-position: 200% center; }
-}
+    .hero-buttons .btn-white {
+      background: var(--accent-neon);
+      color: #000;
+      text-decoration: none;
+      padding: 12px 28px;
+      border-radius: 6px;
+      font-weight: bold;
+      margin-right: 15px;
+      display: inline-block;
+      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
 
-/* Hiệu ứng dòng chữ phụ bay lên nhẹ nhàng */
-.sub-text {
-    animation: fadeInUp 1.5s ease-out;
-}
+    .hero-buttons .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 240, 255, 0.5);
+    }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 0.9; transform: translateY(0); }
-}
+    /* SERVICES SECTIONS */
+    .section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border-color);
+    }
 
-/* Hiệu ứng bo góc và đổ bóng cho ảnh sản phẩm */
-.thumb img {
-    transition: transform 0.5s ease;
-}
-.card:hover .thumb img {
-    transform: scale(1.1); /* Phóng to nhẹ ảnh khi di chuột vào */
-}
+    .section-header {
+      text-align: center;
+      margin-bottom: 5px;
+    }
 
-/* Làm cho các nút liên hệ (Zalo, FB) rung nhẹ để thu hút sự chú ý */
-@keyframes shake {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(5deg); }
-    50% { transform: rotate(-5deg); }
-    100% { transform: rotate(0deg); }
-}
-.contact-item {
-    animation: shake 2s infinite ease-in-out;
-}
+    .section-tag {
+      color: var(--accent-pink);
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
 
-.contact-sidebar {
-    position: fixed;
-    right: 20px;
-    bottom: 450px; /* Tăng từ 80px lên 450px để nó nằm trên hẳn khung chat */
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Tăng khoảng cách giữa các nút cho đẹp */
-}
+    .section-header h2 {
+      font-size: 32px;
+      margin: 10px 0;
+    }
 
-.contact-item {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-decoration: none;
-    font-size: 24px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: 0.3s;
-}
+    .section-header p {
+      color: var(--text-muted);
+    }
 
-.contact-item:hover {
-    transform: scale(1.1) translateX(-5px);
-}
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+      margin-top: 50px;
+    }
 
-.zalo { background: #0068ff; }
-.facebook { background: #1877f2; }
-.telegram { background: #229ed9; }
-        
-        :root { --primary: #ff0000; --secondary: #121212; --accent: #ff4d4d; --text: #ffffff; --bg: #050505; --card-bg: #1a1a1a; }
-        body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
-        
-        /* Hiệu ứng hạt nền */
-        #particleCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: radial-gradient(circle, #1a0000 0%, #050505 100%); }
-        
-        /* Navigation Bar */
-        nav { background: rgba(0, 0, 0, 0.85); border-bottom: 2px solid var(--primary); padding: 15px 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(15px); }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .nav-content { display: flex; justify-content: space-between; align-items: center; }
-/* Tìm đến dòng 24 và thay bằng đoạn này */
-.logo {
-    font-size: 26px;
-    font-weight: 900;
-    text-transform: uppercase;
-    animation: rgb-glow 4s infinite linear; /* Thêm dòng này để kích hoạt đổi màu */
-}
+    .srv-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      transition: transform 0.3s, border-color 0.3s;
+    }
 
-/* Thêm hiệu ứng chạy màu vào bất kỳ đâu trong thẻ <style> */
-@keyframes rgb-glow {
-    0% { color: #ff0000; text-shadow: 0 0 15px #ff0000; }
-    33% { color: #00ff00; text-shadow: 0 0 15px #00ff00; }
-    66% { color: #00ffff; text-shadow: 0 0 15px #00ffff; }
-    100% { color: #ff0000; text-shadow: 0 0 15px #ff0000; }
-}
-        /* Nút bấm xịn */
-        .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
-        .btn-red { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); }
-        .btn-red:hover { background: #ff3333; transform: scale(1.05); }
-        
-        /* Grid Sản phẩm */
-        .shop-title { border-left: 5px solid var(--primary); padding-left: 15px; margin: 40px 0 20px; font-size: 22px; text-transform: uppercase; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid #222; transition: 0.4s; position: relative; }
-        .card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(255,0,0,0.1); }
-        .thumb { height: 180px; width: 100%; }
-        .thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .card-body { padding: 20px; text-align: center; }
-        .price { color: var(--primary); font-size: 22px; font-weight: 800; margin: 10px 0; }
+    .srv-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-neon);
+    }
 
-        /* Modal hệ thống */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(10px); }
-        .modal-content { background: #151515; padding: 35px; border-radius: 20px; border: 1px solid #333; max-width: 400px; width: 90%; text-align: center; position: relative; }
-        .input-group { position: relative; margin-bottom: 15px; text-align: left; }
-        .input-group input { width: 100%; padding: 12px 15px; background: #000; border: 1px solid #333; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; }
-        .input-group input:focus { border-color: var(--primary); }
-        
-        /* Thông báo giả lập */
-        .fake-noti { position: fixed; bottom: -100px; left: 20px; background: rgba(20, 20, 20, 0.95); padding: 12px 20px; border-left: 4px solid var(--primary); border-radius: 8px; transition: 0.5s; z-index: 999; display: flex; align-items: center; gap: 10px; font-size: 14px; }
-        .fake-noti.show { bottom: 20px; }
+    .srv-icon {
+      font-size: 35px;
+      margin-bottom: 20px;
+    }
 
-        /* Lịch sử mua hàng */
-        .history-box { margin-top: 50px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #222; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #222; }
-        th { color: var(--primary); }
-        
-    </style>
+    .srv-card h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    .srv-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .srv-features {
+      list-style: none;
+    }
+
+    .srv-features li {
+      font-size: 13px;
+      color: #b5bac9;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .srv-features li::before {
+      content: "⚡";
+      color: var(--accent-neon);
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      background: var(--bg-card);
+      padding: 40px 0;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .stats-grid {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .stat-box {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--accent-neon);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+
+    .stat-text {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: #06070a;
+      padding: 60px 0 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .f-brand p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 15px;
+      max-width: 300px;
+    }
+
+    .f-col h4 {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .f-col ul {
+      list-style: none;
+    }
+
+    .f-col ul li {
+      margin-bottom: 12px;
+    }
+
+    .f-col ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .f-col ul li a:hover {
+      color: var(--accent-neon);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-color);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .footer-socials a {
+      color: var(--text-muted);
+      font-size: 18px;
+      margin-left: 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-socials a:hover {
+      color: var(--accent-neon);
+    }
+
+    @media (max-width: 768px) {
+      .hero-inner { flex-direction: column; text-align: center; }
+      .footer-grid { grid-template-columns: 1fr; gap: 25px; }
+      .footer-bottom { flex-direction: column; gap: 15px; }
+    }
+  </style>
 </head>
-    
-</head>
+
 <body>
 
-    <canvas id="particleCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;"></canvas>
-
-<nav>
-    <div class="container nav-content">
-       <div class="logo">
-    <a href="index.html" style="text-decoration: none; color: inherit;">
-        <h1 style="margin: 0; cursor: pointer;">HOANGKUNSTORE</h1>
-    </a>
-</div>
-        <div id="auth-section">
-            <button class="btn btn-red" onclick="showAuth(false)">ĐĂNG NHẬP / ĐĂNG KÝ</button>
-        </div>
-        <div id="user-section" style="display: none; align-items: center; gap: 15px;">
-            <div style="font-size: 14px;">Xin chào, <b id="display-name" style="color:var(--primary)">...</b></div>
-            <div style="background: #222; padding: 5px 12px; border-radius: 20px; font-size: 14px;">
-                <i class="fas fa-wallet" style="color:#00ff00"></i> <span id="user-balance">0đ</span>
-            </div>
-            <button class="btn btn-red" style="padding: 5px 10px; font-size: 12px;" onclick="showRecharge()">NẠP</button>
-            <button class="btn" style="background: #9c27b0; color: white; padding: 5px 10px; font-size: 12px; margin-left: 5px; box-shadow: 0 0 10px #9c27b0;" onclick="moModalCode()">
-    <i class="fas fa-gift"></i> CODE
-</button>
-            <i class="fas fa-sign-out-alt" style="cursor:pointer; color: #666;" onclick="logout()"></i>
-        </div>
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-box">
+      <div class="popup-icon">🛡️</div>
+      <h2>HỆ THỐNG THÔNG BÁO</h2>
+      <div class="popup-subtitle">Điều khoản và quy định mua hàng</div>
+      <p>Cửa hàng chuyên cung ứng mã nguồn, tài nguyên website sạch và tối ưu hóa hệ thống vận hành tự động.</p>
+      <div class="popup-warning">
+        ⚠️ Nghiêm cấm mọi hành vi lợi dụng tài nguyên để quấy phá, khai thác lỗ hổng hoặc giả mạo trục lợi. Hệ thống sẽ ghi nhận lịch sử và IP truy cập để xử lý nếu có vấn đề phát sinh.
+      </div>
+      <p style="margin-bottom: 15px; font-size: 14px;">🙏 Chúc các bạn tìm được mã nguồn ưng ý!</p>
+      <button class="popup-btn" onclick="closePopup()">Tôi Đã Hiểu</button>
     </div>
-</nav>
+  </div>
 
-<div class="swiper bannerSwiper" style="border-radius: 15px; margin-top: 20px; border: 1px solid #444; position: relative; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.5);">
-    
-  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; display: flex; flex-direction: column; align-items: center; width: 100%; text-align: center;">
-    <h1 class="glow-text" style="font-size: 65px; margin: 0; font-weight: 900; text-transform: uppercase; color: #fff; text-shadow: 0 0 20px #00e5ff;">
-        HOANGKUN STORE
-    </h1>
-   <div style="background: rgba(0, 229, 255, 0.1); border: 1px solid #00e5ff; padding: 10px 25px; border-radius: 50px; margin-top: 20px; backdrop-filter: blur(5px); box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);">
-        <span style="color: #fff; font-size: 18px; font-weight: bold; letter-spacing: 1px;">
-            <i class="fas fa-fire" style="color: #ff9100;"></i> 
-            ƯU ĐÃI: +20% GIÁ TRỊ KHI NẠP QUA ATM/MOMO 
-            <i class="fas fa-fire" style="color: #ff9100;"></i>
-        </span>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-brand">HOANGKUN <span>STORE</span></div>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="active">Trang chủ</a>
+        <a href="#products">Mã nguồn</a>
+        <a href="#scripts">Gaming Scripts</a>
+        <a href="#contact" class="nav-cta"><i class="fas fa-headset"></i> Hỗ trợ</a>
+      </div>
     </div>
-</div>
+  </nav>
 
-   <div class="swiper-wrapper">
-        <div class="swiper-slide">
-            <div style="width: 100%; height: 500px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://cdn-media.sforum.vn/storage/app/media/ctv_seo8/chuong-trinh-khuyen-mai/chuong-trinh-khuyen-mai-thumbnail.jpg') center/cover;"></div>
+  <section class="hero" id="home">
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="dot"></span> Cập nhật phiên bản mới 2026
         </div>
-        
-         <div class="swiper-slide">
-            <div style="width: 100%; height: 500px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://suno.vn/blog/wp-content/uploads/2017/09/cach-su-dung-khuyen-mai.jpg') center/cover;"></div>
+        <h1>Kho <span class="text-gradient">Source Code</span><br>&amp; Gaming Scripts<br>Premium Chất Lượng</h1>
+        <p class="hero-desc">Hệ thống cung cấp mã nguồn chuyên nghiệp, giao diện đẹp mắt, sạch 100%, tích hợp sẵn cổng thanh toán tự động, tối ưu hóa tối đa hiệu năng vận hành.</p>
+        <div class="hero-buttons">
+          <a href="#products" class="btn-white"><i class="fas fa-shopping-cart"></i> Xem Sản Phẩm</a>
         </div>
-        
-        <div class="swiper-slide">
-            <div style="width: 100%; height: 500px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://suno.vn/blog/wp-content/uploads/2017/11/4-h%C3%ACnh-th%E1%BB%A9c-khuy%E1%BA%BFn-m%C3%A3i-b%C3%A1n-h%C3%A0ng-trong-b%C3%A1n-l%E1%BA%BB-v%C3%A0-c%C3%A1ch-th%E1%BB%B1c-hi%E1%BB%87n-ch%C3%BAng-01-e1511489022773.jpg') center/cover;"></div>
-        </div>
-
-        <div class="swiper-slide">
-            <div style="width: 100%; height: 500px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://sf-static.upanhlaylink.com/img/image_20260221cd82032b24c87a441629b0c1695f5863.jpg   ') center/cover;"></div>
-        </div>
+      </div>
     </div>
+  </section>
 
-    <div class="swiper-button-next banner-nav" style="color: #fff; text-shadow: 0 0 10px #ff0000; z-index: 20; transform: scale(0.6);"></div>
-    <div class="swiper-button-prev banner-nav" style="color: #fff; text-shadow: 0 0 10px #ff0000; z-index: 20; transform: scale(0.6);"></div>
-</div>
-    
-    <div class="container" style="margin-top: 40px;">
-    <div style="background: rgba(15, 15, 15, 0.95); border: 1px solid #333; border-radius: 20px; padding: 25px; box-shadow: 0 0 25px rgba(255, 0, 0, 0.15);">
-        <h2 style="text-align: center; color: #fff; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 25px; font-weight: 800;">
-            <i class="fas fa-trophy" style="color: gold; margin-right: 10px;"></i> 
-            TOP 10 ĐẠI GIA NẠP NHIỀU
-            <i class="fas fa-trophy" style="color: gold; margin-left: 10px;"></i>
-        </h2>
-        <div class="table-responsive" style="border-radius: 15px; overflow: hidden;">
-            <table class="table" style="color: white; margin-bottom: 0;">
-                <thead style="background: linear-gradient(90deg, #ff0000, #990000); color: white;">
-                    <tr>
-                        <th style="text-align: center; width: 80px; border: none;">HẠNG</th>
-                        <th style="border: none;">KHÁCH HÀNG</th>
-                        <th style="text-align: center; border: none;">SỐ DƯ HIỆN TẠI</th>
-                    </tr>
-                </thead>
-                <tbody id="top-nap-body">
-                    </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-   <div style="display: flex; justify-content: space-between; align-items: center; margin: 40px 0 20px;">
-    <h2 class="shop-title" style="margin: 0;"><i class="fas fa-fire"></i> Sản phẩm mới nhất</h2>
-    <div style="position: relative;">
-        <input type="text" id="productSearch" onkeyup="searchProduct()" placeholder="Nhập tên code cần tìm..." 
-               style="background: #1a1a1a; color: white; border: 1px solid #ff0000; padding: 10px 40px 10px 15px; border-radius: 8px; width: 250px; outline: none; font-family: inherit;">
-        <i class="fas fa-search" style="position: absolute; right: 15px; top: 12px; color: #ff0000;"></i>
-    </div>
-</div>
-    <div class="filter-tabs" style="display: flex; gap: 10px; margin-bottom: 20px;">
-    <button class="filter-btn active" onclick="locSanPham('all', this)">Tất cả</button>
-    <button class="filter-btn" onclick="locSanPham('paid', this)">Mất phí</button>
-    <button class="filter-btn" onclick="locSanPham('free', this)">Miễn phí</button>
-</div>
-    
-  <div id="productGrid" class="grid-3x3"></div>
-    
-    <div id="product-pagination" style="text-align: center; margin-top: 10px; margin-bottom: 40px;"></div>
-    
-   <div id="history-section" class="history-box" style="display:none; border: 1px solid var(--primary); margin-top: 30px;">
-    <h3 style="color: var(--primary); text-align: center;"><i class="fas fa-shopping-cart"></i> LỊCH SỬ GIAO DỊCH & KHO CODE</h3>
-    <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-        <thead>
-            <tr style="background: #222; color: #fff;">
-                <th style="width: 30%; padding: 10px; border: 1px solid #333;">Tên Sản Phẩm</th>
-                <th style="width: 15%; border: 1px solid #333;">Giá</th>
-                <th style="width: 30%; border: 1px solid #333;">Ngày Mua</th>
-                <th style="width: 25%; border: 1px solid #333;">Link Tải</th>
-            </tr>
-        </thead>
-        <tbody id="history-body"></tbody>
-    </table>
-    
-    <div id="history-pagination" style="text-align: center; margin-top: 20px;"></div>
-</div>
-       
-       <div id="history-section" class="history-box" style="display:none; border: 1px solid var(--primary); margin-top: 30px;">
-    <h3 style="color: var(--primary); text-align: center;"><i class="fas fa-shopping-cart"></i> LỊCH SỬ GIAO DỊCH & KHO CODE</h3>
-    <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-        <thead>
-            <tr style="background: #222; color: #fff;">
-                <th style="width: 30%; padding: 10px; border: 1px solid #333;">Tên Sản Phẩm</th>
-                <th style="width: 15%; border: 1px solid #333;">Giá</th>
-                <th style="width: 30%; border: 1px solid #333;">Ngày Mua</th>
-                <th style="width: 25%; border: 1px solid #333;">Link Tải</th>
-            </tr>
-        </thead>
-        <tbody id="history-body"></tbody>
-    </table>
-    
-    <div id="history-pagination" style="text-align: center; margin-top: 20px;"></div>
-</div>
-</div>
-    
-<div id="authModal" class="modal">
-    <div class="modal-content">
-        <h2 id="authTitle" style="margin-top:0">LOGIN</h2>
-        <div class="input-group">
-            <label style="font-size: 12px; color: #666;">Tên tài khoản</label>
-            <input type="text" id="userInput" placeholder="Gõ tên tài khoản...">
-        </div>
-        <div class="input-group">
-            <label style="font-size: 12px; color: #666;">Mật khẩu</label>
-            <input type="password" id="passInput" placeholder="*******">
-        </div>
-        <div id="regFields" style="display: none;">
-            <div class="input-group">
-                <label style="font-size: 12px; color: #666;">Xác nhận mật khẩu</label>
-                <input type="password" id="confirmInput" placeholder="*******">
-            </div>
-        </div>
-        <button class="btn btn-red" style="width: 100%; margin-top: 10px;" onclick="handleAuth()">XÁC NHẬN</button>
-        <p class="auth-switch">
-            <span id="switchText">Chưa có tài khoản?</span> 
-            <b onclick="toggleAuth()" style="color:var(--primary); cursor:pointer">Bấm vào đây</b>
-        </p>
-        <div style="margin-top: 20px; font-size: 13px; color: #444; cursor: pointer;" onclick="closeModal('authModal')">Đóng cửa sổ</div>
-    </div>
-</div>
-<div id="rechargeModal" class="modal" style="display: none;">
-    <div class="modal-content" style="max-width: 500px; padding: 0; overflow: hidden; background: #fff; border: none; border-radius: 15px;">
-        <div onclick="closeRecharge()" style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 24px; color: #888; font-weight: bold;">&times;</div>
-        
-        <div style="display: flex; background: #f8f9fa; border-bottom: 1px solid #ddd;">
-            <div id="re-tab0" onclick="switchRechargeTab('atm')" style="flex: 1; padding: 15px; cursor: pointer; color: #ff4747; font-weight: bold; border-bottom: 3px solid #ff4747; text-align: center;">Nạp ATM</div>
-            <div id="re-tab1" onclick="switchRechargeTab('card')" style="flex: 1; padding: 15px; cursor: pointer; color: #555; font-weight: bold; text-align: center;">Nạp thẻ</div>
-            <div id="re-tab2" onclick="switchRechargeTab('top')" style="flex: 1; padding: 15px; cursor: pointer; color: #555; font-weight: bold; text-align: center;">Top nạp</div>
-            <div id="re-tab3" onclick="switchRechargeTab('reward')" style="flex: 1; padding: 15px; cursor: pointer; color: #555; font-weight: bold; text-align: center;">Phần thưởng</div>
-        </div>
-
-      <div id="con-atm" style="padding: 20px; display: block;">
-    
-    <div id="step-1-input">
-        <div style="background: #e8f0fe; border: 1px dashed #1877f2; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-            <p style="color: #1877f2; font-size: 13px; margin: 0;">
-                <i class="fas fa-bolt"></i> <b>Nạp tự động MB Bank:</b><br>
-                Nhập đúng số tiền cần nạp để hệ thống tự động cộng sau 10s.
-            </p>
-        </div>
-
-        <label style="font-weight: bold; color: #333; display: block; margin-bottom: 5px;">Nhập số tiền muốn nạp:</label>
-        <input type="number" id="auto-amount" placeholder="Ví dụ: 10000, 20000..." 
-               style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; margin-bottom: 5px; outline: none;">
-        <p style="font-size: 11px; color: #888; margin-bottom: 15px;">* Tối thiểu 10.000đ</p>
-
-        <button onclick="createPaymentQR()" 
-                style="width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase;">
-            <i class="fas fa-qrcode"></i> Tạo Mã QR Nạp Tiền
-        </button>
-    </div>
-
-    <div id="step-2-qr" style="display: none; text-align: center;">
-        <div style="background: #fff; padding: 10px; border: 2px solid #1877f2; border-radius: 10px; display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative;">
-            <img id="qr-image" src="" alt="QR Code" style="width: 200px; display: block;">
-            
-            <img src="https://img.mservice.io/momo_app_v2/new_version/img/app/logo-mb-bank.png" 
-                 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; border: 2px solid #fff; border-radius: 50%;">
-        </div>
-        
-        <div style="margin-top: 15px; text-align: left; background: #f9f9f9; padding: 10px; border-radius: 8px; border: 1px solid #eee;">
-            <p style="margin: 5px 0;">🏦 Ngân hàng: <b style="color:#1877f2">MB BANK (Quân Đội)</b></p>
-            <p style="margin: 5px 0;">💳 Số tài khoản: <b>88812072006888</b></p>
-            <p style="margin: 5px 0;">👤 Chủ TK: <b>NGUYEN VIET HOANG</b></p>
-            <p style="margin: 5px 0; border-top: 1px dashed #ccc; padding-top: 5px; margin-top: 5px;">
-                💰 Số tiền: <b id="display-amount" style="color: #00aa00; font-size: 16px;">0đ</b>
-            </p>
-            <p style="margin: 5px 0;">
-                📝 Nội dung: <b id="display-memo" style="color: #d9534f; background: #ffeded; padding: 2px 5px;">...</b>
-            </p>
-        </div>
-
-        <div style="margin-top: 15px;">
-            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">
-                <i class="fas fa-sync fa-spin"></i> Đang chờ tiền về (10-30 giây)...
-            </div>
-            <button onclick="resetRecharge()" style="background: none; border: none; color: #666; text-decoration: underline; cursor: pointer;">
-                ← Quay lại nhập tiền khác
-            </button>
-        </div>
-    </div>
-</div>
-
-       <div id="con-card" style="padding: 20px; display: none;">
-    
-    <div style="background: #fffcf5; border: 1px dashed #f59f00; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-        <p style="color: #f59f00; font-size: 13px; margin: 0;">
-            <i class="fas fa-exclamation-triangle"></i> <b>Lưu ý quan trọng:</b><br>
-            Sai mệnh giá sẽ bị phạt <b>-50%</b> tiền nhận. Vui lòng kiểm tra kỹ.
-        </p>
-    </div>
-
-   <label style="font-size: 12px; font-weight: bold; color: #555;">Chọn loại thẻ:</label>
-<div style="display: flex; gap: 10px; margin-bottom: 15px; margin-top: 5px; flex-wrap: wrap;">
-    <div class="telco-btn active" onclick="selectTelco(this, 'VIETTEL')" style="flex: 1 0 25%; min-width: 70px; border: 1px solid #ff9900; background: #fffbe6; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #ee0033;">VIETTEL</div>
-    
-    <div class="telco-btn" onclick="selectTelco(this, 'VINAPHONE')" style="flex: 1 0 25%; min-width: 70px; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #0085cf;">VINA</div>
-    
-    <div class="telco-btn" onclick="selectTelco(this, 'MOBIFONE')" style="flex: 1 0 25%; min-width: 70px; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #005a8b;">MOBI</div>
-
-    <div class="telco-btn" onclick="selectTelco(this, 'GARENA')" style="flex: 1 0 40%; border: 1px solid #e74c3c; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #c0392b;">GARENA</div>
-
-    <div class="telco-btn" onclick="selectTelco(this, 'ZING')" style="flex: 1 0 40%; border: 1px solid #f39c12; padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; color: #d35400;">ZING</div>
-</div>
-
-<input type="hidden" id="card-telco" value="VIETTEL"> 
-
-<label style="font-size: 12px; font-weight: bold; color: #555;">Chọn mệnh giá:</label>
-<select id="card-amount" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; outline: none;">
-    <option value="">-- Chọn đúng mệnh giá --</option>
-    <option value="10000">10.000đ</option>
-    <option value="20000">20.000đ</option>
-    <option value="50000">50.000đ</option>
-    <option value="100000">100.000đ</option>
-    <option value="200000">200.000đ</option>
-    <option value="500000">500.000đ</option>
-</select>
-
-<script>
-    function selectTelco(element, value) {
-        // Xóa class active và reset style các nút khác
-        document.querySelectorAll('.telco-btn').forEach(btn => {
-            btn.classList.remove('active');
-            btn.style.background = 'transparent';
-            btn.style.borderColor = '#ddd';
-        });
-
-        // Thêm active cho nút được chọn
-        element.classList.add('active');
-        document.getElementById('card-telco').value = value;
-        
-        // Đổi màu nền nút được chọn cho đẹp
-        element.style.background = '#fffbe6';
-        element.style.borderColor = '#ff9900';
-    }
-</script>
-
-    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <div style="flex: 1;">
-            <label style="font-size: 12px; font-weight: bold; color: #555;">Mã thẻ (Pin):</label>
-            <input type="number" id="card-pin" placeholder="Mã số sau lớp bạc" 
-                   style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; outline: none;">
-        </div>
-        <div style="flex: 1;">
-            <label style="font-size: 12px; font-weight: bold; color: #555;">Số Seri:</label>
-            <input type="number" id="card-serial" placeholder="Dãy số seri" 
-                   style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; outline: none;">
-        </div>
-    </div>
-
-<button onclick="sendCardAuto()" 
-            style="width: 100%; padding: 14px; background: linear-gradient(90deg, #ff9900, #ffcc00); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 15px;">
-        <i class="fas fa-paper-plane"></i> Gửi thẻ ngay
-    </button>
-</div>
-        
-        <div id="con-top" style="padding: 15px; display: none; max-height: 300px; overflow-y: auto;">
-            <table style="width: 100%; border-collapse: collapse; color: #333; font-size: 14px;">
-                <thead>
-                    <tr style="border-bottom: 2px solid #eee; color: #888;">
-                        <th style="padding: 10px; text-align: left;">Hạng</th>
-                        <th style="padding: 10px; text-align: left;">Người dùng</th>
-                        <th style="padding: 10px; text-align: right;">Số tiền</th>
-                    </tr>
-                </thead>
-                <tbody id="top-recharge-modal-body"></tbody>
-            </table>
-        </div>
-
-        <div id="con-reward" style="padding: 20px; display: none; text-align: left;">
-            <div style="background: #fff5f5; border-left: 4px solid #ff4747; padding: 15px; border-radius: 8px;">
-                <p style="color: #d9534f; font-weight: bold; margin-bottom: 10px; font-size: 16px;">🎁 ĐUA TOP NẠP THÁNG 02</p>
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <div style="display: flex; justify-content: space-between; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ffebeb;">
-                        <span>🥇 <b>Top 1</b></span>
-                        <b style="color: #ff4747;">500.000 VNĐ</b>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ffebeb;">
-                        <span>🥈 <b>Top 2</b></span>
-                        <b style="color: #ff4747;">200.000 VNĐ</b>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 8px; background: white; border-radius: 5px; border: 1px solid #ffebeb;">
-                        <span>🥉 <b>Top 3</b></span>
-                        <b style="color: #ff4747;">100.000 VNĐ</b>
-                    </div>
-                </div>
-                <p style="font-size: 11px; color: #888; margin-top: 10px; font-style: italic;">* Phần thưởng cộng vào tài khoản cuối tháng</p>
-            </div>
-        </div>
-
-        <div id="con-history" style="padding: 10px; display: none; max-height: 350px; overflow-y: auto;">
-    <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-        <thead>
-            <tr style="background: #f8f9fa; color: #555; border-bottom: 2px solid #ddd;">
-                <th style="padding: 10px; text-align: left;">Thời gian</th>
-                <th style="padding: 10px; text-align: left;">Loại</th>
-                <th style="padding: 10px; text-align: right;">Số tiền</th>
-                <th style="padding: 10px; text-align: center;">Trạng thái</th>
-            </tr>
-        </thead>
-        <tbody id="deposit-history-body">
-            <tr><td colspan="4" style="text-align:center; padding:20px; color:#999;">Đang tải dữ liệu...</td></tr>
-        </tbody>
-    </table>
-
-        <div style="padding: 15px; border-top: 1px solid #eee;">
-            <button onclick="document.getElementById('rechargeModal').style.display='none'" style="width: 100%; padding: 14px; border: none; border-radius: 12px; background: #666; color: #fff; cursor: pointer; font-weight: bold;">ĐÓNG</button>
-        </div>
-    </div> </div> </div>
-
-    <script>
-
-        function closeRecharge() {
-    const modal = document.getElementById('rechargeModal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
-
-        function loadTopRechargeModal() {
-    const topBody = document.getElementById('top-recharge-modal-body');
-    if (!topBody) return;
-
-    // Lấy danh sách user, sắp xếp theo balance hoặc một trường 'total_nạp' nếu bạn có
-    db.ref('users').orderByChild('balance').limitToLast(10).on('value', snapshot => {
-        let html = '';
-        let rank = 1;
-        let users = [];
-
-        snapshot.forEach(child => {
-            users.push(child.val());
-        });
-        
-        // Đảo ngược danh sách để người cao nhất lên đầu
-        users.reverse().forEach(user => {
-            let color = rank <= 3 ? '#ff4747' : '#555'; // Top 3 để màu đỏ cho nổi
-            html += `
-                <tr style="border-bottom: 1px solid #f9f9f9;">
-                    <td style="padding: 10px; font-weight: bold; color: ${color};">#${rank}</td>
-                    <td style="padding: 10px;">${user.username || user.name || 'Khách'}</td>
-                    <td style="padding: 10px; text-align: right; font-weight: bold; color: #28a745;">
-                        ${(user.balance || 0).toLocaleString()}đ
-                    </td>
-                </tr>
-            `;
-            rank++;
-        });
-        topBody.innerHTML = html;
-    });
-}
-
-    let isSpinning = false; // Thêm dòng này ở đầu file Script
-    
-    // --- 1. KẾT NỐI FIREBASE ---
-    const firebaseConfig = {
-        apiKey: "AIzaSyDqpk71mVDWCP3jk7fxbHZayz92LTheY7g",
-        databaseURL: "https://hoangkun-594d0-default-rtdb.firebaseio.com",
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-        
-
-     // --- 1. Hàm chuyển Tab nạp tiền ---
-function switchRechargeTab(tab) {
-    const tabs = ['card', 'top', 'reward'];
-    tabs.forEach(t => {
-        const content = document.getElementById('con-' + t);
-        const btn = document.getElementById('re-tab' + (tabs.indexOf(t) + 1));
-        if(content) content.style.display = (t === tab) ? 'block' : 'none';
-        if (btn) {
-            btn.style.color = (t === tab) ? '#ff4747' : '#555';
-            btn.style.borderBottom = (t === tab) ? '3px solid #ff4747' : 'none';
-        }
-   }); // Kết thúc tabs.forEach
-
-    if (tab === 'top') {
-        loadTopRechargeModal();
-    }
-} // Kết thúc hàm switchRechargeTab tại đây (Dòng 482)
-
-function showRecharge() {
-    const user = localStorage.getItem('hoangUser');
-    if (!user) return showAuth(false);
-    
-    document.getElementById('rechargeModal').style.display = 'flex';
-    switchRechargeTab('atm'); 
-
-    // Tự động điền nội dung: nap + tên tài khoản
-    const memoElement = document.getElementById('nap-memo');
-    if (memoElement) {
-        memoElement.innerText = `nap ${user}`;
-    }
-}
-        
-function sendCard() {
-    const user = localStorage.getItem('hoangUser');
-    const type = document.getElementById('cardType').value;
-    const value = document.getElementById('cardValue').value;
-    const seri = document.getElementById('cardSeri').value.trim();
-    const pin = document.getElementById('cardPin').value.trim();
-    
-    if(!type || !value || !seri || !pin) {
-        return Swal.fire("Lỗi", "Vui lòng nhập đầy đủ thông tin thẻ!", "error");
-    }
-
-    // Hiệu ứng "Đang gửi" cho xịn
-    Swal.fire({
-        title: 'Đang gửi thẻ...',
-        didOpen: () => { Swal.showLoading(); }
-    });
-
-    // Lưu thông tin thẻ vào nhánh 'card_requests' trên Firebase
-    db.ref('card_requests').push({
-        username: user,
-        cardType: type,
-        cardValue: value,
-        seri: seri,
-        pin: pin,
-        status: "pending",
-        time: new Date().toLocaleString()
-    }).then(() => {
-        Swal.fire("Thành công", "Thẻ đã được gửi! Chờ Admin duyệt nhé.", "success");
-        closeModal('rechargeModal');
-        // Xóa trắng ô nhập để lần sau nạp tiếp
-        document.getElementById('cardSeri').value = '';
-        document.getElementById('cardPin').value = '';
-    }).catch(err => Swal.fire("Lỗi", err.message, "error"));
-}
-    
-
-  // Thay thế đoạn cũ bằng đoạn này:
-const products = [
-    { id: 1, name: "MS01 - CODE TRAITYM 1", price: 22000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-3.jpg", link: "https://www.mediafire.com/file/x82cfpep8576y2m/Code_tr%25C3%25A1i_tym_1.zip/file" },
-    { id: 2, name: "MS02 - CODE TRAITYM 2", price: 28000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-9.jpg", link: "https://www.mediafire.com/file/9ouog8a5ot8bbjr/Code_tr%25C3%25A1i_tym_2.zip/file" },
-    { id: 3, name: "MS03 - CODE TRAITYM 3", price: 32000, img: "https://cellphones.com.vn/sforum/wp-content/uploads/2024/03/Huong-dan-tao-code-trai-tim-html-tang-nguoi-than-yeu-nhan-ngay-8-3-13.jpg", link: "https://www.mediafire.com/file/y5koz065nphas87/Code_tr%25C3%25A1i_tym_3.zip/file" },
-    { id: 4, name: "MS04 - CODE WEB SHOP", price: 350000, img: "https://i.postimg.cc/JzmdcN7p/game-title.jpg", link: "https://www.mediafire.com/file/kpd7vqbm7235b46/Code+website+Game.zip/file" },
-    { id: 5, name: "MS05 - CODE GAME BẮN CUNG", price: 60000, img: "https://i.postimg.cc/svBYRYkr/IMG-6222.png", link: "https://www.mediafire.com/file/fppnwb0cye4f8p7/Code_ba%25CC%2586%25CC%2581n_cung.zip/file" },
-    { id: 6, name: "MS06 - CODE WEB MÈO CUTE", price: 75000, img: "https://i.postimg.cc/QKFThDy3/IMG-6223.gif", link: "https://www.mediafire.com/file/tcobfv1lccqrvjb/Code_chu%25CC%2581c_mu%25CC%259B%25CC%2580ng_sinh_nha%25CC%25A3%25CC%2582t_1.zip/file" },
-    { id: 7, name: "MS07 - CODE HIỆU ỨNG RỒNG", price: 69000, img: "https://i.postimg.cc/Czfq2F8R/IMG-6224.gif", link: "https://www.mediafire.com/file/csvufyf40lrz37s/Code_hie%25CC%25A3%25CC%2582u_u%25CC%259B%25CC%2581ng_tro%25CC%2589_chuo%25CC%25A3%25CC%2582t_1.zip/file" },
-    { id: 8, name: "MS08 - CODE HIỆU ỨNG CHUỘT 2", price: 65000, img: "https://i.postimg.cc/K3mMVW6Q/IMG-6225.gif", link: "https://www.mediafire.com/file/rzwparz9rv49icq/Code_Hie%25CC%25A3%25CC%2582u_U%25CC%259B%25CC%2581ng_Chuo%25CC%25A3%25CC%2582t_2.zip/file" },
-    { id: 10, name: "MS10 - Code Thư Tỏ Tình", price: 50000, img: "https://i.postimg.cc/q62Czw4K/IMG-6227.gif", link: "https://www.mediafire.com/file/689n10vjdpsnnfv/Code_Thu%25CC%259B_To%25CC%2589_Ti%25CC%2580nh.zip/file" },
-    { id: 11, name: "MS11 - Code Thiệp Chúc Giáng Sinh", price: 51000, img: "https://i.postimg.cc/3yHJnG5Y/IMG-6228.png", link: "https://www.mediafire.com/file/t914seytwtw0me0/Code_Thu%25CC%259B_Gia%25CC%2581ng_Sinh.zip/file" },
-    { id: 12, name: "MS12 - CODE HIỆU ỨNG CHUỘT 4", price: 63000, img: "https://i.postimg.cc/NKjWYf6d/IMG-6231.gif", link: "https://www.mediafire.com/file/e064bjd9uyb8z75/Code_Hie%25CC%25A3%25CC%2582u_U%25CC%259B%25CC%2581ng_Chuo%25CC%25A3%25CC%2582t_4.zip/file" },
-    { id: 13, name: "MS13 - CODE HIỆU ỨNG CHUỘT 5", price: 58000, img: "https://i.postimg.cc/HrkfHswf/IMG-6232.gif", link: "https://www.mediafire.com/file/6zwm6ew9ygnr1u3/Code_Hie%25CC%25A3%25CC%2582u_U%25CC%259B%25CC%2581ng_Chuo%25CC%25A3%25CC%2582t_5.zip/file" },
-    { id: 14, name: "MS14 - CODE HIỆU ỨNG LOADDING", price: 21000, img: "https://i.postimg.cc/pmLgxXfS/IMG-6233.png", link: "https://www.mediafire.com/file/zgsje7jjri4wh7t/Code_Hie%25CC%25A3%25CC%2582u_U%25CC%259B%25CC%2581ng_Loadding.zip/file" },
-    { id: 15, name: "MS15 - Code Qly Web Trường Học", price: 550000, img: "https://i.postimg.cc/G3B9xytZ/Untitled.png", link: "https://www.mediafire.com/file/xd5x96ia1g6arbv/Code+website+quản+lý+trường+học.zip/file" },
-    { id: 16, name: "MS16 - CODE WEBSITE ", price: 200000, img: "https://i.postimg.cc/DzqnVxw3/Untitled.png", link: "https://www.mediafire.com/file/g65sp328f6xfwvl/Code+website.zip/file" },
-    { id: 17, name: "MS17 - CODE Web Trường Học ", price: 500000, img: "https://sf-static.upanhlaylink.com/img/image_20260214f6fd60cb617300eefbc1b2026f2b2abd.jpg", link: "https://www.mediafire.com/file/z6opqban361ypx1/Test-code-main.zip/file" },
-    { id: 18, name: "MS18 - CODE WEB Time ", price: 0, status: "Miễn phí", img: "https://sf-static.upanhlaylink.com/img/image_20260224dba66dc85c3b4c62bfb094f26cc60a2e.jpg", link: "https://www.mediafire.com/file/lwkihu1jp2h2au7/hoangcyber-main.zip/file" },
-    { id: 19, name: "MS19 - CODE WEB PRO ", price: 0, status: "Miễn phí", img: "https://sf-static.upanhlaylink.com/img/image_202602247c7d57fbec0e8cafe089e6da88e6bbf8.jpg", link: "https://www.mediafire.com/file/ga3rt9r4cy03752/hoangcyber-main+(1).zip/file" },
-    { id: 20, name: "MS20 - CODE WEB PRO ", price: 0, status: "Miễn phí", img: "https://sf-static.upanhlaylink.com/img/image_20260224fdbe0d595a63bcc80fe4c0ba356f3c0f.jpg", link: "https://www.mediafire.com/file/pg36algr09uzofd/hoangcyber-main+(2).zip/file" },
-    { id: 21, name: "MS21 - CODE SHOP ROBLOX ", price: 800000, img: "https://sf-static.upanhlaylink.com/img/image_2026031036bee330f80a46d4d75648c6e065edff.jpg", link: "https://www.mediafire.com/file/j93bj92cw44vnip/web+bán+robux+acc+roblox.zip/file" },
-];
-             
-
-function renderProducts() {
-    let html = '';
-    
-    // 1. LỌC DANH SÁCH THEO TAB
-    let filteredProducts = [];
-    if (currentFilter === 'free') {
-        filteredProducts = products.filter(p => p.price === 0);
-    } else if (currentFilter === 'paid') {
-        filteredProducts = products.filter(p => p.price > 0);
-    } else {
-        filteredProducts = products; // 'all' - Lấy tất cả
-    }
-
-    // Nếu không có sản phẩm nào sau khi lọc
-    if (filteredProducts.length === 0) {
-        document.getElementById('productGrid').innerHTML = `<div style="width: 100%; text-align: center; color: #888; padding: 40px; font-size: 16px;">Chưa có sản phẩm nào trong mục này.</div>`;
-        if (myProductSwiper) { myProductSwiper.destroy(true, true); myProductSwiper = null; }
-        return;
-    }
-
-    // 2. VẼ DANH SÁCH SẢN PHẨM (Giữ nguyên giao diện của ông)
-    for (let i = 0; i < filteredProducts.length; i += 2) {
-        
-        // --- XỬ LÝ SẢN PHẨM 1 (HÀNG TRÊN) ---
-        const p1 = filteredProducts[i];
-        let giaGiam1 = p1.price, phanTram1 = "";
-
-        if (p1.price === 0) { phanTram1 = "FREE"; giaGiam1 = 0; }
-        else if (p1.price < 100000) { phanTram1 = "-50%"; giaGiam1 = p1.price * 0.5; } 
-        else if (p1.price <= 300000) { phanTram1 = "-20%"; giaGiam1 = p1.price * 0.8; } 
-        else { phanTram1 = "-10%"; giaGiam1 = p1.price * 0.9; }
-
-        let card1 = `
-            <div class="product-card">
-                <div class="discount-badge" style="background: ${p1.price === 0 ? '#00e5ff' : 'linear-gradient(45deg, #ff0055, #ff0000)'}; color: ${p1.price === 0 ? '#000' : '#fff'};">${phanTram1}</div>
-                <div class="card-img-wrap"><img src="${p1.img}"></div>
-                <div class="card-info">
-                    <h3 class="card-title">${p1.name}</h3>
-                    <div class="price-box">
-                        <span class="old-price">${p1.price > 0 ? p1.price.toLocaleString() + 'đ' : ''}</span>
-                        <span class="new-price" style="color: ${p1.price === 0 ? '#00e5ff' : '#00e5ff'};">${p1.price === 0 ? 'Miễn Phí' : Math.floor(giaGiam1).toLocaleString() + 'đ'}</span>
-                    </div>
-                    <button class="buy-btn" style="background: ${p1.price === 0 ? 'linear-gradient(90deg, #00e5ff, #007bff)' : 'linear-gradient(90deg, #ff0055, #ff0000)'}; color: ${p1.price === 0 ? '#fff' : '#fff'};" onclick="buyItem('${p1.name}', ${Math.floor(giaGiam1)}, '${p1.link}')">
-                        <i class="fas fa-shopping-cart"></i> ${p1.price === 0 ? 'NHẬN NGAY' : 'MUA NGAY'}
-                    </button>
-                </div>
-            </div>
-        `;
-
-        // --- XỬ LÝ SẢN PHẨM 2 (HÀNG DƯỚI) ---
-        let card2 = '';
-        if (filteredProducts[i + 1]) {
-            const p2 = filteredProducts[i + 1];
-            let giaGiam2 = p2.price, phanTram2 = "";
-
-            if (p2.price === 0) { phanTram2 = "FREE"; giaGiam2 = 0; }
-            else if (p2.price < 100000) { phanTram2 = "-50%"; giaGiam2 = p2.price * 0.5; } 
-            else if (p2.price <= 300000) { phanTram2 = "-20%"; giaGiam2 = p2.price * 0.8; } 
-            else { phanTram2 = "-10%"; giaGiam2 = p2.price * 0.9; }
-
-            card2 = `
-                <div class="product-card">
-                    <div class="discount-badge" style="background: ${p2.price === 0 ? '#00e5ff' : 'linear-gradient(45deg, #ff0055, #ff0000)'}; color: ${p2.price === 0 ? '#000' : '#fff'};">${phanTram2}</div>
-                    <div class="card-img-wrap"><img src="${p2.img}"></div>
-                    <div class="card-info">
-                        <h3 class="card-title">${p2.name}</h3>
-                        <div class="price-box">
-                            <span class="old-price">${p2.price > 0 ? p2.price.toLocaleString() + 'đ' : ''}</span>
-                            <span class="new-price" style="color: ${p2.price === 0 ? '#00e5ff' : '#00e5ff'};">${p2.price === 0 ? 'Miễn Phí' : Math.floor(giaGiam2).toLocaleString() + 'đ'}</span>
-                        </div>
-                        <button class="buy-btn" style="background: ${p2.price === 0 ? 'linear-gradient(90deg, #00e5ff, #007bff)' : 'linear-gradient(90deg, #ff0055, #ff0000)'}; color: ${p2.price === 0 ? '#fff' : '#fff'};" onclick="buyItem('${p2.name}', ${Math.floor(giaGiam2)}, '${p2.link}')">
-                            <i class="fas fa-shopping-cart"></i> ${p2.price === 0 ? 'NHẬN NGAY' : 'MUA NGAY'}
-                        </button>
-                    </div>
-                </div>
-            `;
-        } else {
-            card2 = `<div style="height: 100%; visibility: hidden;"></div>`;
-        }
-
-        html += `
-            <div class="swiper-slide">
-                <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
-                    ${card1}
-                    ${card2}
-                </div>
-            </div>
-        `;
-    }
-
-    document.getElementById('productGrid').innerHTML = html;
-
-    // 3. KHỞI TẠO LẠI SWIPER 
-    if (myProductSwiper) {
-        myProductSwiper.destroy(true, true); // Hủy Swiper cũ trước khi tạo cái mới
-    }
-    
-    myProductSwiper = new Swiper(".productSwiper", {
-        slidesPerView: 1, 
-        spaceBetween: 20,
-        loop: false, // Tắt loop đi để nếu khách chọn mục có ít SP thì nó không bị lỗi lặp vòng
-        autoplay: {
-            delay: 5000, 
-            disableOnInteraction: false,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        breakpoints: {
-            640: { slidesPerView: 2, slidesPerGroup: 2 },
-            960: { slidesPerView: 3, slidesPerGroup: 3 },
-            1200: { 
-                slidesPerView: 4, 
-                slidesPerGroup: 4 
-            },
-        },
-    });
-}
-        // --- LỌC, TÌM KIẾM VÀ PHÂN TRANG SẢN PHẨM ---
-let currentFilter = 'all';
-let currentProductPage = 1;
-const productsPerPage = 9; // Đổi thành 9 để hiện 3 hàng x 3 cột
-
-function locSanPham(type, btnElement) {
-    currentFilter = type;
-    currentProductPage = 1; // Reset về trang 1 khi bấm lọc
-    
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    btnElement.classList.add('active');
-    
-    renderProducts();
-}
-
-function searchProduct() {
-    let input = document.getElementById('productSearch').value.toLowerCase();
-    let cards = document.querySelectorAll('#productGrid .product-card'); 
-    
-    cards.forEach(card => {
-        let title = card.querySelector('.card-title').innerText.toLowerCase();
-        card.style.display = title.includes(input) ? "" : "none";
-    });
-    
-    // Ẩn thanh phân trang nếu đang gõ tìm kiếm
-    document.getElementById('product-pagination').style.display = input.length > 0 ? 'none' : 'block';
-}
-
-function renderProducts() {
-    let html = '';
-    
-    // 1. Lọc mảng
-    let filteredProducts = [];
-    if (currentFilter === 'free') {
-        filteredProducts = products.filter(p => p.price === 0);
-    } else if (currentFilter === 'paid') {
-        filteredProducts = products.filter(p => p.price > 0);
-    } else {
-        filteredProducts = products;
-    }
-
-    if (filteredProducts.length === 0) {
-        document.getElementById('productGrid').innerHTML = `<div style="width: 100%; text-align: center; color: #888; padding: 40px; grid-column: 1 / -1;">Chưa có sản phẩm nào trong mục này.</div>`;
-        document.getElementById('product-pagination').innerHTML = '';
-        return;
-    }
-
-    // 2. Tính toán phân trang
-    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-    const startIndex = (currentProductPage - 1) * productsPerPage;
-    const endIndex = startIndex + productsPerPage;
-    
-    const pageData = filteredProducts.slice(startIndex, endIndex);
-
-    // 3. Vẽ HTML Sản phẩm
-    pageData.forEach(p => {
-        let giaGiam, phanTram;
-        
-        if (p.price === 0) { phanTram = "FREE"; giaGiam = 0; }
-        else if (p.price < 100000) { phanTram = "-50%"; giaGiam = p.price * 0.5; } 
-        else if (p.price <= 300000) { phanTram = "-20%"; giaGiam = p.price * 0.8; } 
-        else { phanTram = "-10%"; giaGiam = p.price * 0.9; }
-
-        html += `
-            <div class="product-card">
-                <div class="discount-badge" style="background: ${p.price === 0 ? '#00e5ff' : 'linear-gradient(45deg, #ff0055, #ff0000)'}; color: ${p.price === 0 ? '#000' : '#fff'};">${phanTram}</div>
-                <div class="card-img-wrap"><img src="${p.img}"></div>
-                <div class="card-info">
-                    <h3 class="card-title">${p.name}</h3>
-                    <div class="price-box">
-                        <span class="old-price">${p.price > 0 ? p.price.toLocaleString() + 'đ' : ''}</span>
-                        <span class="new-price" style="color: ${p.price === 0 ? '#00e5ff' : '#00e5ff'};">${p.price === 0 ? 'Miễn Phí' : Math.floor(giaGiam).toLocaleString() + 'đ'}</span>
-                    </div>
-                    <button class="buy-btn" style="background: ${p.price === 0 ? 'linear-gradient(90deg, #00e5ff, #007bff)' : 'linear-gradient(90deg, #ff0055, #ff0000)'}; color: ${p.price === 0 ? '#fff' : '#fff'};" onclick="buyItem('${p.name}', ${Math.floor(giaGiam)}, '${p.link}')">
-                        <i class="fas fa-shopping-cart"></i> ${p.price === 0 ? 'NHẬN NGAY' : 'MUA NGAY'}
-                    </button>
-                </div>
-            </div>
-        `;
-    });
-
-    document.getElementById('productGrid').innerHTML = html;
-
-    // 4. Vẽ thanh chuyển trang 1, 2, 3...
-    renderProductPagination(totalPages);
-}
-
-function renderProductPagination(totalPages) {
-    const paginationDiv = document.getElementById('product-pagination');
-    
-    if (totalPages <= 1) {
-        paginationDiv.innerHTML = '';
-        return;
-    }
-
-    let paginationHtml = `<div style="display: flex; justify-content: center; align-items: center; gap: 8px;">`;
-    
-    paginationHtml += `
-        <button onclick="changeProductPage(-1)" ${currentProductPage === 1 ? 'disabled' : ''} 
-                style="padding: 6px 15px; background: ${currentProductPage === 1 ? '#333' : 'var(--primary)'}; color: white; border: none; border-radius: 5px; cursor: ${currentProductPage === 1 ? 'not-allowed' : 'pointer'}; transition: 0.3s;">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-    `;
-
-    for (let i = 1; i <= totalPages; i++) {
-        const isCurrent = (i === currentProductPage);
-        paginationHtml += `
-            <button onclick="goToProductPage(${i})" 
-                    style="padding: 6px 14px; background: ${isCurrent ? '#fff' : '#222'}; color: ${isCurrent ? '#ff0000' : '#fff'}; border: 1px solid ${isCurrent ? '#fff' : 'var(--primary)'}; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;">
-                ${i}
-            </button>
-        `;
-    }
-
-    paginationHtml += `
-        <button onclick="changeProductPage(1)" ${currentProductPage === totalPages ? 'disabled' : ''} 
-                style="padding: 6px 15px; background: ${currentProductPage === totalPages ? '#333' : 'var(--primary)'}; color: white; border: none; border-radius: 5px; cursor: ${currentProductPage === totalPages ? 'not-allowed' : 'pointer'}; transition: 0.3s;">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-    `;
-
-    paginationHtml += `</div>`;
-    paginationDiv.innerHTML = paginationHtml;
-}
-
-function changeProductPage(direction) {
-    currentProductPage += direction;
-    renderProducts();
-    // Cuộn mượt mà lên đầu khu vực sản phẩm khi lật trang
-    document.querySelector('.filter-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function goToProductPage(page) {
-    currentProductPage = page;
-    renderProducts();
-    document.querySelector('.filter-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-    function showAuth(isReg) {
-        isRegisterMode = isReg;
-        updateAuthUI();
-        document.getElementById('authModal').style.display = 'flex';
-    }
-
-    function toggleAuth() {
-        isRegisterMode = !isRegisterMode;
-        updateAuthUI();
-    }
-
-    function updateAuthUI() {
-        document.getElementById('authTitle').innerText = isRegisterMode ? "ĐĂNG KÝ" : "ĐĂNG NHẬP";
-        document.getElementById('regFields').style.display = isRegisterMode ? "block" : "none";
-        document.getElementById('switchText').innerText = isRegisterMode ? "Đã có tài khoản?" : "Chưa có tài khoản?";
-    }
-
-    function handleAuth() {
-        const user = document.getElementById('userInput').value.trim().toLowerCase();
-        const pass = document.getElementById('passInput').value;
-
-        if(!user || !pass) return Swal.fire("Lỗi", "Vui lòng nhập đầy đủ!", "error");
-
-        if(isRegisterMode) {
-            const confirm = document.getElementById('confirmInput').value;
-            if(pass !== confirm) return Swal.fire("Lỗi", "Mật khẩu không khớp!", "error");
-
-            db.ref('users/' + user).once('value').then(snap => {
-                if(snap.exists()) {
-                    Swal.fire("Lỗi", "Tên tài khoản đã tồn tại!", "error");
-                } else {
-                    db.ref('users/' + user).set({
-                        pass: pass,
-                        balance: 0,
-                        createdAt: new Date().toLocaleString()
-                    }).then(() => {
-                        Swal.fire("Thành công", "Đăng ký thành công! Hãy đăng nhập.", "success");
-                        isRegisterMode = false;
-                        updateAuthUI();
-                    });
-                }
-            });
-        } else {
-            db.ref('users/' + user).once('value').then(snap => {
-                const data = snap.val();
-                if(data && data.pass === pass) {
-                    localStorage.setItem('hoangUser', user);
-                    Swal.fire("Chào mừng", "Đăng nhập thành công!", "success").then(() => location.reload());
-                } else {
-                    Swal.fire("Lỗi", "Sai tài khoản hoặc mật khẩu!", "error");
-                }
-            });
-        }
-    }
-
-       function checkLogin() {
-    const user = localStorage.getItem('hoangUser');
-    const userSection = document.getElementById('user-section');
-    const authSection = document.getElementById('auth-section');
-
-    if(user && userSection) {
-        authSection.style.display = 'none';
-        userSection.style.display = 'flex';
-        document.getElementById('history-section').style.display = 'block';
-        
-        // Đoạn này đã bỏ nút Trang cá nhân lỗi
-        userSection.innerHTML = `
-            <span style="color: #fff; margin-right: 10px;">Chào, <b style="color:var(--primary)">${user}</b></span>
-            <div style="background: #222; padding: 5px 12px; border-radius: 20px; font-size: 14px; margin-right: 10px;">
-                <i class="fas fa-wallet" style="color:#00ff00"></i> <span id="user-balance">0đ</span>
-            </div>
-            <button class="btn btn-red" style="padding: 5px 10px; font-size: 12px;" onclick="showRecharge()">NẠP</button>
-            <a href="profile.html" class="btn" style="background: #333; color: white; padding: 5px 10px; font-size: 12px; text-decoration: none; margin-left: 5px;">
-    <i class="fas fa-user"></i> HỒ SƠ
-</a>
-            <i class="fas fa-sign-out-alt" style="cursor:pointer; color: #666; margin-left:10px" onclick="logout()"></i>
-        `;
-        
-        db.ref('users/' + user).on('value', snap => {
-            const data = snap.val();
-            if(data) {
-                const balance = data.balance || 0;
-                localStorage.setItem('hoangBal', balance);
-                const balEl = document.getElementById('user-balance');
-                if(balEl) balEl.innerText = balance.toLocaleString() + 'đ';
-            }
-        });
-        loadHistory(user);
-    }
-}
-
-function buyItem(name, price, downloadLink) {
-    const user = localStorage.getItem('hoangUser');
-    if (!user) return showAuth(false);
-
-    const currentBal = parseInt(localStorage.getItem('hoangBal') || 0);
-    if (currentBal < price) {
-        Swal.fire("Thiếu tiền", "Số dư không đủ!", "warning").then(() => showRecharge());
-        return;
-    }
-
-    Swal.fire({
-        title: 'Xác nhận mua?',
-        text: `Mua ${name} với giá ${price.toLocaleString()}đ?`,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#ff0000',
-        confirmButtonText: 'MUA NGAY'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const now = new Date().toLocaleString();
-
-            // Lấy dữ liệu mới nhất để tính toán chính xác
-            db.ref('users/' + user).once('value').then(snapshot => {
-                let userData = snapshot.val() || {};
-                let oldSpent = userData.totalSpent || 0;
-                let newSpent = oldSpent + price;
-                
-                // Tính toán lượt tặng: Cứ tiêu mỗi 100.000đ tặng 1 lượt
-                let bonus = Math.floor(newSpent / 100000) - Math.floor(oldSpent / 100000);
-
-                // Cập nhật tất cả các trường trong 1 lần duy nhất để tránh lỗi đồng bộ
-                let updates = {
-                    balance: (userData.balance || 0) - price,
-                    totalSpent: newSpent,
-                    freeSpins: (userData.freeSpins || 0) + bonus, // Lượt vòng quay
-                    freeTurns: (userData.freeTurns || 0) + bonus  // Lượt bốc lì xì
-                };
-
-                db.ref('users/' + user).update(updates).then(() => {
-                    // 1. Lưu lịch sử mua hàng
-                    db.ref('history/' + user).push({
-                        product: name,
-                        price: price,
-                        date: now,
-                        link: downloadLink,
-                        status: "Thành công"
-                    });
-
-                    let successMsg = `Bạn đã mua ${name} thành công!`;
-                    if(bonus > 0) {
-                        successMsg += `<br><b style="color:green">Bạn được tặng thêm ${bonus} lượt bốc & quay!</b>`;
-                    }
-
-                    Swal.fire({
-                        title: "Thành công",
-                        html: successMsg,
-                        icon: "success"
-                    });
-                });
-            });
-        }
-    });
-}
-            
- // --- KHAI BÁO BIẾN CHO PHÂN TRANG LỊCH SỬ ---
-let historyDataList = [];
-let currentHistoryPage = 1;
-const historyItemsPerPage = 10; // Cài đặt 10 dòng 1 trang
-
-function loadHistory(user) {
-    db.ref('history/' + user).on('value', snap => {
-        const historyBody = document.getElementById('history-body');
-        const paginationDiv = document.getElementById('history-pagination');
-        const data = snap.val();
-        
-        if(!data) {
-            historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px; color: #888;">Chưa có giao dịch nào</td></tr>';
-            if(paginationDiv) paginationDiv.innerHTML = '';
-            return;
-        }
-
-        // Chuyển Object thành Mảng và đảo ngược để giao dịch mới nhất lên đầu
-        historyDataList = Object.values(data).reverse();
-        currentHistoryPage = 1; // Mặc định hiển thị trang 1
-        renderHistoryPage();
-    });
-}
-
-function renderHistoryPage() {
-    const historyBody = document.getElementById('history-body');
-    const paginationDiv = document.getElementById('history-pagination');
-    
-    // Tính toán số trang
-    const totalPages = Math.ceil(historyDataList.length / historyItemsPerPage);
-    const startIndex = (currentHistoryPage - 1) * historyItemsPerPage;
-    const endIndex = startIndex + historyItemsPerPage;
-    
-    // Cắt dữ liệu cho trang hiện tại
-    const pageData = historyDataList.slice(startIndex, endIndex);
-
-    // 1. Render HTML cho bảng lịch sử
-    let html = '';
-    pageData.forEach(item => {
-        html += `<tr>
-            <td style="color:#fff; padding: 10px; border: 1px solid #333;">${item.product}</td>
-            <td style="color:var(--primary); border: 1px solid #333;">${(item.price || 0).toLocaleString()}đ</td>
-            <td style="color:#ccc; font-size: 13px; border: 1px solid #333;">${item.date}</td>
-            <td style="text-align: center; border: 1px solid #333;">
-                <a href="${item.link || '#'}" target="_blank" 
-                   style="color:#00ff00; text-decoration:none; font-weight:bold; border:1px solid #00ff00; padding:4px 10px; border-radius:4px; font-size:12px; background: rgba(0,255,0,0.1);">
-                   <i class="fas fa-download"></i> TẢI VỀ
-                </a>
-            </td>
-        </tr>`;
-    });
-    historyBody.innerHTML = html;
-
-    // 2. Render nút bấm chuyển trang có đánh số 1, 2, 3...
-    if (totalPages > 1 && paginationDiv) {
-        let paginationHtml = `<div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 15px;">`;
-        
-        // Nút "Trước"
-        paginationHtml += `
-            <button onclick="changeHistoryPage(-1)" ${currentHistoryPage === 1 ? 'disabled' : ''} 
-                    style="padding: 6px 12px; background: ${currentHistoryPage === 1 ? '#333' : 'var(--primary)'}; color: white; border: none; border-radius: 5px; cursor: ${currentHistoryPage === 1 ? 'not-allowed' : 'pointer'};">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-        `;
-
-        // Vòng lặp tạo các nút số 1, 2, 3...
-        for (let i = 1; i <= totalPages; i++) {
-            const isCurrent = (i === currentHistoryPage);
-            paginationHtml += `
-                <button onclick="goToHistoryPage(${i})" 
-                        style="padding: 6px 14px; background: ${isCurrent ? '#fff' : '#222'}; color: ${isCurrent ? '#ff0000' : '#fff'}; border: 1px solid ${isCurrent ? '#fff' : 'var(--primary)'}; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;">
-                    ${i}
-                </button>
-            `;
-        }
-        
-        // Nút "Tiếp"
-        paginationHtml += `
-            <button onclick="changeHistoryPage(1)" ${currentHistoryPage === totalPages ? 'disabled' : ''} 
-                    style="padding: 6px 12px; background: ${currentHistoryPage === totalPages ? '#333' : 'var(--primary)'}; color: white; border: none; border-radius: 5px; cursor: ${currentHistoryPage === totalPages ? 'not-allowed' : 'pointer'};">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        `;
-        
-        paginationHtml += `</div>`;
-        paginationDiv.innerHTML = paginationHtml;
-    } else if (paginationDiv) {
-        paginationDiv.innerHTML = ''; // Ẩn nếu chỉ có 1 trang
-    }
-}
-
-// Hàm mới để nhảy thẳng tới trang được chọn
-function goToHistoryPage(page) {
-    currentHistoryPage = page;
-    renderHistoryPage();
-}
-
-function changeHistoryPage(direction) {
-    const totalPages = Math.ceil(historyDataList.length / historyItemsPerPage);
-    currentHistoryPage += direction;
-    
-    // Đảm bảo không lỗi nếu người dùng bấm quá nhanh
-    if (currentHistoryPage < 1) currentHistoryPage = 1;
-    if (currentHistoryPage > totalPages) currentHistoryPage = totalPages;
-    
-    renderHistoryPage();
-}
-
-  function logout() {
-    localStorage.removeItem('hoangUser');
-    Swal.fire("Thông báo", "Đã đăng xuất thành công!", "success").then(() => {
-        location.reload(); // Tải lại trang để cập nhật giao diện
-    });
-}
-        
-    // --- 5. HIỆU ỨNG VÀ TRANG TRÍ ---
-    function initParticles() {
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        let particles = [];
-        for(let i=0; i<60; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: Math.random() - 0.5,
-                vy: Math.random() - 0.5
-            });
-        }
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
-            particles.forEach(p => {
-                p.x += p.vx; p.y += p.vy;
-                if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-    }
-
-    function startFakeNoti() {
-        const names = ["Quốc Bảo", "Văn Nam", "Thanh Tùng", "Minh Hằng", "Đức Huy"];
-        const prices = ["50,000đ", "200,000đ", "100,000đ", "500,000đ"];
-        setInterval(() => {
-            const noti = document.getElementById('fakeNoti');
-            document.getElementById('fakeNotiText').innerHTML = `Khách hàng <b>${names[Math.floor(Math.random()*names.length)]}</b> vừa nạp thành công ${prices[Math.floor(Math.random()*prices.length)]}`;
-            noti.classList.add('show');
-            setTimeout(() => noti.classList.remove('show'), 5000);
-        }, 12000);
-    }
-
-    window.onload = () => {
-        initParticles();
-        renderProducts();
-        checkLogin();
-        startFakeNoti();
-    };
-</script>
-
-    <script>
-    const canvas = document.getElementById('particleCanvas');
-    if(canvas) {
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        let particles = [];
-        for(let i=0; i<100; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 2 + 1,
-                speedY: Math.random() * 1 + 0.5
-            });
-        }
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
-            particles.forEach(p => {
-                p.y -= p.speedY;
-                if(p.y < 0) p.y = canvas.height;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-    }
-
-        function loadBoughtCodes(user) {
-    db.ref('bought_codes/' + user).on('value', snap => {
-        const data = snap.val();
-        const body = document.getElementById('kho-code-body');
-        if (!data) return;
-
-        let html = '';
-        for (let id in data) {
-            html = `<tr>
-                <td>${data[id].name}</td>
-                <td>${data[id].date}</td>
-                <td><a href="${data[id].link}" target="_blank" style="color:#00ff00; text-decoration:none; font-weight:bold;">[TẢI VỀ]</a></td>
-            </tr>` + html;
-        }
-        body.innerHTML = html;
-    });
-}
-
-        function loadTopTen() {
-    db.ref('users').on('value', snap => {
-        const users = snap.val();
-        if (!users) return;
-
-        let userArray = [];
-        for (let username in users) {
-            userArray.push({
-                name: username,
-                balance: users[username].balance || 0
-            });
-        }
-
-        // Sắp xếp ai nhiều tiền hơn đứng trước
-        userArray.sort((a, b) => b.balance - a.balance);
-
-        const top10 = userArray.slice(0, 10);
-        let html = '';
-
-        top10.forEach((user, index) => {
-            let rank = index + 1;
-            let icon = rank;
-            let nameColor = "#eee";
-
-            if (index === 0) { icon = '👑'; nameColor = "gold"; }
-            else if (index === 1) { icon = '🥈'; nameColor = "silver"; }
-            else if (index === 2) { icon = '🥉'; nameColor = "#cd7f32"; }
-
-            html += `
-                <tr style="border-bottom: 1px solid #222; background: rgba(255,255,255,0.03);">
-                    <td style="text-align: center; font-weight: bold; padding: 12px;">${icon}</td>
-                    <td style="font-weight: 600; color: ${nameColor}; padding: 12px;">${user.name}</td>
-                    <td style="text-align: center; color: #00ff00; font-weight: bold; padding: 12px;">
-                        ${user.balance.toLocaleString()}đ
-                    </td>
-                </tr>
-            `;
-        });
-        document.getElementById('top-nap-body').innerHTML = html;
-    });
-}
-// Chạy hàm
-loadTopTen();
-
-function openProfile() {
-    const user = localStorage.getItem('hoangUser');
-    if (!user) return typeof showAuth === 'function' ? showAuth(false) : alert("Vui lòng đăng nhập!");
-
-    // 1. Ẩn tất cả nội dung chính của shop để hiện trang cá nhân
-    const mainElements = document.querySelectorAll('section, .container-fluid, #main-content, .banner, .shop-title, .grid');
-    mainElements.forEach(el => el.style.display = 'none');
-
-    // 2. Hiện khung profile-page
-    const profilePage = document.getElementById('profile-page');
-    if (profilePage) {
-        profilePage.style.display = 'block';
-    } else {
-        return console.error("Không tìm thấy ID 'profile-page' trong HTML!");
-    }
-
-    // 3. Hiển thị tên (hỗ trợ cả thẻ input và thẻ text)
-    const pInput = document.getElementById('p-username');
-    const pDisplay = document.getElementById('p-username-display');
-    if (pInput) pInput.value = user;
-    if (pDisplay) pDisplay.innerText = user;
-
-    // 4. Load lịch sử từ Firebase
-    db.ref('wallet_history/' + user).limitToLast(20).on('value', snap => {
-        const body = document.getElementById('wallet-history-body');
-        if (!body) return;
-        
-        body.innerHTML = '';
-        const data = snap.val();
-        
-        if (!data) {
-            body.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#888;">Không có dữ liệu lịch sử</td></tr>';
-            return;
-        }
-
-        Object.values(data).reverse().forEach(item => {
-            const amountColor = item.amount > 0 ? '#00ff00' : '#ff4444';
-            const amountPrefix = item.amount > 0 ? '+' : '';
-            
-            body.innerHTML += `
-                <tr style="border-bottom: 1px solid #333;">
-                    <td style="padding: 12px; font-size:12px;">${item.date || '---'}</td>
-                    <td style="padding: 12px; color:${amountColor}; font-weight:bold;">${amountPrefix}${(item.amount || 0).toLocaleString()}đ</td>
-                    <td style="padding: 12px; color:#aaa;">${(item.balanceBefore || 0).toLocaleString()}đ</td>
-                    <td style="padding: 12px; color:#fff;">${(item.balanceAfter || 0).toLocaleString()}đ</td>
-                    <td style="padding: 12px;"><span style="background:#333; padding:2px 8px; border-radius:10px; font-size:11px;">${item.note || 'Giao dịch'}</span></td>
-                </tr>`;
-        });
-    });
-}
-
-function closeProfile() {
-    // Cách an toàn nhất: Reload trang để giao diện shop quay về trạng thái ban đầu
-    location.reload(); 
-}
-        
-</script>
-
-<div class="contact-sidebar">
-    <a href="https://zalo.me/84788265513" target="_blank" class="contact-item-right zalo-neon">
-        <i class="fa-solid fa-comment"></i>
-        <span class="tooltip-right">Zalo Hỗ Trợ</span>
-    </a>
-    <a href="https://facebook.com/nvh12072006" target="_blank" class="contact-item-right fb-neon">
-        <i class="fa-brands fa-facebook-f"></i>
-        <span class="tooltip-right">Facebook Admin</span>
-    </a>
-    <a href="https://t.me/@kunmmo2006" target="_blank" class="contact-item-right tele-neon">
-        <i class="fa-brands fa-telegram"></i>
-        <span class="tooltip-right">Telegram Channel</span>
-    </a>
-</div>
-
-    <div id="profile-page" style="display: none; background: #f4f6f9; min-height: 100vh; padding: 20px 0;">
-    <div class="container" style="max-width: 1100px;">
-        <nav style="margin-bottom: 20px; font-size: 14px;">
-            <a href="#" onclick="closeProfile()" style="text-decoration:none; color:#333;">Trang chủ</a> 
-            <span style="color:#999;"> &gt; Lịch sử giao dịch</span>
-        </nav>
-
-        <div style="background: #fff; padding: 25px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div>
-                    <label style="display:block; margin-bottom:5px; font-weight:bold;">Tên của bạn <span style="color:red">*</span></label>
-                    <input type="text" id="p-username" disabled style="width:100%; padding:10px; border:1px solid #ddd; background:#f9f9f9;">
-                </div>
-                <div>
-                    <label style="display:block; margin-bottom:5px; font-weight:bold;">Số điện thoại</label>
-                    <input type="text" placeholder="Chưa cập nhật" style="width:100%; padding:10px; border:1px solid #ddd;">
-                </div>
-            </div>
-            <div style="margin-top:15px;">
-                <label style="display:block; margin-bottom:5px; font-weight:bold;">Mật khẩu mới</label>
-                <input type="password" id="p-new-pass" placeholder="Bỏ trống nếu giữ mật khẩu cũ" style="width:100%; padding:10px; border:1px solid #ddd;">
-            </div>
-            <button class="btn" style="background:#d9534f; color:#fff; margin-top:20px; border:none; padding:10px 25px; border-radius:3px;">
-                <i class="fas fa-edit"></i> Cập nhật
-            </button>
-        </div>
-
-        <div style="background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-            <h4 style="color: #d9534f; margin-bottom: 20px;"><i class="fas fa-file-invoice-dollar"></i> Lịch sử biến động số dư</h4>
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                    <thead>
-                        <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
-                            <th style="padding: 12px; text-align: left;">Thời gian</th>
-                            <th style="padding: 12px; text-align: left;">Số tiền</th>
-                            <th style="padding: 12px; text-align: left;">Số dư trước</th>
-                            <th style="padding: 12px; text-align: left;">Số dư sau</th>
-                            <th style="padding: 12px; text-align: left;">Loại</th>
-                        </tr>
-                    </thead>
-                    <tbody id="wallet-history-body">
-                        <tr><td colspan="5" style="text-align:center; padding:20px; color:#999;">Không có dữ liệu</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-    
-    <footer style="background: #0a0a0a; border-top: 2px solid var(--primary); padding: 50px 0 20px; margin-top: 50px;">
+  <section class="section" id="products">
     <div class="container">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;">
-            
-            <div>
-                <a href="#" class="logo" style="text-decoration: none;">HOANGKUN<span>STORE</span></a>
-                <p style="color: #888; font-size: 14px; line-height: 1.6; margin-top: 15px;">
-                    Chuyên cung cấp các giải pháp Source Code Website, hiệu ứng HTML/CSS chất lượng cao. Hệ thống thanh toán tự động, an toàn và bảo mật.
-                </p>
-
-                <div class="popup-body" style="text-align: center; padding: 30px 20px;">
-    <a href="https://zalo.me/84788265513" target="_blank" class="zalo-blink-btn">
-        <i class="fas fa-headset"></i> CHĂM SÓC KHÁCH HÀNG
-    </a>
-</div>
-
-<style>
-    /* CSS Nút bấm & Hiệu ứng */
-    .zalo-blink-btn {
-        display: inline-block;
-        background: #d32f2f; /* Màu đỏ */
-        color: #fff;
-        font-weight: 900;
-        text-decoration: none;
-        padding: 12px 25px; /* Căn chỉnh lại cho nút to đẹp */
-        border-radius: 5px;
-        font-size: 1.1rem;
-        text-transform: uppercase;
-        border: 2px solid #ff5252;
-        animation: pulse-red 1.5s infinite; /* Hiệu ứng nhịp tim */
-        transition: 0.3s;
-        cursor: pointer;
-    }
-
-    /* Hiệu ứng khi di chuột vào */
-    .zalo-blink-btn:hover {
-        background: #fff;
-        color: #d32f2f;
-        transform: scale(1.05);
-        box-shadow: 0 0 20px #d32f2f;
-    }
-
-    /* Animation nhấp nháy */
-    @keyframes pulse-red {
-        0% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7); }
-        70% { box-shadow: 0 0 0 15px rgba(255, 82, 82, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
-    }
-</style>
-                
-            </div>
-
-            <div>
-                <h4 style="color: var(--primary); text-transform: uppercase; margin-bottom: 20px;">Liên kết nhanh</h4>
-                <ul style="list-style: none; padding: 0; font-size: 14px; line-height: 2;">
-                    <li><a href="#" style="color: #ccc; text-decoration: none;">Trang chủ</a></li>
-                   <li><a href="javascript:void(0);" onclick="moModalCode()" style="color: #ccc; text-decoration: none;"><i class="fas fa-ticket-alt" style="color: var(--primary);"></i> Nhập mã Giftcode</a></li>
-                    <li><a href="https://zalo.me/84788265513" target="_blank" style="color: #ccc; text-decoration: none;">Hỗ trợ khách hàng</a></li>
-                    <li><a href="#" onclick="showRecharge()" style="color: #ccc; text-decoration: none;">Hướng dẫn nạp tiền</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 style="color: var(--primary); text-transform: uppercase; margin-bottom: 20px;">Thông tin liên hệ</h4>
-                <div style="font-size: 14px; color: #ccc; display: flex; flex-direction: column; gap: 12px;">
-                    <div><i class="fas fa-phone-alt" style="color: var(--primary); width: 20px;"></i> Hotline: 0788.265.513</div>
-                    <div><i class="fas fa-envelope" style="color: var(--primary); width: 20px;"></i> Email: hoangvb12072006@gmail.com</div>
-                    <div><i class="fas fa-map-marker-alt" style="color: var(--primary); width: 20px;"></i> Địa chỉ: Hải Phòng, Việt Nam</div>
-                    <div style="margin-top: 10px; display: flex; gap: 15px;">
-                        <a href="https://facebook.com/nvh12072006" target="_blank" style="color: #fff; font-size: 20px;"><i class="fab fa-facebook-square"></i></a>
-                        <a href="https://zalo.me/84788265513" target="_blank" style="color: #fff; font-size: 20px;"><i class="fas fa-comment-dots"></i></a>
-                        <a href="https://t.me/@kunmmo2006" target="_blank" style="color: #fff; font-size: 20px;"><i class="fab fa-telegram"></i></a>
-                    </div>
-                </div>
-            </div>
-
+      <div class="section-header">
+        <div class="section-tag"><i class="fas fa-code"></i> TÀI NGUYÊN NỔI BẬT</div>
+        <h2>Sản Phẩm <span class="text-gradient">Chính Thức</span></h2>
+        <p>Chọn lọc những mã nguồn và công cụ tối ưu, vận hành ổn định nhất</p>
+      </div>
+      
+      <div class="services-grid">
+        <div class="srv-card">
+          <div class="srv-icon">💻</div>
+          <h3>Source Code Website</h3>
+          <p>Mã nguồn Landing Page, Portfolio, Web giới thiệu dịch vụ thiết kế chuẩn UI/UX, responsive mượt mà.</p>
+          <ul class="srv-features">
+            <li>Tối ưu tốc độ tải trang cực nhanh</li>
+            <li>Dễ dàng tùy biến cấu trúc cấu hình</li>
+            <li>Code sạch không mã độc dính kèm</li>
+          </ul>
         </div>
-
-        <hr style="border: 0; border-top: 1px solid #222; margin: 40px 0 20px;">
         
-        <p style="text-align: center; color: #555; font-size: 12px;">
-            &copy; 2024 - 2026 <b>HOANGKUN STORE</b>. All Rights Reserved. Thiết kế bởi <b>Nguyen Viet Hoang</b>
-        </p>
-    </div>
-</footer>
-
-<div id="profile-page" style="display: none; background: #f4f6f9; min-height: 100vh; padding: 20px 0; position: fixed; top: 0; left: 0; width: 100%; z-index: 10000; overflow-y: auto;">
-    <div class="container" style="max-width: 1000px; margin: auto; font-family: sans-serif;">
-        <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px;">
-            <h4 style="border-left: 5px solid #d9534f; padding-left: 15px; color: #333; margin: 0; text-align: left;">THÔNG TIN TÀI KHOẢN</h4>
-            <hr style="border: 0.5px solid #eee; margin: 15px 0;">
-            <p style="font-size: 16px; color: #555; text-align: left;">Tên tài khoản: <b id="p-username-display" style="color: #d9534f;">---</b></p>
+        <div class="srv-card">
+          <div class="srv-icon">🎮</div>
+          <h3>Gaming Scripts Premium</h3>
+          <p>Các đoạn mã, kịch bản bổ trợ tối ưu hóa hiệu năng, xử lý logic mượt mà và quản lý dữ liệu game bài bản.</p>
+          <ul class="srv-features">
+            <li>Cập nhật thuật toán tối ưu mới</li>
+            <li>Hỗ trợ tích hợp nền tảng nhanh chóng</li>
+            <li>Bảo mật cao, chống khai thác</li>
+          </ul>
         </div>
-
-        <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-            <h4 style="border-left: 5px solid #d9534f; padding-left: 15px; color: #333; margin-bottom: 20px; text-align: left;">LỊCH SỬ BIẾN ĐỘNG SỐ DƯ</h4>
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
-                    <thead>
-                        <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
-                            <th style="padding: 12px; text-align: left; color: #444;">Thời gian</th>
-                            <th style="padding: 12px; text-align: left; color: #444;">Số tiền</th>
-                            <th style="padding: 12px; text-align: left; color: #444;">Số dư cuối</th>
-                            <th style="padding: 12px; text-align: left; color: #444;">Nội dung</th>
-                        </tr>
-                    </thead>
-                    <tbody id="wallet-history-body" style="color: #333;">
-                        <tr><td colspan="4" style="text-align:center; padding:30px; color: #999;">Đang tải lịch sử...</td></tr>
-                    </tbody>
-                </table>
-            </div>
+        
+        <div class="srv-card">
+          <div class="srv-icon">⚡</div>
+          <h3>Hệ Thống Tự Động Hóa</h3>
+          <p>Giải pháp phân phối tài nguyên, webhook đồng bộ trạng thái và các công cụ auto nâng cao hiệu suất làm việc.</p>
+          <ul class="srv-features">
+            <li>Tích hợp cổng thanh toán API</li>
+            <li>Xử lý tức thì không delay hóa đơn</li>
+            <li>Báo cáo trạng thái chi tiết qua bot</li>
+          </ul>
         </div>
-        <div style="text-align: center; margin-top: 30px;">
-            <button onclick="closeProfile()" style="padding: 12px 30px; cursor: pointer; background: #333; color: #fff; border: none; border-radius: 5px; font-weight: bold;">
-                <i class="fas fa-arrow-left"></i> QUAY LẠI CỬA HÀNG
-            </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-number">100%</div>
+          <div class="stat-text">Mã nguồn sạch, an toàn</div>
         </div>
-    </div>
-</div>
-    
-<style>
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-    @keyframes pulseBtn {
-    0% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 20px rgba(255, 65, 108, 0.6); }
-    100% { transform: translate(-50%, -50%) scale(1); }
-}
-
-#spinBtn:not(:disabled) {
-    animation: pulseBtn 1.5s infinite;
-}
-    
-</style>
-
-<style>
-    /* Sticker nằm góc trái dưới */
-    .spin-sticker {
-        position: fixed;
-        bottom: 30px;
-        left: 30px;
-        width: 70px;
-        height: 70px;
-        background: radial-gradient(circle, #ff0000, #800000);
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-decoration: none;
-        box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
-        border: 3px solid #fff;
-        z-index: 9999;
-        transition: transform 0.3s;
-        animation: floatSticker 3s ease-in-out infinite;
-    }
-
-    .spin-sticker:hover {
-        transform: scale(1.1) rotate(10deg);
-        box-shadow: 0 0 30px #ff0000;
-    }
-
-    /* Icon bánh xe xoay tròn mãi mãi */
-    .sticker-content i {
-        font-size: 35px;
-        color: #fff;
-        animation: spinInfinite 4s linear infinite;
-    }
-
-    /* Chữ "QUAY NGAY" nhỏ ở dưới */
-    .sticker-tag {
-        position: absolute;
-        bottom: -12px;
-        background: #ffff00;
-        color: #ff0000;
-        font-size: 10px;
-        font-weight: 900;
-        padding: 2px 8px;
-        border-radius: 10px;
-        border: 1px solid #ff0000;
-        white-space: nowrap;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    }
-
-    @keyframes spinInfinite {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    @keyframes floatSticker {
-        0%, 100% { bottom: 30px; }
-        50% { bottom: 40px; } /* Hiệu ứng bay lên xuống nhẹ */
-    }
-</style>
-
-    <script>
-// --- XỬ LÝ NẠP TIỀN AUTO MB BANK ---
-function createPaymentQR() {
-    const amountInput = document.getElementById('auto-amount').value;
-    const amount = parseInt(amountInput);
-    const user = localStorage.getItem('hoangUser');
-
-    if (!user) {
-        closeRecharge();
-        if(typeof showAuth === 'function') showAuth(false);
-        return Swal.fire("Thông báo", "Vui lòng đăng nhập để nạp tiền!", "warning");
-    }
-
-    if (!amount || amount < 10000) {
-        return Swal.fire("Lỗi", "Vui lòng nạp tối thiểu 10.000đ", "error");
-    }
-
-    // --- QUAN TRỌNG: Dòng này để ngắt các bộ lắng nghe cũ, giúp tạo nhiều mã không bị lỗi ---
-    db.ref('deposit_requests').off(); 
-
-    const memo = "nap " + user;
-    const qrSource = `https://img.vietqr.io/image/MB-88812072006888-compact2.jpg?amount=${amount}&addInfo=${encodeURIComponent(memo)}`;
-
-    document.getElementById('qr-image').src = qrSource;
-    const amountEl = document.getElementById('display-amount');
-    if(amountEl) amountEl.innerText = amount.toLocaleString() + 'đ';
-    const memoEl = document.getElementById('display-memo');
-    if(memoEl) memoEl.innerText = memo;
-
-    document.getElementById('step-1-input').style.display = 'none';
-    document.getElementById('step-2-qr').style.display = 'block';
-
-    listenForMoney(user);
-}
-
-function resetRecharge() {
-    document.getElementById('step-1-input').style.display = 'block';
-    document.getElementById('step-2-qr').style.display = 'none';
-    document.getElementById('auto-amount').value = '';
-}
-
-let lastDepositTime = Date.now(); // Biến chặn giao dịch cũ
-
-function listenForMoney(user) {
-    // Chỉ lắng nghe bản ghi mới nhất vừa được thêm vào
-    db.ref('deposit_requests')
-      .orderByChild('user')
-      .equalTo(user)
-      .limitToLast(1)
-      .on('child_added', snapshot => {
-        const data = snapshot.val();
-        
-        // Kiểm tra nếu trạng thái trong database đã đổi thành Thành công
-        if (data && data.status === "Thành công") {
-            // Ngắt kết nối ngay lập tức để lần tạo mã sau không bị báo lặp
-            db.ref('deposit_requests').off(); 
-            
-            Swal.fire({
-                title: "Thành công!",
-                text: `Đã nhận được +${parseInt(data.amount).toLocaleString()}đ`,
-                icon: "success",
-                confirmButtonText: "Tuyệt vời"
-            }).then(() => {
-                location.reload(); 
-            });
-        }
-    });
-}
-        // --- XỬ LÝ NẠP THẺ CÀO (TIẾNG VIỆT) ---
-
-function selectTelco(element, telcoName) {
-    document.querySelectorAll('.telco-btn').forEach(btn => {
-        btn.classList.remove('active');
-        btn.style.border = "1px solid #ddd";
-        btn.style.background = "transparent";
-    });
-    element.classList.add('active');
-    element.style.border = "1px solid #ff9900";
-    element.style.background = "#fffbe6";
-    document.getElementById('card-telco').value = telcoName;
-}
-
-function sendCardAuto() {
-    const user = localStorage.getItem('hoangUser');
-    if(!user) return Swal.fire("Lỗi", "Vui lòng đăng nhập trước!", "error");
-
-    const telco = document.getElementById('card-telco').value;
-    const amount = document.getElementById('card-amount').value;
-    const pin = document.getElementById('card-pin').value;
-    const serial = document.getElementById('card-serial').value;
-
-    if(!amount) return Swal.fire("Thiếu thông tin", "Bạn chưa chọn mệnh giá thẻ!", "warning");
-    if(pin.length < 9 || serial.length < 9) return Swal.fire("Sai mã thẻ", "Mã thẻ hoặc Seri quá ngắn, vui lòng kiểm tra lại!", "warning");
-
-    Swal.fire({
-        title: 'Đang gửi thẻ...',
-        html: 'Hệ thống đang kiểm tra thẻ <b>' + telco + '</b>...',
-        allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
-    });
-
-    setTimeout(() => {
-        db.ref('card_requests').push({
-            username: user,
-            telco: telco,
-            amount: parseInt(amount),
-            pin: pin,
-            serial: serial,
-            status: "pending",
-            time: new Date().toLocaleString('vi-VN')
-        }).then(() => {
-            Swal.fire({
-                title: "Gửi thành công!",
-                text: "Thẻ đang được duyệt. Tiền sẽ về sau 1-5 phút nếu thẻ đúng.",
-                icon: "success",
-                confirmButtonColor: "#ff9900",
-                confirmButtonText: "Đã hiểu"
-            });
-            document.getElementById('card-pin').value = "";
-            document.getElementById('card-serial').value = "";
-        }).catch(err => {
-            Swal.fire("Lỗi kết nối", "Không thể gửi thẻ lúc này: " + err.message, "error");
-        });
-    }, 1500); 
-}
-        
-</script>
-
-    <style>
-    #fake-toast {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        z-index: 9999;
-        font-family: 'Roboto', sans-serif;
-        pointer-events: none; /* Để khách không bấm nhầm */
-    }
-    
-    .toast-item {
-        background: rgba(0, 0, 0, 0.85);
-        color: #fff;
-        padding: 12px 20px;
-        border-radius: 50px;
-        margin-top: 10px;
-        border: 1px solid #d32f2f; /* Viền đỏ theo tông web */
-        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        animation: slideInLeft 0.5s ease, fadeOut 0.5s 4s forwards;
-        min-width: 250px;
-    }
-
-    .toast-item i {
-        color: #ffd700; /* Màu vàng kim */
-        font-size: 1.2rem;
-    }
-
-    .toast-content {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .toast-name { font-weight: bold; color: #d32f2f; font-size: 0.9rem; }
-    .toast-msg { font-size: 0.85rem; color: #eee; }
-
-    @keyframes slideInLeft {
-        from { opacity: 0; transform: translateX(-100px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes fadeOut {
-        from { opacity: 1; }
-        to { opacity: 0; transform: translateY(-20px); }
-    }
-</style>
-
-<div id="fake-toast"></div>
-
-<script>
-   // Danh sách tên khách hàng (Random cho tự nhiên)
-    const names = ["Hoàng Dev", "Minh Tuấn", "Thanh Tùng", "Phạm Quang", "Huy Code", "Tiến Đạt", "Linh PHP", "Sơn Tùng", "Đức Anh", "Thầy Ba", "Nam Coder", "Dũng JS"];
-    
-    // DANH SÁCH HÀNH ĐỘNG (Lấy đúng tên sản phẩm trên shop bạn)
-    const actions = [
-        // Mua Code Trái Tim (Sản phẩm hot)
-        { msg: "vừa mua Code Trái Tim 1 - 22k", icon: "fas fa-heart", color: "#e91e63" },
-        { msg: "vừa mua Code Trái Tim 3 (VIP) - 32k", icon: "fas fa-heart", color: "#e91e63" },
-        { msg: "vừa tải Source Code Trái Tim 2", icon: "fas fa-download", color: "#2ecc71" },
-
-        // Mua Code Game/Web
-        { msg: "vừa mua Code Game Bắn Cung - 60k", icon: "fas fa-gamepad", color: "#f39c12" },
-        { msg: "vừa mua Code Web Mèo Cute - 75k", icon: "fas fa-cat", color: "#9b59b6" },
-        { msg: "vừa rinh ngay Code Web Shop - 350k", icon: "fas fa-shopping-cart", color: "#3498db" },
-        { msg: "vừa mua Code Hiệu Ứng Rồng - 69k", icon: "fas fa-dragon", color: "#c0392b" },
-
-        // Nạp tiền & Hoạt động khác
-        { msg: "vừa nạp thành công 50.000đ", icon: "fas fa-money-bill-wave", color: "#27ae60" },
-        { msg: "vừa nạp thành công 100.000đ", icon: "fas fa-university", color: "#27ae60" },
-        { msg: "vừa đánh giá 5 sao cho Shop", icon: "fas fa-star", color: "#f1c40f" }
-    ];
-
-    function showFakeNotification() {
-        const container = document.getElementById('fake-toast');
-        
-        // Random dữ liệu
-        const randomName = names[Math.floor(Math.random() * names.length)];
-        const randomAction = actions[Math.floor(Math.random() * actions.length)];
-        
-        // Che tên cho uy tín (Ví dụ: Hoàng Kun -> Hoàn***)
-        const maskedName = randomName.substring(0, 3) + "***";
-
-        const toast = document.createElement('div');
-        toast.className = 'toast-item';
-        toast.innerHTML = `
-            <i class="${randomAction.icon}"></i>
-            <div class="toast-content">
-                <span class="toast-name">${maskedName}</span>
-                <span class="toast-msg">${randomAction.msg}</span>
-            </div>
-        `;
-
-        container.appendChild(toast);
-
-        // Xóa thông báo sau 4.5 giây
-        setTimeout(() => {
-            toast.remove();
-        }, 4500);
-    }
-
-    // Chạy ngẫu nhiên từ 3 đến 8 giây một lần
-    function loopNotification() {
-        const randTime = Math.floor(Math.random() * 5000) + 3000;
-        setTimeout(() => {
-            showFakeNotification();
-            loopNotification();
-        }, randTime);
-    }
-
-    // Bắt đầu chạy
-    loopNotification();
-</script>
-
-<script>
-    document.addEventListener('click', function(e) {
-        const amount = document.createElement('div');
-        amount.innerHTML = '<i class="fas fa-dollar-sign" style="color:#ffd700"></i>'; 
-        // Hoặc thích chữ thì dùng: amount.innerText = "+1";
-        
-        amount.style.position = 'absolute';
-        amount.style.left = e.pageX + 'px';
-        amount.style.top = e.pageY + 'px';
-        amount.style.color = '#ffd700';
-        amount.style.fontWeight = 'bold';
-        amount.style.fontSize = '20px';
-        amount.style.pointerEvents = 'none';
-        amount.style.animation = 'floatUp 1s ease-out forwards';
-        amount.style.zIndex = '10000';
-        
-        document.body.appendChild(amount);
-
-        setTimeout(() => { amount.remove(); }, 1000);
-    });
-
-    // Thêm style cho animation vào thẻ style có sẵn hoặc tạo mới
-    const styleSheet = document.createElement("style");
-    styleSheet.innerText = `
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
-        }
-    `;
-    document.head.appendChild(styleSheet);
-</script>
-
-    <style>
-   #live-chat {
-    position: fixed; 
-    bottom: 80px; 
-    right: 20px; /* Đổi left thành right để đẩy sang bên phải */
-    width: 300px; 
-    height: 350px;
-    background: rgba(0, 0, 0, 0.9);
-    border: 1px solid #d32f2f;
-    border-radius: 10px;
-    z-index: 9998;
-    display: flex; 
-    flex-direction: column;
-    box-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
-    font-family: 'Roboto', sans-serif;
-    overflow: hidden;
-    transition: 0.3s;
-}
-
-    /* Tiêu đề chat */
-    .chat-header {
-        background: linear-gradient(90deg, #d32f2f, #b71c1c);
-        padding: 10px 15px;
-        color: white; font-weight: bold; font-size: 0.9rem;
-        display: flex; justify-content: space-between; align-items: center;
-        cursor: pointer;
-    }
-    .online-count { font-size: 0.7rem; color: #ffd700; }
-
-    /* Nội dung chat */
-    .chat-body {
-        flex: 1; padding: 10px;
-        overflow-y: auto;
-        display: flex; flex-direction: column; gap: 8px;
-    }
-    /* Tùy chỉnh thanh cuộn */
-    .chat-body::-webkit-scrollbar { width: 5px; }
-    .chat-body::-webkit-scrollbar-thumb { background: #555; }
-
-    .chat-line { font-size: 0.85rem; color: #ddd; line-height: 1.4; animation: fadeIn 0.3s ease; }
-    .c-name { color: #ffd700; font-weight: bold; margin-right: 5px; }
-    .c-name.admin { color: #ff0000; text-shadow: 0 0 5px red; }
-    .c-tag { background: #333; padding: 1px 4px; border-radius: 3px; font-size: 0.6rem; color: #aaa; margin-right: 5px; }
-    .c-vip { background: #ffd700; color: #000; font-weight: bold; }
-
-    /* Ô nhập liệu (giả) */
-    .chat-input {
-        padding: 10px; border-top: 1px solid #333;
-        background: #111;
-    }
-    .chat-input input {
-        width: 100%; background: #222; border: none;
-        padding: 8px; border-radius: 5px; color: #fff;
-        outline: none; font-size: 0.8rem;
-    }
-
-    /* Nút thu nhỏ */
-    .minimized { height: 40px !important; }
-    .toggle-btn { transition: 0.3s; }
-    .minimized .toggle-btn { transform: rotate(180deg); }
-
-</style>
-
-<div id="live-chat">
-    <div class="chat-header" onclick="toggleChat()">
-        <span><i class="fas fa-comment-dots"></i> KÊNH THẾ GIỚI <span class="online-count">● 142 Online</span></span>
-        <i class="fas fa-chevron-down toggle-btn"></i>
-    </div>
-    <div class="chat-body" id="chat-content">
-        <div class="chat-line"><span class="c-tag" style="background:red;color:#fff">Hệ thống</span> Chào mừng bạn đến với HoangKun Store!</div>
-    </div>
-    <div class="chat-input">
-    <input type="text" id="myMsg" placeholder="Nhập tin nhắn..." onkeypress="sendMyMessage(event)">
-</div>
-</div>
-
-<script>
-    
-    const chatContent = document.getElementById('chat-content');
-    const chatBox = document.getElementById('live-chat');
-    
-    // Danh sách tên bot
-    const botNames = ["Hùng Dũng", "Nam Cao", "Thánh Quay", "Bá Đạo", "Gamer Thủ Đô", "Mèo Béo", "Chúa Hề", "Rick Kid", "Tuấn Hưng", "Khách Vãng Lai"];
-    
-    // Kịch bản chat (Content)
-    const messages = [
-        "Web này nạp thẻ Viettel được không ae?",
-        "Vừa quay ra 50k thẻ cào, ngon choét :v",
-        "Admin ơi check hộ mình cái thẻ nạp lúc nãy với",
-        "Uy tín nha, tui mới rút xong.",
-        "Web mượt đấy, giao diện đẹp.",
-        "Có ai biết cách nhận thêm lượt quay free ko?",
-        "Hôm nay đen quá, quay toàn vào ô 5k :(",
-        "Nạp 100k được bao nhiêu lượt thế mn?",
-        "Anh em nạp Momo cho nhanh, đỡ bị nuốt thẻ.",
-        "Ông nào vừa trúng 500k đấy, xin cái card 20k đi!",
-        "Lừa đảo không đấy ae?",
-        "Lừa cái đầu ông, tôi chơi từ tháng trước rồi.",
-        "Admin rep tin nhắn nhanh vãi."
-    ];
-
-    function addMessage(name, msg, isVip = false) {
-        const div = document.createElement('div');
-        div.className = 'chat-line';
-        
-        let tagHtml = '<span class="c-tag">Member</span>';
-        if(isVip) tagHtml = '<span class="c-tag c-vip">VIP</span>';
-        if(name === 'Admin') tagHtml = '<span class="c-tag" style="background:red;color:white">ADMIN</span>';
-
-        div.innerHTML = `${tagHtml}<span class="c-name ${name==='Admin'?'admin':''}">${name}:</span> ${msg}`;
-        
-        chatContent.appendChild(div);
-        chatContent.scrollTop = chatContent.scrollHeight; // Tự cuộn xuống dưới
-    }
-
-    function autoChat() {
-        const randomName = botNames[Math.floor(Math.random() * botNames.length)];
-        const randomMsg = messages[Math.floor(Math.random() * messages.length)];
-        const isVip = Math.random() > 0.8; // 20% cơ hội là VIP
-
-        addMessage(randomName, randomMsg, isVip);
-    }
-
-    // Admin thỉnh thoảng vào nói 1 câu
-    function adminChat() {
-        const adminMsgs = [
-            "Các bạn nạp thẻ vui lòng giữ lại seri để đối soát nhé.",
-            "Hệ thống vừa cập nhật thêm thẻ Garena nhé ae.",
-            "Chúc mừng bạn **Hùng** vừa trúng giải đặc biệt!",
-            "Anh em chú ý không spam kênh chat nhé."
-        ];
-        addMessage("Admin", adminMsgs[Math.floor(Math.random() * adminMsgs.length)]);
-    }
-
-    // Chạy random chat
-    function loopChat() {
-        const randTime = Math.floor(Math.random() * 4000) + 2000; // 2-6 giây 1 tin
-        setTimeout(() => {
-            autoChat();
-            loopChat();
-        }, randTime);
-    }
-
-    // Chạy Admin chat (lâu lâu mới hiện)
-    setInterval(adminChat, 25000); 
-
-    // Bắt đầu
-    loopChat();
-
-    // Hàm thu nhỏ chat
-    function toggleChat() {
-        chatBox.classList.toggle('minimized');
-    }
-
-   // Hàm gửi tin nhắn của bạn (Đã sửa để lấy đúng tên nick đang đăng nhập)
-    function sendMyMessage(event) {
-        if (event.key === "Enter") {
-            const input = document.getElementById('myMsg');
-            const text = input.value.trim();
-            
-            // Lấy tên người dùng từ bộ nhớ (nếu chưa đăng nhập thì hiện là Khách)
-            const currentUser = localStorage.getItem('hoangUser') || "Khách";
-
-            if (text !== "") {
-                // Thay "Hoàng Chủ Shop" bằng biến currentUser
-                addMessage(currentUser, text, true); 
-                input.value = ""; 
-                const chatBody = document.getElementById('chat-content');
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }
-        }
-    }
-
-</script>
-    
-    <div id="modalGiftcode" class="modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
-    <div class="modal-content" style="background-color: #1a1a1a; margin: auto; padding: 25px; border: 2px solid #ffd700; width: 90%; max-width: 400px; border-radius: 15px; text-align: center; position: relative; box-shadow: 0 0 20px #ffd700;">
-        <span onclick="dongModalCode()" style="position: absolute; right: 15px; top: 10px; color: #fff; font-size: 30px; cursor: pointer;">&times;</span>
-        <h2 style="color: #ffd700; margin-bottom: 10px; text-transform: uppercase;">🧧 NHẬP GIFTCODE 🧧</h2>
-        <p style="color: #ccc; font-size: 13px; margin-bottom: 20px;">Mỗi mã chỉ sử dụng được 1 lần duy nhất!</p>
-        <input type="text" id="inputGiftCode" placeholder="GÕ MÃ TẠI ĐÂY..." style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #444; background: #000; color: #ffd700; text-align: center; font-weight: bold; font-size: 18px; box-sizing: border-box; outline: none;">
-        <button onclick="xulyNhapCode()" class="btn" style="width: 100%; background: linear-gradient(90deg, #ffd700, #ff8c00); color: #000; font-weight: bold; padding: 12px; border: none; border-radius: 5px; cursor: pointer; text-transform: uppercase;">XÁC NHẬN NHẬN QUÀ</button>
-    </div>
-</div>
-    
-
-<script src="giftcode.js"></script>
-<script src="diemdanh.js"></script>
-<script src="thongbao.js"></script>
-
-
-<div id="modalDiemDanh" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(10px); opacity: 0; transition: 0.5s;">
-    <div style="background: linear-gradient(145deg, #0f0f0f, #1a1a1a); width: 95%; max-width: 400px; padding: 40px 25px; border-radius: 30px; border: 2px solid #00e5ff; text-align: center; position: relative; box-shadow: 0 0 50px rgba(0, 229, 255, 0.4);">
-        
-        <span onclick="dongModalDiemDanh()" style="position: absolute; right: 25px; top: 20px; color: #555; font-size: 28px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">&times;</span>
-        
-        <div style="margin-bottom: 20px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/4213/4213732.png" style="width: 100px; filter: drop-shadow(0 0 15px #ffd700); animation: floatGift 3s ease-in-out infinite;">
+        <div class="stat-box">
+          <div class="stat-number">Instant</div>
+          <div class="stat-text">Giao hàng tự động sau khi nạp</div>
         </div>
-
-        <h2 style="color: #fff; font-size: 22px; font-weight: 900; text-transform: uppercase; margin: 0; text-shadow: 0 0 10px #00e5ff;">QUÀ TẶNG MỖI NGÀY</h2>
-        <p style="color: #00e5ff; font-size: 13px; font-weight: bold; margin-top: 10px;">CƠ HỘI NHẬN LÊN TỚI 500.000đ</p>
-
-        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 229, 255, 0.2); padding: 20px; border-radius: 20px; margin: 25px 0;">
-            <div style="color: #aaa; font-size: 11px; text-transform: uppercase; margin-bottom: 8px;">Số dư ví của ông</div>
-            <div id="dd-balance" style="color: #fff; font-size: 28px; font-weight: 800; font-family: 'Courier New', monospace;">0đ</div>
+        <div class="stat-box">
+          <div class="stat-number">24/7</div>
+          <div class="stat-text">Hỗ trợ kỹ thuật vận hành</div>
         </div>
-
-        <button id="btn-diemdanh" onclick="thucHienDiemDanh()" style="width: 100%; padding: 18px; background: linear-gradient(90deg, #00e5ff, #007bff); color: #fff; border: none; border-radius: 15px; font-weight: 900; font-size: 16px; cursor: pointer; text-transform: uppercase; box-shadow: 0 10px 20px rgba(0, 229, 255, 0.3); transition: 0.4s;">
-            <i class="fas fa-gift" style="margin-right: 8px;"></i> NHẬN QUÀ NGAY
-        </button>
-
-        <p id="dd-status" style="margin-top: 20px; font-size: 12px; color: #ff4444; font-weight: bold; display: none; animation: fadeIn 0.5s;">Hôm nay ông nhận rồi, mai quay lại nhé!</p>
+      </div>
     </div>
-</div>
+  </section>
 
-<style>
-    @keyframes floatGift {
-        0%, 100% { transform: translateY(0) rotate(0); }
-        50% { transform: translateY(-15px) rotate(8deg); }
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="f-brand">
+          <div class="nav-brand">HOANGKUN <span>STORE</span></div>
+          <p>Hệ thống chuyên cung cấp giải pháp lập trình, source code web và tài nguyên số cao cấp hàng đầu.</p>
+        </div>
+        <div class="f-col">
+          <h4>Sản Phẩm</h4>
+          <ul>
+            <li><a href="#products">Source Code Web</a></li>
+            <li><a href="#products">Gaming Scripts</a></li>
+            <li><a href="#products">Auto System Tools</a></li>
+          </ul>
+        </div>
+        <div class="f-col">
+          <h4>Liên Kết</h4>
+          <ul>
+            <li><a href="#">Trang chủ</a></li>
+            <li><a href="#products">Danh mục</a></li>
+          </ul>
+        </div>
+        <div class="f-col">
+          <h4>Liên Hệ Kỹ Thuật</h4>
+          <ul>
+            <li><a href="#"><i class="fab fa-telegram"></i> Liên hệ Telegram Support</a></li>
+            <li><a href="#">🌐 hoangkunstore.id.vn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 HOANGKUN STORE. All rights reserved.</p>
+        <div class="footer-socials">
+          <a href="#"><i class="fab fa-telegram"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Hàm đóng Popup khi nhấn nút "Tôi Đã Hiểu"
+    function closePopup() {
+      document.getElementById('popupOverlay').style.display = 'none';
     }
-    #btn-diemdanh:hover { transform: scale(1.03); box-shadow: 0 0 30px #00e5ff; }
-</style>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script src="diemdanh.js"></script>
-
-    <script>
-// Hàm xử lý tìm kiếm sản phẩm
-function searchProduct() {
-    let input = document.getElementById('productSearch').value.toLowerCase();
-    let slides = document.querySelectorAll('#productGrid .swiper-slide'); 
-
-    slides.forEach(slide => {
-        let cards = slide.querySelectorAll('.card'); // Tìm tất cả sản phẩm trong 1 cột
-        let slideHasVisibleCard = false;
-
-        cards.forEach(card => {
-            let title = card.querySelector('h3').innerText.toLowerCase();
-            if (title.includes(input)) {
-                card.style.display = ""; // Khớp tên thì hiện
-                slideHasVisibleCard = true;
-            } else {
-                card.style.display = "none"; // Không khớp thì ẩn
-            }
-        });
-
-        // Nếu cả 2 sản phẩm trong cột đều bị ẩn, thì ẩn luôn cả cái cột đó đi cho đẹp
-        if (slideHasVisibleCard) {
-            slide.style.display = "";
-        } else {
-            slide.style.display = "none";
-        }
-    });
-}
-</script>
-
-    <script>
-   // Khởi tạo Swiper cho Banner ở đầu trang
-new Swiper(".bannerSwiper", {
-    loop: true, // Lặp lại vô hạn
-    autoplay: {
-        delay: 3000, // 3 giây tự chuyển 1 lần
-        disableOnInteraction: false,
-    },
-    navigation: {
-        nextEl: ".bannerSwiper .swiper-button-next",
-        prevEl: ".bannerSwiper .swiper-button-prev",
-    },
-});
-    </script>
-
-<div style="position: fixed; left: 20px; bottom: 120px; z-index: 9999; display: flex; flex-direction: column; gap: 15px;">
-
-    <div onclick="moHopQua()" class="btn-sidebar-left gift-theme">
-        <i class="fas fa-gift"></i>
-        <span class="tooltip-sidebar">Quà Tân Thủ</span>
-    </div>
-
-   <div onclick="moModalDiemDanh()" class="btn-sidebar-left lixi-theme">
-        <i class="fas fa-calendar-check"></i>
-        <span class="tooltip-sidebar">Điểm Danh</span>
-    </div>
-
-    <a href="spin.html" class="btn-sidebar-left spin-theme">
-        <i class="fas fa-dharmachakra" style="animation: spinInfinite 4s linear infinite;"></i>
-        <span class="tooltip-sidebar">Vòng Quay</span>
-    </a>
-</div>
-    
-<style>
-/* Style đồng bộ với dàn nút bên phải */
-.btn-sidebar-left {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-decoration: none;
-    font-size: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: 0.3s;
-    cursor: pointer;
-    position: relative;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Thay thế 3 dòng màu đỏ cũ bằng 3 dòng này */
-.gift-theme { background: #00e5ff; box-shadow: 0 0 10px #00e5ff; }
-.lixi-theme { background: #00b0ff; box-shadow: 0 0 10px #00b0ff; }
-.spin-theme { background: #008191; box-shadow: 0 0 10px #008191; }
-
-.btn-sidebar-left:hover {
-    transform: scale(1.1) translateX(8px);
-    filter: brightness(1.2);
-    border-color: #fff;
-}
-
-/* Tooltip hiện tên */
-.tooltip-sidebar {
-    position: absolute;
-    left: 55px;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: bold;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: 0.3s;
-    pointer-events: none;
-}
-
-.btn-sidebar-left:hover .tooltip-sidebar {
-    opacity: 1;
-    transform: translateX(0);
-}
-</style>
-    
-<script src="hopqua.js"></script> 
-
+  </script>
 </body>
+
 </html>
