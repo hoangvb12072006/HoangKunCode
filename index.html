@@ -450,5 +450,35 @@
       }, 1000);
     }
   </script>
+
+  <script>
+  // 1. Chặn chuột phải
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
+
+  // 2. Chặn các phím tắt mở DevTools (F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+Shift+J, Ctrl+U)
+  document.addEventListener('keydown', function(e) {
+    if (
+      e.key === 'F12' ||
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) ||
+      (e.ctrlKey && e.key === 'u')
+    ) {
+      e.preventDefault();
+      // Có thể thêm cảnh báo ở đây nếu muốn
+      // alert("Chức năng này đã bị vô hiệu hóa!");
+    }
+  });
+
+  // 3. (Tùy chọn) Tự động chuyển hướng nếu người dùng cố tình mở Console
+  // Cách này hơi gắt, nếu không cần thiết thì bạn có thể bỏ qua phần này
+  (function() {
+    var devtools = /./;
+    devtools.toString = function() {
+      this.opened = true;
+    };
+  })();
+</script>
+  
 </body>
 </html>
