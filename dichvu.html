@@ -7,35 +7,86 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: #030712; --accent: #6366f1; --text: #f8fafc; --muted: #94a3b8; --border: rgba(255,255,255,0.1); }
+    :root { 
+      --bg: #030712; 
+      --blue: #6366f1; 
+      --text: #f8fafc; 
+      --muted: #94a3b8; 
+      --border: rgba(255,255,255,0.1); 
+      --green: #10b981;
+    }
     body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; }
     .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+    a { text-decoration: none; }
 
-    /* Nav */
+    /* Nav & Header */
     nav { padding: 30px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
     .logo { font-weight: 800; font-size: 1.5rem; }
     .nav-links a { color: var(--muted); margin-left: 20px; font-weight: 500; transition: 0.3s; }
     .nav-links a:hover { color: #fff; }
+    .page-header { text-align: center; padding: 60px 0; }
+    .page-header h1 { font-size: 2.8rem; margin-bottom: 10px; }
+    .page-header p { color: var(--muted); font-size: 1.05rem; }
 
-    /* Page Header */
-    .page-header { text-align: center; padding: 80px 0; }
-    .page-header h1 { font-size: 3rem; margin-bottom: 10px; }
-    .page-header p { color: var(--muted); }
-
-    /* Service Section */
-    .service-block { display: flex; align-items: center; gap: 60px; margin-bottom: 100px; }
-    .service-block:nth-child(even) { flex-direction: row-reverse; }
-    .text-content { flex: 1; }
-    .text-content h2 { font-size: 2rem; margin-bottom: 20px; color: #fff; }
-    .text-content ul { margin: 20px 0; }
-    .text-content li { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-    .text-content li i { color: #10b981; }
+    /* Khối Dịch Vụ Chi Tiết Chi Chiết */
+    .detail-block { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 24px; padding: 40px; margin-bottom: 40px; }
+    .detail-head { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
+    .detail-icon { font-size: 2.5rem; color: var(--blue); background: rgba(99, 102, 241, 0.1); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 14px; }
+    .detail-head h3 { font-size: 1.6rem; margin: 0 0 5px 0; color: #fff; }
+    .detail-sub { color: var(--muted); margin: 0; font-size: 0.95rem; }
+    .detail-desc-box { background: rgba(99, 102, 241, 0.04); padding: 20px; border-radius: 16px; margin: 20px 0; border: 1px solid rgba(99, 102, 241, 0.08); font-size: 0.95rem; color: #cbd5e1; border-left: 4px solid var(--blue); }
     
-    .img-content { flex: 1; height: 350px; background: rgba(255,255,255,0.05); border-radius: 24px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: var(--accent); }
+    .detail-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 25px; }
+    .detail-col h4 { font-size: 1.1rem; margin-bottom: 15px; color: #fff; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+    .detail-list { list-style: none; padding: 0; margin: 0; }
+    .detail-list li { margin-bottom: 12px; font-size: 0.9rem; color: #cbd5e1; display: flex; align-items: center; gap: 10px; }
+    .detail-list li i { font-size: 0.85rem; }
+    
+    .use-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; }
+    .use-tag { padding: 6px 14px; background: rgba(255,255,255,0.03); border-radius: 99px; font-size: 0.8rem; border: 1px solid var(--border); color: #cbd5e1; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .use-tag:hover { background: rgba(255,255,255,0.08); border-color: var(--blue); }
 
-    /* Responsive */
+    /* Bảng Giá */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 60px 0 40px; }
+    .price-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 40px 30px; border-radius: 24px; text-align: center; position: relative; display: flex; flex-direction: column; }
+    .price-card.popular { border: 2px solid var(--blue); transform: scale(1.03); background: rgba(99, 102, 241, 0.03); }
+    .badge { position: absolute; top: -12px; right: 24px; background: var(--blue); padding: 4px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; }
+    .price-card h3 { font-size: 1.3rem; margin: 0 0 5px 0; color: #fff; }
+    .price { font-size: 2.4rem; font-weight: 800; margin: 20px 0; color: var(--blue); }
+    .price span { font-size: 0.95rem; color: var(--muted); font-weight: 400; }
+    .price-list { text-align: left; margin: 20px 0 30px 0; list-style: none; padding: 0; flex-grow: 1; }
+    .price-list li { margin-bottom: 12px; font-size: 0.9rem; color: #cbd5e1; display: flex; align-items: center; gap: 10px; }
+    .price-list li i { color: var(--green); }
+    .btn-outline { display: block; width: 100%; padding: 12px 0; border: 1px solid var(--blue); color: var(--blue); border-radius: 8px; font-weight: 600; text-align: center; transition: 0.3s; margin-top: auto; }
+    .btn-outline:hover { background: rgba(99, 102, 241, 0.1); transform: translateY(-2px); }
+    .btn-solid { display: block; width: 100%; padding: 13px 0; background: var(--blue); color: #fff; border-radius: 8px; font-weight: 600; text-align: center; transition: 0.3s; margin-top: auto; }
+    .btn-solid:hover { background: #4f46e5; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+
+    /* Cảnh báo & FAQ */
+    .info-banner { background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.15); padding: 20px; border-radius: 16px; display: flex; align-items: center; gap: 15px; margin: 40px 0 80px 0; font-size: 0.9rem; color: #fcd34d; }
+    .info-banner i { font-size: 1.2rem; }
+    
+    .faq-container { margin-bottom: 80px; }
+    .faq-item { border-bottom: 1px solid var(--border); padding: 5px 0; }
+    .faq-btn { width: 100%; padding: 20px 0; background: none; border: none; color: #fff; text-align: left; font-weight: 600; font-size: 1.05rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .faq-btn:hover { color: var(--blue); }
+    .faq-content { max-height: 0; overflow: hidden; transition: all 0.3s cubic-bezier(0,1,0,1); color: var(--muted); font-size: 0.95rem; padding-left: 5px; }
+    .faq-content.active { max-height: 200px; padding-bottom: 20px; transition: all 0.3s ease-in-out; }
+    .faq-btn i { font-size: 0.9rem; color: var(--blue); transition: 0.3s; }
+
+    /* Footer & CTA */
+    .cta-section { text-align: center; padding: 80px 0; border-top: 1px solid var(--border); }
+    .cta-section h2 { font-size: 2.2rem; margin-bottom: 10px; }
+    .footer { background: #0a0e1a; padding: 60px 0 20px; border-top: 1px solid var(--border); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer h4 { color: #fff; margin-bottom: 20px; font-size: 1rem; letter-spacing: 1px; }
+    .footer ul { list-style: none; padding: 0; margin: 0; color: var(--muted); }
+    .footer ul li { margin-bottom: 12px; font-size: 0.9rem; }
+
     @media (max-width: 768px) {
-      .service-block, .service-block:nth-child(even) { flex-direction: column; text-align: center; gap: 30px; }
+      .detail-cols, .pricing-grid, .footer-grid { grid-template-columns: 1fr; gap: 25px; }
+      .price-card.popular { transform: scale(1); }
+      .page-header h1 { font-size: 2.2rem; }
     }
   </style>
 </head>
@@ -49,41 +100,449 @@
     </div>
   </nav>
 
-  <section class="page-header">
-    <div class="container">
-      <h1>Dịch Vụ & Bảng Giá</h1>
-      <p>Giải pháp website và automation với mức giá cạnh tranh nhất thị trường</p>
-    </div>
+  <section class="page-header container">
+    <div style="font-size:0.85rem; background:rgba(99,102,241,0.1); color:var(--blue); padding:4px 12px; border-radius:99px; display:inline-block; margin-bottom:15px; font-weight:600;">DỊCH VỤ & BẢNG GIÁ</div>
+    <h1>Giải Pháp Công Nghệ</h1>
+    <p>Các mẫu website chuyên nghiệp được thiết kế riêng biệt theo từng khách hàng</p>
   </section>
 
   <main class="container">
     
-    <section class="service-block">
-      <div class="text-content">
-        <h2>Thiết Kế Website</h2>
-        <p>Từ website giới thiệu đến web thương mại, học tập — tất cả được thiết kế riêng biệt, chuẩn SEO, tốc độ cao.</p>
-        <ul>
-          <li><i class="fas fa-check"></i> Thiết kế độc quyền theo thương hiệu</li>
-          <li><i class="fas fa-check"></i> Responsive chuẩn trên mọi thiết bị</li>
-          <li><i class="fas fa-check"></i> Tốc độ tải trang nhanh (Page Speed 90+)</li>
-        </ul>
+    <div class="detail-block">
+      <div class="detail-head">
+        <div class="detail-icon"><i class="fas fa-building"></i></div>
+        <div>
+          <h3>Web Công Ty & Doanh Nghiệp</h3>
+          <p class="detail-sub">Phù hợp: Công ty, thương hiệu, bất động sản, spa, nhà hàng, phòng khám...</p>
+        </div>
       </div>
-      <div class="img-content"><i class="fas fa-laptop-code"></i></div>
-    </section>
+      <div class="detail-desc-box">
+        Website là bộ mặt của doanh nghiệp trên internet. Chúng tôi thiết kế website giới thiệu công ty với giao diện chuyên nghiệp, hiện đại, ấn tượng ngay từ cái nhìn đầu tiên. Mỗi website được nghiên cứu và thiết kế riêng biệt theo đặc thù ngành nghề, không sử dụng template chung.
+      </div>
+      <div class="detail-cols">
+        <div class="detail-col">
+          <h4><i class="fas fa-check-circle" style="color:var(--blue)"></i> Tính năng bao gồm</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Thiết kế giao diện độc quyền theo brand</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Responsive chuẩn trên mọi thiết bị</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tối ưu SEO Google bài bản (On-page)</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tích hợp Google Analytics & Search Console</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tích hợp Zalo OA, Facebook Messenger</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tốc độ tải trang nhanh (Page Speed 90+)</li>
+          </ul>
+        </div>
+        <div class="detail-col">
+          <h4><i class="fas fa-star" style="color:#f59e0b"></i> Lợi ích nổi bật</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Tăng độ tin cậy với khách hàng tiềm năng</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Xuất hiện trên Google khi khách tìm kiếm</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Hoạt động 24/7 không cần nhân viên trực</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Bàn giao source code toàn bộ</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Hỗ trợ kỹ thuật 24/7 qua Telegram</li>
+          </ul>
+        </div>
+      </div>
+      <div class="use-tags">
+        <span class="use-tag"><i class="fas fa-briefcase"></i> Công ty TNHH / CP</span>
+        <span class="use-tag"><i class="fas fa-home"></i> Bất động sản</span>
+        <span class="use-tag"><i class="fas fa-spa"></i> Spa / Làm đẹp</span>
+        <span class="use-tag"><i class="fas fa-utensils"></i> Nhà hàng / Cafe</span>
+        <span class="use-tag"><i class="fas fa-user-md"></i> Phòng khám</span>
+      </div>
+    </div>
 
-    <section class="service-block">
-      <div class="text-content">
-        <h2>Dịch Vụ Automation</h2>
-        <p>Tự động hóa mọi tác vụ từ marketing đến quản lý khách hàng giúp tiết kiệm 80% thời gian vận hành.</p>
-        <ul>
-          <li><i class="fas fa-check"></i> Auto tương tác Facebook, TikTok</li>
-          <li><i class="fas fa-check"></i> Tự động tìm kiếm khách hàng</li>
-          <li><i class="fas fa-check"></i> Báo cáo tiến độ chi tiết</li>
-        </ul>
+    <div class="detail-block">
+      <div class="detail-head">
+        <div class="detail-icon"><i class="fas fa-shopping-cart"></i></div>
+        <div>
+          <h3>Web Shop & Thương Mại Điện Tử</h3>
+          <p class="detail-sub">Phù hợp: Shop online, khách sạn, căn hộ, dịch vụ đặt phòng, nền tảng bán hàng...</p>
+        </div>
       </div>
-      <div class="img-content"><i class="fas fa-robot"></i></div>
+      <div class="detail-desc-box">
+        Nền tảng bán hàng online đầy đủ tính năng, từ giỏ hàng đến thanh toán tự động. Hệ thống tích hợp cổng thanh toán VNPay, Momo, chuyển khoản ngân hàng và nạp tiền tự động — giúp shop hoạt động hoàn toàn tự động, thu tiền ngay cả khi bạn đang ngủ.
+      </div>
+      <div class="detail-cols">
+        <div class="detail-col">
+          <h4><i class="fas fa-check-circle" style="color:var(--blue)"></i> Tính năng bao gồm</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Giao diện shop/store hiện đại, dễ dùng</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Giỏ hàng & checkout tối ưu tỷ lệ mua</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tích hợp VNPay, Momo, QR Code</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Nạp tiền tự động qua API ngân hàng</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Hệ thống booking / đặt phòng realtime</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Thông báo đơn hàng qua Telegram</li>
+          </ul>
+        </div>
+        <div class="detail-col">
+          <h4><i class="fas fa-star" style="color:#f59e0b"></i> Lợi ích nổi bật</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Thu tiền tự động 24/7 không cần thủ công</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Quản lý tập trung mọi đơn hàng, kho hàng</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Giảm thiểu sai sót trong xử lý đơn</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Khách hàng mua hàng nhanh chóng, tiện lợi</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Báo cáo doanh thu chi tiết theo ngày/tháng</li>
+          </ul>
+        </div>
+      </div>
+      <div class="use-tags">
+        <span class="use-tag"><i class="fas fa-tshirt"></i> Shop thời trang</span>
+        <span class="use-tag"><i class="fas fa-hotel"></i> Khách sạn / Homestay</span>
+        <span class="use-tag"><i class="fas fa-gamepad"></i> Shop game / Key</span>
+        <span class="use-tag"><i class="fas fa-pills"></i> Dược phẩm</span>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-head">
+        <div class="detail-icon"><i class="fas fa-graduation-cap"></i></div>
+        <div>
+          <h3>Web Học Tập & Thi Online</h3>
+          <p class="detail-sub">Phù hợp: Trung tâm gia sư, khóa học online, trường học, trung tâm luyện thi...</p>
+        </div>
+      </div>
+      <div class="detail-desc-box">
+        Nền tảng học tập và thi trực tuyến được xây dựng với hệ thống chống gian lận đa tầng tiên tiến nhất. Camera giám sát realtime, phát hiện chuyển tab, khóa toàn màn hình — đảm bảo kỳ thi diễn ra công bằng và bảo mật tuyệt đối. Phù hợp cho cả mô hình B2C lẫn B2B.
+      </div>
+      <div class="detail-cols">
+        <div class="detail-col">
+          <h4><i class="fas fa-check-circle" style="color:var(--blue)"></i> Tính năng bao gồm</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Hệ thống bán khóa học online tự động</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Thi trắc nghiệm / tự luận online</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Chống gian lận: Camera, phát hiện tab ẩn</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Fullscreen lock trong suốt kỳ thi</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Bảng điểm và chứng chỉ tự động</li>
+          </ul>
+        </div>
+        <div class="detail-col">
+          <h4><i class="fas fa-star" style="color:#f59e0b"></i> Lợi ích nổi bật</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Đảm bảo tính công bằng của kỳ thi</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Tiết kiệm chi phí in ấn đề thi</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Kết quả được chấm ngay lập tức</li>
+            <li><i class="fas fa-star" style="color:var(--blue)"></i> Phân tích điểm yếu học viên theo từng môn</li>
+          </ul>
+        </div>
+      </div>
+      <div class="use-tags">
+        <span class="use-tag"><i class="fas fa-book"></i> Khóa học online</span>
+        <span class="use-tag"><i class="fas fa-school"></i> Trường học / ĐH</span>
+        <span class="use-tag"><i class="fas fa-chalkboard-teacher"></i> Gia sư / dạy kèm</span>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-head">
+        <div class="detail-icon"><i class="fas fa-robot"></i></div>
+        <div>
+          <h3>Automation Mạng Xã Hội</h3>
+          <p class="detail-sub">Tự động hóa hoạt động trên Facebook, TikTok, Instagram — tăng tương tác và tiếp cận đúng đối tượng</p>
+        </div>
+      </div>
+      <div class="detail-desc-box">
+        Phần mềm automation mạng xã hội giúp tài khoản/fanpage của bạn hoạt động liên tục 24/7 mà không cần ngồi trực. Tự động like, comment, share, follow, nhắn tin — tất cả đều được cấu hình thông minh để tránh bị khóa tài khoản.
+      </div>
+      <div class="detail-cols">
+        <div class="detail-col">
+          <h4><i class="fab fa-facebook-messenger" style="color:#0084ff"></i> Facebook & Messenger</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Auto like, comment, share bài viết</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Auto nhắn tin Messenger hàng loạt</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tự động kết bạn đúng đối tượng target</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Auto seeding bình luận fanpage</li>
+          </ul>
+        </div>
+        <div class="detail-col">
+          <h4><i class="fab fa-tiktok" style="color:#fe2c55"></i> TikTok & Instagram</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Auto follow, unfollow theo từ khóa</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tự động like & comment video TikTok</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tăng tương tác tự nhiên, an toàn</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Lên lịch đăng bài tự động</li>
+          </ul>
+        </div>
+      </div>
+      <div class="use-tags">
+        <span class="use-tag"><i class="fab fa-facebook"></i> Facebook</span>
+        <span class="use-tag"><i class="fab fa-tiktok"></i> TikTok</span>
+        <span class="use-tag"><i class="fab fa-instagram"></i> Instagram</span>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-head">
+        <div class="detail-icon"><i class="fas fa-bullseye"></i></div>
+        <div>
+          <h3>Tìm Kiếm Khách Hàng Tiềm Năng</h3>
+          <p class="detail-sub">Phần mềm tự động tìm và tiếp cận khách hàng mục tiêu trên Zalo, Facebook với độ chính xác cao</p>
+        </div>
+      </div>
+      <div class="detail-desc-box">
+        Không còn mất hàng giờ tìm kiếm khách hàng thủ công. Phần mềm tự động quét và lọc khách hàng tiềm năng dựa trên vị trí địa lý, nghề nghiệp, độ tuổi — sau đó tự động nhắn tin tiếp cận với nội dung tùy chỉnh của bạn.
+      </div>
+      <div class="detail-cols">
+        <div class="detail-col">
+          <h4><i class="fas fa-comments" style="color:#0068ff"></i> Zalo Marketing</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tìm kiếm số điện thoại theo khu vực</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Auto kết bạn Zalo hàng loạt</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Nhắn tin giới thiệu tự động</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Lọc khách theo nghề nghiệp, tuổi</li>
+          </ul>
+        </div>
+        <div class="detail-col">
+          <h4><i class="fas fa-users" style="color:var(--blue)"></i> Lead Generation</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Scrape data khách hàng từ Group FB</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Lọc khách hàng đang cần dịch vụ</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Export danh sách CRM tự động</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tích hợp chatbot tư vấn tự động</li>
+          </ul>
+        </div>
+      </div>
+      <div class="use-tags">
+        <span class="use-tag"><i class="fas fa-comment"></i> Zalo</span>
+        <span class="use-tag"><i class="fas fa-crosshairs"></i> Auto Target</span>
+        <span class="use-tag"><i class="fas fa-chart-bar"></i> Analytics</span>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-head">
+        <div class="detail-icon"><i class="fas fa-bolt"></i></div>
+        <div>
+          <h3>Custom Solution — Giải Pháp Tùy Chỉnh</h3>
+          <p class="detail-sub">Phát triển phần mềm, tool, bot riêng theo yêu cầu đặc thù của doanh nghiệp</p>
+        </div>
+      </div>
+      <div class="detail-desc-box">
+        Bạn có ý tưởng về một phần mềm, tool tự động hóa riêng nhưng chưa tìm được đơn vị thực hiện? HOANGKUN STORE nhận phát triển các giải pháp custom từ A-Z: từ phân tích yêu cầu, thiết kế giải pháp, lập trình đến bảo trì dài hạn.
+      </div>
+      <div class="detail-cols">
+        <div class="detail-col">
+          <h4><i class="fas fa-cube" style="color:var(--blue)"></i> Loại giải pháp</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Bot Telegram / Discord tự động</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Phần mềm quản lý nội bộ (ERP nhỏ)</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Tool scrape & xử lý dữ liệu</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> API tích hợp hệ thống thanh toán</li>
+            <li><i class="fas fa-check" style="color:var(--green)"></i> Chrome Extension tự động hóa</li>
+          </ul>
+        </div>
+        <div class="detail-col">
+          <h4><i class="fas fa-sync" style="color:#f59e0b"></i> Quy trình làm việc</h4>
+          <ul class="detail-list">
+            <li><i class="fas fa-check" style="color:var(--blue)"></i> Tư vấn & phân tích yêu cầu miễn phí</li>
+            <li><i class="fas fa-check" style="color:var(--blue)"></i> Đề xuất giải pháp kỹ thuật phù hợp</li>
+            <li><i class="fas fa-check" style="color:var(--blue)"></i> Demo prototype trước khi ký hợp đồng</li>
+            <li><i class="fas fa-check" style="color:var(--blue)"></i> Bàn giao source code toàn bộ</li>
+            <li><i class="fas fa-check" style="color:var(--blue)"></i> Bảo trì & nâng cấp dài hạn</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <div style="text-align: center; margin-top: 80px;">
+      <div style="font-size:0.85rem; background:rgba(99,102,241,0.1); color:var(--blue); padding:4px 12px; border-radius:99px; display:inline-block; margin-bottom:10px; font-weight:600;">BẢNG GIÁ</div>
+      <h2 style="font-size: 2.2rem; margin: 0 0 10px 0;">Bảng Giá Chi Tiết</h2>
+      <p style="color:var(--muted); margin:0;">Ưu đãi miễn phí tên miền năm đầu tiên cho tất cả các gói — Giá cạnh tranh nhất thị trường</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Web Doanh Nghiệp</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin: 5px 0 0 0;">Công ty, sale, bất động sản, thương hiệu</p>
+        <div class="price">2 - 5 <span>triệu VNĐ</span></div>
+        <ul class="price-list">
+          <li><i class="fas fa-check"></i> Thiết kế giao diện độc quyền</li>
+          <li><i class="fas fa-check"></i> Responsive đa thiết bị</li>
+          <li><i class="fas fa-check"></i> Tối ưu SEO Google On-page</li>
+          <li><i class="fas fa-check"></i> Kết nối Zalo OA, Messenger</li>
+          <li><i class="fas fa-check"></i> Miễn phí tên miền năm đầu</li>
+          <li><i class="fas fa-check"></i> Hỗ trợ kỹ thuật 24/7</li>
+          <li><i class="fas fa-check"></i> Bàn giao toàn bộ source code</li>
+          <li><i class="fas fa-check"></i> Hosting 1 năm miễn phí</li>
+        </ul>
+        <a href="#contact" class="btn-outline">Liên Hệ Tư Vấn</a>
+      </div>
+
+      <div class="price-card popular">
+        <span class="badge">HOT</span>
+        <h3>Web Thương Mại</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin: 5px 0 0 0;">Shop online, khách sạn, căn hộ, đặt phòng</p>
+        <div class="price">4 - 10 <span>triệu VNĐ</span></div>
+        <ul class="price-list">
+          <li><i class="fas fa-check"></i> Toàn bộ gói Doanh Nghiệp</li>
+          <li><i class="fas fa-check"></i> Giỏ hàng & checkout toán online</li>
+          <li><i class="fas fa-check"></i> Nạp tiền tự động qua ngân hàng</li>
+          <li><i class="fas fa-check"></i> Tích hợp VNPay / Momo / QR</li>
+          <li><i class="fas fa-check"></i> Quản lý sản phẩm & đơn hàng</li>
+          <li><i class="fas fa-check"></i> Hệ thống booking đặt phòng</li>
+          <li><i class="fas fa-check"></i> Dashboard quản trị đầy đủ</li>
+          <li><i class="fas fa-check"></i> Thông báo Telegram tức thì</li>
+        </ul>
+        <a href="#contact" class="btn-solid">Đăng Ký Ngay</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Web Học Tập</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin: 5px 0 0 0;">Nền tảng khóa học, thi trắc nghiệm online</p>
+        <div class="price">Liên hệ <span>báo giá</span></div>
+        <ul class="price-list">
+          <li><i class="fas fa-check"></i> Nền tảng bán khóa học online</li>
+          <li><i class="fas fa-check"></i> Hệ thống thi trắc nghiệm / tự luận</li>
+          <li><i class="fas fa-check"></i> Chống gian lận đa tầng tiên tiến</li>
+          <li><i class="fas fa-check"></i> Camera giám sát realtime</li>
+          <li><i class="fas fa-check"></i> Phân tích kết quả từng học viên</li>
+          <li><i class="fas fa-check"></i> Quản lý lớp học & kỳ thi</li>
+          <li><i class="fas fa-check"></i> Chứng chỉ tự động sau thi</li>
+          <li><i class="fas fa-check"></i> Hỗ trợ dạy online + offline</li>
+        </ul>
+        <a href="#contact" class="btn-outline">Liên Hệ Báo Giá</a>
+      </div>
+    </div>
+
+    <div style="max-width: 450px; margin: 0 auto 40px auto;">
+      <div class="price-card">
+        <div class="detail-icon" style="margin: 0 auto 15px auto;"><i class="fas fa-robot"></i></div>
+        <h3>Automation Marketing</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin: 5px 0 0 0;">Mạng xã hội, tìm kiếm khách hàng, custom tool</p>
+        <div class="price">Liên hệ <span>báo giá</span></div>
+        <ul class="price-list" style="text-align: center;">
+          <li><i class="fas fa-check"></i> Auto like, comment, share MXH</li>
+          <li><i class="fas fa-check"></i> Auto nhắn tin Messenger / Zalo</li>
+          <li><i class="fas fa-check"></i> Tìm kiếm & lọc khách hàng tiềm năng</li>
+          <li><i class="fas fa-check"></i> Quản lý nhiều tài khoản cùng lúc</li>
+          <li><i class="fas fa-check"></i> Cài đặt delay thông minh, an toàn</li>
+          <li><i class="fas fa-check"></i> Hỗ trợ Facebook, TikTok, Instagram, Zalo</li>
+          <li><i class="fas fa-check"></i> Báo cáo & thống kê chi tiết</li>
+          <li><i class="fas fa-check"></i> Tư vấn chiến lược miễn phí</li>
+        </ul>
+        <a href="#contact" class="btn-outline">Liên Hệ Báo Giá</a>
+      </div>
+    </div>
+
+    <div class="info-banner">
+      <i class="fas fa-info-circle"></i>
+      <div><strong>Lưu ý:</strong> Giá trên là giá tham khảo. Giá thực tế phụ thuộc vào độ phức tạp và số lượng tính năng yêu cầu. Liên hệ để được tư vấn và báo giá miễn phí, chính xác nhất.</div>
+    </div>
+
+
+    <div class="faq-container">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <div style="font-size:0.85rem; background:rgba(99,102,241,0.1); color:var(--blue); padding:4px 12px; border-radius:99px; display:inline-block; margin-bottom:10px; font-weight:600;">FAQ</div>
+        <h2 style="font-size: 2rem; margin: 0;">Câu Hỏi Thường Gặp</h2>
+        <p style="color:var(--muted); margin:5px 0 0 0;">Những thắc mắc phổ biến nhất từ khách hàng về dịch vụ</p>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-btn">Thời gian hoàn thành một website mất bao lâu? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-content">Thông thường tiến độ triển khai sẽ từ 3-7 ngày làm việc tùy thuộc vào độ phức tạp của chức năng và tốc độ duyệt giao diện của bạn.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn">HOANGKUN STORE có bàn giao source code không? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-content">Có, hệ thống chúng tôi chỉ cung cấp các sản phẩm mã nguồn sạch và kịch bản scripts, bàn giao 100% toàn bộ source code gốc sau khi hoàn thành.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn">Chi phí hosting và tên miền sau năm đầu là bao nhiêu? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-content">Phí duy trì từ năm thứ hai sẽ phụ thuộc vào gói dung lượng hosting lưu trữ và loại đuôi tên miền (.com, .vn...) bạn lựa chọn. Chúng tôi sẽ thông báo trước 30 ngày.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn">Website có lên được Google không? SEO như thế nào? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-content">Tất cả website đều được tối ưu hóa cấu trúc code chuẩn SEO On-page 100%, tích hợp sitemap đầy đủ giúp robot Google dễ dàng thu thập dữ liệu và lập chỉ mục nhanh nhất.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn">Thanh toán như thế nào? Có đặt cọc trước không? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-content">Hệ thống áp dụng cổng thanh toán tự động qua API ngân hàng. Quy trình thông thường sẽ tạm ứng trước theo tiến độ dự án, trao đổi trực tiếp qua Telegram để thống nhất cụ thể.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn">Dịch vụ automation có vi phạm điều khoản mạng xã hội không? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-content">Các tool script đều được tích hợp thuật toán giả lập hành vi người dùng thật, thiết lập cơ chế delay ngẫu nhiên thông minh giúp bảo mật và giữ an toàn tối đa cho tài khoản của bạn.</div>
+      </div>
+    </div>
+
+    <section class="cta-section" id="contact">
+      <h2>Quan Tâm Dịch Vụ Nào?</h2>
+      <p style="color: var(--muted); margin-bottom: 30px;">Liên hệ ngay để được tư vấn miễn phí và nhận báo giá chi tiết</p>
+      <a href="https://hoangkunstore.id.vn" class="btn-solid" style="display:inline-block; width:auto; padding: 14px 40px;"><i class="fab fa-telegram"></i> Liên Hệ Tư Vấn Qua Telegram</a>
     </section>
 
   </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="logo">HOANGKUN STORE</div>
+          <p style="color: var(--muted); font-size: 0.9rem; margin-top: 15px;">Hệ thống phân phối tài nguyên mã nguồn và giải pháp tự động hóa cao cấp hàng đầu.</p>
+        </div>
+        <div>
+          <h4>DỊCH VỤ</h4>
+          <ul>
+            <li>Web Doanh Nghiệp</li>
+            <li>Web Thương Mại</li>
+            <li>Web Học Tập</li>
+            <li>Automation Tool</li>
+          </ul>
+        </div>
+        <div>
+          <h4>TRANG</h4>
+          <ul>
+            <li><a href="index.html" style="color:var(--muted)">Trang chủ</a></li>
+            <li><a href="dichvu.html" style="color:var(--muted)">Dịch vụ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>LIÊN HỆ</h4>
+          <ul style="color: var(--muted);">
+            <li><i class="fas fa-phone" style="margin-right:5px;"></i> 0374 147 527</li>
+            <li><i class="fab fa-telegram" style="margin-right:5px;"></i> @hoangkun</li>
+            <li><i class="fas fa-globe" style="margin-right:5px;"></i> hoangkunstore.id.vn</li>
+          </ul>
+        </div>
+      </div>
+      <div style="text-align: center; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px;">
+        © 2026 HOANGKUN STORE. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 1. Chặn F12 và Chuột phải
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','C','J'].includes(e.key)) || (e.ctrlKey && e.key === 'u')) {
+        e.preventDefault();
+      }
+    });
+
+    // 2. Xử lý Accordion FAQ mở đóng mượt mà
+    document.querySelectorAll('.faq-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const content = btn.nextElementSibling;
+        const icon = btn.querySelector('i');
+        
+        // Đóng các tab khác đang mở để tạo hiệu ứng chuyên nghiệp
+        document.querySelectorAll('.faq-content').forEach(c => {
+          if(c !== content) c.classList.remove('active');
+        });
+        document.querySelectorAll('.faq-btn i').forEach(i => {
+          if(i !== icon) { i.classList.remove('fa-chevron-up'); i.classList.add('fa-chevron-down'); }
+        });
+
+        // Toggle tab hiện tại
+        content.classList.toggle('active');
+        if(content.classList.contains('active')) {
+          icon.classList.remove('fa-chevron-down');
+          icon.classList.add('fa-chevron-up');
+        } else {
+          icon.classList.remove('fa-chevron-up');
+          icon.classList.add('fa-chevron-down');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
