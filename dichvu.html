@@ -88,11 +88,38 @@
       .price-card.popular { transform: scale(1); }
       .page-header h1 { font-size: 2.2rem; }
     }
+
+    /* --- SỬA LẠI CSS PHẦN HEADER & BOX MÔ TẢ --- */
+.page-header { text-align: center; padding: 70px 0 50px 0; }
+.hero-badge {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 1px;
+  background: rgba(99, 102, 241, 0.15); color: #6366f1;
+  padding: 6px 18px; border-radius: 50px; display: inline-block;
+  margin-bottom: 20px; text-transform: uppercase;
+}
+.page-header h1 { font-size: 3rem; margin: 0 0 15px 0; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+.page-header p { color: #94a3b8; font-size: 1.05rem; margin: 0; }
+
+.detail-desc-box { 
+  background: rgba(99, 102, 241, 0.05); 
+  padding: 20px 25px; 
+  border-radius: 8px; /* Bo góc vuông vức hơn giống ảnh */
+  margin: 20px 0 30px 0; 
+  border: none;
+  border-left: 4px solid #6366f1; /* Đường viền xanh bên trái rõ nét */
+  font-size: 0.95rem; color: #cbd5e1; line-height: 1.7;
+}
+.detail-col h4 { 
+  font-size: 1.1rem; margin-bottom: 20px; color: #fff; 
+  display: flex; align-items: center; gap: 10px; 
+  border-bottom: 1px solid rgba(255,255,255,0.05); 
+  padding-bottom: 12px; 
+}
+    
   </style>
 </head>
 
-<body>
-  <nav class="container">
+<nav class="container">
     <div class="logo">HOANGKUN STORE</div>
     <div class="nav-links">
       <a href="index.html">Trang chủ</a>
@@ -101,7 +128,7 @@
   </nav>
 
   <section class="page-header container">
-    <div style="font-size:0.85rem; background:rgba(99,102,241,0.1); color:var(--blue); padding:4px 12px; border-radius:99px; display:inline-block; margin-bottom:15px; font-weight:600;">DỊCH VỤ & BẢNG GIÁ</div>
+    <div class="hero-badge">DỊCH VỤ & BẢNG GIÁ</div>
     <h1>Giải Pháp Công Nghệ</h1>
     <p>Các mẫu website chuyên nghiệp được thiết kế riêng biệt theo từng khách hàng</p>
   </section>
@@ -116,32 +143,36 @@
           <p class="detail-sub">Phù hợp: Công ty, thương hiệu, bất động sản, spa, nhà hàng, phòng khám...</p>
         </div>
       </div>
+      
       <div class="detail-desc-box">
         Website là bộ mặt của doanh nghiệp trên internet. Chúng tôi thiết kế website giới thiệu công ty với giao diện chuyên nghiệp, hiện đại, ấn tượng ngay từ cái nhìn đầu tiên. Mỗi website được nghiên cứu và thiết kế riêng biệt theo đặc thù ngành nghề, không sử dụng template chung.
       </div>
+      
       <div class="detail-cols">
         <div class="detail-col">
-          <h4><i class="fas fa-check-circle" style="color:var(--blue)"></i> Tính năng bao gồm</h4>
+          <h4><i class="fas fa-check-circle" style="color:#6366f1"></i> Tính năng bao gồm</h4>
           <ul class="detail-list">
-            <li><i class="fas fa-check" style="color:var(--green)"></i> Thiết kế giao diện độc quyền theo brand</li>
-            <li><i class="fas fa-check" style="color:var(--green)"></i> Responsive chuẩn trên mọi thiết bị</li>
-            <li><i class="fas fa-check" style="color:var(--green)"></i> Tối ưu SEO Google bài bản (On-page)</li>
-            <li><i class="fas fa-check" style="color:var(--green)"></i> Tích hợp Google Analytics & Search Console</li>
-            <li><i class="fas fa-check" style="color:var(--green)"></i> Tích hợp Zalo OA, Facebook Messenger</li>
-            <li><i class="fas fa-check" style="color:var(--green)"></i> Tốc độ tải trang nhanh (Page Speed 90+)</li>
+            <li><i class="fas fa-check" style="color:#10b981"></i> Thiết kế giao diện độc quyền theo brand</li>
+            <li><i class="fas fa-check" style="color:#10b981"></i> Responsive chuẩn trên mọi thiết bị</li>
+            <li><i class="fas fa-check" style="color:#10b981"></i> Tối ưu SEO Google bài bản (On-page)</li>
+            <li><i class="fas fa-check" style="color:#10b981"></i> Tích hợp Google Analytics & Search Console</li>
+            <li><i class="fas fa-check" style="color:#10b981"></i> Tích hợp Zalo OA, Facebook Messenger</li>
+            <li><i class="fas fa-check" style="color:#10b981"></i> Tốc độ tải trang nhanh (Page Speed 90+)</li>
           </ul>
         </div>
         <div class="detail-col">
           <h4><i class="fas fa-star" style="color:#f59e0b"></i> Lợi ích nổi bật</h4>
           <ul class="detail-list">
-            <li><i class="fas fa-star" style="color:var(--blue)"></i> Tăng độ tin cậy với khách hàng tiềm năng</li>
-            <li><i class="fas fa-star" style="color:var(--blue)"></i> Xuất hiện trên Google khi khách tìm kiếm</li>
-            <li><i class="fas fa-star" style="color:var(--blue)"></i> Hoạt động 24/7 không cần nhân viên trực</li>
-            <li><i class="fas fa-star" style="color:var(--blue)"></i> Bàn giao source code toàn bộ</li>
-            <li><i class="fas fa-star" style="color:var(--blue)"></i> Hỗ trợ kỹ thuật 24/7 qua Telegram</li>
+            <li><i class="fas fa-star" style="color:#6366f1"></i> Tăng độ tin cậy với khách hàng tiềm năng</li>
+            <li><i class="fas fa-star" style="color:#6366f1"></i> Xuất hiện trên Google khi khách tìm kiếm</li>
+            <li><i class="fas fa-star" style="color:#6366f1"></i> Hoạt động 24/7 không cần nhân viên trực</li>
+            <li><i class="fas fa-star" style="color:#6366f1"></i> Bàn giao source code toàn bộ</li>
+            <li><i class="fas fa-star" style="color:#6366f1"></i> Hỗ trợ kỹ thuật 24/7 qua Telegram</li>
           </ul>
         </div>
       </div>
+    </div>
+      
       <div class="use-tags">
         <span class="use-tag"><i class="fas fa-briefcase"></i> Công ty TNHH / CP</span>
         <span class="use-tag"><i class="fas fa-home"></i> Bất động sản</span>
