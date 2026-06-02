@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nguyễn Việt Hoàng | Giao Diện Đối Tác Chính Thức</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-   <style>
+    <style>
         /* --- HỆ THỐNG BIẾN MÀU SẮC (THEME) --- */
         :root {
             --bg-gradient: radial-gradient(circle at center, #14141a 0%, #08080a 100%);
@@ -97,12 +97,12 @@
         .theme-toggle-btn:hover { transform: scale(1.1); }
         .theme-toggle-btn svg { width: 22px; height: 22px; fill: var(--text-color); }
 
-        /* --- CONTAINER CHÍNH (Đã mở rộng thành 1100px) --- */
+        /* --- CONTAINER CHÍNH --- */
         .main-container {
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 1100px; /* Thay đổi chính: Bung rộng layout */
+            max-width: 1100px; 
             padding: 40px 20px;
             display: flex;
             flex-direction: column;
@@ -111,8 +111,8 @@
 
         /* --- KHỐI THÔNG TIN CÁ NHÂN (HERO SECTION) --- */
         .profile-card {
-            background: transparent; /* Loại bỏ khung viền bao quanh toàn bộ như bản gốc */
-            padding: 20px 0;
+            background: transparent; 
+            padding: 20px 0 0 0;
             text-align: center;
         }
 
@@ -134,23 +134,29 @@
         }
         .badge-dot { width: 6px; height: 6px; background: var(--neon-secondary); border-radius: 50%; }
 
+        /* Đã fix cứng khung avatar tròn xoe */
         .avatar-container {
             position: relative;
-            width: 180px; /* Tăng kích thước avatar */
-            height: 180px;
-            margin: 0 auto 20px;
+            width: 170px; 
+            height: 170px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            border: 4px solid var(--neon-primary); 
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); 
+            overflow: hidden; /* Ép mọi thứ bên trong thành hình tròn */
+            background-color: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .avatar-img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--neon-primary); /* Đổi sang viền nổi */
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); /* Tăng sáng cho viền */
         }
 
         .profile-name {
-            font-size: 3.5rem; /* Cỡ chữ to đùng y hệt web mẫu */
+            font-size: 3.5rem; 
             font-weight: 700;
             letter-spacing: -0.5px;
             margin-bottom: 15px;
@@ -161,7 +167,7 @@
 
         .profile-desc {
             font-size: 1.1rem;
-            color: var(--neon-primary); /* Thay màu text cho giống bản gốc */
+            color: var(--neon-primary); 
             line-height: 1.6;
             margin-bottom: 35px;
             font-weight: 600;
@@ -170,7 +176,16 @@
             margin-right: auto;
         }
 
-        /* --- ĐƯỜNG DẪN LIÊN KẾT CHÍNH (CTA BUTTONS) --- */
+        /* --- ĐƯỜNG DẪN LIÊN KẾT CHÍNH (CTA BUTTONS) - ĐÃ XẾP DỌC NGĂN NẮP --- */
+        .quick-links {
+            display: flex;
+            flex-direction: column; /* Ép xếp thành 1 hàng dọc */
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
         .cta-btn-main {
             display: flex;
             align-items: center;
@@ -180,59 +195,39 @@
             color: #ffffff;
             text-decoration: none;
             padding: 16px 30px;
-            border-radius: 50px; /* Bo tròn hoàn toàn */
+            border-radius: 50px; 
             font-weight: 700;
             font-size: 1.05rem;
             box-shadow: var(--shadow-glow);
             transition: transform 0.2s, opacity 0.2s;
-            max-width: 600px; /* Giới hạn độ dài nút chính giữa */
-            margin: 0 auto 25px auto;
+            width: 100%;
+            max-width: 650px; /* Khóa cứng độ dài tối đa */
         }
         .cta-btn-main:hover { transform: translateY(-2px); opacity: 0.95; }
-
-        .quick-links {
-            display: flex;
-            flex-direction: row; /* Dàn hàng ngang */
-            flex-wrap: wrap; /* Cho phép rớt dòng nếu màn hình bé */
-            justify-content: center;
-            gap: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
 
         .link-outline-btn {
             display: flex;
             align-items: center;
-            justify-content: center; /* Căn giữa nội dung trong nút */
+            justify-content: center;
             gap: 10px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-color);
             color: var(--text-color);
             text-decoration: none;
-            padding: 14px 25px;
-            border-radius: 50px; /* Bo tròn theo chuẩn ảnh */
+            padding: 15px 25px;
+            border-radius: 50px;
             font-weight: 600;
             transition: all 0.2s;
-            flex: 1 1 calc(33.333% - 40px); /* Chia đều 3 cột cho máy tính */
-            min-width: 250px;
+            width: 100%;
+            max-width: 650px; /* Dài bằng nút chính bên trên */
         }
         .link-outline-btn:hover {
             background: var(--card-bg);
             border-color: var(--neon-secondary);
-            transform: translateY(-4px); /* Nhấc lên thay vì đẩy ngang */
+            transform: translateY(-2px); 
             box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
         }
         .icon-diamond { color: var(--neon-secondary); font-size: 0.8rem; }
-
-        /* --- ĐOẠN TEXT MÔ TẢ PHỤ BÊN DƯỚI NÚT --- */
-        .sub-desc {
-            text-align: center;
-            font-size: 1rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 30px auto;
-        }
 
         /* --- MẠNG XÃ HỘI (SOCIAL ROW) --- */
         .social-row {
@@ -253,28 +248,22 @@
             justify-content: center;
             transition: all 0.2s;
         }
-        .social-icon.zalo-icon {
-            width: auto;
-            padding: 0 20px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: var(--text-color);
-            text-decoration: none;
-        }
         .social-icon:hover {
             transform: translateY(-4px);
             background: var(--neon-primary);
             border-color: var(--neon-primary);
             box-shadow: var(--shadow-glow);
         }
-        .social-icon svg { width: 20px; height: 20px; fill: var(--text-color); }
+        .social-icon svg { width: 22px; height: 22px; fill: var(--text-color); }
 
-        /* --- KHỐI THỐNG KÊ (STATS ROW) --- */
+        /* --- KHỐI THỐNG KÊ (STATS ROW) - Gom thành cục 2x2 vuông vức --- */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* Đã chia thành 4 cột hàng ngang */
+            grid-template-columns: repeat(2, 1fr); /* Ép thành 2 cột */
             gap: 20px;
+            width: 100%;
+            max-width: 650px; /* Bằng với độ dài của các nút */
+            margin: 0 auto; /* Đưa ra giữa */
         }
         .stat-box {
             background: var(--card-bg);
@@ -284,8 +273,8 @@
             text-align: center;
             backdrop-filter: blur(12px);
         }
-        .stat-num { font-size: 2rem; font-weight: 700; color: var(--text-color); margin-bottom: 8px; }
-        .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;}
+        .stat-num { font-size: 2.2rem; font-weight: 700; color: var(--text-color); margin-bottom: 8px; }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;}
 
         /* --- KHỐI SẢN PHẨM / SHOWCASE --- */
         .section-title {
@@ -308,7 +297,7 @@
 
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Đã chia 2 cột */
+            grid-template-columns: repeat(2, 1fr); 
             gap: 20px;
         }
         .product-card {
@@ -337,7 +326,7 @@
         /* --- KHỐI ĐÁNH GIÁ (FEEDBACK) --- */
         .feedback-list { 
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* Đã chia 2 cột */
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px; 
         }
         .feedback-card {
@@ -364,7 +353,6 @@
 
         /* --- RESPONSIVE MOBILE TỐI ƯU --- */
         @media (max-width: 900px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .product-grid { grid-template-columns: 1fr; }
             .feedback-list { grid-template-columns: 1fr; }
         }
@@ -373,7 +361,6 @@
             .profile-name { font-size: 2.5rem; }
             .avatar-container { width: 140px; height: 140px; }
             .stats-grid { grid-template-columns: 1fr; }
-            .link-outline-btn { flex: 1 1 100%; }
         }
     </style>
 </head>
@@ -383,7 +370,7 @@
 
     <button class="theme-toggle-btn" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối">
         <svg id="theme-icon" viewBox="0 0 24 24">
-            <path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/>
+            <path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c-0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/>
         </svg>
     </button>
 
@@ -395,7 +382,7 @@
             </div>
             
             <div class="avatar-container">
-                <img src="https://via.placeholder.com/130/8b5cf6/ffffff?text=HOANGKUN" alt="Nguyễn Việt Hoàng" class="avatar-img">
+                <img src="https://i.imgur.com/k2Hw2X4.jpeg" alt="Avatar" class="avatar-img">
             </div>
 
             <h1 class="profile-name">Nguyễn Việt Hoàng</h1>
@@ -434,12 +421,20 @@
 
         <section class="stats-grid">
             <div class="stat-box">
+                <div class="stat-num">1.8M+</div>
+                <div class="stat-label">Followers</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num">120K+</div>
+                <div class="stat-label">Live Viewers</div>
+            </div>
+            <div class="stat-box">
                 <div class="stat-num">500+</div>
                 <div class="stat-label">Dự Án Triển Khai</div>
             </div>
             <div class="stat-box">
                 <div class="stat-num">10K+</div>
-                <div class="stat-label">Khách Hàng Tin Dùng</div>
+                <div class="stat-label">Khách Hàng</div>
             </div>
         </section>
 
@@ -481,47 +476,40 @@
     </footer>
 
     <script>
-        // Tạo hiệu ứng hạt lấp lánh ngẫu nhiên bay lên
         function createParticles() {
             const container = document.getElementById('particles-container');
-            const particleCount = 25; // Số lượng hạt hiển thị
+            const particleCount = 25; 
             
             for(let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 
-                // Thuộc tính ngẫu nhiên cho từng hạt
-                const size = Math.random() * 4 + 2; // Độ lớn từ 2px - 6px
+                const size = Math.random() * 4 + 2; 
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 
                 particle.style.left = `${Math.random() * 100}vw`;
-                particle.style.animationDuration = `${Math.random() * 8 + 4}s`; // Tốc độ bay 4s - 12s
+                particle.style.animationDuration = `${Math.random() * 8 + 4}s`; 
                 particle.style.animationDelay = `${Math.random() * 5}s`;
                 
                 container.appendChild(particle);
             }
         }
 
-        // Hàm chuyển đổi theme Sáng / Tối độc lập
         function toggleTheme() {
             const body = document.body;
             const currentTheme = body.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             body.setAttribute('data-theme', newTheme);
             
-            // Thay đổi SVG icon tương ứng với giao diện
             const iconButton = document.getElementById('theme-icon');
             if (newTheme === 'light') {
-                // Biến đổi thành icon Mặt Trăng
                 iconButton.innerHTML = `<path d="M12.3,2a10,10,0,0,0-1.9.2,1,1,0,0,0-.7,1.2,1,1,0,0,0,1,.8,8,8,0,0,1,7.4,7.4,1,1,0,0,0,.8,1,1,0,0,0,1.2-.7A10,10,0,0,0,12.3,2Z"/>`;
             } else {
-                // Quay lại mặt trời mặc định
-                iconButton.innerHTML = `<path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/>`;
+                iconButton.innerHTML = `<path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c-0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/>`;
             }
         }
 
-        // Kích hoạt chạy hiệu ứng ngay khi load trang
         window.addEventListener('DOMContentLoaded', createParticles);
     </script>
 </body>
