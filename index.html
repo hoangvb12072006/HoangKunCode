@@ -392,17 +392,29 @@
             background: rgba(10, 10, 14, 0.5);
         }
 
-        /* --- RESPONSIVE MOBILE TỐI ƯU --- */
+     /* --- RESPONSIVE MOBILE TỐI ƯU --- */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: 1fr; }
             .feedback-list { grid-template-columns: 1fr; }
         }
         
         @media (max-width: 600px) {
-            .profile-name { font-size: 2.5rem; }
-            .avatar-container { width: 140px; height: 140px; }
+            .profile-name { 
+                font-size: 1.8rem; /* Thu nhỏ lại để tên nằm gọn trên 1 dòng */
+                min-height: 2.5rem; /* Thu gọn khung chiều cao */
+                margin-bottom: 10px;
+            }
+            .profile-desc {
+                font-size: 0.95rem; /* Chữ mô tả nhỏ lại cho thanh thoát */
+                padding: 0 10px; /* Thêm lề 2 bên để không sát mép màn hình */
+            }
+            .avatar-container { 
+                width: 130px; 
+                height: 130px; 
+            }
             .stats-grid { grid-template-columns: 1fr; }
         }
+        
     </style>
 </head>
 <body data-theme="dark">
