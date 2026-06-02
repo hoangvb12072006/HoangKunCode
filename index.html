@@ -134,7 +134,7 @@
         }
         .badge-dot { width: 6px; height: 6px; background: var(--neon-secondary); border-radius: 50%; }
 
-        /* Đã fix cứng khung avatar tròn xoe */
+       /* Đã fix cứng khung avatar tròn xoe và thêm chuyển động lơ lửng */
         .avatar-container {
             position: relative;
             width: 170px; 
@@ -143,26 +143,66 @@
             border-radius: 50%;
             border: 4px solid var(--neon-primary); 
             box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); 
-            overflow: hidden; /* Ép mọi thứ bên trong thành hình tròn */
+            overflow: hidden; 
             background-color: var(--card-bg);
             display: flex;
             align-items: center;
             justify-content: center;
+            /* THÊM KÍCH HOẠT CHUYỂN ĐỘNG Ở ĐÂY */
+            animation: floatingAvatar 3.5s ease-in-out infinite;
         }
+
+        /* THÊM ĐOẠN KEYFRAMES NÀY NGAY BÊN DƯỚI ĐỂ TẠO NHỊP NHÀNG */
+        @keyframes floatingAvatar {
+            0% { 
+                transform: translateY(0px); 
+            }
+            50% { 
+                transform: translateY(-12px); /* Nhấc ảnh lên 12px */
+                box-shadow: 0 15px 35px rgba(139, 92, 246, 0.8); /* Loé sáng viền nhẹ lúc lên đỉnh */
+            }
+            100% { 
+                transform: translateY(0px); 
+            }
+        }
+        
         .avatar-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
+       /* Cấu trúc tiêu đề tên */
         .profile-name {
             font-size: 3.5rem; 
             font-weight: 700;
             letter-spacing: -0.5px;
             margin-bottom: 15px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 4.5rem; /* Giữ khung cố định để web không bị đẩy lên xuống khi xóa chữ */
+        }
+
+        /* Hiệu ứng màu gradient cho riêng chữ */
+        #typing-text {
             background: var(--btn-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        /* Thanh con trỏ nhấp nháy chuẩn nét */
+        .typing-cursor {
+            display: inline-block;
+            width: 4px;
+            height: 1em; /* Tự động co giãn theo kích thước chữ */
+            background: var(--neon-secondary);
+            margin-left: 8px;
+            animation: blinkCursor 0.7s infinite;
+        }
+
+        @keyframes blinkCursor {
+            50% { opacity: 0; }
         }
 
         .profile-desc {
@@ -385,7 +425,7 @@
                 <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Nguyễn Việt Hoàng" class="avatar-img">
             </div>
 
-            <h1 class="profile-name">Nguyễn Việt Hoàng</h1>
+            <h1 class="profile-name"><span id="typing-text"></span><span class="typing-cursor">|</span></h1>
             <p class="profile-desc">
                 Chuyên phát triển hệ thống e-commerce, thiết kế landing page tối ưu và cung cấp mã nguồn, gaming script tự động hóa chất lượng cao. Vận hành và quản trị thương hiệu hệ thống thương mại mã nguồn.
             </p>
@@ -460,6 +500,7 @@
     </footer>
 
     <script>
+       // 1. Giữ nguyên hàm tạo hạt nền cũ của bạn
         function createParticles() {
             const container = document.getElementById('particles-container');
             const particleCount = 25; 
@@ -480,6 +521,7 @@
             }
         }
 
+        // 2. Giữ nguyên hàm đổi giao diện Sáng / Tối của bạn
         function toggleTheme() {
             const body = document.body;
             const currentTheme = body.getAttribute('data-theme');
@@ -490,11 +532,45 @@
             if (newTheme === 'light') {
                 iconButton.innerHTML = `<path d="M12.3,2a10,10,0,0,0-1.9.2,1,1,0,0,0-.7,1.2,1,1,0,0,0,1,.8,8,8,0,0,1,7.4,7.4,1,1,0,0,0,.8,1,1,0,0,0,1.2-.7A10,10,0,0,0,12.3,2Z"/>`;
             } else {
-                iconButton.innerHTML = `<path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c-0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/>`;
+                iconButton.innerHTML = `<path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/>`;
             }
         }
 
-        window.addEventListener('DOMContentLoaded', createParticles);
+        /* 3. THÊM LOGIC HIỆU ỨNG TỰ ĐỘNG GÕ CHỮ TẠI ĐÂY */
+        const textElement = document.getElementById('typing-text');
+        const textToType = "Nguyễn Việt Hoàng";
+        let isDeleting = false;
+        let textIndex = 0;
+
+        function typeAnimation() {
+            const currentText = textToType.substring(0, textIndex);
+            textElement.textContent = currentText;
+
+            // Tốc độ: gõ chữ mất 120ms, xóa chữ siêu tốc mất 40ms để tiết kiệm thời gian
+            let typeSpeed = isDeleting ? 40 : 120; 
+
+            // Khi đã gõ hết chữ
+            if (!isDeleting && textIndex === textToType.length) {
+                typeSpeed = 2500; // Đứng im cho người ta đọc trong 2.5 giây
+                isDeleting = true;
+            } 
+            // Khi đã xóa hết chữ
+            else if (isDeleting && textIndex === 0) {
+                isDeleting = false;
+                typeSpeed = 600; // Nghỉ nửa giây rồi mới bắt đầu gõ lại chu kỳ mới
+            }
+
+            textIndex += isDeleting ? -1 : 1;
+            setTimeout(typeAnimation, typeSpeed);
+        }
+
+        // Kích hoạt chạy đồng thời cả hạt nền lẫn hiệu ứng chữ gõ ngay khi vào web
+        window.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            typeAnimation();
+        });
+        
     </script>
+    
 </body>
 </html>
