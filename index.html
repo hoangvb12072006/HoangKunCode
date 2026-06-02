@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nguyễn Việt Hoàng | Giao Diện Đối Tác Chính Thức</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="preloader.css">
     <style>
         /* --- HỆ THỐNG BIẾN MÀU SẮC (THEME) --- */
         :root {
@@ -405,6 +406,11 @@
     </style>
 </head>
 <body data-theme="dark">
+    
+    <div id="preloader">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">Đang tải...</div>
+</div>
 
     <div id="particles-container"></div>
 
@@ -572,6 +578,8 @@
         });
         
     </script>
+
+    <script src="preloader.js"></script>
     
 </body>
 </html>
