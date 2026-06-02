@@ -1,515 +1,129 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HOANGKUN STORE - Chuyên cung cấp Source Code Website và Gaming Scripts chất lượng cao.">
-  <title>HOANGKUN STORE | Premium Source Code & Scripts</title>
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <style>
-    /* ===== MODERN PREMIUM THEME ===== */
-    :root {
-      --bg-dark: #030712;
-      --bg-glass: rgba(255, 255, 255, 0.03);
-      --border-glass: rgba(255, 255, 255, 0.08);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent-1: #6366f1; /* Indigo */
-      --accent-2: #a855f7; /* Purple */
-      --accent-3: #ec4899; /* Pink */
-      --danger: #ef4444;
-      --success: #10b981;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyễn Việt Hoàng | Profile</title>
+    <style>
+        :root {
+            --neon-color: #00ffff; /* Màu xanh ngọc chuẩn Cyberpunk */
+            --bg-color: #0d0d0d;
+        }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      overflow-x: hidden;
-      line-height: 1.6;
-      /* Nền tối có luồng sáng mờ tinh tế ở góc */
-      background-image: 
-        radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.15), transparent 25%);
-    }
+        body {
+            background-color: var(--bg-color);
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+        }
 
-    a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .profile-card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid var(--neon-color);
+            border-radius: 15px;
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.1);
+        }
 
-    /* Hiệu ứng mờ kính (Glassmorphism) dùng chung */
-    .glass-panel {
-      background: var(--bg-glass);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border-glass);
-      border-radius: 24px;
-    }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-color);
+            margin-bottom: 20px;
+            object-fit: cover;
+            box-shadow: 0 0 15px var(--neon-color);
+        }
 
-    /* Hiệu ứng chữ Gradient chuyển màu */
-    .text-gradient {
-      background: linear-gradient(to right, #818cf8, #c084fc, #f472b6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+        .name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px var(--neon-color);
+        }
 
-    /* Nút bấm bo tròn hiện đại */
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-      color: #fff; padding: 14px 32px; border-radius: 99px;
-      font-weight: 600; font-size: 1rem; border: none; cursor: pointer;
-      transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
-    }
-    .btn-primary:hover {
-      transform: translateY(-3px); box-shadow: 0 15px 35px rgba(99, 102, 241, 0.6);
-    }
-    
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(255,255,255,0.05); color: #fff;
-      padding: 14px 32px; border-radius: 99px; font-weight: 600;
-      border: 1px solid var(--border-glass); transition: all 0.3s ease;
-    }
-    .btn-secondary:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); }
+        .bio {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
 
-    /* ===== NAVBAR ===== */
-    .navbar {
-      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-      padding: 20px 0; transition: all 0.4s ease;
-    }
-    .navbar.scrolled {
-      padding: 12px 0; background: rgba(3, 7, 18, 0.8);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border-glass);
-    }
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
-    .nav-brand { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px;}
-    .nav-brand i { color: var(--accent-2); font-size: 1.6rem;}
-    .nav-links { display: flex; gap: 32px; align-items: center; }
-    .nav-links a { font-size: 0.95rem; font-weight: 500; color: var(--text-muted); transition: 0.3s; }
-    .nav-links a:hover, .nav-links a.active { color: #fff; }
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-    /* ===== HERO SECTION ===== */
-    .hero { min-height: 100vh; display: flex; align-items: center; text-align: center; padding-top: 80px; }
-    .hero-content { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;}
-    .badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 16px; border-radius: 99px; background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.2); color: var(--success);
-      font-size: 0.85rem; font-weight: 600; margin-bottom: 32px;
-    }
-    .badge .pulse { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
-    
-    .hero h1 { font-size: 4rem; font-weight: 800; line-height: 1.15; letter-spacing: -1px; margin-bottom: 24px; }
-    .hero p { font-size: 1.15rem; color: var(--text-muted); max-width: 600px; margin-bottom: 40px; }
-    .hero-btns { display: flex; gap: 16px; }
+        .link-btn {
+            display: block;
+            text-decoration: none;
+            color: var(--neon-color);
+            border: 1px solid var(--neon-color);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+        }
 
-    /* ===== SERVICES GRID ===== */
-    .section { padding: 120px 0; }
-    .sec-header { text-align: center; margin-bottom: 64px; }
-    .sec-header h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; }
-    .sec-header p { color: var(--text-muted); font-size: 1.1rem; }
+        .link-btn:hover {
+            background-color: var(--neon-color);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-color);
+            transform: translateY(-2px);
+        }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
-    .card { padding: 40px; transition: transform 0.4s ease, border-color 0.4s ease; text-align: left;}
-    .card:hover { transform: translateY(-8px); border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-    .card-icon {
-      width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.2));
-      display: flex; align-items: center; justify-content: center; font-size: 24px; color: #fff; margin-bottom: 24px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
-    .card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px; line-height: 1.6; }
-    .card ul li { font-size: 0.9rem; color: #cbd5e1; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-    .card ul li i { color: var(--success); font-size: 0.8rem; }
+        /* Hiệu ứng nhấp nháy chữ (Glitch) nhẹ */
+        .glitch-hover:hover {
+            animation: glitch 0.2s linear infinite;
+        }
 
-    /* ===== STATS ===== */
-    .stats-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: center; margin-top: 40px; }
-    .stat-item { padding: 32px; }
-    .stat-num { font-size: 3rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
-    .stat-label { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
-
-    /* ===== FOOTER ===== */
-    .footer { border-top: 1px solid var(--border-glass); padding: 80px 0 32px; margin-top: 60px; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 64px; }
-    .f-desc { color: var(--text-muted); font-size: 0.95rem; margin-top: 16px; max-width: 300px; line-height: 1.6; }
-    .f-col h4 { color: #fff; font-size: 1rem; font-weight: 600; margin-bottom: 24px; }
-    .f-col ul li { margin-bottom: 16px; }
-    .f-col ul a { color: var(--text-muted); font-size: 0.95rem; transition: 0.3s; }
-    .f-col ul a:hover { color: var(--accent-2); }
-    .footer-bottom { border-top: 1px solid var(--border-glass); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.9rem; }
-    .socials a { color: var(--text-muted); font-size: 1.25rem; margin-left: 20px; transition: 0.3s; }
-    .socials a:hover { color: #fff; transform: translateY(-2px); display: inline-block;}
-
-    /* ===== POPUP (MODAL TỐI GIẢN) ===== */
-    .popup-overlay {
-      position: fixed; inset: 0; background: rgba(3, 7, 18, 0.8); backdrop-filter: blur(8px);
-      z-index: 99999; display: flex; align-items: center; justify-content: center;
-      opacity: 0; visibility: hidden; transition: all 0.3s ease;
-    }
-    .popup-overlay.active { opacity: 1; visibility: visible; }
-    .popup-box {
-      width: 90%; max-width: 460px; padding: 40px; text-align: center;
-      transform: scale(0.95) translateY(10px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .popup-overlay.active .popup-box { transform: scale(1) translateY(0); }
-    .pop-icon {
-      width: 64px; height: 64px; background: rgba(239, 68, 68, 0.1); color: var(--danger);
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 28px; margin: 0 auto 24px; border: 1px solid rgba(239, 68, 68, 0.2);
-    }
-    .popup-box h2 { font-size: 1.5rem; margin-bottom: 12px; }
-    .popup-box p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px; line-height: 1.6; }
-    .pop-alert {
-      background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-left: 3px solid var(--danger);
-      padding: 16px; border-radius: 12px; text-align: left; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 32px;
-    }
-    .btn-block { width: 100%; justify-content: center; }
-
-    /* ===== CHAT WIDGET (MODERN) ===== */
-    #chat-widget { position: fixed; bottom: 32px; right: 32px; z-index: 10000; }
-    .chat-toggle {
-      width: 64px; height: 64px; border-radius: 50%; border: none;
-      background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); color: #fff;
-      font-size: 24px; cursor: pointer; box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; justify-content: center;
-    }
-    .chat-toggle:hover { transform: scale(1.1); }
-    
-    #chat-window {
-      position: absolute; bottom: 84px; right: 0; width: 360px;
-      transform-origin: bottom right; transform: scale(0.8); opacity: 0; visibility: hidden;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden;
-    }
-    #chat-window.open { transform: scale(1); opacity: 1; visibility: visible; }
-    
-    .chat-header {
-      padding: 20px; border-bottom: 1px solid var(--border-glass);
-      display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02);
-    }
-    .chat-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(to right, var(--accent-1), var(--accent-2)); display: flex; align-items: center; justify-content: center; font-weight: bold;}
-    .chat-info h4 { font-size: 1rem; margin-bottom: 4px; }
-    .chat-info span { font-size: 0.75rem; color: var(--success); display: flex; align-items: center; gap: 6px;}
-    
-    .chat-body { height: 320px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
-    .msg { padding: 12px 16px; border-radius: 16px; max-width: 85%; font-size: 0.9rem; line-height: 1.5; }
-    .msg.bot { background: rgba(255,255,255,0.05); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 4px; }
-    .msg.user { background: var(--accent-1); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-    
-    .chat-footer { padding: 16px; border-top: 1px solid var(--border-glass); display: flex; gap: 12px; background: rgba(255,255,255,0.01);}
-    .chat-footer input {
-      flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass);
-      border-radius: 99px; padding: 10px 16px; color: #fff; font-family: 'Inter', sans-serif; outline: none;
-    }
-    .chat-footer input:focus { border-color: var(--accent-2); }
-    .chat-footer button {
-      width: 42px; height: 42px; border-radius: 50%; background: var(--accent-1); color: #fff;
-      border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center;
-    }
-    .chat-footer button:hover { background: var(--accent-2); }
-
-    /* Scroll animations */
-    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-    .d-1 { transition-delay: 0.1s; } .d-2 { transition-delay: 0.2s; } .d-3 { transition-delay: 0.3s; }
-
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 2.5rem; }
-      .nav-links { display: none; }
-      .hero-btns { flex-direction: column; }
-      .stats-wrap { grid-template-columns: 1fr; gap: 16px; }
-      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
-      #chat-window { width: calc(100vw - 48px); right: -16px; bottom: 80px;}
-    }
-  </style>
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+    </style>
 </head>
-
 <body>
 
-  <div class="popup-overlay active" id="popupAlert">
-    <div class="popup-box glass-panel">
-      <div class="pop-icon"><i class="fas fa-shield-alt"></i></div>
-      <h2>Thông Báo Hệ Thống</h2>
-      <p>Cửa hàng chuyên cung cấp mã nguồn web sạch và tool tự động hóa tối ưu cho Developer.</p>
-      <div class="pop-alert">
-        <strong>Lưu ý quan trọng:</strong> Nghiêm cấm mọi hành vi lợi dụng tài nguyên để quấy phá, khai thác lỗ hổng hoặc lừa đảo. Hệ thống lưu vết IP truy cập tự động.
-      </div>
-      <button class="btn-primary btn-block" onclick="document.getElementById('popupAlert').classList.remove('active')">
-        Tôi Đã Hiểu & Đồng Ý
-      </button>
-    </div>
-  </div>
-
-  <nav class="navbar" id="navbar">
-    <div class="container nav-inner">
-      <a href="#" class="nav-brand">
-        <i class="fas fa-layer-group"></i> HOANGKUN
-      </a>
-      <div class="nav-links">
-        <a href="#" class="active">Trang chủ</a>
-        <a href="#products">Mã Nguồn</a>
-        <a href="#products">Scripts</a>
-        <a href="#contact">Liên Hệ</a>
-      </div>
-    </div>
-  </nav>
-
-  <section class="hero" id="home">
-    <div class="container hero-content">
-      <div class="badge reveal">
-        <div class="pulse"></div> Hệ thống đang hoạt động tốt
-      </div>
-      <h1 class="reveal d-1">Tài Nguyên Lập Trình <br><span class="text-gradient">Premium Quality</span></h1>
-      <p class="reveal d-2">Cung cấp giải pháp phần mềm, Source Code Website chuẩn SEO và Gaming Scripts tối ưu hiệu năng dành riêng cho nền tảng của bạn.</p>
-      
-      <div class="hero-btns reveal d-3">
-        <a href="dichvu.html" class="btn-primary"><i class="fas fa-rocket"></i> Xem Dịch Vụ</a>
-        <a href="https://t.me/HoangKunHp" class="btn-secondary"><i class="fab fa-telegram"></i> Hỗ Trợ</a>
-      </div>
-    </div>
-  </section>
-
-<section class="section" id="products">
-  <div class="container">
-    <div class="sec-header reveal">
-      <h2>Giải Pháp <span class="text-gradient">Toàn Diện</span></h2>
-      <p>Kiến trúc sạch, tối ưu siêu tốc, dễ dàng triển khai</p>
-    </div>
-    
-    <div class="grid">
-      <div class="card glass-panel reveal d-1">
-        <div class="card-icon"><i class="fas fa-code"></i></div>
-        <h3>Web Source Code</h3>
-        <p>Mã nguồn Landing Page, Shop tự động, Web giới thiệu. Thiết kế UI/UX hiện đại.</p>
-        <ul>
-          <li><i class="fas fa-check-circle"></i> Tối ưu tốc độ tải trang 100/100</li>
-          <li><i class="fas fa-check-circle"></i> Code sạch, không mã độc</li>
-        </ul>
-      </div>
-      
-      <div class="card glass-panel reveal d-2">
-        <div class="card-icon"><i class="fas fa-gamepad"></i></div>
-        <h3>Gaming Scripts</h3>
-        <p>Đoạn mã kịch bản tối ưu hóa máy chủ, xử lý logic mượt mà và quản lý dữ liệu game.</p>
-        <ul>
-          <li><i class="fas fa-check-circle"></i> Thuật toán mới nhất</li>
-          <li><i class="fas fa-check-circle"></i> Bảo mật Anti-cheat</li>
-        </ul>
-      </div>
-      
-      <div class="card glass-panel reveal d-3">
-        <div class="card-icon"><i class="fas fa-bolt"></i></div>
-        <h3>Auto System API</h3>
-        <p>Giải pháp Webhook đồng bộ trạng thái, tích hợp API thanh toán thẻ cào, ngân hàng.</p>
-        <ul>
-          <li><i class="fas fa-check-circle"></i> Xử lý giao dịch Real-time</li>
-          <li><i class="fas fa-check-circle"></i> Gửi log qua Telegram</li>
-        </ul>
-      </div>
-
-      <div class="card glass-panel reveal d-4">
-        <div class="card-icon"><i class="fas fa-shield-halved"></i></div>
-        <h3>Bảo Mật Hệ Thống</h3>
-        <p>Tăng cường lớp tường lửa, chống DDoS và bảo vệ dữ liệu khách hàng tuyệt đối.</p>
-        <ul>
-          <li><i class="fas fa-check-circle"></i> Chứng chỉ SSL chuẩn</li>
-          <li><i class="fas fa-check-circle"></i> Backup dữ liệu tự động</li>
-        </ul>
-      </div>
-      
-      <div class="card glass-panel reveal d-5">
-        <div class="card-icon"><i class="fas fa-server"></i></div>
-        <h3>Hosting & VPS</h3>
-        <p>Cung cấp tài nguyên máy chủ ổn định, uptime cao cho các dự án lớn nhỏ.</p>
-        <ul>
-          <li><i class="fas fa-check-circle"></i> Tốc độ SSD NVMe</li>
-          <li><i class="fas fa-check-circle"></i> Hỗ trợ kỹ thuật 24/7</li>
-        </ul>
-      </div>
-      
-      <div class="card glass-panel reveal d-6">
-        <div class="card-icon"><i class="fas fa-magic"></i></div>
-        <h3>Tùy Biến Giao Diện</h3>
-        <p>Chỉnh sửa theme, thêm hiệu ứng theo ý muốn để web độc quyền thương hiệu riêng.</p>
-        <ul>
-          <li><i class="fas fa-check-circle"></i> Code sạch, dễ edit</li>
-          <li><i class="fas fa-check-circle"></i> Tối ưu trải nghiệm UI/UX</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="stats-wrap">
-      <div class="stat-item glass-panel reveal d-1">
-        <div class="stat-num text-gradient">100%</div>
-        <div class="stat-label">Bảo mật & An toàn</div>
-      </div>
-      <div class="stat-item glass-panel reveal d-2">
-        <div class="stat-num text-gradient">Instant</div>
-        <div class="stat-label">Giao hàng tự động</div>
-      </div>
-      <div class="stat-item glass-panel reveal d-3">
-        <div class="stat-num text-gradient">24/7</div>
-        <div class="stat-label">Hỗ trợ kỹ thuật</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-  <footer class="footer" id="contact">
-    <div class="container">
-      <div class="footer-grid reveal">
-        <div>
-          <div class="nav-brand"><i class="fas fa-layer-group"></i> HOANGKUN</div>
-          <p class="f-desc">Hệ thống phân phối tài nguyên mã nguồn và giải pháp tự động hóa cao cấp hàng đầu.</p>
-        </div>
-        <div class="f-col">
-          <h4>Sản Phẩm</h4>
-          <ul>
-            <li><a href="#products">Web Source</a></li>
-            <li><a href="#products">Game Scripts</a></li>
-            <li><a href="#products">API Tools</a></li>
-          </ul>
-        </div>
+    <div class="profile-card">
+        <!-- Thay link ảnh của bạn vào thuộc tính src dưới đây -->
+        <img src="https://via.placeholder.com/120/00ffff/000000?text=HOANGKUN" alt="Avatar" class="avatar">
         
-        <div class="f-col">
-          <h4>Thông Tin</h4>
-          <ul>
-            <li><a href="#">Về chúng tôi</a></li>
-            <li><a href="#">Điều khoản dịch vụ</a></li>
-            <li><a href="#">Chính sách bảo mật</a></li>
-          </ul>
+        <h1 class="name glitch-hover">Nguyễn Việt Hoàng</h1>
+        <p class="bio">Developer & Administrator | HOANGKUN STORE</p>
+
+        <div class="social-links">
+            <!-- Thay dấu # bằng link thực tế của bạn -->
+            <a href="#" class="link-btn" target="_blank">TikTok</a>
+            <a href="#" class="link-btn" target="_blank">YouTube</a>
+            <a href="#" class="link-btn" target="_blank">Facebook</a>
+            <a href="#" class="link-btn" target="_blank">Cửa Hàng (Store)</a>
         </div>
-        <div class="f-col">
-          <h4>Liên Hệ</h4>
-          <ul>
-            <li><a href="#"><i class="fab fa-telegram" style="color:var(--accent-1); margin-right:8px;"></i>Hỗ trợ Telegram</a></li>
-            <li><a href="https://hoangkunstore.id.vn"><i class="fas fa-globe" style="margin-right:8px;"></i>hoangkunstore.id.vn</a></li>
-          </ul>
-        </div>
-      </div>
-      
-      
-      <div class="footer-bottom reveal d-1">
-        <p>© 2026 HOANGKUN STORE. All rights reserved.</p>
-        <div class="socials">
-          <a href="#"><i class="fab fa-github"></i></a>
-          <a href="#"><i class="fab fa-telegram"></i></a>
-          <a href="#"><i class="fab fa-facebook"></i></a>
-        </div>
-      </div>
     </div>
-  </footer>
 
-  <div id="chat-widget">
-    <button class="chat-toggle" id="chatToggleBtn" onclick="toggleChat()">
-      <i class="fas fa-comment-dots"></i>
-    </button>
-    <div id="chat-window" class="glass-panel">
-      <div class="chat-header">
-        <div class="chat-avatar"><i class="fas fa-robot"></i></div>
-        <div class="chat-info">
-          <h4>Hỗ trợ viên</h4>
-          <span><div class="pulse" style="width:6px;height:6px;background:var(--success);border-radius:50%;"></div> Đang trực tuyến</span>
-        </div>
-      </div>
-      <div class="chat-body" id="chatBody">
-        <div class="msg bot">👋 Xin chào! Mình là trợ lý ảo của hệ thống. Bạn cần tư vấn source code hay hỗ trợ cài đặt script nào ạ?</div>
-      </div>
-      <div class="chat-footer">
-        <input type="text" id="chatInput" placeholder="Nhập tin nhắn..." onkeydown="if(event.key==='Enter') sendChatMsg()">
-        <button onclick="sendChatMsg()"><i class="fas fa-paper-plane"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Navbar mờ khi cuộn
-    window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
-    });
-
-    // Hiệu ứng Fade up mượt
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // Chat Box UI
-    function toggleChat() {
-      const windowChat = document.getElementById('chat-window');
-      const icon = document.querySelector('#chatToggleBtn i');
-      if (windowChat.classList.contains('open')) {
-        windowChat.classList.remove('open');
-        icon.className = 'fas fa-comment-dots';
-      } else {
-        windowChat.classList.add('open');
-        icon.className = 'fas fa-times';
-        document.getElementById('chatInput').focus();
-      }
-    }
-
-    function sendChatMsg() {
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const body = document.getElementById('chatBody');
-      body.innerHTML += `<div class="msg user">${text}</div>`;
-      input.value = '';
-      body.scrollTop = body.scrollHeight;
-
-      // Giả lập bot rep
-      setTimeout(() => {
-        body.innerHTML += `<div class="msg bot">Đã tiếp nhận thông tin. Bạn đợi một lát để Admin kiểm tra nhé!</div>`;
-        body.scrollTop = body.scrollHeight;
-      }, 1000);
-    }
-  </script>
-
-  <script>
-  // 1. Chặn chuột phải
-  document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-  });
-
-  // 2. Chặn các phím tắt mở DevTools (F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+Shift+J, Ctrl+U)
-  document.addEventListener('keydown', function(e) {
-    if (
-      e.key === 'F12' ||
-      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) ||
-      (e.ctrlKey && e.key === 'u')
-    ) {
-      e.preventDefault();
-      // Có thể thêm cảnh báo ở đây nếu muốn
-      // alert("Chức năng này đã bị vô hiệu hóa!");
-    }
-  });
-
-  // 3. (Tùy chọn) Tự động chuyển hướng nếu người dùng cố tình mở Console
-  // Cách này hơi gắt, nếu không cần thiết thì bạn có thể bỏ qua phần này
-  (function() {
-    var devtools = /./;
-    devtools.toString = function() {
-      this.opened = true;
-    };
-  })();
-</script>
-  
 </body>
 </html>
