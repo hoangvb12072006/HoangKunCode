@@ -1,4 +1,4 @@
-// --- CẤU HÌNH KẾT NỐI FIREBASE CHÍNH THỨC CỦA HOÀNG KUN ---
+// --- KHÁCH: TỰ ĐỘNG TẠO PHÒNG CHAT KÍN ---
 const firebaseConfig = {
     apiKey: "AIzaSyD9Vi39Xuj8qf_bYjtZLAjpOkEvMIhzD1Y",
     authDomain: "hoangkun-chat.firebaseapp.com",
@@ -10,77 +10,63 @@ const firebaseConfig = {
     measurementId: "G-JY93M87T99"
 };
 
-// Khởi tạo Firebase
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const db = firebase.database();
 
-// Nhận diện đường dẫn: Có chữ "admin" (viết hoa/thường đều được) thì là trang chủ shop
-const isPageAdmin = window.location.pathname.toLowerCase().includes('admin');
-const currentRoomId = "room_khach_8921"; 
+// Tìm kiếm mã phòng cũ, nếu chưa có thì để rỗng chờ khởi tạo
+let currentRoomId = localStorage.getItem('currentRoomId') || '';
+const chatBox = document.getElementById('chat-box');
 
-if (!isPageAdmin) {
-    // ==========================================
-    // LOGIC CHO KHÁCH (Nằm ở kho HoangKunCode)
-    // ==========================================
-    const chatBox = document.getElementById('chat-box');
-    if(chatBox) chatBox.innerHTML = '';
+window.initChat = function() {
+    const currentName = window.guestName || localStorage.getItem('guestName');
+    
+    // 1. NẾU LÀ KHÁCH MỚI HOÀN TOÀN -> TẠO MÃ PHÒNG RIÊNG
+    if (!currentRoomId) {
+        currentRoomId = "room_" + Date.now();
+        localStorage.setItem('currentRoomId', currentRoomId);
+        
+        // Bắn tin báo hệ thống ngầm cho Admin biết có khách mới
+        db.ref('chats/' + currentRoomId).push({
+            sender: 'system',
+            senderName: currentName,
+            text: 'Khách hàng [' + currentName + '] đã bắt đầu phiên chat.',
+            timestamp: Date.now()
+        });
+    }
 
+    if (chatBox) chatBox.innerHTML = ''; 
+    db.ref('chats/' + currentRoomId).off();
+
+    // 2. NHẬN TIN NHẮN TỪ PHÒNG KÍN NÀY
     db.ref('chats/' + currentRoomId).on('child_added', (snapshot) => {
         const data = snapshot.val();
+        if(data.sender === 'system') return; // Ẩn tin nhắn hệ thống đi không cho khách thấy
+        
         const msgDiv = document.createElement('div');
         msgDiv.className = data.sender === 'admin' ? 'message msg-received' : 'message msg-sent';
         msgDiv.textContent = data.text;
         
-        if(chatBox) {
+        if (chatBox) {
             chatBox.appendChild(msgDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     });
+}
 
-    window.sendMessage = function() {
-        const input = document.getElementById('msg-input');
-        if(input && input.value.trim() !== '') {
-            db.ref('chats/' + currentRoomId).push({ 
-                sender: 'user', 
-                text: input.value, 
-                timestamp: Date.now() 
-            });
-            input.value = '';
-        }
-    }
-} else {
-    // ==========================================
-    // LOGIC CHO ADMIN (Nằm ở kho Admin)
-    // ==========================================
-    const chatBox = document.getElementById('chat-box');
-    if(chatBox) chatBox.innerHTML = '';
-
-    db.ref('chats/' + currentRoomId).on('child_added', (snapshot) => {
-        const data = snapshot.val();
-        const msgDiv = document.createElement('div');
-        msgDiv.className = data.sender === 'admin' ? 'message msg-sent' : 'message msg-received';
-        msgDiv.textContent = data.text;
-        
-        if(chatBox) {
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        if(data.sender === 'user') {
-            const previewText = document.querySelector('.user-preview');
-            if(previewText) previewText.textContent = data.text;
-        }
-    });
-
-    window.sendMessage = function() {
-        const input = document.getElementById('msg-input');
-        if(input && input.value.trim() !== '') {
-            db.ref('chats/' + currentRoomId).push({ 
-                sender: 'admin', 
-                text: input.value, 
-                timestamp: Date.now() 
-            });
-            input.value = '';
-        }
+// 3. GỬI TIN NHẮN
+window.sendMessage = function() {
+    const input = document.getElementById('msg-input');
+    const currentName = window.guestName || localStorage.getItem('guestName');
+    
+    if(input && input.value.trim() !== '') {
+        db.ref('chats/' + currentRoomId).push({ 
+            sender: 'user',
+            senderName: currentName,
+            text: input.value, 
+            timestamp: Date.now() 
+        });
+        input.value = '';
     }
 }
