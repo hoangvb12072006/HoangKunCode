@@ -211,6 +211,33 @@
             body { padding: 0; }
             .widget-container { border-radius: 0; height: 100vh; max-width: 100%; }
         }
+
+        /* --- CHỈ STYLE RIÊNG CHO BONG BÓNG CHAT CHỨA FORM --- */
+.bot-message-wrapper { display: flex; gap: 12px; margin-bottom: 20px; align-items: flex-start; }
+.bot-avatar-wrap { position: relative; flex-shrink: 0; }
+.bot-avatar-wrap img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+.bot-online-dot { position: absolute; bottom: 0; right: -2px; width: 12px; height: 12px; background: #f59e0b; border: 2px solid #fff; border-radius: 50%; }
+
+.bot-bubble {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+    padding: 20px; max-width: 400px; font-size: 14px; color: #1f2937; line-height: 1.6;
+}
+.bot-bubble b { color: #111827; }
+
+/* Form nhập tên bên trong bong bóng */
+.pre-chat-form { border-top: 1px dashed #e2e8f0; padding-top: 15px; margin-top: 15px; }
+.pre-chat-input {
+    width: 100%; padding: 12px 15px; border: 1px solid #d1d5db;
+    border-radius: 8px; font-size: 14px; margin-bottom: 12px; outline: none; background: #f9fafb; color: #000;
+}
+.pre-chat-input:focus { border-color: #ea580c; background: #fff; }
+.pre-chat-btn {
+    width: 100%; background: #ea580c; color: #000;
+    font-weight: 700; border: none; padding: 12px; border-radius: 8px;
+    cursor: pointer; font-size: 14px; transition: 0.2s;
+}
+.pre-chat-btn:hover { background: #d94a08; color: #fff; }
+        
     </style>
 </head>
 <body>
@@ -249,9 +276,29 @@
                 </div>
             </div>
 
-            <div class="chat-messages" id="chat-box">
-                <!-- Tin nhắn tự động đổ vào đây từ Firebase -->
+           <div class="chat-messages" id="chat-box">
+    <!-- BONG BÓNG BOT (CHỨA FORM NHẬP TÊN GIỐNG LIVECHAT) -->
+    <div class="bot-message-wrapper" id="welcome-bubble">
+        <div class="bot-avatar-wrap">
+            <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Bot Avatar">
+            <span class="bot-online-dot"></span>
+        </div>
+        <div class="bot-bubble">
+            <div class="bot-intro-text">
+                ☀️ <b>HOANGKUN STORE</b> – Chuyên cung cấp Source Code chuẩn, an toàn & bảo mật ✅<br><br>
+                📱 Nhận mã nguồn tự động, hỗ trợ setup 24/7.<br>
+                ➡️ Chỉ có <u>HOANGKUN.ID.VN</u> là hệ thống hỗ trợ chính thức.<br><br>
+                Vui lòng cung cấp tên hiển thị tài khoản cần hỗ trợ:
             </div>
+            
+            <!-- FORM NHẬP TÊN -->
+            <div class="pre-chat-form" id="pre-chat-form-area">
+                <input type="text" id="guestNameInput" class="pre-chat-input" autocomplete="off" onkeypress="if(event.key === 'Enter') startLiveChat()">
+                <button class="pre-chat-btn" onclick="startLiveChat()">Bắt đầu chat</button>
+            </div>
+        </div>
+    </div>
+</div>
 
             <div class="chat-input-area">
                 <input type="text" id="msg-input" class="chat-input" placeholder="Nhập tin nhắn..." autocomplete="off">
