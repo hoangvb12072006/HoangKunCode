@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hỗ Trợ Trực Tuyến | HOANGKUN STORE</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -157,12 +157,43 @@
 
         .footer-brand { text-align: center; font-size: 11px; color: #94a3b8; padding: 8px 0; background: #ffffff; }
 
-        /* Responsive cho điện thoại */
+     /* ================= RESPONSIVE CHO ĐIỆN THOẠI (CHUẨN APP) ================= */
         @media (max-width: 768px) {
-            .features-grid { grid-template-columns: 1fr; }
-            .home-body { padding: 0 15px 30px 15px; }
-        }
+            /* 1. Xóa khoảng trắng viền body, ép full màn hình */
+            body { padding: 0; background-color: #ffffff; }
+            
+            /* 2. Khung chat chiếm 100% màn hình, không bo góc */
+            .widget-container { 
+                height: 100vh; /* Chiều cao dự phòng */
+                height: 100dvh; /* Chiều cao động (dvh) giúp tránh bị lấp bởi thanh địa chỉ của Safari/Chrome mobile */
+                max-width: 100%; 
+                border-radius: 0; 
+                border: none;
+                box-shadow: none;
+            }
 
+            /* 3. Căn chỉnh lại màn hình Home cho điện thoại */
+            .home-body { padding: 0 15px 30px 15px; margin-top: -40px; }
+            .features-grid { grid-template-columns: 1fr; gap: 15px; }
+            .home-header-bg { padding: 40px 15px 70px 15px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+            .home-title { font-size: 26px; }
+            .welcome-card { padding: 20px; }
+
+            /* 4. Ép kích thước bong bóng chat vừa vặn không bị tràn */
+            .bot-bubble { max-width: 90%; padding: 15px; }
+            .message { max-width: 85%; padding: 10px 15px; }
+            .bot-message-wrapper { margin-top: 5vh; } /* Đẩy bóng bot lên một chút cho đỡ trống */
+
+            /* 5. FIX LỖI ZOOM TRÊN IPHONE (iOS) */
+            /* Apple tự động zoom màn hình nếu font-size của ô input nhỏ hơn 16px. Ta ép nó lên 16px! */
+            .chat-input, .pre-chat-input { font-size: 16px !important; }
+            
+            /* Thu gọn viền thanh nhập tin nhắn */
+            .chat-input-area { padding: 12px 15px; }
+            .chat-header { padding: 12px 15px; }
+            .chat-messages { padding: 15px; }
+        }
+        
         /* --- STYLE RIÊNG CHO BONG BÓNG CHAT CHỨA FORM --- */
         .bot-message-wrapper { 
             display: flex; gap: 12px; align-self: center; margin-top: 15vh; margin-bottom: 20px; align-items: flex-start; animation: fadeInSlideUp 0.6s ease-out; 
