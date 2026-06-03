@@ -242,7 +242,40 @@
             0%, 60%, 100% { transform: translateY(0); }
             30% { transform: translateY(-6px); background-color: #64748b; }
         }
+
+                /* --- CSS NÚT KẾT THÚC & FORM ĐÁNH GIÁ --- */
+        .end-chat-btn {
+            background: #ef4444; color: white; border: none; padding: 6px 12px;
+            border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
+            margin-left: auto; transition: 0.2s;
+        }
+        .end-chat-btn:hover { background: #dc2626; }
+
+        .review-box {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+            padding: 20px; text-align: center; margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); animation: fadeInSlideUp 0.5s;
+        }
+        .review-title { font-weight: 700; margin-bottom: 5px; color: #1e293b; font-size: 15px; }
         
+        /* Hiệu ứng 5 sao mượt mà */
+        .stars { display: flex; justify-content: center; gap: 5px; margin-bottom: 15px; flex-direction: row-reverse; }
+        .stars input { display: none; }
+        .stars label { font-size: 35px; color: #cbd5e1; cursor: pointer; transition: 0.2s; }
+        .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: #f59e0b; }
+        
+        .review-input {
+            width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;
+            margin-bottom: 15px; font-size: 13px; outline: none; resize: none; background: #f8fafc;
+        }
+        .review-input:focus { border-color: #ea580c; background: #fff; }
+        
+        .submit-review-btn {
+            background: #ea580c; color: white; border: none; padding: 12px;
+            border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s;
+        }
+        .submit-review-btn:hover { background: #c2410c; transform: translateY(-2px); }
+
     </style>
 </head>
 <body>
@@ -298,13 +331,15 @@
         </div>
 
         <div id="tab-chat">
-            <div class="chat-header">
+               <div class="chat-header">
                 <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" class="header-avatar" alt="Admin Avatar">
                 <div>
                     <div class="header-name">Nguyễn Việt Hoàng</div>
                     <div class="header-status">● Đang trực tuyến</div>
                 </div>
+                <button class="end-chat-btn" onclick="endChat()">Kết thúc</button>
             </div>
+
 
             <div class="chat-messages" id="chat-box">
                 <div class="bot-message-wrapper" id="welcome-bubble">
