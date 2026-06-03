@@ -347,6 +347,51 @@
         });
     </script>
 
+    <!-- Script chuyển đổi giữa 2 tab -->
+    <script>
+        // KIỂM TRA XEM KHÁCH ĐÃ NHẬP TÊN LẦN NÀO CHƯA
+        window.onload = function() {
+            const savedName = localStorage.getItem('guestName');
+            if (savedName && savedName.trim() !== '') {
+                // Đã có tên -> Giấu form, hiện thanh chat
+                document.getElementById('pre-chat-form-area').style.display = 'none';
+                document.getElementById('bottom-input-area').style.display = 'flex';
+                
+                // Bật kết nối Firebase
+                if(typeof window.initChat === 'function') {
+                    window.guestName = savedName;
+                    window.initChat();
+                }
+            }
+        };
+
+        // HÀM XỬ LÝ KHI BẤM NÚT "BẮT ĐẦU CHAT"
+        function startLiveChat() {
+            const inputName = document.getElementById('guestNameInput').value.trim();
+            if (inputName !== '') {
+                // Lưu tên vào máy
+                localStorage.setItem('guestName', inputName);
+                
+                // Hiệu ứng chuyển đổi
+                document.getElementById('pre-chat-form-area').style.display = 'none';
+                document.getElementById('bottom-input-area').style.display = 'flex';
+                document.getElementById('msg-input').focus();
+                
+                // Mở kết nối
+                if(typeof window.initChat === 'function') {
+                    window.guestName = inputName;
+                    window.initChat();
+                }
+            } else {
+                alert('Bạn nhập tên vào ô trống phía trên để mình tiện xưng hô nhé!');
+                document.getElementById('guestNameInput').focus();
+            }
+        }
+
+        function switchTab(tabName) {
+            // ... (Đoạn code switchTab và phím Enter của bạn giữ nguyên y hệt) ...
+            </script>
+
     <!-- Thư viện Firebase & Code xử lý tin nhắn -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
