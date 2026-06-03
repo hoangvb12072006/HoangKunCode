@@ -295,43 +295,27 @@
     </div>
 
     <script>
-       // 1. KIỂM TRA TÊN VÀ THỜI GIAN (HẾT HẠN SAU 5 PHÚT)
+        // 1. KHI KHÁCH F5 TẢI LẠI TRANG -> XÓA SẠCH ĐỂ LÀM LẠI TỪ ĐẦU
         window.onload = function() {
-            const savedName = localStorage.getItem('guestName');
-            const saveTime = localStorage.getItem('chatStartTime');
-            const currentTime = Date.now();
-            const fiveMinutes = 5 * 60 * 1000; // 5 phút tính bằng mili-giây
-
-            // Kiểm tra: Nếu có tên VÀ thời gian lưu chưa quá 5 phút
-            if (savedName && saveTime && (currentTime - parseInt(saveTime) < fiveMinutes)) {
-                // Vẫn trong 5 phút -> Giấu form, cho chat tiếp
-                document.getElementById('pre-chat-form-area').style.display = 'none';
-                document.getElementById('bottom-input-area').style.display = 'flex';
-                
-                if(typeof window.initChat === 'function') {
-                    window.guestName = savedName;
-                    window.initChat();
-                }
-            } else {
-                // Nếu quá 5 phút -> Xóa trí nhớ, hiện lại Form bắt nhập tên
-                localStorage.removeItem('guestName');
-                localStorage.removeItem('chatStartTime');
-            }
+            localStorage.removeItem('guestName');
+            localStorage.removeItem('currentRoomId'); // Xóa phòng cũ để Bot bắt buộc phải chạy lại
+            
+            document.getElementById('pre-chat-form-area').style.display = 'block';
+            document.getElementById('bottom-input-area').style.display = 'none';
         };
 
-        // 2. XỬ LÝ NÚT BẤM "BẮT ĐẦU CHAT" (Lưu thêm mốc thời gian)
+        // 2. XỬ LÝ NÚT BẤM "BẮT ĐẦU CHAT"
         function startLiveChat() {
             const inputName = document.getElementById('guestNameInput').value.trim();
             if (inputName !== '') {
-                localStorage.setItem('guestName', inputName); // Lưu tên
-                localStorage.setItem('chatStartTime', Date.now()); // Lưu mốc thời gian bắt đầu
+                localStorage.setItem('guestName', inputName); 
                 
                 // Đổi giao diện
                 document.getElementById('pre-chat-form-area').style.display = 'none';
                 document.getElementById('bottom-input-area').style.display = 'flex';
                 document.getElementById('msg-input').focus();
                 
-                // Mở phòng chat
+                // Mở phòng chat & Gọi Bot
                 if(typeof window.initChat === 'function') {
                     window.guestName = inputName;
                     window.initChat();
@@ -354,7 +338,6 @@
                 const box = document.getElementById('chat-box');
                 if (box) box.scrollTop = box.scrollHeight;
                 
-                // Chỉ focus vào thanh chat nếu nó đang hiện
                 const bottomInput = document.getElementById('bottom-input-area');
                 if (bottomInput.style.display !== 'none') {
                     document.getElementById('msg-input').focus();
