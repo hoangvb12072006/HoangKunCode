@@ -14,14 +14,25 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            padding: 20px; /* Thêm lề để không sát viền màn hình */
+            padding: 20px; 
+        }
+
+        /* --- HIỆU ỨNG ANIMATION GỌN GÀNG MƯỢT MÀ --- */
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* --- KHUNG CHAT ĐÃ ĐƯỢC PHÓNG TO NHƯ MESSENGER --- */
         .widget-container {
             width: 100%;
-            max-width: 1000px; /* Phóng to chiều rộng lên 1000px */
-            height: 95vh;      /* Chiều cao chiếm 95% màn hình */
+            max-width: 1000px; 
+            height: 95vh;      
             background: #ffffff;
             border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
@@ -29,6 +40,7 @@
             flex-direction: column;
             overflow: hidden;
             position: relative;
+            animation: fadeIn 0.5s ease-out; /* Hiệu ứng hiện khung */
         }
 
         /* --- MÀN HÌNH HOME --- */
@@ -37,16 +49,17 @@
             flex-direction: column;
             height: 100%;
             background: #ffffff;
+            animation: fadeIn 0.3s ease-out;
         }
 
         .home-banner {
             background: #fcebe0; 
-            padding: 60px 30px 80px 30px; /* Tăng padding cho cân đối với màn hình to */
+            padding: 60px 30px 80px 30px; 
             text-align: center;
         }
 
         .home-banner h1 {
-            font-size: 36px; /* Chữ to hơn */
+            font-size: 36px; 
             font-weight: 800;
             color: #111827;
             line-height: 1.2;
@@ -58,7 +71,7 @@
             margin-top: -50px; 
             flex: 1;
             display: flex;
-            justify-content: center; /* Căn giữa card để không bị dãn ngang */
+            justify-content: center; 
         }
 
         .welcome-card {
@@ -68,8 +81,9 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             border: 1px solid #f1f5f9;
             width: 100%;
-            max-width: 500px; /* Khóa kích thước card cho đẹp */
+            max-width: 500px; 
             height: fit-content;
+            animation: fadeInSlideUp 0.6s ease-out; /* Hiệu ứng thẻ Welcome */
         }
 
         .agent-profile {
@@ -103,9 +117,9 @@
             justify-content: center;
             align-items: center;
             gap: 8px;
-            transition: 0.2s;
+            transition: all 0.3s ease;
         }
-        .start-btn:hover { background: #c2410c; }
+        .start-btn:hover { background: #c2410c; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(234, 88, 12, 0.3); }
         .start-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
         /* --- MÀN HÌNH CHAT --- */
@@ -114,6 +128,7 @@
             flex-direction: column;
             height: 100%;
             background: #ffffff;
+            animation: fadeIn 0.3s ease-out;
         }
 
         .chat-header {
@@ -138,18 +153,33 @@
             flex-direction: column;
             gap: 15px;
             background: #f8fafc;
+            scroll-behavior: smooth; /* Cuộn mượt */
         }
 
-        .message { max-width: 70%; padding: 12px 18px; border-radius: 12px; font-size: 15px; line-height: 1.5; }
-        .msg-received { background: #ffffff; align-self: flex-start; border-bottom-left-radius: 2px; color: #1f2937; border: 1px solid #e2e8f0; }
-        .msg-sent { background: #ea580c; align-self: flex-end; border-bottom-right-radius: 2px; color: #ffffff; }
+        /* Custom thanh cuộn nhìn xịn hơn */
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .chat-messages::-webkit-scrollbar-track { background: transparent; }
 
+        .message { 
+            max-width: 70%; 
+            padding: 12px 18px; 
+            border-radius: 12px; 
+            font-size: 15px; 
+            line-height: 1.5; 
+            animation: fadeInSlideUp 0.4s ease-out; /* Hiệu ứng tin nhắn bay lên */
+        }
+        .msg-received { background: #ffffff; align-self: flex-start; border-bottom-left-radius: 2px; color: #1f2937; border: 1px solid #e2e8f0; }
+        .msg-sent { background: #ea580c; align-self: flex-end; border-bottom-right-radius: 2px; color: #ffffff; box-shadow: 0 4px 10px rgba(234, 88, 12, 0.2); }
+
+        /* --- THANH NHẬP TIN NHẮN (SẼ BỊ ẨN LÚC ĐẦU) --- */
         .chat-input-area {
             padding: 20px 25px;
             background: #ffffff;
             border-top: 1px solid #e2e8f0;
-            display: flex;
+            display: none; /* Lệnh ẩn form lúc mới vào */
             gap: 15px;
+            animation: fadeIn 0.5s ease-out;
         }
 
         .chat-input {
@@ -160,9 +190,9 @@
             padding: 0 20px;
             font-size: 15px;
             outline: none;
-            transition: 0.2s;
+            transition: all 0.3s ease;
         }
-        .chat-input:focus { border-color: #cbd5e1; background: #ffffff; }
+        .chat-input:focus { border-color: #ea580c; background: #ffffff; box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1); }
 
         .send-btn {
             background: none;
@@ -172,7 +202,9 @@
             padding: 5px;
             display: flex;
             align-items: center;
+            transition: transform 0.2s;
         }
+        .send-btn:hover { transform: scale(1.1); }
         .send-btn svg { width: 28px; height: 28px; fill: currentColor; }
 
         /* --- THANH MENU DƯỚI CÙNG --- */
@@ -194,9 +226,11 @@
             color: #64748b;
             cursor: pointer;
             font-weight: 500;
+            transition: color 0.2s;
         }
-        .nav-item svg { width: 24px; height: 24px; fill: currentColor; }
+        .nav-item svg { width: 24px; height: 24px; fill: currentColor; transition: transform 0.2s; }
         .nav-item.active { color: #ea580c; }
+        .nav-item.active svg { transform: translateY(-2px); }
 
         .footer-brand {
             text-align: center;
@@ -212,31 +246,39 @@
             .widget-container { border-radius: 0; height: 100vh; max-width: 100%; }
         }
 
-        /* --- CHỈ STYLE RIÊNG CHO BONG BÓNG CHAT CHỨA FORM --- */
-.bot-message-wrapper { display: flex; gap: 12px; margin-bottom: 20px; align-items: flex-start; }
-.bot-avatar-wrap { position: relative; flex-shrink: 0; }
-.bot-avatar-wrap img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
-.bot-online-dot { position: absolute; bottom: 0; right: -2px; width: 12px; height: 12px; background: #f59e0b; border: 2px solid #fff; border-radius: 50%; }
+        /* --- STYLE RIÊNG CHO BONG BÓNG CHAT CHỨA FORM --- */
+        .bot-message-wrapper { 
+            display: flex; 
+            gap: 12px; 
+            margin-bottom: 20px; 
+            align-items: flex-start;
+            animation: fadeInSlideUp 0.6s ease-out; /* Hiệu ứng bay vào mượt mà */
+        }
+        .bot-avatar-wrap { position: relative; flex-shrink: 0; }
+        .bot-avatar-wrap img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+        .bot-online-dot { position: absolute; bottom: 0; right: -2px; width: 12px; height: 12px; background: #f59e0b; border: 2px solid #fff; border-radius: 50%; }
 
-.bot-bubble {
-    background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
-    padding: 20px; max-width: 400px; font-size: 14px; color: #1f2937; line-height: 1.6;
-}
-.bot-bubble b { color: #111827; }
+        .bot-bubble {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+            padding: 20px; max-width: 400px; font-size: 14px; color: #1f2937; line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .bot-bubble b { color: #111827; }
 
-/* Form nhập tên bên trong bong bóng */
-.pre-chat-form { border-top: 1px dashed #e2e8f0; padding-top: 15px; margin-top: 15px; }
-.pre-chat-input {
-    width: 100%; padding: 12px 15px; border: 1px solid #d1d5db;
-    border-radius: 8px; font-size: 14px; margin-bottom: 12px; outline: none; background: #f9fafb; color: #000;
-}
-.pre-chat-input:focus { border-color: #ea580c; background: #fff; }
-.pre-chat-btn {
-    width: 100%; background: #ea580c; color: #000;
-    font-weight: 700; border: none; padding: 12px; border-radius: 8px;
-    cursor: pointer; font-size: 14px; transition: 0.2s;
-}
-.pre-chat-btn:hover { background: #d94a08; color: #fff; }
+        /* Form nhập tên bên trong bong bóng */
+        .pre-chat-form { border-top: 1px dashed #e2e8f0; padding-top: 15px; margin-top: 15px; }
+        .pre-chat-input {
+            width: 100%; padding: 12px 15px; border: 1px solid #d1d5db;
+            border-radius: 8px; font-size: 14px; margin-bottom: 12px; outline: none; background: #f9fafb; color: #000;
+            transition: all 0.3s ease;
+        }
+        .pre-chat-input:focus { border-color: #ea580c; background: #fff; box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1); }
+        .pre-chat-btn {
+            width: 100%; background: #ea580c; color: #000;
+            font-weight: 700; border: none; padding: 12px; border-radius: 8px;
+            cursor: pointer; font-size: 14px; transition: all 0.3s ease;
+        }
+        .pre-chat-btn:hover { background: #d94a08; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3); }
         
     </style>
 </head>
@@ -276,31 +318,32 @@
                 </div>
             </div>
 
-           <div class="chat-messages" id="chat-box">
-    <!-- BONG BÓNG BOT (CHỨA FORM NHẬP TÊN GIỐNG LIVECHAT) -->
-    <div class="bot-message-wrapper" id="welcome-bubble">
-        <div class="bot-avatar-wrap">
-            <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Bot Avatar">
-            <span class="bot-online-dot"></span>
-        </div>
-        <div class="bot-bubble">
-            <div class="bot-intro-text">
-                ☀️ <b>HOANGKUN STORE</b> – Chuyên cung cấp Source Code chuẩn, an toàn & bảo mật ✅<br><br>
-                📱 Nhận mã nguồn tự động, hỗ trợ setup 24/7.<br>
-                ➡️ Chỉ có <u>HOANGKUN.ID.VN</u> là hệ thống hỗ trợ chính thức.<br><br>
-                Vui lòng cung cấp tên hiển thị tài khoản cần hỗ trợ:
+            <div class="chat-messages" id="chat-box">
+                <!-- BONG BÓNG BOT (CHỨA FORM NHẬP TÊN GIỐNG LIVECHAT) -->
+                <div class="bot-message-wrapper" id="welcome-bubble">
+                    <div class="bot-avatar-wrap">
+                        <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Bot Avatar">
+                        <span class="bot-online-dot"></span>
+                    </div>
+                    <div class="bot-bubble">
+                        <div class="bot-intro-text">
+                            ☀️ <b>HOANGKUN STORE</b> – Chuyên cung cấp Source Code chuẩn, an toàn & bảo mật ✅<br><br>
+                            📱 Nhận mã nguồn tự động, hỗ trợ setup 24/7.<br>
+                            ➡️ Chỉ có <u>HOANGKUN.ID.VN</u> là hệ thống hỗ trợ chính thức.<br><br>
+                            Vui lòng cung cấp tên hiển thị tài khoản cần hỗ trợ:
+                        </div>
+                        
+                        <!-- FORM NHẬP TÊN -->
+                        <div class="pre-chat-form" id="pre-chat-form-area">
+                            <input type="text" id="guestNameInput" class="pre-chat-input" autocomplete="off" placeholder="Nhập tên của bạn..." onkeypress="if(event.key === 'Enter') startLiveChat()">
+                            <button class="pre-chat-btn" onclick="startLiveChat()">Bắt đầu chat</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <!-- FORM NHẬP TÊN -->
-            <div class="pre-chat-form" id="pre-chat-form-area">
-                <input type="text" id="guestNameInput" class="pre-chat-input" autocomplete="off" onkeypress="if(event.key === 'Enter') startLiveChat()">
-                <button class="pre-chat-btn" onclick="startLiveChat()">Bắt đầu chat</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-            <div class="chat-input-area">
+            <!-- THANH NHẬP TIN NHẮN (Đã thêm ID và lệnh ẩn display: none) -->
+            <div class="chat-input-area" id="bottom-input-area" style="display: none;">
                 <input type="text" id="msg-input" class="chat-input" placeholder="Nhập tin nhắn..." autocomplete="off">
                 <button class="send-btn" onclick="if(typeof sendMessage === 'function') sendMessage();">
                     <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
@@ -323,8 +366,47 @@
 
     </div>
 
-    <!-- Script chuyển đổi giữa 2 tab -->
+    <!-- KHỐI JAVASCRIPT ĐÃ ĐƯỢC GỘP CHUẨN XÁC VÀ SẠCH SẼ -->
     <script>
+        // 1. KIỂM TRA TÊN KHÁCH KHI TẢI TRANG
+        window.onload = function() {
+            const savedName = localStorage.getItem('guestName');
+            if (savedName && savedName.trim() !== '') {
+                // Giấu form nhập tên, hiện thanh chat mượt mà
+                document.getElementById('pre-chat-form-area').style.display = 'none';
+                document.getElementById('bottom-input-area').style.display = 'flex';
+                
+                // Kích hoạt Firebase nếu file main.js đã tải xong
+                if(typeof window.initChat === 'function') {
+                    window.guestName = savedName;
+                    window.initChat();
+                }
+            }
+        };
+
+        // 2. XỬ LÝ NÚT BẤM "BẮT ĐẦU CHAT"
+        function startLiveChat() {
+            const inputName = document.getElementById('guestNameInput').value.trim();
+            if (inputName !== '') {
+                localStorage.setItem('guestName', inputName); // Lưu tên
+                
+                // Đổi giao diện
+                document.getElementById('pre-chat-form-area').style.display = 'none';
+                document.getElementById('bottom-input-area').style.display = 'flex';
+                document.getElementById('msg-input').focus();
+                
+                // Mở phòng chat trên Firebase
+                if(typeof window.initChat === 'function') {
+                    window.guestName = inputName;
+                    window.initChat();
+                }
+            } else {
+                alert('Vui lòng nhập tên vào ô trống để hệ thống hỗ trợ tốt nhất nhé!');
+                document.getElementById('guestNameInput').focus();
+            }
+        }
+
+        // 3. XỬ LÝ CHUYỂN ĐỔI TAB (HOME / CHAT)
         function switchTab(tabName) {
             document.getElementById('tab-home').style.display = tabName === 'home' ? 'flex' : 'none';
             document.getElementById('tab-chat').style.display = tabName === 'chat' ? 'flex' : 'none';
@@ -335,64 +417,25 @@
             if (tabName === 'chat') {
                 const box = document.getElementById('chat-box');
                 if (box) box.scrollTop = box.scrollHeight;
-                document.getElementById('msg-input').focus();
+                
+                // Chỉ focus vào thanh chat nếu nó đang hiện
+                const bottomInput = document.getElementById('bottom-input-area');
+                if (bottomInput.style.display !== 'none') {
+                    document.getElementById('msg-input').focus();
+                }
             }
         }
 
+        // 4. LẮNG NGHE PHÍM ENTER GỬI TIN NHẮN
         document.getElementById('msg-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                if(typeof sendMessage === 'function') sendMessage();
+                if(typeof window.sendMessage === 'function') window.sendMessage();
             }
         });
     </script>
 
-    <!-- Script chuyển đổi giữa 2 tab -->
-    <script>
-        // KIỂM TRA XEM KHÁCH ĐÃ NHẬP TÊN LẦN NÀO CHƯA
-        window.onload = function() {
-            const savedName = localStorage.getItem('guestName');
-            if (savedName && savedName.trim() !== '') {
-                // Đã có tên -> Giấu form, hiện thanh chat
-                document.getElementById('pre-chat-form-area').style.display = 'none';
-                document.getElementById('bottom-input-area').style.display = 'flex';
-                
-                // Bật kết nối Firebase
-                if(typeof window.initChat === 'function') {
-                    window.guestName = savedName;
-                    window.initChat();
-                }
-            }
-        };
-
-        // HÀM XỬ LÝ KHI BẤM NÚT "BẮT ĐẦU CHAT"
-        function startLiveChat() {
-            const inputName = document.getElementById('guestNameInput').value.trim();
-            if (inputName !== '') {
-                // Lưu tên vào máy
-                localStorage.setItem('guestName', inputName);
-                
-                // Hiệu ứng chuyển đổi
-                document.getElementById('pre-chat-form-area').style.display = 'none';
-                document.getElementById('bottom-input-area').style.display = 'flex';
-                document.getElementById('msg-input').focus();
-                
-                // Mở kết nối
-                if(typeof window.initChat === 'function') {
-                    window.guestName = inputName;
-                    window.initChat();
-                }
-            } else {
-                alert('Bạn nhập tên vào ô trống phía trên để mình tiện xưng hô nhé!');
-                document.getElementById('guestNameInput').focus();
-            }
-        }
-
-        function switchTab(tabName) {
-            // ... (Đoạn code switchTab và phím Enter của bạn giữ nguyên y hệt) ...
-            </script>
-
-    <!-- Thư viện Firebase & Code xử lý tin nhắn -->
+    <!-- Thư viện Firebase & Code kết nối Data -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="main.js"></script>
