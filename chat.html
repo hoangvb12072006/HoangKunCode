@@ -141,7 +141,6 @@
         .send-btn:hover { transform: scale(1.08); }
         .send-btn svg { width: 22px; height: 22px; fill: #fff; transform: translateX(2px); }
 
-        /* Tối ưu hóa tuyệt đối cho giao diện Mobile */
         @media (max-width: 600px) {
             body { padding: 0; }
             .chat-container { height: 100vh; border-radius: 0; border: none; }
@@ -166,38 +165,29 @@
         </div>
 
         <div class="chat-messages" id="chat-box">
-            <div class="message msg-received">Chào bạn! Mình là Nguyễn Việt Hoàng. Hiện tại bạn đang cần liên hệ hợp tác, booking review phim hay có câu hỏi nào không? Hãy để lại lời nhắn nhé!</div>
-        </div>
+            </div>
 
         <div class="chat-input-area">
             <input type="text" class="chat-input" id="msg-input" placeholder="Nhập tin nhắn của bạn..." autocomplete="off">
-            <button class="send-btn" onclick="sendMessage()">
+            <button class="send-btn" onclick="if(typeof sendMessage === 'function') sendMessage();">
                 <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
             </button>
         </div>
     </div>
 
-    <script>
-        // Xử lý gửi tin nhắn mượt mà, cuộn tự động xuống dòng mới nhất
-        function sendMessage() {
-            const input = document.getElementById('msg-input');
-            const chatBox = document.getElementById('chat-box');
-            
-            if(input.value.trim() !== '') {
-                const newMsg = document.createElement('div');
-                newMsg.className = 'message msg-sent';
-                newMsg.textContent = input.value;
-                chatBox.appendChild(newMsg);
-                
-                input.value = '';
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-        }
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
-        // Kích hoạt nhấn phím Enter để gửi nhanh trên máy tính
+    <script>
+        // Kích hoạt nhấn phím Enter để gửi nhanh
         document.getElementById('msg-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') sendMessage();
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if(typeof sendMessage === 'function') sendMessage();
+            }
         });
     </script>
+    
+    <script src="main.js"></script>
 </body>
 </html>
