@@ -9,19 +9,19 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
         body {
-            background-color: #f1f5f9; /* Nền xám nhạt đằng sau widget */
+            background-color: #f1f5f9; 
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            padding: 20px; /* Thêm lề để không sát viền màn hình */
         }
 
-        /* --- KHUNG WIDGET CHÍNH --- */
+        /* --- KHUNG CHAT ĐÃ ĐƯỢC PHÓNG TO NHƯ MESSENGER --- */
         .widget-container {
             width: 100%;
-            max-width: 380px;
-            height: 100vh;
-            max-height: 680px;
+            max-width: 1000px; /* Phóng to chiều rộng lên 1000px */
+            height: 95vh;      /* Chiều cao chiếm 95% màn hình */
             background: #ffffff;
             border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
@@ -31,7 +31,7 @@
             position: relative;
         }
 
-        /* --- MÀN HÌNH HOME (GIỐNG ẢNH 100%) --- */
+        /* --- MÀN HÌNH HOME --- */
         #tab-home {
             display: flex;
             flex-direction: column;
@@ -40,13 +40,13 @@
         }
 
         .home-banner {
-            background: #fcebe0; /* Màu be nhạt giống ảnh */
-            padding: 40px 30px 60px 30px;
+            background: #fcebe0; 
+            padding: 60px 30px 80px 30px; /* Tăng padding cho cân đối với màn hình to */
             text-align: center;
         }
 
         .home-banner h1 {
-            font-size: 28px;
+            font-size: 36px; /* Chữ to hơn */
             font-weight: 800;
             color: #111827;
             line-height: 1.2;
@@ -55,44 +55,49 @@
 
         .welcome-card-wrapper {
             padding: 0 20px;
-            margin-top: -30px; /* Kéo thẻ chồng lên phần banner */
+            margin-top: -50px; 
             flex: 1;
+            display: flex;
+            justify-content: center; /* Căn giữa card để không bị dãn ngang */
         }
 
         .welcome-card {
             background: #ffffff;
             border-radius: 12px;
-            padding: 20px;
+            padding: 30px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             border: 1px solid #f1f5f9;
+            width: 100%;
+            max-width: 500px; /* Khóa kích thước card cho đẹp */
+            height: fit-content;
         }
 
         .agent-profile {
             display: flex;
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .agent-avatar {
-            width: 45px;
-            height: 45px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             object-fit: cover;
         }
 
         .agent-info { flex: 1; }
-        .agent-name { font-weight: 700; font-size: 15px; color: #1f2937; margin-bottom: 4px; }
-        .agent-desc { font-size: 13px; color: #4b5563; line-height: 1.4; }
+        .agent-name { font-weight: 700; font-size: 18px; color: #1f2937; margin-bottom: 4px; }
+        .agent-desc { font-size: 14px; color: #4b5563; line-height: 1.5; }
 
         .start-btn {
             width: 100%;
-            background: #ea580c; /* Màu cam LiveChat */
+            background: #ea580c; 
             color: white;
             border: none;
-            padding: 14px;
+            padding: 16px;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 16px;
             cursor: pointer;
             display: flex;
             justify-content: center;
@@ -101,59 +106,59 @@
             transition: 0.2s;
         }
         .start-btn:hover { background: #c2410c; }
-        .start-btn svg { width: 18px; height: 18px; fill: currentColor; }
+        .start-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
-        /* --- MÀN HÌNH CHAT (SÁNG SỦA, CHUYÊN NGHIỆP) --- */
+        /* --- MÀN HÌNH CHAT --- */
         #tab-chat {
-            display: none; /* Ẩn lúc đầu */
+            display: none; 
             flex-direction: column;
             height: 100%;
             background: #ffffff;
         }
 
         .chat-header {
-            padding: 15px 20px;
+            padding: 18px 25px;
             background: #ffffff;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        .header-avatar { width: 35px; height: 35px; border-radius: 50%; }
-        .header-name { font-weight: 600; font-size: 15px; color: #111827; }
-        .header-status { font-size: 12px; color: #10b981; }
+        .header-avatar { width: 45px; height: 45px; border-radius: 50%; }
+        .header-name { font-weight: 600; font-size: 17px; color: #111827; }
+        .header-status { font-size: 13px; color: #10b981; }
 
         .chat-messages {
             flex: 1;
-            padding: 20px;
+            padding: 25px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
             background: #f8fafc;
         }
 
-        .message { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; }
+        .message { max-width: 70%; padding: 12px 18px; border-radius: 12px; font-size: 15px; line-height: 1.5; }
         .msg-received { background: #ffffff; align-self: flex-start; border-bottom-left-radius: 2px; color: #1f2937; border: 1px solid #e2e8f0; }
         .msg-sent { background: #ea580c; align-self: flex-end; border-bottom-right-radius: 2px; color: #ffffff; }
 
         .chat-input-area {
-            padding: 15px 20px;
+            padding: 20px 25px;
             background: #ffffff;
             border-top: 1px solid #e2e8f0;
             display: flex;
-            gap: 10px;
+            gap: 15px;
         }
 
         .chat-input {
             flex: 1;
             background: #f1f5f9;
             border: 1px solid transparent;
-            border-radius: 20px;
-            padding: 0 16px;
-            font-size: 14px;
+            border-radius: 25px;
+            padding: 0 20px;
+            font-size: 15px;
             outline: none;
             transition: 0.2s;
         }
@@ -168,14 +173,14 @@
             display: flex;
             align-items: center;
         }
-        .send-btn svg { width: 24px; height: 24px; fill: currentColor; }
+        .send-btn svg { width: 28px; height: 28px; fill: currentColor; }
 
-        /* --- THANH MENU DƯỚI CÙNG (BOTTOM NAV) --- */
+        /* --- THANH MENU DƯỚI CÙNG --- */
         .bottom-nav {
             display: flex;
             background: #ffffff;
             border-top: 1px solid #e2e8f0;
-            padding: 10px 0;
+            padding: 12px 0;
             z-index: 10;
         }
 
@@ -184,26 +189,27 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            font-size: 12px;
+            gap: 5px;
+            font-size: 13px;
             color: #64748b;
             cursor: pointer;
             font-weight: 500;
         }
-        .nav-item svg { width: 22px; height: 22px; fill: currentColor; }
+        .nav-item svg { width: 24px; height: 24px; fill: currentColor; }
         .nav-item.active { color: #ea580c; }
 
         .footer-brand {
             text-align: center;
-            font-size: 10px;
+            font-size: 11px;
             color: #94a3b8;
-            padding: 6px 0;
+            padding: 8px 0;
             background: #ffffff;
         }
 
-        /* Responsive Mobile */
-        @media (max-width: 400px) {
-            .widget-container { border-radius: 0; max-height: 100vh; }
+        /* Responsive cho điện thoại */
+        @media (max-width: 600px) {
+            body { padding: 0; }
+            .widget-container { border-radius: 0; height: 100vh; max-width: 100%; }
         }
     </style>
 </head>
@@ -225,7 +231,6 @@
                             <div class="agent-desc">Tốc độ vượt trội, bảo mật tối ưu - Tải và bật App 1.1.1.1 để truy cập nếu bị chặn mạng.</div>
                         </div>
                     </div>
-                    <!-- Nút bấm chuyển sang tab chat -->
                     <button class="start-btn" onclick="switchTab('chat')">
                         Cùng trò chuyện 
                         <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
@@ -271,26 +276,22 @@
 
     </div>
 
-    <!-- Script chuyển đổi giữa 2 tab (Home và Chat) -->
+    <!-- Script chuyển đổi giữa 2 tab -->
     <script>
         function switchTab(tabName) {
-            // Đổi nội dung
             document.getElementById('tab-home').style.display = tabName === 'home' ? 'flex' : 'none';
             document.getElementById('tab-chat').style.display = tabName === 'chat' ? 'flex' : 'none';
             
-            // Đổi màu thanh menu dưới
             document.getElementById('nav-home').classList.toggle('active', tabName === 'home');
             document.getElementById('nav-chat').classList.toggle('active', tabName === 'chat');
 
-            // Nếu bấm sang tab chat, cuộn xuống tin nhắn mới nhất
             if (tabName === 'chat') {
                 const box = document.getElementById('chat-box');
                 if (box) box.scrollTop = box.scrollHeight;
-                document.getElementById('msg-input').focus(); // Tự động trỏ chuột vào ô nhập
+                document.getElementById('msg-input').focus();
             }
         }
 
-        // Kích hoạt phím Enter để gửi tin
         document.getElementById('msg-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
