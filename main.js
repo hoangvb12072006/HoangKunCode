@@ -22,7 +22,10 @@ function showTyping() {
     const typingDiv = document.createElement('div');
     typingDiv.className = 'message msg-received typing-indicator';
     typingDiv.id = 'typing-effect';
-    typingDiv.innerHTML = '<i>Nguyễn Việt Hoàng đang nhập...</i>';
+    
+    // 👇 Nhét 3 cái chấm tròn vào đây thay cho chữ 👇
+    typingDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+    
     chatBox.appendChild(typingDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
