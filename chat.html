@@ -246,14 +246,17 @@
             .widget-container { border-radius: 0; height: 100vh; max-width: 100%; }
         }
 
-        /* --- STYLE RIÊNG CHO BONG BÓNG CHAT CHỨA FORM --- */
+      /* --- STYLE RIÊNG CHO BONG BÓNG CHAT CHỨA FORM --- */
         .bot-message-wrapper { 
             display: flex; 
             gap: 12px; 
+            align-self: center; /* Lệnh kéo ra chính giữa theo chiều ngang */
+            margin-top: 15vh; /* Đẩy xuống một chút cho cân với chiều dọc */
             margin-bottom: 20px; 
             align-items: flex-start;
-            animation: fadeInSlideUp 0.6s ease-out; /* Hiệu ứng bay vào mượt mà */
+            animation: fadeInSlideUp 0.6s ease-out; 
         }
+        
         .bot-avatar-wrap { position: relative; flex-shrink: 0; }
         .bot-avatar-wrap img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
         .bot-online-dot { position: absolute; bottom: 0; right: -2px; width: 12px; height: 12px; background: #f59e0b; border: 2px solid #fff; border-radius: 50%; }
@@ -368,34 +371,43 @@
 
     <!-- KHỐI JAVASCRIPT ĐÃ ĐƯỢC GỘP CHUẨN XÁC VÀ SẠCH SẼ -->
     <script>
-        // 1. KIỂM TRA TÊN KHÁCH KHI TẢI TRANG
+       // 1. KIỂM TRA TÊN VÀ THỜI GIAN (HẾT HẠN SAU 5 PHÚT)
         window.onload = function() {
             const savedName = localStorage.getItem('guestName');
-            if (savedName && savedName.trim() !== '') {
-                // Giấu form nhập tên, hiện thanh chat mượt mà
+            const saveTime = localStorage.getItem('chatStartTime');
+            const currentTime = Date.now();
+            const fiveMinutes = 5 * 60 * 1000; // 5 phút tính bằng mili-giây
+
+            // Kiểm tra: Nếu có tên VÀ thời gian lưu chưa quá 5 phút
+            if (savedName && saveTime && (currentTime - parseInt(saveTime) < fiveMinutes)) {
+                // Vẫn trong 5 phút -> Giấu form, cho chat tiếp
                 document.getElementById('pre-chat-form-area').style.display = 'none';
                 document.getElementById('bottom-input-area').style.display = 'flex';
                 
-                // Kích hoạt Firebase nếu file main.js đã tải xong
                 if(typeof window.initChat === 'function') {
                     window.guestName = savedName;
                     window.initChat();
                 }
+            } else {
+                // Nếu quá 5 phút -> Xóa trí nhớ, hiện lại Form bắt nhập tên
+                localStorage.removeItem('guestName');
+                localStorage.removeItem('chatStartTime');
             }
         };
 
-        // 2. XỬ LÝ NÚT BẤM "BẮT ĐẦU CHAT"
+        // 2. XỬ LÝ NÚT BẤM "BẮT ĐẦU CHAT" (Lưu thêm mốc thời gian)
         function startLiveChat() {
             const inputName = document.getElementById('guestNameInput').value.trim();
             if (inputName !== '') {
                 localStorage.setItem('guestName', inputName); // Lưu tên
+                localStorage.setItem('chatStartTime', Date.now()); // Lưu mốc thời gian bắt đầu
                 
                 // Đổi giao diện
                 document.getElementById('pre-chat-form-area').style.display = 'none';
                 document.getElementById('bottom-input-area').style.display = 'flex';
                 document.getElementById('msg-input').focus();
                 
-                // Mở phòng chat trên Firebase
+                // Mở phòng chat
                 if(typeof window.initChat === 'function') {
                     window.guestName = inputName;
                     window.initChat();
