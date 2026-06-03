@@ -118,6 +118,26 @@ window.showBotOptions = function(menuType) {
         btn.innerHTML = opt.label;
         btn.onclick = () => {
             const currentName = window.guestName || localStorage.getItem('guestName') || 'Khách';
+
+            // Đổ nút ra màn hình
+    buttons.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quick-reply-btn';
+        btn.innerHTML = opt.label;
+        
+        btn.onclick = () => {
+            const currentName = window.guestName || localStorage.getItem('guestName') || 'Khách';
+            
+            // 👇 GIA HẠN THÊM 5 PHÚT MỖI KHI KHÁCH BẤM NÚT MENU
+            localStorage.setItem('chatStartTime', Date.now());
+            
+            // Khách tự động nhắn câu trả lời lên
+            db.ref('chats/' + currentRoomId).push({
+                sender: 'user', senderName: currentName,
+                text: opt.reply, timestamp: Date.now()
+            });
+
+            // ... (các đoạn code bên dưới giữ nguyên)
             
             // Khách tự động nhắn câu trả lời lên
             db.ref('chats/' + currentRoomId).push({
@@ -146,13 +166,15 @@ window.showBotOptions = function(menuType) {
     chatBox.appendChild(optionsDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
-
 // 4. GỬI TIN NHẮN THỦ CÔNG TỪ THANH CHAT
 window.sendMessage = function() {
     const input = document.getElementById('msg-input');
     const currentName = window.guestName || localStorage.getItem('guestName');
     
     if(input && input.value.trim() !== '') {
+        // 👇 GIA HẠN THÊM 5 PHÚT MỖI KHI NHẮN TIN
+        localStorage.setItem('chatStartTime', Date.now()); 
+        
         db.ref('chats/' + currentRoomId).push({ 
             sender: 'user',
             senderName: currentName,
