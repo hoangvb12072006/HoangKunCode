@@ -27,11 +27,26 @@ window.initChat = function() {
         currentRoomId = "room_" + Date.now();
         localStorage.setItem('currentRoomId', currentRoomId);
         
-        // Bắn tin báo hệ thống ngầm cho Admin biết có khách mới
+      // Bản tin báo hệ thống ngầm cho Admin biết có khách mới
         db.ref('chats/' + currentRoomId).push({
             sender: 'system',
             senderName: currentName,
             text: 'Khách hàng [' + currentName + '] đã bắt đầu phiên chat.',
+            timestamp: Date.now()
+        });
+
+        // ==========================================
+        // BOT TỰ ĐỘNG GỬI TIN NHẮN CHÀO MỪNG
+        // ==========================================
+        const botWelcomeText = `Chào ${currentName}! 👋 Cảm ơn bạn đã liên hệ HOANGKUN STORE.\n\n` +
+                              `Yêu cầu của bạn đã được chuyển đến Nguyễn Việt Hoàng.\n` +
+                              `Nguyễn Việt Hoàng sẽ trả lời bạn sớm nhất có thể ạ!\n\n` +
+                              `Trong lúc chờ đợi, bạn cần hỗ trợ về Source Code nào ạ? 😊`;
+
+        db.ref('chats/' + currentRoomId).push({
+            sender: 'admin', 
+            senderName: 'Nguyễn Việt Hoàng', 
+            text: botWelcomeText,
             timestamp: Date.now()
         });
     }
