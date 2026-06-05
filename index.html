@@ -415,6 +415,18 @@
             .stats-grid { grid-template-columns: 1fr; }
         }
         
+/* CSS cho Nút Web Shop VIP */
+.btn-shop-vip {
+    display: flex; align-items: center; justify-content: center; width: 100%;
+    padding: 16px 20px; margin-top: 15px; margin-bottom: 16px; border-radius: 30px;
+    text-decoration: none; font-weight: 700; color: white; font-size: 1rem;
+    background: linear-gradient(90deg, #ea580c, #e11d48, #9333ea);
+    background-size: 200% 200%; animation: gradientShift 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4); transition: 0.3s;
+}
+.btn-shop-vip:hover { transform: scale(1.02); box-shadow: 0 6px 25px rgba(225, 29, 72, 0.6); }
+@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
     </style>
 </head>
 <body data-theme="dark">
@@ -462,6 +474,12 @@
                     <span class="icon-diamond">♦</span> Trò Chuyện Trực Tiếp (Chat)
                     <span class="icon-diamond">♦</span>
                 </a>
+
+             <!-- Nút chuyển sang Web Shop -->
+                <a href="shop.html" class="btn-shop-vip">
+               🔥 HOANGKUNSTORE - Web Shop 🔥
+              </a>
+
             </div>
             
            <div class="social-row">
