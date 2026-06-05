@@ -430,7 +430,7 @@ window.sendMessage = function() {
     }
 }
 
-// 5. TÍNH NĂNG KẾT THÚC CHAT & ĐÁNH GIÁ (Đã được sửa bọc gọn vào trong hàm)
+// 5. TÍNH NĂNG KẾT THÚC CHAT & ĐÁNH GIÁ (Phần này lúc nãy bạn copy bị thiếu)
 window.endChat = function(isFromAdmin = false) {
     if(!currentRoomId) return;
 
@@ -471,7 +471,7 @@ window.endChat = function(isFromAdmin = false) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// 6. HÀM GỬI ĐÁNH GIÁ (Đã sửa ngoặc chuẩn chỉ)
+// 6. GỬI FEEDBACK LÊN HỆ THỐNG
 window.submitReview = function() {
     const ratingEle = document.querySelector('input[name="rating"]:checked');
     const comment = document.getElementById('review-comment').value.trim();
