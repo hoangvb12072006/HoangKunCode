@@ -120,7 +120,7 @@ window.showBotOptions = function(menuType) {
     const optionsDiv = document.createElement('div');
     optionsDiv.className = 'quick-replies-container';
 
-const menus = {
+    const menus = {
         'main_menu': [
             { 
                 label: '🛒 Mua Source Code / Hack Game', 
@@ -377,7 +377,7 @@ const menus = {
             btn.className = 'quick-reply-btn';
             btn.innerHTML = opt.label;
             
-btn.onclick = () => {
+            btn.onclick = () => {
                 const currentName = window.guestName || localStorage.getItem('guestName') || 'Khách';
                 db.ref('chats/' + currentRoomId).push({
                     sender: 'user', senderName: currentName,
@@ -430,66 +430,73 @@ window.sendMessage = function() {
     }
 }
 
-if (!isFromAdmin) {
-    db.ref('chats/' + currentRoomId).push({
-        sender: 'system', senderName: window.guestName,
-        text: 'Khách hàng [' + window.guestName + '] đã chủ động kết thúc phiên chat.',
-        timestamp: Date.now()
-    });
-    // Báo Telegram khách rời đi
-    sendTelegramAlert(`❌ <b>Khách hàng [${window.guestName}] đã RỜI KHỎI phiên chat.</b>`);
+// 5. TÍNH NĂNG KẾT THÚC CHAT & ĐÁNH GIÁ (Đã được sửa bọc gọn vào trong hàm)
+window.endChat = function(isFromAdmin = false) {
+    if(!currentRoomId) return;
+
+    if (!isFromAdmin) {
+        db.ref('chats/' + currentRoomId).push({
+            sender: 'system', senderName: window.guestName,
+            text: 'Khách hàng [' + window.guestName + '] đã chủ động kết thúc phiên chat.',
+            timestamp: Date.now()
+        });
+        // Báo Telegram khách rời đi
+        sendTelegramAlert(`❌ <b>Khách hàng [${window.guestName}] đã RỜI KHỎI phiên chat.</b>`);
+    }
+
+    const inputArea = document.getElementById('bottom-input-area');
+    if (inputArea) inputArea.style.display = 'none';
+    const endBtn = document.querySelector('.end-chat-btn');
+    if (endBtn) endBtn.style.display = 'none';
+    document.querySelectorAll('.quick-replies-container').forEach(el => el.remove());
+
+    const reviewDiv = document.createElement('div');
+    reviewDiv.className = 'review-box';
+    reviewDiv.innerHTML = `
+        <div class="review-title">Phiên chat đã hoàn tất</div>
+        <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Vui lòng đánh giá chất lượng hỗ trợ của Admin</p>
+        
+        <div class="stars">
+            <input type="radio" id="star5" name="rating" value="5" /><label for="star5">★</label>
+            <input type="radio" id="star4" name="rating" value="4" /><label for="star4">★</label>
+            <input type="radio" id="star3" name="rating" value="3" /><label for="star3">★</label>
+            <input type="radio" id="star2" name="rating" value="2" /><label for="star2">★</label>
+            <input type="radio" id="star1" name="rating" value="1" /><label for="star1">★</label>
+        </div>
+        
+        <textarea id="review-comment" class="review-input" rows="3" placeholder="Nhận xét của bạn về HOANGKUN STORE... (Không bắt buộc)"></textarea>
+        <button class="submit-review-btn" onclick="submitReview()">Gửi Đánh Giá</button>
+    `;
+    chatBox.appendChild(reviewDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-const inputArea = document.getElementById('bottom-input-area');
-if (inputArea) inputArea.style.display = 'none';
-const endBtn = document.querySelector('.end-chat-btn');
-if (endBtn) endBtn.style.display = 'none';
-document.querySelectorAll('.quick-replies-container').forEach(el => el.remove());
-
-const reviewDiv = document.createElement('div');
-reviewDiv.className = 'review-box';
-reviewDiv.innerHTML = `
-    <div class="review-title">Phiên chat đã hoàn tất</div>
-    <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Vui lòng đánh giá chất lượng hỗ trợ của Admin</p>
-    
-    <div class="stars">
-        <input type="radio" id="star5" name="rating" value="5" /><label for="star5">★</label>
-        <input type="radio" id="star4" name="rating" value="4" /><label for="star4">★</label>
-        <input type="radio" id="star3" name="rating" value="3" /><label for="star3">★</label>
-        <input type="radio" id="star2" name="rating" value="2" /><label for="star2">★</label>
-        <input type="radio" id="star1" name="rating" value="1" /><label for="star1">★</label>
-    </div>
-    
-    <textarea id="review-comment" class="review-input" rows="3" placeholder="Nhận xét của bạn về HOANGKUN STORE... (Không bắt buộc)"></textarea>
-    <button class="submit-review-btn" onclick="submitReview()">Gửi Đánh Giá</button>
-`;
-chatBox.appendChild(reviewDiv);
-chatBox.scrollTop = chatBox.scrollHeight;
-
+// 6. HÀM GỬI ĐÁNH GIÁ (Đã sửa ngoặc chuẩn chỉ)
 window.submitReview = function() {
     const ratingEle = document.querySelector('input[name="rating"]:checked');
     const comment = document.getElementById('review-comment').value.trim();
     const rating = ratingEle ? ratingEle.value : 5;
 
-   db.ref('reviews/' + currentRoomId).set({
-    guestName: window.guestName || 'Khách',
-    rating: rating + ' Sao',
-    comment: comment || 'Không có nhận xét',
-    timestamp: Date.now()
-});
+    db.ref('reviews/' + currentRoomId).set({
+        guestName: window.guestName || 'Khách',
+        rating: rating + ' Sao',
+        comment: comment || 'Không có nhận xét',
+        timestamp: Date.now()
+    });
 
-// 🚀 BÁO TELEGRAM CÓ ĐÁNH GIÁ 5 SAO
-sendTelegramAlert(`⭐️ <b>ĐÁNH GIÁ MỚI TỪ: ${window.guestName}</b>\n⭐ Đánh giá: <b>${rating} Sao</b>\n📝 Nhận xét: <i>${comment}</i>`);
+    // 🚀 BÁO TELEGRAM CÓ ĐÁNH GIÁ 5 SAO
+    sendTelegramAlert(`⭐️ <b>ĐÁNH GIÁ MỚI TỪ: ${window.guestName}</b>\n⭐ Đánh giá: <b>${rating} Sao</b>\n📝 Nhận xét: <i>${comment}</i>`);
 
-localStorage.removeItem('guestName');
-localStorage.removeItem('currentRoomId');
+    localStorage.removeItem('guestName');
+    localStorage.removeItem('currentRoomId');
 
-const reviewBox = document.querySelector('.review-box');
-if(reviewBox) {
-    reviewBox.innerHTML = `
-        <div style="font-size: 45px; margin-bottom: 10px;">💖</div>
-        <div class="review-title">Cảm ơn bạn đã đánh giá!</div>
-        <p style="font-size: 13px; color: #64748b;">Đánh giá <b>${rating} Sao</b> của bạn sẽ giúp hệ thống phục vụ tốt hơn.</p>
-        <button class="submit-review-btn" style="margin-top: 15px;" onclick="location.reload()">Quay Về Trang Chủ</button>
-    `;
+    const reviewBox = document.querySelector('.review-box');
+    if(reviewBox) {
+        reviewBox.innerHTML = `
+            <div style="font-size: 45px; margin-bottom: 10px;">💖</div>
+            <div class="review-title">Cảm ơn bạn đã đánh giá!</div>
+            <p style="font-size: 13px; color: #64748b;">Đánh giá <b>${rating} Sao</b> của bạn sẽ giúp hệ thống phục vụ tốt hơn.</p>
+            <button class="submit-review-btn" style="margin-top: 15px;" onclick="location.reload()">Quay Về Trang Chủ</button>
+        `;
+    }
 }
