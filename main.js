@@ -72,16 +72,21 @@ window.initChat = function() {
     // 🚀 BÁO TELEGRAM CÓ KHÁCH VÀO
     sendTelegramAlert(`🟢 <b>KHÁCH HÀNG MỚI TRUY CẬP!</b>\n👤 Tên khách: <b>${currentName}</b>\n👉 Đang xem kịch bản tự động...`);
 
+    // LẮNG NGHE TIN NHẮN TỪ FIREBASE
     db.ref('chats/' + currentRoomId).on('child_added', (snapshot) => {
         const data = snapshot.val();
         
+        // --- NẾU NHẬN ĐƯỢC LỆNH KẾT THÚC TỪ ADMIN ---
         if (data.sender === 'system' && data.action === 'ADMIN_END_CHAT') {
-            if (typeof window.endChat === 'function') window.endChat(true); 
+            if (typeof window.endChat === 'function') {
+                window.endChat(true); 
+            }
             return;
         }
 
+        // 🌟 NẾU ADMIN GỬI TIN NHẮN MỚI -> PHÁT ÂM THANH
         if (data.sender === 'admin' && data.timestamp > lastPingTime) {
-            notifySound.play().catch(e => console.log("Chưa click"));
+            notifySound.play().catch(e => console.log("Trình duyệt chặn âm thanh vì khách chưa tương tác."));
             lastPingTime = data.timestamp; 
         }
 
@@ -97,22 +102,26 @@ window.initChat = function() {
         }
     });
 
+    // Gọi Bot chào mừng
     setTimeout(() => {
         showTyping();
         setTimeout(() => {
             hideTyping();
-            const botWelcomeText = `Chào <b>${currentName}</b>! 👋 Cảm ơn bạn đã liên hệ HOANGKUN STORE.<br><br>Nguyễn Việt Hoàng sẽ trả lời bạn sớm nhất có thể ạ!<br><br>Trong lúc chờ đợi, bạn cần hỗ trợ về Source Code nào ạ? 😊`;
+            const botWelcomeText = `Chào <b>${currentName}</b>! 👋 Cảm ơn bạn đã liên hệ HOANGKUN STORE.<br><br>` +
+                                  `Nguyễn Việt Hoàng sẽ trả lời bạn sớm nhất có thể ạ!<br><br>` +
+                                  `Trong lúc chờ đợi, bạn cần hỗ trợ về Source Code nào ạ? 😊`;
             
             db.ref('chats/' + currentRoomId).push({
                 sender: 'admin', senderName: 'Nguyễn Việt Hoàng',
                 text: botWelcomeText, timestamp: Date.now()
             });
+            
             setTimeout(() => window.showBotOptions('main_menu'), 400);
         }, 1200); 
     }, 300);
 }
 
-// 3. MENU KỊCH BẢN SIÊU DÀI
+// 3. MENU KỊCH BẢN ĐA TẦNG
 window.showBotOptions = function(menuType) {
     if (!chatBox) return;
 
@@ -384,7 +393,7 @@ window.showBotOptions = function(menuType) {
                     text: opt.reply, timestamp: Date.now()
                 });
 
-                // 🚀 ĐẨY THÔNG BÁO TELEGRAM
+                // 🚀 BÁO TELEGRAM KHI KHÁCH BẤM MENU
                 if(!opt.nextMenu) { 
                     sendTelegramAlert(`🔔 <b>Khách hàng [${currentName}] vừa chọn mục:</b>\n👉 <i>${opt.reply}</i>\n📲 Hãy vào CRM hỗ trợ khách ngay!`);
                 } else if (opt.label.includes('Gặp Admin Hoàng')) {
@@ -430,18 +439,18 @@ window.sendMessage = function() {
     }
 }
 
-// 5. TÍNH NĂNG KẾT THÚC CHAT & ĐÁNH GIÁ (Phần này lúc nãy bạn copy bị thiếu)
+// 5. TÍNH NĂNG KẾT THÚC CHAT & ĐÁNH GIÁ (FEEDBACK)
 window.endChat = function(isFromAdmin = false) {
     if(!currentRoomId) return;
 
     if (!isFromAdmin) {
         db.ref('chats/' + currentRoomId).push({
-            sender: 'system', senderName: window.guestName,
-            text: 'Khách hàng [' + window.guestName + '] đã chủ động kết thúc phiên chat.',
+            sender: 'system', senderName: window.guestName || 'Khách',
+            text: 'Khách hàng [' + (window.guestName || 'Khách') + '] đã chủ động kết thúc phiên chat.',
             timestamp: Date.now()
         });
-        // Báo Telegram khách rời đi
-        sendTelegramAlert(`❌ <b>Khách hàng [${window.guestName}] đã RỜI KHỎI phiên chat.</b>`);
+        // 🚀 Báo Telegram khách rời đi
+        sendTelegramAlert(`❌ <b>Khách hàng [${window.guestName || 'Khách'}] đã RỜI KHỎI phiên chat.</b>`);
     }
 
     const inputArea = document.getElementById('bottom-input-area');
@@ -485,7 +494,7 @@ window.submitReview = function() {
     });
 
     // 🚀 BÁO TELEGRAM CÓ ĐÁNH GIÁ 5 SAO
-    sendTelegramAlert(`⭐️ <b>ĐÁNH GIÁ MỚI TỪ: ${window.guestName}</b>\n⭐ Đánh giá: <b>${rating} Sao</b>\n📝 Nhận xét: <i>${comment}</i>`);
+    sendTelegramAlert(`⭐️ <b>ĐÁNH GIÁ MỚI TỪ: ${window.guestName || 'Khách'}</b>\n⭐ Đánh giá: <b>${rating} Sao</b>\n📝 Nhận xét: <i>${comment}</i>`);
 
     localStorage.removeItem('guestName');
     localStorage.removeItem('currentRoomId');
