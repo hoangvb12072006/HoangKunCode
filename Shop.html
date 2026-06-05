@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Shop | HOANGKUN STORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --primary: #ea580c;
+            --neon-blue: #3b82f6;
+            --neon-purple: #8b5cf6;
+            --text-light: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-light); line-height: 1.6; }
+
+        /* HEADER */
+        header {
+            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px);
+            position: fixed; width: 100%; top: 0; z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(to right, var(--primary), var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* BANNER */
+        .hero {
+            margin-top: 80px; padding: 60px 5%; text-align: center;
+            background: radial-gradient(circle at center, rgba(234, 88, 12, 0.1) 0%, transparent 70%);
+        }
+        .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
+        .hero p { color: var(--text-dim); max-width: 600px; margin: 0 auto 30px auto; }
+
+        /* LỌC DANH MỤC */
+        .filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+        .filter-btn {
+            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-light); padding: 10px 25px; border-radius: 30px;
+            cursor: pointer; font-weight: 600; transition: 0.3s;
+        }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 15px rgba(234, 88, 12, 0.4); }
+
+        /* LƯỚI SẢN PHẨM */
+        .products-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px; padding: 0 5% 80px 5%; max-width: 1200px; margin: 0 auto;
+        }
+
+        .product-card {
+            background: var(--bg-card); border-radius: 20px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05); transition: 0.4s;
+            position: relative;
+        }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 15px rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.5); }
+        
+        .product-img { width: 100%; height: 180px; object-fit: cover; background: #2a364b; display: flex; align-items: center; justify-content: center; font-size: 3rem; border-bottom: 2px solid var(--primary); }
+        
+        .product-info { padding: 20px; }
+        .category-tag { font-size: 0.75rem; color: var(--primary); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; display: inline-block; margin-bottom: 8px; }
+        .product-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        .product-desc { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px; }
+        
+        .price-row { display: flex; justify-content: space-between; align-items: center; }
+        .price { font-size: 1.3rem; font-weight: 800; color: #10b981; }
+        
+        .buy-btn {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: white; border: none; padding: 10px 20px; border-radius: 8px;
+            font-weight: 700; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block;
+        }
+        .buy-btn:hover { box-shadow: 0 0 15px rgba(139, 92, 246, 0.6); transform: scale(1.05); }
+
+        /* NÚT FLOAT HỖ TRỢ */
+        .float-support {
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--primary); width: 60px; height: 60px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 5px 20px rgba(234, 88, 12, 0.5); font-size: 1.5rem;
+            cursor: pointer; transition: 0.3s; text-decoration: none; z-index: 100;
+        }
+        .float-support:hover { transform: scale(1.1); animation: none; }
+        .float-support::before {
+            content: ''; position: absolute; width: 100%; height: 100%;
+            border-radius: 50%; border: 2px solid var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+        /* REPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .products-grid { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">HOANGKUN STORE</div>
+        <div class="nav-links">
+            <a href="index.html">Bio Link</a>
+            <a href="chat.html" style="color: var(--primary);">Hỗ Trợ Live</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Kho Source Code & Hack Game VIP</h1>
+        <p>Hệ thống cung cấp giải pháp Website tự động và Script Game tối ưu nhất. An toàn, bảo mật và hỗ trợ setup 24/7 từ A-Z.</p>
+        
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterItems('all')">Tất Cả Sản Phẩm</button>
+            <button class="filter-btn" onclick="filterItems('web')">Source Code Web</button>
+            <button class="filter-btn" onclick="filterItems('game')">Hack / Script Game</button>
+        </div>
+    </section>
+
+    <section class="products-grid" id="productGrid">
+        
+        <div class="product-card item-web">
+            <div class="product-img">🛒</div>
+            <div class="product-info">
+                <span class="category-tag">Source Code Web</span>
+                <h3 class="product-title">Code Web Shop Game Auto Bank</h3>
+                <p class="product-desc">Hệ thống Shop chuẩn SEO, tích hợp API Bank/Momo tự động duyệt đơn trong 3s. Giao diện cực mượt.</p>
+                <div class="price-row">
+                    <span class="price">Inbox</span>
+                    <a href="chat.html" class="buy-btn">Mua Ngay</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card item-web">
+            <div class="product-img">🎨</div>
+            <div class="product-info">
+                <span class="category-tag">Source Code Web</span>
+                <h3 class="product-title">Landing Page Cyberpunk VIP</h3>
+                <p class="product-desc">Giao diện Profile/Bio cá nhân phong cách Neon Cyberpunk cực ngầu, hiệu ứng JS siêu mượt.</p>
+                <div class="price-row">
+                    <span class="price">Inbox</span>
+                    <a href="chat.html" class="buy-btn">Mua Ngay</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card item-game">
+            <div class="product-img">☠️</div>
+            <div class="product-info">
+                <span class="category-tag">Script Hack Game</span>
+                <h3 class="product-title">Script Blox Fruits Auto Farm</h3>
+                <p class="product-desc">Auto Max Level, Auto Boss, Devil Fruit Sniper. Siêu nhẹ, bypass ngon cho Fluxus/Delta/Codex.</p>
+                <div class="price-row">
+                    <span class="price">Inbox</span>
+                    <a href="chat.html" class="buy-btn">Mua Ngay</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card item-game">
+            <div class="product-img">🔫</div>
+            <div class="product-info">
+                <span class="category-tag">Hack Game Mobile</span>
+                <h3 class="product-title">Hack Free Fire Auto Headshot</h3>
+                <p class="product-desc">Bản VIP bypass xịn nhất. Ghim tâm siêu dính 100%, ESP Wallhack, Antenna nhìn xuyên map.</p>
+                <div class="price-row">
+                    <span class="price">Inbox</span>
+                    <a href="chat.html" class="buy-btn">Mua Ngay</a>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <a href="chat.html" class="float-support" title="Chat với Admin">💬</a>
+
+    <script>
+        function filterItems(category) {
+            // Đổi màu nút active
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Lọc sản phẩm
+            const items = document.querySelectorAll('.product-card');
+            items.forEach(item => {
+                if (category === 'all') {
+                    item.style.display = 'block';
+                } else if (item.classList.contains('item-' + category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
