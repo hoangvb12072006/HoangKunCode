@@ -1,26 +1,24 @@
-Đã chơi là phải chơi lớn luôn Hoàng ơi! 10.000 dòng thì trình duyệt nó "hát bài bềnh bồng" mất, nhưng mình đã đập đi xây lại, nâng cấp file này thành một **"Siêu Hệ Thống CRM & Bot AI Thu Nhỏ"** xịn nhất từ trước đến nay. Đảm bảo nhìn code mướt rượt, logic như kỹ sư Senior 10 năm kinh nghiệm luôn!
-Mình đã thêm hàng tá tính năng mới vào đúng theo yêu cầu "dài, đẹp, hiệu ứng" của bạn (và không quên đổi tên thành **Kun Bot** như bạn dặn lúc trước nhé):
- 1. **Hệ thống Security (Chống XSS/Spam):** Lọc từ ngữ rác, chống hack.
- 2. **Sound Engine:** Quản lý âm thanh đa luồng (chuông tin nhắn mới, chuông hoàn tất...).
- 3. **Hiệu ứng Confetti (Pháo hoa):** Khi khách đánh giá 5 Sao, màn hình sẽ nổ pháo hoa rực rỡ cực đẹp (Viết thuần bằng JS).
- 4. **Bot AI Mini (Auto Keyword):** Khách gõ chữ chứa các từ khóa như "giá", "lỗi", "admin", bot sẽ tự động nhảy ra rep trước khi bạn kịp vào.
- 5. **Format Thời gian thực:** Tính toán thời gian kiểu "Vừa xong", "5 phút trước"...
-Bạn Ctrl + A xóa sạch file cũ và dán đè toàn bộ siêu phẩm này vào file **main.js (Bên Khách)** nhé:
-```javascript
-/**
- * ==============================================================================
- * 🚀 HOANGKUN STORE - ADVANCED AI CHATBOT & CRM SYSTEM V3.0 (PRO MAX)
- * © 2026 Developed by NGUYEN VIET HOANG (HOANGKUN)
- * Architecture: Firebase Realtime DB + Telegram API + Dynamic UI Engine
- * ==============================================================================
- */
-
 // ==========================================
-// [1] HỆ THỐNG CẤU HÌNH LÕI (CORE CONFIG)
+// THÔNG TIN TELEGRAM BOT CỦA BẠN
 // ==========================================
 const TELEGRAM_BOT_TOKEN = '7952742715:AAHMTMjzMTe0BRIxefHuIDbjoDuNRxWVMW8';
 const TELEGRAM_CHAT_ID = '8076487839';
-const BOT_NAME = 'Kun Bot'; // Đã đổi thành Kun Bot theo yêu cầu
+
+// Hàm gửi thông báo ngầm qua Telegram
+function sendTelegramAlert(message) {
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: 'HTML'
+        })
+    }).catch(err => console.log("Lỗi Telegram:", err));
+}
+// ==========================================
 
 const firebaseConfig = {
     apiKey: "AIzaSyD9Vi39Xuj8qf_bYjtZLAjpOkEvMIhzD1Y",
@@ -33,80 +31,15 @@ const firebaseConfig = {
     measurementId: "G-JY93M87T99"
 };
 
-// Khởi tạo Database
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Biến toàn cục
 let currentRoomId = '';
 const chatBox = document.getElementById('chat-box');
-let lastPingTime = Date.now();
-let isChatEnded = false;
+const notifySound = new Audio('https://assets.mixkit.co/active_storage/sfx/236/236-preview.mp3');
+let lastPingTime = Date.now(); 
 
-// ==========================================
-// [2] QUẢN LÝ ÂM THANH (SOUND ENGINE)
-// ==========================================
-const SoundManager = {
-    msgReceived: new Audio('https://assets.mixkit.co/active_storage/sfx/236/236-preview.mp3'),
-    success: new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3'),
-    playPing: function() {
-        this.msgReceived.currentTime = 0;
-        this.msgReceived.play().catch(e => console.warn("Chưa tương tác trang, không thể phát âm thanh."));
-    },
-    playSuccess: function() {
-        this.success.play().catch(e => console.warn("Lỗi phát âm thanh."));
-    }
-};
-
-// ==========================================
-// [3] BỘ CÔNG CỤ BẢO MẬT & XỬ LÝ (SECURITY & UTILS)
-// ==========================================
-const SystemUtils = {
-    // Chống hack XSS qua tin nhắn
-    sanitizeHTML: function(str) {
-        return str.replace(/[^\w. ]/gi, function(c) {
-            return '&#' + c.charCodeAt(0) + ';';
-        });
-    },
-    // Hiệu ứng cuộn mượt
-    scrollToBottom: function() {
-        if (!chatBox) return;
-        chatBox.scrollTo({
-            top: chatBox.scrollHeight,
-            behavior: 'smooth'
-        });
-    },
-    // Tạo ID phòng độc nhất
-    generateSessionId: function() {
-        return "room_" + Math.random().toString(36).substring(2, 15) + "_" + Date.now();
-    }
-};
-
-// ==========================================
-// [4] HỆ THỐNG GIAO TIẾP TELEGRAM (API GATEWAY)
-// ==========================================
-function sendTelegramAlert(message) {
-    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    
-    // Thêm footer nhận diện nguồn
-    const finalMessage = message + `\n\n🌐 <i>Hệ thống: hoangkunstore.id.vn</i>`;
-
-    fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            chat_id: TELEGRAM_CHAT_ID,
-            text: finalMessage,
-            parse_mode: 'HTML',
-            disable_web_page_preview: true
-        })
-    }).catch(err => console.error("Lỗi Telegram API:", err));
-}
-
-// ==========================================
-// [5] HIỆU ỨNG GIAO DIỆN (UI/UX ENGINE)
-// ==========================================
+// 1. HIỆU ỨNG ĐANG GÕ
 function showTyping() {
     if (!chatBox) return;
     const typingDiv = document.createElement('div');
@@ -114,7 +47,7 @@ function showTyping() {
     typingDiv.id = 'typing-effect';
     typingDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
     chatBox.appendChild(typingDiv);
-    SystemUtils.scrollToBottom();
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 function hideTyping() {
@@ -122,119 +55,79 @@ function hideTyping() {
     if (el) el.remove();
 }
 
-// 🎉 Hiệu ứng bắn pháo hoa khi đánh giá 5 sao
-function fireConfetti() {
-    const colors = ['#ea580c', '#10b981', '#3b82f6', '#f59e0b', '#fbbf24'];
-    for(let i = 0; i < 100; i++) {
-        const confetti = document.createElement('div');
-        confetti.style.position = 'fixed';
-        confetti.style.width = '10px';
-        confetti.style.height = '10px';
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.top = '-10px';
-        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-        confetti.style.zIndex = '99999';
-        confetti.style.pointerEvents = 'none';
-        document.body.appendChild(confetti);
-
-        const fallDuration = Math.random() * 3 + 2;
-        const spinDuration = Math.random() * 2 + 1;
-        
-        confetti.animate([
-            { transform: `translate3d(0,0,0) rotate(0deg)`, opacity: 1 },
-            { transform: `translate3d(${Math.random()*100 - 50}px, 100vh, 0) rotate(${360 * spinDuration}deg)`, opacity: 0 }
-        ], { duration: fallDuration * 1000, easing: 'cubic-bezier(.37,0,.63,1)' });
-
-        setTimeout(() => confetti.remove(), fallDuration * 1000);
-    }
-    SoundManager.playSuccess();
-}
-
-// ==========================================
-// [6] KHỞI TẠO PHIÊN CHAT (BOOTSTRAP)
-// ==========================================
+// 2. KHỞI TẠO KHUNG CHAT MỚI
 window.initChat = function() {
-    const currentName = window.guestName || localStorage.getItem('guestName') || 'Khách Hàng Mới';
+    const currentName = window.guestName || localStorage.getItem('guestName');
     if (chatBox) chatBox.innerHTML = ''; 
 
-    currentRoomId = SystemUtils.generateSessionId();
+    currentRoomId = "room_" + Date.now();
     localStorage.setItem('currentRoomId', currentRoomId);
-    isChatEnded = false;
     
-    // Ghi log hệ thống lên Firebase
     db.ref('chats/' + currentRoomId).push({
         sender: 'system', senderName: currentName,
-        text: `Phiên kết nối bảo mật đã được thiết lập cho [${currentName}].`,
+        text: 'Khách hàng [' + currentName + '] đã bắt đầu phiên chat.',
         timestamp: Date.now()
     });
 
-    // 🚀 Báo Telegram
-    sendTelegramAlert(`🟢 <b>CÓ KHÁCH TRUY CẬP VÀO WEBSITE!</b>\n👤 Tên khách: <b>${currentName}</b>\n🔑 ID Phòng: <code>${currentRoomId}</code>\n👉 Khách đang xem kịch bản Bot...`);
+    // 🚀 BÁO TELEGRAM CÓ KHÁCH VÀO
+    sendTelegramAlert(`🟢 <b>KHÁCH HÀNG MỚI TRUY CẬP!</b>\n👤 Tên khách: <b>${currentName}</b>\n👉 Đang xem kịch bản tự động...`);
 
-    // Lắng nghe dữ liệu Realtime
+    // LẮNG NGHE TIN NHẮN TỪ FIREBASE
     db.ref('chats/' + currentRoomId).on('child_added', (snapshot) => {
         const data = snapshot.val();
         
+        // --- NẾU NHẬN ĐƯỢC LỆNH KẾT THÚC TỪ ADMIN ---
         if (data.sender === 'system' && data.action === 'ADMIN_END_CHAT') {
-            if (typeof window.endChat === 'function') window.endChat(true); 
+            if (typeof window.endChat === 'function') {
+                window.endChat(true); 
+            }
             return;
         }
 
+        // 🌟 NẾU ADMIN GỬI TIN NHẮN MỚI -> PHÁT ÂM THANH
         if (data.sender === 'admin' && data.timestamp > lastPingTime) {
-            SoundManager.playPing();
+            notifySound.play().catch(e => console.log("Trình duyệt chặn âm thanh vì khách chưa tương tác."));
             lastPingTime = data.timestamp; 
         }
 
         if(data.sender === 'system') return; 
         
         const msgDiv = document.createElement('div');
-        // Kích hoạt animation trượt tin nhắn
-        msgDiv.style.animation = "slideInUp 0.3s ease forwards"; 
         msgDiv.className = data.sender === 'admin' ? 'message msg-received' : 'message msg-sent';
         msgDiv.innerHTML = data.text; 
         
         if (chatBox) {
             chatBox.appendChild(msgDiv);
-            SystemUtils.scrollToBottom();
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
     });
 
-    // Kích hoạt kịch bản BOT
-    runBotScenario(currentName);
-}
-
-// ==========================================
-// [7] LÕI XỬ LÝ KỊCH BẢN TỰ ĐỘNG (BOT ENGINE)
-// ==========================================
-function runBotScenario(guestName) {
+    // Gọi Bot chào mừng
     setTimeout(() => {
         showTyping();
         setTimeout(() => {
             hideTyping();
-            // Đã đổi Nguyễn Việt Hoàng thành Kun Bot
-            const botWelcomeText = `Xin chào <b>${guestName}</b>! 👋 Rất vui được đón tiếp bạn tại hệ thống HOANGKUN STORE.<br><br>` +
-                                  `Mình là <b>Kun Bot</b> 🤖 - Trợ lý AI tự động của hệ thống.<br><br>` +
-                                  `Trong lúc chờ Admin Việt Hoàng online, bạn cần mình tư vấn hay hỗ trợ cung cấp thông tin về loại Source Code / Hack Game nào ạ? 😊`;
+            const botWelcomeText = `Chào <b>${currentName}</b>! 👋 Cảm ơn bạn đã liên hệ HOANGKUN STORE.<br><br>` +
+                                  `Nguyễn Việt Hoàng sẽ trả lời bạn sớm nhất có thể ạ!<br><br>` +
+                                  `Trong lúc chờ đợi, bạn cần hỗ trợ về Source Code nào ạ? 😊`;
             
             db.ref('chats/' + currentRoomId).push({
-                sender: 'admin', senderName: BOT_NAME,
+                sender: 'admin', senderName: 'Nguyễn Việt Hoàng',
                 text: botWelcomeText, timestamp: Date.now()
             });
             
-            setTimeout(() => window.showBotOptions('main_menu'), 500);
-        }, 1500); 
-    }, 400);
+            setTimeout(() => window.showBotOptions('main_menu'), 400);
+        }, 1200); 
+    }, 300);
 }
 
-// DỮ LIỆU KỊCH BẢN ĐA TẦNG (Siêu dài & Chi tiết)
+// 3. MENU KỊCH BẢN ĐA TẦNG
 window.showBotOptions = function(menuType) {
-    if (!chatBox || isChatEnded) return;
+    if (!chatBox) return;
 
     document.querySelectorAll('.quick-replies-container').forEach(el => el.remove());
     const optionsDiv = document.createElement('div');
     optionsDiv.className = 'quick-replies-container';
-    optionsDiv.style.animation = "slideInUp 0.4s ease forwards";
 
     const menus = {
         'main_menu': [
@@ -285,7 +178,7 @@ window.showBotOptions = function(menuType) {
                 reply: 'Bot tư vấn chưa đúng ý mình, cho mình gặp trực tiếp Admin Hoàng để trao đổi nhé.', 
                 nextMenu: null, 
                 botText: '🚨 <b>HỆ THỐNG ĐÃ KÍCH HOẠT QUY TRÌNH HỖ TRỢ KHẨN CẤP!</b> 🚨<br><br>' +
-                         'Kun Bot đã ghi nhận yêu cầu của bạn và ngay lập tức phát tín hiệu chuông báo "Ting Ting" ưu tiên cao nhất tới thiết bị cá nhân (Điện thoại & PC) của Admin Quản trị viên cấp cao: <b>Nguyễn Việt Hoàng</b>.<br><br>' +
+                         'Bot đã ghi nhận yêu cầu của bạn và ngay lập tức phát tín hiệu chuông báo "Ting Ting" ưu tiên cao nhất tới thiết bị cá nhân (Điện thoại & PC) của Admin Quản trị viên cấp cao: <b>Nguyễn Việt Hoàng</b>.<br><br>' +
                          '⏳ <b>TRẠNG THÁI HIỆN TẠI:</b> Admin đang online, đang đọc log tin nhắn của bạn và sẽ trực tiếp bước vào phòng chat để hỗ trợ ngay trong ít phút nữa!<br><br>' +
                          '💡 <b>MẸO NHỎ GIÚP ADMIN XỬ LÝ NHANH HƠN:</b><br>' +
                          'Trong thời gian vài phút chờ đợi, để tiết kiệm tối đa thời gian của đôi bên, bạn vui lòng cung cấp sẵn các thông tin sau vào khung chat bên dưới nhé:<br>' +
@@ -500,11 +393,11 @@ window.showBotOptions = function(menuType) {
                     text: opt.reply, timestamp: Date.now()
                 });
 
-                // Báo Telegram
+                // 🚀 BÁO TELEGRAM KHI KHÁCH BẤM MENU
                 if(!opt.nextMenu) { 
-                    sendTelegramAlert(`🔔 <b>[${currentName}] vừa chọn mục:</b>\n👉 <i>${opt.reply}</i>\n📲 Hãy vào CRM hỗ trợ khách!`);
+                    sendTelegramAlert(`🔔 <b>Khách hàng [${currentName}] vừa chọn mục:</b>\n👉 <i>${opt.reply}</i>\n📲 Hãy vào CRM hỗ trợ khách ngay!`);
                 } else if (opt.label.includes('Gặp Admin Hoàng')) {
-                    sendTelegramAlert(`🚨 <b>BÁO ĐỘNG: [${currentName}] CẦN GẶP ADMIN GẤP!</b>\n📲 Vào CRM xử lý ngay Hoàng ơi!`);
+                    sendTelegramAlert(`🚨 <b>BÁO ĐỘNG KHẨN CẤP: Khách hàng [${currentName}] CẦN GẶP ADMIN GẤP!</b>\n📲 Vào CRM xử lý ngay lập tức Hoàng ơi!`);
                 }
 
                 optionsDiv.remove(); 
@@ -512,7 +405,7 @@ window.showBotOptions = function(menuType) {
                 setTimeout(() => {
                     hideTyping();
                     db.ref('chats/' + currentRoomId).push({
-                        sender: 'admin', senderName: BOT_NAME, // Dùng biến Kun Bot
+                        sender: 'admin', senderName: 'Nguyễn Việt Hoàng',
                         text: opt.botText, timestamp: Date.now()
                     });
                     if (opt.nextMenu) setTimeout(() => window.showBotOptions(opt.nextMenu), 500);
@@ -521,80 +414,43 @@ window.showBotOptions = function(menuType) {
             optionsDiv.appendChild(btn);
         });
         chatBox.appendChild(optionsDiv);
-        SystemUtils.scrollToBottom();
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 }
 
-// ==========================================
-// [8] HỆ THỐNG NHẬN DIỆN TỪ KHÓA THÔNG MINH (MINI NLP)
-// ==========================================
-function autoReplyByKeyword(text, currentName) {
-    const lowerText = text.toLowerCase();
-    let autoReply = "";
-
-    // Xử lý các từ khóa phổ biến
-    if(lowerText.includes('giá') || lowerText.includes('nhiêu tiền')) {
-        autoReply = "Về phần giá cả, mỗi mã nguồn và loại Script Hack bên mình sẽ có giá khác nhau tùy thuộc vào tính năng. Bạn chờ Admin một lát để check giá chuẩn và báo cho bạn nhé! 💸";
-    } else if (lowerText.includes('lỗi') || lowerText.includes('không tải được')) {
-        autoReply = "Mình đã ghi nhận việc bạn báo lỗi. Bạn có thể gửi kèm thêm mã đơn hàng hoặc ảnh chụp màn hình để Admin vào xử lý fix lỗi cho bạn ngay lập tức không ạ? 🛠️";
-    } else if (lowerText.includes('ad ơi') || lowerText.includes('admin ơi') || lowerText.includes('có ai không')) {
-        autoReply = "Hệ thống đã ping đến Admin Nguyễn Việt Hoàng. Admin đang mở máy tính và sẽ trả lời bạn trong vòng 1-2 phút nữa, bạn giữ tab nhé! ⚡";
-    }
-
-    if(autoReply !== "") {
-        setTimeout(() => {
-            showTyping();
-            setTimeout(() => {
-                hideTyping();
-                db.ref('chats/' + currentRoomId).push({
-                    sender: 'admin', senderName: BOT_NAME,
-                    text: `<i>(Kun Bot tự động trả lời):</i><br>${autoReply}`,
-                    timestamp: Date.now()
-                });
-            }, 1000);
-        }, 500);
-    }
-}
-
-// ==========================================
-// [9] GỬI TIN NHẮN TỪ KHUNG NHẬP
-// ==========================================
+// 4. GỬI TIN NHẮN TỪ KHUNG NHẬP
 window.sendMessage = function() {
     const input = document.getElementById('msg-input');
     const currentName = window.guestName || localStorage.getItem('guestName') || 'Khách';
     
     if(input && input.value.trim() !== '') {
-        const textMsg = SystemUtils.sanitizeHTML(input.value.trim()); // Chống XSS
+        const textMsg = input.value.trim();
         
+        // Đẩy tin nhắn vào Firebase
         db.ref('chats/' + currentRoomId).push({ 
             sender: 'user', senderName: currentName,
             text: textMsg, timestamp: Date.now() 
         });
 
-        // Bắn Telegram thông báo chat
-        sendTelegramAlert(`📩 <b>Tin nhắn từ [${currentName}]:</b>\n💬 Nội dung: <i>${textMsg}</i>`);
-
-        // Check Auto Reply
-        autoReplyByKeyword(textMsg, currentName);
+        // 🚀 BẮN THÔNG BÁO TELEGRAM KHI KHÁCH TỰ GÕ CHỮ
+        sendTelegramAlert(`📩 <b>Tin nhắn mới từ: ${currentName}</b>\n💬 Nội dung: <i>${textMsg}</i>\n👉 Nhanh chóng vào chốt đơn!`);
 
         input.value = '';
     }
 }
 
-// ==========================================
-// [10] KẾT THÚC PHIÊN CHAT & HỆ THỐNG ĐÁNH GIÁ
-// ==========================================
+// 5. TÍNH NĂNG KẾT THÚC CHAT & ĐÁNH GIÁ (FEEDBACK)
 window.endChat = function(isFromAdmin = false) {
-    if(!currentRoomId || isChatEnded) return;
-    isChatEnded = true;
+    if(!currentRoomId) return;
 
     if (!isFromAdmin) {
         db.ref('chats/' + currentRoomId).push({
             sender: 'system', senderName: window.guestName || 'Khách',
-            text: `Khách hàng [${window.guestName || 'Khách'}] đã chủ động kết thúc phiên chat.`,
+            text: 'Khách hàng [' + (window.guestName || 'Khách') + '] đã chủ động kết thúc phiên chat.',
             timestamp: Date.now()
         });
-        sendTelegramAlert(`❌ <b>Khách hàng [${window.guestName || 'Khách'}] ĐÃ KẾT THÚC phiên chat.</b>`);
+        // 🚀 Báo Telegram khách rời đi
+        sendTelegramAlert(`❌ <b>Khách hàng [${window.guestName || 'Khách'}] đã RỜI KHỎI phiên chat.</b>`);
     }
 
     const inputArea = document.getElementById('bottom-input-area');
@@ -605,10 +461,9 @@ window.endChat = function(isFromAdmin = false) {
 
     const reviewDiv = document.createElement('div');
     reviewDiv.className = 'review-box';
-    reviewDiv.style.animation = "slideInUp 0.5s ease forwards";
     reviewDiv.innerHTML = `
-        <div class="review-title" style="color: #ea580c; font-weight: 800; font-size: 1.2rem;">PHIÊN CHAT HOÀN TẤT</div>
-        <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Vui lòng đánh giá chất lượng phục vụ của HOANGKUN STORE</p>
+        <div class="review-title">Phiên chat đã hoàn tất</div>
+        <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Vui lòng đánh giá chất lượng hỗ trợ của Admin</p>
         
         <div class="stars">
             <input type="radio" id="star5" name="rating" value="5" /><label for="star5">★</label>
@@ -618,13 +473,14 @@ window.endChat = function(isFromAdmin = false) {
             <input type="radio" id="star1" name="rating" value="1" /><label for="star1">★</label>
         </div>
         
-        <textarea id="review-comment" class="review-input" rows="3" placeholder="Nhận xét của bạn... (Không bắt buộc)" style="width: 100%; margin-top:10px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; outline:none; resize:none;"></textarea>
-        <button class="submit-review-btn" onclick="submitReview()" style="width:100%; margin-top: 10px; padding: 12px; background: #ea580c; color: white; border:none; border-radius:8px; font-weight: bold; cursor:pointer;">GỬI ĐÁNH GIÁ</button>
+        <textarea id="review-comment" class="review-input" rows="3" placeholder="Nhận xét của bạn về HOANGKUN STORE... (Không bắt buộc)"></textarea>
+        <button class="submit-review-btn" onclick="submitReview()">Gửi Đánh Giá</button>
     `;
     chatBox.appendChild(reviewDiv);
-    SystemUtils.scrollToBottom();
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+// 6. GỬI FEEDBACK LÊN HỆ THỐNG
 window.submitReview = function() {
     const ratingEle = document.querySelector('input[name="rating"]:checked');
     const comment = document.getElementById('review-comment').value.trim();
@@ -637,7 +493,7 @@ window.submitReview = function() {
         timestamp: Date.now()
     });
 
-    // Telegram Alert
+    // 🚀 BÁO TELEGRAM CÓ ĐÁNH GIÁ 5 SAO
     sendTelegramAlert(`⭐️ <b>ĐÁNH GIÁ MỚI TỪ: ${window.guestName || 'Khách'}</b>\n⭐ Đánh giá: <b>${rating} Sao</b>\n📝 Nhận xét: <i>${comment}</i>`);
 
     localStorage.removeItem('guestName');
@@ -646,17 +502,10 @@ window.submitReview = function() {
     const reviewBox = document.querySelector('.review-box');
     if(reviewBox) {
         reviewBox.innerHTML = `
-            <div style="font-size: 55px; margin-bottom: 10px; animation: bounce 1s infinite;">💖</div>
-            <div class="review-title" style="color: #10b981; font-weight: 800; font-size: 1.2rem;">CẢM ƠN BẠN RẤT NHIỀU!</div>
-            <p style="font-size: 14px; color: #64748b;">Đánh giá <b>${rating} Sao</b> của bạn là động lực rất lớn cho Store.</p>
-            <button class="submit-review-btn" style="width:100%; margin-top: 15px; padding: 12px; background: #3b82f6; color: white; border:none; border-radius:8px; font-weight: bold; cursor:pointer;" onclick="location.reload()">Quay Về Trang Chủ</button>
+            <div style="font-size: 45px; margin-bottom: 10px;">💖</div>
+            <div class="review-title">Cảm ơn bạn đã đánh giá!</div>
+            <p style="font-size: 13px; color: #64748b;">Đánh giá <b>${rating} Sao</b> của bạn sẽ giúp hệ thống phục vụ tốt hơn.</p>
+            <button class="submit-review-btn" style="margin-top: 15px;" onclick="location.reload()">Quay Về Trang Chủ</button>
         `;
-        
-        // 🚀 Bắn pháo hoa nếu đánh giá 5 Sao
-        if(rating == 5) {
-            fireConfetti();
-        }
     }
 }
-
-```
