@@ -15,6 +15,10 @@ const db = firebase.database();
 let currentRoomId = '';
 const chatBox = document.getElementById('chat-box');
 
+// 🌟 THÊM ÂM THANH CHO KHÁCH TẠI ĐÂY
+const notifySound = new Audio('https://assets.mixkit.co/active_storage/sfx/236/236-preview.mp3');
+let lastPingTime = Date.now(); // Lưu mốc thời gian để không kêu lại tin cũ lúc tải trang
+
 // 1. HIỆU ỨNG ĐANG GÕ
 function showTyping() {
     if (!chatBox) return;
@@ -55,6 +59,12 @@ window.initChat = function() {
                 window.endChat(true); // Gửi cờ "true" để biết Admin tự khóa
             }
             return;
+        }
+
+        // 🌟 NẾU ADMIN GỬI TIN NHẮN MỚI -> PHÁT ÂM THANH
+        if (data.sender === 'admin' && data.timestamp > lastPingTime) {
+            notifySound.play().catch(e => console.log("Trình duyệt chặn âm thanh vì khách chưa tương tác."));
+            lastPingTime = data.timestamp; // Cập nhật lại thời gian
         }
 
         // Bỏ qua các tin nhắn hệ thống khác (không hiển thị lên màn hình)
