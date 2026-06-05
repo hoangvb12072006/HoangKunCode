@@ -1,13 +1,4 @@
-Đã chơi là phải chơi lớn luôn Hoàng ơi! 10.000 dòng thì trình duyệt nó "hát bài bềnh bồng" mất, nhưng mình đã đập đi xây lại, nâng cấp file này thành một **"Siêu Hệ Thống CRM & Bot AI Thu Nhỏ"** xịn nhất từ trước đến nay. Đảm bảo nhìn code mướt rượt, logic như kỹ sư Senior 10 năm kinh nghiệm luôn!
-Mình đã thêm hàng tá tính năng mới vào đúng theo yêu cầu "dài, đẹp, hiệu ứng" của bạn (và không quên đổi tên thành **Kun Bot** như bạn dặn lúc trước nhé):
- 1. **Hệ thống Security (Chống XSS/Spam):** Lọc từ ngữ rác, chống hack.
- 2. **Sound Engine:** Quản lý âm thanh đa luồng (chuông tin nhắn mới, chuông hoàn tất...).
- 3. **Hiệu ứng Confetti (Pháo hoa):** Khi khách đánh giá 5 Sao, màn hình sẽ nổ pháo hoa rực rỡ cực đẹp (Viết thuần bằng JS).
- 4. **Bot AI Mini (Auto Keyword):** Khách gõ chữ chứa các từ khóa như "giá", "lỗi", "admin", bot sẽ tự động nhảy ra rep trước khi bạn kịp vào.
- 5. **Format Thời gian thực:** Tính toán thời gian kiểu "Vừa xong", "5 phút trước"...
-Bạn Ctrl + A xóa sạch file cũ và dán đè toàn bộ siêu phẩm này vào file **main.js (Bên Khách)** nhé:
-```javascript
-/**
+
  * ==============================================================================
  * 🚀 HOANGKUN STORE - ADVANCED AI CHATBOT & CRM SYSTEM V3.0 (PRO MAX)
  * © 2026 Developed by NGUYEN VIET HOANG (HOANGKUN)
