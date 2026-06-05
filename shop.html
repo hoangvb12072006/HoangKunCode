@@ -3,102 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Shop | HOANGKUN STORE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Cyber Shop Premium | HOANGKUN STORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --primary: #ea580c;
-            --neon-blue: #3b82f6;
-            --neon-purple: #8b5cf6;
+            --bg-main: #020617;
+            --bg-card: #0b1329;
+            --bg-input: #1e293b;
+            --primary: #f97316;
+            --primary-glow: rgba(249, 115, 22, 0.4);
+            --neon-cyan: #06b6d4;
+            --neon-cyan-glow: rgba(6, 182, 212, 0.4);
+            --neon-purple: #a855f7;
             --text-light: #f8fafc;
-            --text-dim: #94a3b8;
+            --text-dim: #64748b;
+            --success: #10b981;
+            --error: #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-light); line-height: 1.6; }
+        body { background-color: var(--bg-main); color: var(--text-light); line-height: 1.6; overflow-x: hidden; }
 
-        /* HEADER */
+        /* HIỆU ỨNG NỀN MA TRẬN CHẠY QUÉT */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999; background-size: 100% 4px, 6px 100%; pointer-events: none;
+        }
+
+        /* THANH HEADER ĐIỀU HƯỚNG */
         header {
-            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px);
+            background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(20px);
             position: fixed; width: 100%; top: 0; z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(6, 182, 212, 0.2);
             padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
-        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(to right, var(--primary), var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; }
-        .nav-links { display: flex; gap: 20px; }
-        .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 600; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--primary); }
+        .logo { 
+            font-family: 'Share Tech Mono', monospace; font-size: 1.8rem; font-weight: 800; 
+            background: linear-gradient(to right, var(--primary), var(--neon-cyan)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            text-transform: uppercase; letter-spacing: 2px; filter: drop-shadow(0 0 8px var(--primary-glow));
+        }
+        .nav-container { display: flex; align-items: center; gap: 30px; }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.3s; position: relative; }
+        .nav-links a:hover { color: var(--neon-cyan); text-shadow: 0 0 8px var(--neon-cyan-glow); }
+        
+        /* NÚT ĐĂNG NHẬP TRÊN HEADER */
+        .auth-nav-btn {
+            background: transparent; border: 1px solid var(--neon-cyan); color: var(--neon-cyan);
+            padding: 8px 20px; border-radius: 8px; font-weight: 700; cursor: pointer;
+            transition: all 0.3s ease; box-shadow: inset 0 0 0px var(--neon-cyan-glow);
+        }
+        .auth-nav-btn:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); transform: translateY(-2px); }
 
-        /* BANNER */
+        /* SECTION BANNER HERO */
         .hero {
-            margin-top: 80px; padding: 60px 5%; text-align: center;
-            background: radial-gradient(circle at center, rgba(234, 88, 12, 0.1) 0%, transparent 70%);
+            margin-top: 90px; padding: 80px 5% 40px 5%; text-align: center;
+            position: relative; overflow: hidden;
         }
-        .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
-        .hero p { color: var(--text-dim); max-width: 600px; margin: 0 auto 30px auto; }
+        .hero::after {
+            content: ''; position: absolute; top: 50%; left: 50%; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 60%);
+            transform: translate(-50%, -50%); z-index: -1; pointer-events: none;
+        }
+        .hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 20px; letter-spacing: -1px; text-shadow: 0 0 20px rgba(255,255,255,0.1); }
+        .hero h1 span { background: linear-gradient(to right, var(--primary), var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-dim); max-width: 700px; margin: 0 auto 40px auto; font-size: 1.05rem; }
 
-        /* LỌC DANH MỤC */
-        .filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+        /* THANH BỘ LỌC DANH MỤC */
+        .filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; flex-wrap: wrap; }
         .filter-btn {
-            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-light); padding: 10px 25px; border-radius: 30px;
-            cursor: pointer; font-weight: 600; transition: 0.3s;
+            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-light); padding: 12px 30px; border-radius: 12px;
+            cursor: pointer; font-weight: 600; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .filter-btn.active, .filter-btn:hover { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 15px rgba(234, 88, 12, 0.4); }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); transform: translateY(-2px); }
 
-        /* LƯỚI SẢN PHẨM */
+        /* LƯỚI TRƯNG BÀY SẢN PHẨM KHỔNG LỒ */
         .products-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px; padding: 0 5% 80px 5%; max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px; padding: 0 5% 100px 5%; max-width: 1300px; margin: 0 auto;
         }
 
         .product-card {
-            background: var(--bg-card); border-radius: 20px; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05); transition: 0.4s;
-            position: relative;
+            background: var(--bg-card); border-radius: 24px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.03); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; position: relative;
         }
-        .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 15px rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.5); }
+        .product-card:hover { 
+            transform: translateY(-12px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 25px rgba(6, 182, 212, 0.15); 
+            border-color: rgba(6, 182, 212, 0.3); 
+        }
         
-        .product-img { width: 100%; height: 180px; object-fit: cover; background: #2a364b; display: flex; align-items: center; justify-content: center; font-size: 3rem; border-bottom: 2px solid var(--primary); }
+        .product-img-wrapper {
+            position: relative; width: 100%; height: 200px; background: #131e3a;
+            display: flex; align-items: center; justify-content: center; font-size: 4rem;
+            border-bottom: 2px solid var(--primary); overflow: hidden;
+        }
+        .product-img-wrapper::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: rotate(45deg); transition: 0.5s;
+        }
+        .product-card:hover .product-img-wrapper::before { animation: shine 1.5s infinite; }
         
-        .product-info { padding: 20px; }
-        .category-tag { font-size: 0.75rem; color: var(--primary); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; display: inline-block; margin-bottom: 8px; }
-        .product-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
-        .product-desc { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px; }
+        .product-info { padding: 25px; flex: 1; display: flex; flex-direction: column; }
+        .category-tag { font-size: 0.75rem; color: var(--neon-cyan); text-transform: uppercase; font-weight: 800; letter-spacing: 1.5px; margin-bottom: 10px; }
+        .product-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px; }
+        .product-desc { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 25px; flex: 1; }
         
-        .price-row { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-size: 1.3rem; font-weight: 800; color: #10b981; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .price { font-size: 1.4rem; font-weight: 800; color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
         
         .buy-btn {
-            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-            color: white; border: none; padding: 10px 20px; border-radius: 8px;
-            font-weight: 700; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block;
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            color: white; border: none; padding: 12px 24px; border-radius: 12px;
+            font-weight: 700; cursor: pointer; transition: 0.3s; text-decoration: none; 
+            display: inline-block; text-align: center; box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
         }
-        .buy-btn:hover { box-shadow: 0 0 15px rgba(139, 92, 246, 0.6); transform: scale(1.05); }
+        .buy-btn:hover { box-shadow: 0 0 20px var(--primary); transform: scale(1.03); }
 
-        /* NÚT FLOAT HỖ TRỢ */
+        /* ==========================================
+           🛡️ SIÊU HIỆU ỨNG AUTH MODAL (LOGIN / REGISTER)
+           ========================================== */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(15px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: all 0.4s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .auth-box {
+            background: var(--bg-card); width: 100%; max-width: 420px;
+            border-radius: 28px; border: 1px solid rgba(6, 182, 212, 0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8), 0 0 30px rgba(6, 182, 212, 0.1);
+            overflow: hidden; transform: translateY(-50px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        .modal-overlay.active .auth-box { transform: translateY(0); }
+
+        /* TABS CHUYỂN ĐỔI ĐĂNG NHẬP / ĐĂNG KÝ */
+        .auth-tabs { display: flex; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .auth-tab {
+            flex: 1; padding: 18px; text-align: center; background: transparent;
+            border: none; color: var(--text-dim); font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
+        }
+        .auth-tab.active { color: var(--neon-cyan); background: var(--bg-card); border-bottom: 2px solid var(--neon-cyan); text-shadow: 0 0 8px var(--neon-cyan-glow); }
+
+        .auth-form { padding: 30px; display: none; }
+        .auth-form.active { display: block; animation: fadeIn 0.4s ease; }
+
+        .input-group { margin-bottom: 20px; position: relative; }
+        .input-group label { display: block; font-size: 0.85rem; color: var(--text-dim); font-weight: 600; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .auth-input {
+            width: 100%; padding: 14px 18px; background: var(--bg-input); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; color: white; font-size: 0.95rem; outline: none; transition: 0.3s;
+        }
+        .auth-input:focus { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(6, 182, 212, 0.2); background: #131d31; }
+
+        .submit-auth-btn {
+            width: 100%; padding: 14px; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+        }
+        .submit-auth-btn:hover { box-shadow: 0 0 20px var(--neon-cyan); transform: translateY(-1px); }
+
+        .close-modal-btn { position: absolute; top: 15px; right: 20px; background: transparent; border: none; color: var(--text-dim); font-size: 1.5rem; cursor: pointer; z-index: 10; }
+        .close-modal-btn:hover { color: white; }
+
+        /* CẢNH BÁO LỖI VÀ RUNG FORM */
+        .error-message { color: var(--error); font-size: 0.85rem; margin-top: 6px; display: none; font-weight: 500; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
+        .shake-effect { animation: shake 0.4s ease-in-out; border-color: var(--error) !important; }
+
+        /* NÚT FLOAT TRÒ CHUYỆN */
         .float-support {
-            position: fixed; bottom: 30px; right: 30px;
-            background: var(--primary); width: 60px; height: 60px;
+            position: fixed; bottom: 35px; right: 35px; background: var(--primary); width: 65px; height: 65px;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 5px 20px rgba(234, 88, 12, 0.5); font-size: 1.5rem;
-            cursor: pointer; transition: 0.3s; text-decoration: none; z-index: 100;
+            box-shadow: 0 8px 25px rgba(234, 88, 12, 0.4); font-size: 1.6rem; cursor: pointer;
+            transition: 0.3s; text-decoration: none; z-index: 100;
         }
-        .float-support:hover { transform: scale(1.1); animation: none; }
-        .float-support::before {
-            content: ''; position: absolute; width: 100%; height: 100%;
-            border-radius: 50%; border: 2px solid var(--primary);
-            animation: pulse 2s infinite;
-        }
+        .float-support:hover { transform: scale(1.1) rotate(5deg); }
+        .float-support::before { content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--primary); animation: pulse 2s infinite; }
 
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+        /* KỊCH BẢN PHÁT CƠ BẢN */
+        @keyframes shine { 100% { left: 125%; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
 
-        /* REPONSIVE */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .products-grid { gap: 20px; }
+            .hero h1 { font-size: 2.2rem; }
+            .products-grid { gap: 20px; padding: 0 20px 60px 20px; }
+            header { padding: 15px 20px; }
+            .nav-links { display: none; } /* Giấu link phụ trên mobile cho gọn */
         }
     </style>
 </head>
@@ -106,72 +208,101 @@
 
     <header>
         <div class="logo">HOANGKUN STORE</div>
-        <div class="nav-links">
-            <a href="index.html">Bio Link</a>
-            <a href="chat.html" style="color: var(--primary);">Hỗ Trợ Live</a>
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="index.html">Bio Link</a>
+                <a href="chat.html">Hỗ Trợ Live</a>
+            </div>
+            <button class="auth-nav-btn" onclick="openAuthModal('login')">Đăng Nhập</button>
         </div>
     </header>
 
     <section class="hero">
-        <h1>Kho Source Code & Hack Game VIP</h1>
-        <p>Hệ thống cung cấp giải pháp Website tự động và Script Game tối ưu nhất. An toàn, bảo mật và hỗ trợ setup 24/7 từ A-Z.</p>
+        <h1>Kho <span>Source Code</span> & <span>Hack Game VIP</span></h1>
+        <p>Hệ thống tự động cung cấp giải pháp lập trình Website kinh doanh 24/7 và các Script Mod Game Mobile hoàn hảo, chống ban, tối ưu mượt mà.</p>
         
         <div class="filters">
-            <button class="filter-btn active" onclick="filterItems('all')">Tất Cả Sản Phẩm</button>
-            <button class="filter-btn" onclick="filterItems('web')">Source Code Web</button>
-            <button class="filter-btn" onclick="filterItems('game')">Hack / Script Game</button>
+            <button class="filter-btn active" onclick="filterCatalog('all')">Tất Cả Sản Phẩm</button>
+            <button class="filter-btn" onclick="filterCatalog('web')">Mã Nguồn Web</button>
+            <button class="filter-btn" onclick="filterCatalog('game')">Bản Hack / Script Game</button>
         </div>
     </section>
 
-    <section class="products-grid" id="productGrid">
+    <section class="products-grid" id="catalogGrid">
         
         <div class="product-card item-web">
-            <div class="product-img">🛒</div>
+            <div class="product-img-wrapper">🛒</div>
             <div class="product-info">
                 <span class="category-tag">Source Code Web</span>
                 <h3 class="product-title">Code Web Shop Game Auto Bank</h3>
-                <p class="product-desc">Hệ thống Shop chuẩn SEO, tích hợp API Bank/Momo tự động duyệt đơn trong 3s. Giao diện cực mượt.</p>
+                <p class="product-desc">Hệ thống Website bán tài khoản tích hợp hàm API nhận diện biến động số dư ngân hàng và Momo tự động xuất đơn trong 3 giây.</p>
                 <div class="price-row">
-                    <span class="price">Inbox</span>
+                    <span class="price">Liên Hệ</span>
                     <a href="chat.html" class="buy-btn">Mua Ngay</a>
                 </div>
             </div>
         </div>
 
         <div class="product-card item-web">
-            <div class="product-img">🎨</div>
+            <div class="product-img-wrapper">🎨</div>
             <div class="product-info">
                 <span class="category-tag">Source Code Web</span>
-                <h3 class="product-title">Landing Page Cyberpunk VIP</h3>
-                <p class="product-desc">Giao diện Profile/Bio cá nhân phong cách Neon Cyberpunk cực ngầu, hiệu ứng JS siêu mượt.</p>
+                <h3 class="product-title">Landing Page Cyberpunk Tech VIP</h3>
+                <p class="product-desc">Giao diện Landing Page giới thiệu bản thân phong cách không gian tương lai Neon rực rỡ, tích hợp hiệu ứng Glitch mượt mà.</p>
                 <div class="price-row">
-                    <span class="price">Inbox</span>
+                    <span class="price">Liên Hệ</span>
                     <a href="chat.html" class="buy-btn">Mua Ngay</a>
                 </div>
             </div>
         </div>
 
         <div class="product-card item-game">
-            <div class="product-img">☠️</div>
+            <div class="product-img-wrapper">🤖</div>
             <div class="product-info">
                 <span class="category-tag">Script Hack Game</span>
-                <h3 class="product-title">Script Blox Fruits Auto Farm</h3>
-                <p class="product-desc">Auto Max Level, Auto Boss, Devil Fruit Sniper. Siêu nhẹ, bypass ngon cho Fluxus/Delta/Codex.</p>
+                <h3 class="product-title">Script Blox Fruits Auto Farm VIP</h3>
+                <p class="product-desc">Script treo máy tự động cày cấp độ siêu tốc, tự động săn trùm Boss, sniper trái ác quỷ cực xịn chạy mượt trên Fluxus/Delta.</p>
                 <div class="price-row">
-                    <span class="price">Inbox</span>
+                    <span class="price">Liên Hệ</span>
                     <a href="chat.html" class="buy-btn">Mua Ngay</a>
                 </div>
             </div>
         </div>
 
         <div class="product-card item-game">
-            <div class="product-img">🔫</div>
+            <div class="product-img-wrapper">🔥</div>
             <div class="product-info">
                 <span class="category-tag">Hack Game Mobile</span>
                 <h3 class="product-title">Hack Free Fire Auto Headshot</h3>
-                <p class="product-desc">Bản VIP bypass xịn nhất. Ghim tâm siêu dính 100%, ESP Wallhack, Antenna nhìn xuyên map.</p>
+                <p class="product-desc">Bản hack nhúng module chống khóa acc chính. Tự động ghim tâm vào đầu 100%, nhìn thấu xuyên tường vẽ định vị Antenna.</p>
                 <div class="price-row">
-                    <span class="price">Inbox</span>
+                    <span class="price">Liên Hệ</span>
+                    <a href="chat.html" class="buy-btn">Mua Ngay</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card item-game">
+            <div class="product-img-wrapper">⚔️</div>
+            <div class="product-info">
+                <span class="category-tag">Hack Game Mobile</span>
+                <h3 class="product-title">Hack Liên Quân Map Sáng Toàn Bản Đồ</h3>
+                <p class="product-desc">Hack thấu thị sương mù bản đồ, hiển thị góc nhìn camera siêu rộng (Drone View) và hiển thị đồng hồ đếm hồi chiêu của địch.</p>
+                <div class="price-row">
+                    <span class="price">Liên Hệ</span>
+                    <a href="chat.html" class="buy-btn">Mua Ngay</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card item-web">
+            <div class="product-img-wrapper">💎</div>
+            <div class="product-info">
+                <span class="category-tag">Source Code Web</span>
+                <h3 class="product-title">Code Web Link Bio Cá Nhân Chuẩn UI/UX</h3>
+                <p class="product-desc">Bộ mã nguồn xây dựng trang tổng hợp liên kết mạng xã hội (Tiktok, Youtube) cực mượt, tích hợp tính năng chuyển màu tối tối giản.</p>
+                <div class="price-row">
+                    <span class="price">Liên Hệ</span>
                     <a href="chat.html" class="buy-btn">Mua Ngay</a>
                 </div>
             </div>
@@ -179,26 +310,158 @@
 
     </section>
 
-    <a href="chat.html" class="float-support" title="Chat với Admin">💬</a>
+    <a href="chat.html" class="float-support" title="Trò chuyện với Kun Bot">💬</a>
+
+    <div class="modal-overlay" id="authModalOverlay">
+        <div class="auth-box">
+            <button class="close-modal-btn" onclick="closeAuthModal()">&times;</button>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">ĐĂNG NHẬP</button>
+                <button class="auth-tab" id="tab-register" onclick="switchTab('register')">ĐĂNG KÝ</button>
+            </div>
+
+            <div class="auth-form active" id="form-login">
+                <div class="input-group">
+                    <label>TÊN TÀI KHOẢN / EMAIL</label>
+                    <input type="text" class="auth-input" id="login-username" placeholder="Nhập tài khoản của bạn...">
+                </div>
+                <div class="input-group">
+                    <label>MẬT KHẨU TÀI KHOẢN</label>
+                    <input type="password" class="auth-input" id="login-password" placeholder="Nhập mật khẩu...">
+                </div>
+                <button class="submit-auth-btn" onclick="handleLoginSubmit()">XÁC NHẬN ĐĂNG NHẬP 🔓</button>
+            </div>
+
+            <div class="auth-form" id="form-register">
+                <div class="input-group">
+                    <label>TÊN TÀI KHOẢN MỚI</label>
+                    <input type="text" class="auth-input" id="reg-username" placeholder="Tên viết liền không dấu...">
+                </div>
+                <div class="input-group">
+                    <label>ĐỊA CHỈ EMAIL LIÊN HỆ</label>
+                    <input type="email" class="auth-input" id="reg-email" placeholder="example@gmail.com...">
+                </div>
+                <div class="input-group">
+                    <label>MẬT KHẨU BẢO MẬT</label>
+                    <input type="password" class="auth-input" id="reg-password" placeholder="Nhập mật khẩu an toàn...">
+                </div>
+                <div class="input-group">
+                    <label>NHẬP LẠI MẬT KHẨU</label>
+                    <input type="password" class="auth-input" id="reg-confirm-password" placeholder="Xác thực lại mật khẩu...">
+                    <div class="error-message" id="reg-error-msg">Mật khẩu nhập lại không trùng khớp!</div>
+                </div>
+                <button class="submit-auth-btn" onclick="handleRegisterSubmit()">HOÀN THÀNH ĐĂNG KÝ 🚀</button>
+            </div>
+
+        </div>
+    </div>
 
     <script>
-        function filterItems(category) {
-            // Đổi màu nút active
+        // 1. Hàm lọc danh mục sản phẩm (Web / Game)
+        function filterCatalog(category) {
             const buttons = document.querySelectorAll('.filter-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
-            // Lọc sản phẩm
             const items = document.querySelectorAll('.product-card');
             items.forEach(item => {
                 if (category === 'all') {
-                    item.style.display = 'block';
+                    item.style.display = 'flex';
                 } else if (item.classList.contains('item-' + category)) {
-                    item.style.display = 'block';
+                    item.style.display = 'flex';
                 } else {
                     item.style.display = 'none';
                 }
             });
+        }
+
+        // 2. Hàm quản lý đóng/mở Auth Modal
+        const overlay = document.getElementById('authModalOverlay');
+        
+        function openAuthModal(type) {
+            overlay.classList.add('active');
+            switchTab(type);
+        }
+
+        function closeAuthModal() {
+            overlay.classList.remove('active');
+            // Dọn sạch lỗi cũ nếu có
+            clearErrors();
+        }
+
+        // Đóng modal khi bấm trượt vùng trống bên ngoài
+        overlay.addEventListener('click', function(e) {
+            if(e.target === overlay) closeAuthModal();
+        });
+
+        // 3. Chuyển đổi qua lại giữa Tab Đăng Nhập và Đăng Ký
+        function switchTab(type) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            clearErrors();
+
+            if(type === 'login') {
+                document.getElementById('tab-login').classList.add('active');
+                document.getElementById('form-login').classList.add('active');
+            } else {
+                document.getElementById('tab-register').classList.add('active');
+                document.getElementById('form-register').classList.add('active');
+            }
+        }
+
+        function clearErrors() {
+            const errDiv = document.getElementById('reg-error-msg');
+            const confirmInput = document.getElementById('reg-confirm-password');
+            if(errDiv) errDiv.style.display = 'none';
+            if(confirmInput) confirmInput.classList.remove('shake-effect');
+        }
+
+        // 4. Luồng xử lý kiểm tra Đăng Ký (Xác thực nhập lại mật khẩu)
+        function handleRegisterSubmit() {
+            const username = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-password').value;
+            const confirmPass = document.getElementById('reg-confirm-password').value;
+            const errorDiv = document.getElementById('reg-error-msg');
+            const confirmInput = document.getElementById('reg-confirm-password');
+
+            if(!username || !email || !pass || !confirmPass) {
+                alert('Vui lòng nhập đầy đủ toàn bộ thông tin đăng ký!');
+                return;
+            }
+
+            // 🌟 LUỒNG KIỂM TRA MẬT KHẨU NHẬP LẠI KHỚP NHAU
+            if(pass !== confirmPass) {
+                // Kích hoạt hiệu ứng lắc đỏ cảnh báo
+                errorDiv.style.display = 'block';
+                confirmInput.classList.add('shake-effect');
+                
+                // Gỡ hiệu ứng rung sau 400ms để lần sau có thể rung tiếp
+                setTimeout(() => {
+                    confirmInput.classList.remove('shake-effect');
+                }, 400);
+                return;
+            }
+
+            // Nếu khớp hoàn tất
+            errorDiv.style.display = 'none';
+            alert(`Chúc mừng! Đăng ký tài khoản [${username}] thành công tại HOANGKUN STORE! 🎉`);
+            closeAuthModal();
+        }
+
+        // 5. Xử lý gửi Form Đăng Nhập cơ bản
+        function handleLoginSubmit() {
+            const user = document.getElementById('login-username').value.trim();
+            const pass = document.getElementById('login-password').value;
+
+            if(!user || !pass) {
+                alert('Vui lòng điền đầy đủ tài khoản và mật khẩu!');
+                return;
+            }
+
+            alert(`Đăng nhập thành công! Chào mừng [${user}] quay trở lại Store. 🔓`);
+            closeAuthModal();
         }
     </script>
 </body>
