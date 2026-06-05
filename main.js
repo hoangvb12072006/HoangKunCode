@@ -107,34 +107,134 @@ window.showBotOptions = function(menuType) {
     const optionsDiv = document.createElement('div');
     optionsDiv.className = 'quick-replies-container';
 
-    const menus = {
+  const menus = {
         'main_menu': [
-            { label: '🛒 Mua Source Code', reply: 'Mình muốn xem qua các loại Source Code.', nextMenu: 'source_menu', botText: 'HOANGKUN STORE chuyên cung cấp mã nguồn chuẩn, an toàn & bảo mật.<br>Bạn đang tìm Code Web hay Script Game?' },
-            { label: '⚙️ Hỗ trợ Cài đặt & API', reply: 'Mình cần hỗ trợ setup mã nguồn và API.', nextMenu: 'setup_menu', botText: 'Bạn cần hỗ trợ up code lên Hosting/Cloud hay tích hợp API thanh toán tự động?' },
-            { label: 'ℹ️ Giới thiệu & Chính sách', reply: 'Cho mình xem thông tin về Store.', nextMenu: 'intro_menu', botText: 'Dạ, bạn muốn tìm hiểu về thông tin cửa hàng hay chính sách bảo hành Code ạ?' },
-            { label: '👤 Gặp Admin Hoàng', reply: 'Cho mình gặp trực tiếp Admin Hoàng nhé.', nextMenu: null, botText: 'Hệ thống đã gửi thông báo tới điện thoại của Admin.<br>Bạn đợi một lát nhé, Admin sẽ rep ngay bây giờ!' }
+            { 
+                label: '🛒 Mua Source Code / Script', 
+                reply: 'Mình muốn xem qua các loại Source Code và Script Game.', 
+                nextMenu: 'source_menu', 
+                botText: 'Chào mừng bạn đến với hệ thống CSKH tự động của <b>HOANGKUN STORE</b>! 🚀<br><br>Store chuyên cung cấp mã nguồn chuẩn, an toàn & bảo mật (Lưu ý: Bên mình CHỈ bán Source Code và Script, không bán vật phẩm hay đồ linh tinh).<br><br>Bạn đang cần tìm Code Web, Script Game hay cần hỗ trợ kỹ thuật cài đặt ạ?' 
+            },
+            { 
+                label: '⚙️ Hỗ trợ Cài đặt & API', 
+                reply: 'Mình cần hỗ trợ setup mã nguồn, Hosting và API tự động.', 
+                nextMenu: 'setup_menu', 
+                botText: 'Dạ, bên mình nhận hỗ trợ kỹ thuật toàn diện từ A-Z.<br><br>Bạn cần hỗ trợ cấu hình đưa web lên Hosting/Cloud (Firebase, Vercel), hay cần tích hợp API thanh toán tự động (SePay) cho shop của mình?' 
+            },
+            { 
+                label: 'ℹ️ Giới thiệu & Chính sách', 
+                reply: 'Cho mình xem thông tin về Store và chính sách bảo hành.', 
+                nextMenu: 'intro_menu', 
+                botText: 'Cảm ơn bạn đã quan tâm đến HOANGKUN STORE! 💎<br><br>Bạn muốn tìm hiểu về thông tin hoạt động của cửa hàng hay xem chi tiết về chính sách bảo hành mã nguồn ạ?' 
+            },
+            { 
+                label: '👤 Gặp Admin Hoàng', 
+                reply: 'Bot trả lời chưa đúng ý, cho mình gặp trực tiếp Admin Hoàng nhé.', 
+                nextMenu: null, 
+                botText: 'Hệ thống đã phát tín hiệu "Ting Ting" tới điện thoại của Admin Nguyễn Việt Hoàng. 🔔<br><br>Bạn vui lòng đợi một lát nhé, Admin đang mở máy và sẽ vào hỗ trợ bạn ngay bây giờ!' 
+            }
         ],
+        
         'source_menu': [
-            { label: '🌐 Web Bán Hàng / Shop', reply: 'Mình muốn tham khảo Code Web Bán Hàng.', nextMenu: null, botText: 'Dạ, Web bán hàng bên mình tích hợp sẵn API ngân hàng tự động 24/7.<br>Bạn để lại số điện thoại hoặc Zalo để mình gửi Demo nhé!' },
-            { label: '🎨 Landing Page / Portfolio', reply: 'Mình cần giao diện Landing Page cá nhân.', nextMenu: null, botText: 'Bên mình có sẵn các mẫu giao diện Dark Mode, Cyberpunk và Pixel Art cực chất.<br>Bạn muốn làm chủ đề gì?' },
-            { label: '🎮 Code Web Game / Script', reply: 'Mình xem Code Web Game & Script.', nextMenu: 'game_menu', botText: 'Store có đủ các thể loại tối ưu dung lượng và chống DDOS.<br>Bạn chọn thể loại game bên dưới nhé:' },
-            { label: '🔙 Menu Chính', reply: 'Quay lại menu chính.', nextMenu: 'main_menu', botText: 'Vui lòng chọn thông tin bạn cần hỗ trợ:' }
+            { 
+                label: '🌐 Code Web Bán Hàng / Shop', 
+                reply: 'Mình muốn tham khảo Code Web Shop bán hàng tự động.', 
+                nextMenu: null, 
+                botText: 'Tuyệt vời! Hệ thống Web Shop bên mình được lập trình cực mượt bằng HTML/CSS/JS thuần hoặc Framework hiện đại. Đặc biệt đã được tích hợp sẵn <b>API Banking tự động 24/7</b> xử lý đơn hàng trong 3s.<br><br>Bạn để lại số điện thoại hoặc Zalo để Admin gửi link Demo thực tế cho bạn test thử nhé!' 
+            },
+            { 
+                label: '🎨 Landing Page / Portfolio', 
+                reply: 'Mình cần giao diện Landing Page cá nhân thật độc lạ.', 
+                nextMenu: null, 
+                botText: 'Bên mình đang có sẵn bộ sưu tập giao diện siêu chất, nổi bật với các phong cách: <b>Dark Mode</b> huyền bí, <b>Cyberpunk</b> neon rực rỡ, và <b>Pixel Art 8-bit</b> hoài cổ.<br><br>Bạn muốn cá nhân hóa web theo phong cách nào để Admin gửi mẫu phù hợp nhất?' 
+            },
+            { 
+                label: '🎮 Code Web Game / Script', 
+                reply: 'Cho mình xem danh sách Code Web Game & Script Mod.', 
+                nextMenu: 'game_menu', 
+                botText: 'Kho lưu trữ của Store có đủ các thể loại Web Game siêu nhẹ và Script tối ưu chống DDOS cực tốt.<br><br>Bạn quan tâm đến Script Mobile hay Web Game, vui lòng chọn thể loại bên dưới nhé:' 
+            },
+            { 
+                label: '🔙 Menu Chính', 
+                reply: 'Quay lại menu chính.', 
+                nextMenu: 'main_menu', 
+                botText: 'Đã quay lại Menu chính. Vui lòng chọn thông tin bạn cần hỗ trợ:' 
+            }
         ],
-        'game_menu': [
-            { label: '🦖 Script ARK / Free Fire', reply: 'Mình cần Script cho ARK Mobile hoặc Free Fire.', nextMenu: null, botText: 'Các bản Script APK/OBB bên mình đều được update chống ban mới nhất.<br>Bạn đang dùng Android hay giả lập?' },
-            { label: '👾 Game Pixel Survival', reply: 'Mình quan tâm source game Pixel Survival.', nextMenu: null, botText: 'Source game Pixel Survival cực mượt, dễ dàng build lên web.<br>Bạn cần tích hợp quảng cáo luôn không?' },
-            { label: '🔙 Quay lại Menu Code', reply: 'Quay lại chọn code khác.', nextMenu: 'source_menu', botText: 'Cửa hàng có sẵn mã nguồn Web và Game.<br>Bạn đang tìm loại nào?' }
+
+      'game_menu': [
+            { 
+                label: '🔥 Hack Free Fire / Liên Quân', 
+                reply: 'Mình cần tìm các bản Hack cho game Free Fire hoặc Liên Quân Mobile.', 
+                nextMenu: null, 
+                botText: 'Chào bạn! Các bản Hack <b>Free Fire</b> và <b>Liên Quân Mobile</b> bên mình luôn được cập nhật liên tục theo từng phiên bản mới nhất của nhà phát hành. 🔥<br><br><b>Các chức năng Hack đỉnh cao:</b><br>- Free Fire: Auto Headshot 100%, Nhìn xuyên tường (Wallhack), Định vị anten, Khóa mục tiêu (Aimbot).<br>- Liên Quân: Hack Map sáng toàn bản đồ, Hiện Cam siêu rộng, Hiện thời gian hồi chiêu của địch, Cấm chọn ẩn.<br><br>File cài đặt cực dễ, cam kết an toàn và tích hợp sẵn <b>Anti-ban/Bypass chống khóa acc</b> cực kỳ xịn sò cho acc chính.<br><br>Bạn đang cần bản cài cho Android hay chạy trên PC?' 
+            },
+            { 
+                label: '🤖 Hack Roblox / Blox Fruits', 
+                reply: 'Mình đang tìm mua bản Hack Roblox, đặc biệt là Blox Fruits.', 
+                nextMenu: null, 
+                botText: 'Chuẩn luôn bạn ơi! 😎<br><br><b>HOANGKUN STORE</b> sở hữu kho Hack Roblox cực mượt, đặc biệt tối ưu cho <b>Blox Fruits</b> với các chức năng VIP:<br>- Auto Farm Level siêu tốc, Auto Farm Bone, Mastery.<br>- Auto Raid, săn Trái Ác Quỷ (Devil Fruit Sniper).<br>- Tự động hạ Boss, nhặt item huyền thoại không tốn sức.<br><br>Bản Hack siêu nhẹ, chống giật lag, chạy mượt trên các Client (Fluxus, Delta, Codex, Hydrogen...) cả Mobile lẫn PC.<br><br>Bạn cần mua bản VIP Full chức năng hay bản treo máy nhẹ nhàng ạ?' 
+            },
+            { 
+                label: '👾 Hack Game Khác', 
+                reply: 'Mình muốn tìm bản hack cho các tựa game khác.', 
+                nextMenu: null, 
+                botText: 'Ngoài Free Fire, Liên Quân và Roblox, Admin còn nhận cung cấp các bản Hack, Auto cho nhiều tựa game Mobile khác nữa. Đặc biệt là các dòng game sinh tồn, cày cuốc.<br><br>Bạn đang cần Hack cho game nào, cứ nhắn tên game lên đây để Admin check kho và báo lại luôn nhé!' 
+            },
+            { 
+                label: '🔙 Quay lại Menu', 
+                reply: 'Quay lại danh mục trước.', 
+                nextMenu: 'source_menu', 
+                botText: 'Đã quay lại danh mục trước. Hiện tại HOANGKUN STORE đang sẵn có Code Web Shop, Landing Page và Hack Game.<br><br>Vui lòng chọn loại bạn quan tâm:' 
+            }
         ],
-        'setup_menu': [
-            { label: '☁️ Lên Hosting / Tên miền', reply: 'Hỗ trợ mình trỏ Tên miền và up lên Hosting.', nextMenu: null, botText: 'Ok bạn, chuẩn bị sẵn tài khoản quản lý Tên Miền nhé, Admin sẽ vào Ultraviewer làm cho bạn luôn.' },
-            { label: '🔥 Up lên Firebase / Vercel', reply: 'Cài đặt project lên Firebase/Vercel.', nextMenu: null, botText: 'Lên Firebase thì cấu hình hơi phức tạp ở file JSON.<br>Bạn ném file qua đây Admin kiểm tra cho nhé.' },
-            { label: '🔗 Tích hợp API SePay', reply: 'Hỗ trợ mình tích hợp API SePay.', nextMenu: null, botText: 'Bên mình nhận setup API Banking SePay tự động.<br>Bạn gửi mã nguồn để Admin check nhé.' },
-            { label: '🔙 Menu Chính', reply: 'Quay lại.', nextMenu: 'main_menu', botText: 'Vui lòng chọn thông tin bạn cần hỗ trợ:' }
+
+       'setup_menu': [
+            { 
+                label: '🛠️ Cài đặt Code đã mua', 
+                reply: 'Mình cần hỗ trợ cài đặt Source Code vừa mua trên Store.', 
+                nextMenu: null, 
+                botText: 'Cảm ơn bạn đã ủng hộ HOANGKUN STORE! 💎<br><br>Mọi mã nguồn mua tại hệ thống đều được Admin hỗ trợ cài đặt hoàn toàn miễn phí.<br><br>Bạn vui lòng gửi <b>Mã đơn hàng</b> hoặc <b>Tên code</b> vừa mua kèm theo Ultraviewer/AnyDesk để Admin vào setup trực tiếp cho bạn luôn nhé!' 
+            },
+            { 
+                label: '💳 Lỗi Nạp tiền / Mua hàng', 
+                reply: 'Mình gặp vấn đề khi nạp tiền hoặc thanh toán mua code.', 
+                nextMenu: null, 
+                botText: 'Hệ thống nạp tiền và giao dịch của Store hoạt động hoàn toàn tự động. Tuy nhiên, nếu bạn lỡ chuyển khoản sai nội dung hoặc web chưa cộng tiền/trả link tải thì đừng lo nhé.<br><br>Bạn gửi <b>Ảnh bill chuyển khoản</b> qua đây, Admin sẽ check hệ thống và duyệt thủ công cấp link tải code cho bạn ngay lập tức!' 
+            },
+            { 
+                label: '⚠️ Báo lỗi Code / Link tải', 
+                reply: 'Code mình tải về bị lỗi hoặc link Google Drive không truy cập được.', 
+                nextMenu: null, 
+                botText: 'Store luôn cam kết bảo hành trọn đời cho mọi mã nguồn được bán ra.<br><br>Bạn vui lòng gửi <b>Mã đơn hàng</b> và <b>Ảnh chụp màn hình phần code bị lỗi</b> để Admin kiểm tra, fix lỗi và gửi lại bản update mới nhất cho bạn nhé.' 
+            },
+            { 
+                label: '🔙 Quay lại Menu Chính', 
+                reply: 'Quay lại menu trước.', 
+                nextMenu: 'main_menu', 
+                botText: 'Đã quay lại Menu chính. Vui lòng chọn thông tin bạn cần hỗ trợ:' 
+            }
         ],
+      
         'intro_menu': [
-            { label: '🏢 Về HOANGKUN STORE', reply: 'Giới thiệu về cửa hàng.', nextMenu: null, botText: '<b>HOANGKUN STORE</b> là hệ thống độc quyền chuyên cung cấp <b>Source Code</b> và <b>Script Game</b> chuẩn xác.<br><i>Lưu ý: Store chỉ bán code/script, không bán đồ linh tinh nhé!</i> 😎' },
-            { label: '🛡️ Chính sách bảo hành', reply: 'Chính sách bảo hành code thế nào?', nextMenu: null, botText: 'Mọi Source Code bán ra đều được bảo hành trọn đời.<br>Hỗ trợ fix bug, cập nhật bản vá và hướng dẫn cài đặt từ A-Z.' },
-            { label: '🔙 Menu Chính', reply: 'Quay lại.', nextMenu: 'main_menu', botText: 'Vui lòng chọn thông tin bạn cần hỗ trợ:' }
+            { 
+                label: '🏢 Về HOANGKUN STORE', 
+                reply: 'Giới thiệu chi tiết về cửa hàng và các dịch vụ.', 
+                nextMenu: null, 
+                botText: '<b>HOANGKUN STORE</b> (Website chính thức: <i>hoangkunstore.id.vn</i>) được quản lý và vận hành trực tiếp bởi Admin <b>Nguyễn Việt Hoàng</b>.<br><br>Đây là hệ thống độc quyền chuyên lập trình, cung cấp <b>Source Code Website</b> và <b>Script Game</b> chất lượng cao.<br><br>⚠️ <b>LƯU Ý QUAN TRỌNG:</b> Store chỉ giao dịch mã nguồn kỹ thuật số (Code/Script), tuyệt đối KHÔNG bán tài khoản game, nạp game hay bán các đồ linh tinh khác để tránh loãng dịch vụ nhé! 😎' 
+            },
+            { 
+                label: '🛡️ Chính sách bảo hành', 
+                reply: 'Chính sách bảo hành và hậu mãi của code như thế nào?', 
+                nextMenu: null, 
+                botText: 'Uy tín tạo nên thương hiệu! 💎<br><br>Mọi Source Code và Script mua tại HOANGKUN STORE đều được <b>bảo hành lỗi trọn đời</b>. Hệ thống cam kết hỗ trợ fix bug, cập nhật các bản vá bảo mật hoàn toàn miễn phí và hướng dẫn cài đặt tận tình từ A-Z ngay lúc bàn giao mã nguồn.' 
+            },
+            { 
+                label: '🔙 Menu Chính', 
+                reply: 'Quay lại.', 
+                nextMenu: 'main_menu', 
+                botText: 'Đã quay lại Menu chính. Vui lòng chọn thông tin bạn cần hỗ trợ:' 
+            }
         ]
     };
 
