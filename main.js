@@ -377,12 +377,20 @@ const menus = {
             btn.className = 'quick-reply-btn';
             btn.innerHTML = opt.label;
             
-            btn.onclick = () => {
+btn.onclick = () => {
                 const currentName = window.guestName || localStorage.getItem('guestName') || 'Khách';
                 db.ref('chats/' + currentRoomId).push({
                     sender: 'user', senderName: currentName,
                     text: opt.reply, timestamp: Date.now()
                 });
+
+                // 🚀 ĐẨY THÔNG BÁO TELEGRAM
+                if(!opt.nextMenu) { 
+                    sendTelegramAlert(`🔔 <b>Khách hàng [${currentName}] vừa chọn mục:</b>\n👉 <i>${opt.reply}</i>\n📲 Hãy vào CRM hỗ trợ khách ngay!`);
+                } else if (opt.label.includes('Gặp Admin Hoàng')) {
+                    sendTelegramAlert(`🚨 <b>BÁO ĐỘNG KHẨN CẤP: Khách hàng [${currentName}] CẦN GẶP ADMIN GẤP!</b>\n📲 Vào CRM xử lý ngay lập tức Hoàng ơi!`);
+                }
+
                 optionsDiv.remove(); 
                 showTyping();
                 setTimeout(() => {
@@ -404,81 +412,84 @@ const menus = {
 // 4. GỬI TIN NHẮN TỪ KHUNG NHẬP
 window.sendMessage = function() {
     const input = document.getElementById('msg-input');
-    const currentName = window.guestName || localStorage.getItem('guestName');
+    const currentName = window.guestName || localStorage.getItem('guestName') || 'Khách';
     
     if(input && input.value.trim() !== '') {
+        const textMsg = input.value.trim();
+        
+        // Đẩy tin nhắn vào Firebase
         db.ref('chats/' + currentRoomId).push({ 
             sender: 'user', senderName: currentName,
-            text: input.value, timestamp: Date.now() 
+            text: textMsg, timestamp: Date.now() 
         });
+
+        // 🚀 BẮN THÔNG BÁO TELEGRAM KHI KHÁCH TỰ GÕ CHỮ
+        sendTelegramAlert(`📩 <b>Tin nhắn mới từ: ${currentName}</b>\n💬 Nội dung: <i>${textMsg}</i>\n👉 Nhanh chóng vào chốt đơn!`);
+
         input.value = '';
     }
 }
 
-// 5. TÍNH NĂNG KẾT THÚC CHAT & ĐÁNH GIÁ (FEEDBACK)
-window.endChat = function(isFromAdmin = false) {
-    if(!currentRoomId) return;
-
-    // Báo cáo nếu khách tự bấm
-    if (!isFromAdmin) {
-        db.ref('chats/' + currentRoomId).push({
-            sender: 'system', senderName: window.guestName,
-            text: 'Khách hàng [' + window.guestName + '] đã chủ động kết thúc phiên chat.',
-            timestamp: Date.now()
-        });
-    }
-
-    // Ẩn thanh nhập & giấu nút kết thúc
-    const inputArea = document.getElementById('bottom-input-area');
-    if (inputArea) inputArea.style.display = 'none';
-    const endBtn = document.querySelector('.end-chat-btn');
-    if (endBtn) endBtn.style.display = 'none';
-    document.querySelectorAll('.quick-replies-container').forEach(el => el.remove());
-
-    // HIỆN FORM ĐÁNH GIÁ 5 SAO
-    const reviewDiv = document.createElement('div');
-    reviewDiv.className = 'review-box';
-    reviewDiv.innerHTML = `
-        <div class="review-title">Phiên chat đã hoàn tất</div>
-        <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Vui lòng đánh giá chất lượng hỗ trợ của Admin</p>
-        
-        <div class="stars">
-            <input type="radio" id="star5" name="rating" value="5" /><label for="star5">★</label>
-            <input type="radio" id="star4" name="rating" value="4" /><label for="star4">★</label>
-            <input type="radio" id="star3" name="rating" value="3" /><label for="star3">★</label>
-            <input type="radio" id="star2" name="rating" value="2" /><label for="star2">★</label>
-            <input type="radio" id="star1" name="rating" value="1" /><label for="star1">★</label>
-        </div>
-        
-        <textarea id="review-comment" class="review-input" rows="3" placeholder="Nhận xét của bạn về HOANGKUN STORE... (Không bắt buộc)"></textarea>
-        <button class="submit-review-btn" onclick="submitReview()">Gửi Đánh Giá</button>
-    `;
-    chatBox.appendChild(reviewDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
+if (!isFromAdmin) {
+    db.ref('chats/' + currentRoomId).push({
+        sender: 'system', senderName: window.guestName,
+        text: 'Khách hàng [' + window.guestName + '] đã chủ động kết thúc phiên chat.',
+        timestamp: Date.now()
+    });
+    // Báo Telegram khách rời đi
+    sendTelegramAlert(`❌ <b>Khách hàng [${window.guestName}] đã RỜI KHỎI phiên chat.</b>`);
 }
+
+const inputArea = document.getElementById('bottom-input-area');
+if (inputArea) inputArea.style.display = 'none';
+const endBtn = document.querySelector('.end-chat-btn');
+if (endBtn) endBtn.style.display = 'none';
+document.querySelectorAll('.quick-replies-container').forEach(el => el.remove());
+
+const reviewDiv = document.createElement('div');
+reviewDiv.className = 'review-box';
+reviewDiv.innerHTML = `
+    <div class="review-title">Phiên chat đã hoàn tất</div>
+    <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Vui lòng đánh giá chất lượng hỗ trợ của Admin</p>
+    
+    <div class="stars">
+        <input type="radio" id="star5" name="rating" value="5" /><label for="star5">★</label>
+        <input type="radio" id="star4" name="rating" value="4" /><label for="star4">★</label>
+        <input type="radio" id="star3" name="rating" value="3" /><label for="star3">★</label>
+        <input type="radio" id="star2" name="rating" value="2" /><label for="star2">★</label>
+        <input type="radio" id="star1" name="rating" value="1" /><label for="star1">★</label>
+    </div>
+    
+    <textarea id="review-comment" class="review-input" rows="3" placeholder="Nhận xét của bạn về HOANGKUN STORE... (Không bắt buộc)"></textarea>
+    <button class="submit-review-btn" onclick="submitReview()">Gửi Đánh Giá</button>
+`;
+chatBox.appendChild(reviewDiv);
+chatBox.scrollTop = chatBox.scrollHeight;
 
 window.submitReview = function() {
     const ratingEle = document.querySelector('input[name="rating"]:checked');
     const comment = document.getElementById('review-comment').value.trim();
     const rating = ratingEle ? ratingEle.value : 5;
 
-    db.ref('reviews/' + currentRoomId).set({
-        guestName: window.guestName || 'Khách',
-        rating: rating + ' Sao',
-        comment: comment || 'Không có nhận xét',
-        timestamp: Date.now()
-    });
+   db.ref('reviews/' + currentRoomId).set({
+    guestName: window.guestName || 'Khách',
+    rating: rating + ' Sao',
+    comment: comment || 'Không có nhận xét',
+    timestamp: Date.now()
+});
 
-    localStorage.removeItem('guestName');
-    localStorage.removeItem('currentRoomId');
+// 🚀 BÁO TELEGRAM CÓ ĐÁNH GIÁ 5 SAO
+sendTelegramAlert(`⭐️ <b>ĐÁNH GIÁ MỚI TỪ: ${window.guestName}</b>\n⭐ Đánh giá: <b>${rating} Sao</b>\n📝 Nhận xét: <i>${comment}</i>`);
 
-    const reviewBox = document.querySelector('.review-box');
-    if(reviewBox) {
-        reviewBox.innerHTML = `
-            <div style="font-size: 45px; margin-bottom: 10px;">💖</div>
-            <div class="review-title">Cảm ơn bạn đã đánh giá!</div>
-            <p style="font-size: 13px; color: #64748b;">Đánh giá <b>${rating} Sao</b> của bạn sẽ giúp hệ thống phục vụ tốt hơn.</p>
-            <button class="submit-review-btn" style="margin-top: 15px;" onclick="location.reload()">Quay Về Trang Chủ</button>
-        `;
-    }
+localStorage.removeItem('guestName');
+localStorage.removeItem('currentRoomId');
+
+const reviewBox = document.querySelector('.review-box');
+if(reviewBox) {
+    reviewBox.innerHTML = `
+        <div style="font-size: 45px; margin-bottom: 10px;">💖</div>
+        <div class="review-title">Cảm ơn bạn đã đánh giá!</div>
+        <p style="font-size: 13px; color: #64748b;">Đánh giá <b>${rating} Sao</b> của bạn sẽ giúp hệ thống phục vụ tốt hơn.</p>
+        <button class="submit-review-btn" style="margin-top: 15px;" onclick="location.reload()">Quay Về Trang Chủ</button>
+    `;
 }
