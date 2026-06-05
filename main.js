@@ -1,3 +1,25 @@
+// ==========================================
+// THÔNG TIN TELEGRAM BOT CỦA BẠN
+// ==========================================
+const TELEGRAM_BOT_TOKEN = '7952742715:AAHMTMjzMTe0BRIxefHuIDbjoDuNRxWVMW8';
+const TELEGRAM_CHAT_ID = '8076487839';
+
+// Hàm gửi thông báo ngầm qua Telegram
+function sendTelegramAlert(message) {
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: 'HTML'
+        })
+    }).catch(err => console.log("Lỗi Telegram:", err));
+}
+// ==========================================
+
 const firebaseConfig = {
     apiKey: "AIzaSyD9Vi39Xuj8qf_bYjtZLAjpOkEvMIhzD1Y",
     authDomain: "hoangkun-chat.firebaseapp.com",
@@ -14,10 +36,8 @@ const db = firebase.database();
 
 let currentRoomId = '';
 const chatBox = document.getElementById('chat-box');
-
-// 🌟 THÊM ÂM THANH CHO KHÁCH TẠI ĐÂY
 const notifySound = new Audio('https://assets.mixkit.co/active_storage/sfx/236/236-preview.mp3');
-let lastPingTime = Date.now(); // Lưu mốc thời gian để không kêu lại tin cũ lúc tải trang
+let lastPingTime = Date.now(); 
 
 // 1. HIỆU ỨNG ĐANG GÕ
 function showTyping() {
@@ -49,25 +69,22 @@ window.initChat = function() {
         timestamp: Date.now()
     });
 
-    // LẮNG NGHE TIN NHẮN TỪ FIREBASE
+    // 🚀 BÁO TELEGRAM CÓ KHÁCH VÀO
+    sendTelegramAlert(`🟢 <b>KHÁCH HÀNG MỚI TRUY CẬP!</b>\n👤 Tên khách: <b>${currentName}</b>\n👉 Đang xem kịch bản tự động...`);
+
     db.ref('chats/' + currentRoomId).on('child_added', (snapshot) => {
         const data = snapshot.val();
         
-        // --- NẾU NHẬN ĐƯỢC LỆNH KẾT THÚC TỪ ADMIN ---
         if (data.sender === 'system' && data.action === 'ADMIN_END_CHAT') {
-            if (typeof window.endChat === 'function') {
-                window.endChat(true); // Gửi cờ "true" để biết Admin tự khóa
-            }
+            if (typeof window.endChat === 'function') window.endChat(true); 
             return;
         }
 
-        // 🌟 NẾU ADMIN GỬI TIN NHẮN MỚI -> PHÁT ÂM THANH
         if (data.sender === 'admin' && data.timestamp > lastPingTime) {
-            notifySound.play().catch(e => console.log("Trình duyệt chặn âm thanh vì khách chưa tương tác."));
-            lastPingTime = data.timestamp; // Cập nhật lại thời gian
+            notifySound.play().catch(e => console.log("Chưa click"));
+            lastPingTime = data.timestamp; 
         }
 
-        // Bỏ qua các tin nhắn hệ thống khác (không hiển thị lên màn hình)
         if(data.sender === 'system') return; 
         
         const msgDiv = document.createElement('div');
@@ -80,26 +97,22 @@ window.initChat = function() {
         }
     });
 
-    // Gọi Bot chào mừng
     setTimeout(() => {
         showTyping();
         setTimeout(() => {
             hideTyping();
-            const botWelcomeText = `Chào <b>${currentName}</b>! 👋 Cảm ơn bạn đã liên hệ HOANGKUN STORE.<br><br>` +
-                                  `Nguyễn Việt Hoàng sẽ trả lời bạn sớm nhất có thể ạ!<br><br>` +
-                                  `Trong lúc chờ đợi, bạn cần hỗ trợ về Source Code nào ạ? 😊`;
+            const botWelcomeText = `Chào <b>${currentName}</b>! 👋 Cảm ơn bạn đã liên hệ HOANGKUN STORE.<br><br>Nguyễn Việt Hoàng sẽ trả lời bạn sớm nhất có thể ạ!<br><br>Trong lúc chờ đợi, bạn cần hỗ trợ về Source Code nào ạ? 😊`;
             
             db.ref('chats/' + currentRoomId).push({
                 sender: 'admin', senderName: 'Nguyễn Việt Hoàng',
                 text: botWelcomeText, timestamp: Date.now()
             });
-            
             setTimeout(() => window.showBotOptions('main_menu'), 400);
         }, 1200); 
     }, 300);
 }
 
-// 3. MENU KỊCH BẢN ĐA TẦNG
+// 3. MENU KỊCH BẢN SIÊU DÀI
 window.showBotOptions = function(menuType) {
     if (!chatBox) return;
 
