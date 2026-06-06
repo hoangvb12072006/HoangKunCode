@@ -415,42 +415,52 @@
             .stats-grid { grid-template-columns: 1fr; }
         }
         
-/* CSS cho Nút Web Shop VIP */
-.btn-shop-vip {
-    display: flex; align-items: center; justify-content: center; width: 100%;
-    padding: 16px 20px; margin-top: 15px; margin-bottom: 16px; border-radius: 30px;
-    text-decoration: none; font-weight: 700; color: white; font-size: 1rem;
-    background: linear-gradient(90deg, #ea580c, #e11d48, #9333ea);
-    background-size: 200% 200%; animation: gradientShift 3s ease infinite;
-    box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4); transition: 0.3s;
-}
-.btn-shop-vip:hover { transform: scale(1.02); box-shadow: 0 6px 25px rgba(225, 29, 72, 0.6); }
-@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-        /* Container chứa các nút */
+/* Container chung để căn giữa và giữ độ rộng */
 .button-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px; /* Khoảng cách giữa các nút */
+    gap: 15px;
     width: 100%;
-    max-width: 500px; /* Độ rộng tối đa của nhóm nút */
+    max-width: 500px;
     margin: 0 auto;
+    padding: 0 20px; /* Thêm chút padding để không sát mép màn hình mobile */
 }
 
-/* Style cho từng nút để chúng đều nhau */
+/* Base style cho tất cả các nút (để chúng đều nhau) */
 .btn-style {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;           /* Ép tất cả các nút rộng bằng nhau */
-    padding: 15px 20px;
-    border-radius: 12px;
-    border: none;
+    padding: 16px 20px;
+    border-radius: 30px;   /* Bo tròn đẹp */
     font-weight: 700;
-    text-align: center;
+    color: white;
     text-decoration: none;
-    transition: 0.3s;
-    display: block;        /* Để width có tác dụng */
+    transition: 0.3s ease;
+    border: none;
+    cursor: pointer;
 }
-        
+
+/* Hiệu ứng riêng cho nút Shop VIP */
+.btn-shop-vip {
+    background: linear-gradient(90deg, #ea580c, #e11d48, #9333ea);
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
+}
+
+.btn-shop-vip:hover { 
+    transform: scale(1.02); 
+    box-shadow: 0 6px 25px rgba(225, 29, 72, 0.6); 
+}
+
+@keyframes gradientShift { 
+    0% { background-position: 0% 50%; } 
+    50% { background-position: 100% 50%; } 
+    100% { background-position: 0% 50%; } 
+}
     </style>
 </head>
 <body data-theme="dark">
