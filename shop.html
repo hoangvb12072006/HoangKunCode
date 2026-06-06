@@ -224,6 +224,32 @@
         }
         .status-success { background: rgba(16, 185, 129, 0.2); color: #10b981; }
         .status-pending { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+
+        /* ==========================================
+           💎 CSS THÔNG BÁO TOAST (THAY THẾ ALERT)
+           ========================================== */
+        .toast-container {
+            position: fixed; top: 25px; right: 25px; z-index: 9999;
+            display: flex; flex-direction: column; gap: 12px;
+            pointer-events: none;
+        }
+        .toast-msg {
+            background: rgba(15, 23, 42, 0.95);
+            border-left: 4px solid var(--primary);
+            color: #fff; padding: 16px 24px;
+            border-radius: 8px; font-weight: 600; font-size: 0.95rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(234, 88, 12, 0.2);
+            backdrop-filter: blur(10px);
+            animation: slideInToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeOutToast 0.4s ease-in 2.6s forwards;
+        }
+        @keyframes slideInToast { 
+            from { transform: translateX(120%); opacity: 0; } 
+            to { transform: translateX(0); opacity: 1; } 
+        }
+        @keyframes fadeOutToast { 
+            from { transform: translateX(0); opacity: 1; } 
+            to { transform: translateX(120%); opacity: 0; } 
+        }
         
     </style>
 </head>
@@ -673,55 +699,100 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
                 }).catch(() => errorDiv.style.display = 'block');
         }
 
-        // Hàm Cập Nhật Thông Tin & Mật Khẩu
-window.updateProfile = function() {
-    const newName = document.getElementById('profile-name-input').value.trim();
-    const newPass = document.getElementById('new-password').value;
-    const user = auth.currentUser;
-
-    if (!user) return;
-
-    // 1. Cập nhật tên hiển thị trong Realtime Database
-    if (newName) {
-        database.ref('users/' + user.uid).update({ username: newName })
-            .then(() => alert("Cập nhật tên thành công!"));
-    }
-
-    // 2. Cập nhật mật khẩu nếu có nhập
-    if (newPass) {
-        if (newPass.length < 6) {
-            alert("Mật khẩu phải từ 6 ký tự trở lên!");
-            return;
+function clearErrors() {
+            document.getElementById('reg-error-msg').style.display = 'none';
+            document.getElementById('login-error-msg').style.display = 'none';
         }
-        user.updatePassword(newPass).then(() => {
-            alert("Đổi mật khẩu thành công! Hãy đăng nhập lại.");
-            auth.signOut().then(() => location.reload());
-        }).catch((error) => alert("Lỗi đổi mật khẩu: " + error.message));
-    }
-}
 
-        // ==========================================
-// CHẶN CHUỘT PHẢI & THÔNG BÁO CẤM
-// ==========================================
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault(); // Chặn menu chuột phải
-    
-    // Tạo một cái thông báo nhỏ hiện lên nhanh rồi mất
-    const warning = document.createElement('div');
-    warning.innerText = "🚫 HOANGKUN STORE: Quyền sở hữu trí tuệ, cấm copy!";
-    warning.style.cssText = `
-        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        background: #ea580c; color: white; padding: 10px 20px;
-        border-radius: 8px; font-weight: bold; z-index: 9999;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    `;
-    document.body.appendChild(warning);
-    
-    // Tự động xóa thông báo sau 2 giây
-    setTimeout(() => {
-        warning.remove();
-    }, 2000);
-});
+        // --- HÀM TẠO THÔNG BÁO TRƯỢT (TOAST) ---
+        function showToast(message) {
+            let container = document.getElementById('toast-container');
+            if(!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            toast.className = 'toast-msg';
+            toast.innerHTML = message;
+            container.appendChild(toast);
+            
+            setTimeout(() => toast.remove(), 3000); // Tự tắt sau 3 giây
+        }
+
+        function handleRegisterSubmit() {
+            const username = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-password').value;
+            const confirmPass = document.getElementById('reg-confirm-password').value;
+            const errorDiv = document.getElementById('reg-error-msg');
+
+            if(!username || !email || !pass || !confirmPass) {
+                showToast('⚠️ Vui lòng điền đủ thông tin!'); return;
+            }
+
+            if(pass !== confirmPass) {
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(email, pass)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    database.ref('users/' + user.uid).set({
+                        username: username, email: email, createdAt: Date.now()
+                    }).then(() => {
+                        showToast(`✅ Khởi tạo tài khoản [${username}] thành công! 🎉`);
+                        closeAuthModal();
+                    });
+                }).catch((error) => showToast('❌ Lỗi: ' + error.message));
+        }
+
+        function handleLoginSubmit() {
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value;
+            const errorDiv = document.getElementById('login-error-msg');
+
+            if(!email || !pass) {
+                showToast('⚠️ Vui lòng nhập Email và Mật khẩu!'); return;
+            }
+
+            auth.signInWithEmailAndPassword(email, pass)
+                .then(() => {
+                    showToast('✅ Đăng nhập thành công! 🔓');
+                    closeAuthModal();
+                }).catch(() => errorDiv.style.display = 'block');
+        }
+
+        // Hàm Cập Nhật Thông Tin & Mật Khẩu
+        window.updateProfile = function() {
+            const newName = document.getElementById('profile-name-input').value.trim();
+            const newPass = document.getElementById('new-password').value;
+            const user = auth.currentUser;
+
+            if (!user) return;
+
+            // 1. Cập nhật tên hiển thị trong Realtime Database
+            if (newName) {
+                database.ref('users/' + user.uid).update({ username: newName })
+                    .then(() => showToast("✅ Cập nhật tên thành công!"));
+            }
+
+            // 2. Cập nhật mật khẩu nếu có nhập
+            if (newPass) {
+                if (newPass.length < 6) {
+                    showToast("⚠️ Mật khẩu phải từ 6 ký tự trở lên!");
+                    return;
+                }
+                user.updatePassword(newPass).then(() => {
+                    showToast("✅ Đổi mật khẩu thành công! Hãy đăng nhập lại.");
+                    setTimeout(() => {
+                        auth.signOut().then(() => location.reload());
+                    }, 1500);
+                }).catch((error) => showToast("❌ Lỗi đổi mật khẩu: " + error.message));
+            }
+        }
         
     </script>
 </body>
