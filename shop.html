@@ -187,6 +187,44 @@
             .nav-links { display: none; }
             .auth-box { padding: 25px 20px; }
         }
+
+        /* ==========================================
+           💎 CSS TRANG CÁ NHÂN & TABLE LỊCH SỬ
+           ========================================== */
+        .profile-box { max-width: 650px !important; }
+        
+        .profile-info-group {
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px; padding: 15px; margin-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .profile-label { color: var(--text-dim); font-size: 0.9rem; }
+        .profile-value { color: #fff; font-weight: 700; font-size: 1.1rem; }
+        .profile-value.money { color: #10b981; }
+
+        .history-table-wrapper {
+            background: rgba(0,0,0,0.3); border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05); overflow: hidden;
+            max-height: 250px; overflow-y: auto;
+        }
+        .history-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .history-table th {
+            background: rgba(255,255,255,0.05); color: var(--text-dim);
+            padding: 12px 15px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;
+        }
+        .history-table td {
+            padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: #fff; font-size: 0.9rem;
+        }
+        .history-table tr:last-child td { border-bottom: none; }
+        .empty-history { text-align: center; padding: 30px; color: var(--text-dim); font-style: italic; }
+        
+        .status-badge {
+            padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+        }
+        .status-success { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .status-pending { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        
     </style>
 </head>
 <body>
@@ -327,6 +365,70 @@
         </div>
     </div>
 
+    <!-- ==========================================
+       💎 MODAL TRANG CÁ NHÂN
+       ========================================== -->
+    <div class="modal-overlay" id="profileModalOverlay">
+        <div class="auth-box profile-box">
+            <button class="close-modal-btn" onclick="closeProfileModal()">✕</button>
+            
+            <div class="auth-content">
+                <div class="auth-header">
+                    <h2>TRANG CÁ NHÂN</h2>
+                    <p style="color: var(--text-dim);" id="profile-email-display">Đang tải...</p>
+                </div>
+
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tab-profile-info" onclick="switchProfileTab('info')">TÀI KHOẢN</button>
+                    <button class="auth-tab" id="tab-profile-deposit" onclick="switchProfileTab('deposit')">LS NẠP</button>
+                    <button class="auth-tab" id="tab-profile-history" onclick="switchProfileTab('history')">LS MUA CODE</button>
+                </div>
+
+                <!-- TAB THÔNG TIN -->
+                <div class="auth-form active" id="form-profile-info">
+                    <div class="profile-info-group">
+                        <span class="profile-label">Tên hiển thị:</span>
+                        <span class="profile-value" id="profile-name-display">...</span>
+                    </div>
+                    <div class="profile-info-group">
+                        <span class="profile-label">Số dư hiện tại:</span>
+                        <span class="profile-value money" id="profile-balance-display">0 VNĐ</span>
+                    </div>
+                    <div class="profile-info-group">
+                        <span class="profile-label">Ngày tham gia:</span>
+                        <span class="profile-value" id="profile-date-display">...</span>
+                    </div>
+                </div>
+
+                <!-- TAB LỊCH SỬ NẠP -->
+                <div class="auth-form" id="form-profile-deposit">
+                    <div class="history-table-wrapper">
+                        <table class="history-table">
+                            <thead><tr><th>Mã GD</th><th>Số tiền</th><th>Thời gian</th><th>Trạng thái</th></tr></thead>
+                            <tbody id="deposit-tbody">
+                                <tr><td colspan="4" class="empty-history">Chưa có giao dịch nạp tiền nào.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB LỊCH SỬ MUA -->
+                <div class="auth-form" id="form-profile-history">
+                    <div class="history-table-wrapper">
+                        <table class="history-table">
+                            <thead><tr><th>Tên Source/Script</th><th>Giá</th><th>Thời gian</th></tr></thead>
+                            <tbody id="purchase-tbody">
+                                <tr><td colspan="3" class="empty-history">Chưa có lịch sử mua hàng.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <button class="submit-auth-btn" style="background: linear-gradient(135deg, var(--error), #991b1b); margin-top: 25px;" onclick="logoutUser()">ĐĂNG XUẤT</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TÍCH HỢP FIREBASE -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -348,25 +450,138 @@
         const auth = firebase.auth();
         const database = firebase.database();
 
-        // Check đăng nhập
+        // ==========================================
+        // KHỐI CODE JS MỚI CHO TRANG CÁ NHÂN
+        // ==========================================
+        
+        let currentUserUid = null;
+
+        // Check đăng nhập & Load Header
         auth.onAuthStateChanged((user) => {
             const headerBtn = document.getElementById('header-auth-btn');
             if (user) {
+                currentUserUid = user.uid;
                 database.ref('users/' + user.uid).once('value').then((snapshot) => {
-                    const username = (snapshot.val() && snapshot.val().username) || 'Thành Viên';
-                    headerBtn.innerHTML = `Hi, ${username}`;
-                    headerBtn.onclick = () => {
-                        if(confirm('Bạn có muốn đăng xuất tài khoản không?')) {
-                            auth.signOut().then(() => location.reload());
-                        }
-                    };
+                    const userData = snapshot.val();
+                    const username = (userData && userData.username) || 'Thành Viên';
+                    headerBtn.innerHTML = `👤 ${username}`;
+                    
+                    // Khi click vào tên ở Header -> Mở trang cá nhân thay vì đăng xuất
+                    headerBtn.onclick = () => openProfileModal(user, userData);
                 });
             } else {
+                currentUserUid = null;
                 headerBtn.innerHTML = 'Đăng Nhập Ngay';
                 headerBtn.onclick = () => openAuthModal('login');
             }
         });
 
+        const profileOverlay = document.getElementById('profileModalOverlay');
+        
+        function openProfileModal(user, userData) {
+            profileOverlay.classList.add('active');
+            
+            // Đổ dữ liệu vào Tab Thông tin
+            document.getElementById('profile-email-display').innerText = user.email;
+            document.getElementById('profile-name-display').innerText = userData.username || 'Thành Viên';
+            
+            // Xử lý tiền tệ (Nếu chưa có thì mặc định là 0)
+            let balance = userData.balance || 0;
+            document.getElementById('profile-balance-display').innerText = balance.toLocaleString('vi-VN') + ' VNĐ';
+            
+            // Xử lý ngày tham gia
+            let dateStr = "Chưa rõ";
+            if(userData.createdAt) {
+                const d = new Date(userData.createdAt);
+                dateStr = d.toLocaleDateString('vi-VN');
+            }
+            document.getElementById('profile-date-display').innerText = dateStr;
+
+            // Mặc định gọi load lịch sử
+            loadDepositHistory();
+            loadPurchaseHistory();
+            
+            switchProfileTab('info');
+        }
+
+        function closeProfileModal() {
+            profileOverlay.classList.remove('active');
+        }
+
+        // Tắt modal khi click ra ngoài nền đen
+        profileOverlay.addEventListener('click', function(e) {
+            if(e.target === profileOverlay) closeProfileModal();
+        });
+
+        function switchProfileTab(type) {
+            // Tắt hết active
+            document.getElementById('tab-profile-info').classList.remove('active');
+            document.getElementById('tab-profile-deposit').classList.remove('active');
+            document.getElementById('tab-profile-history').classList.remove('active');
+            
+            document.getElementById('form-profile-info').classList.remove('active');
+            document.getElementById('form-profile-deposit').classList.remove('active');
+            document.getElementById('form-profile-history').classList.remove('active');
+
+            // Bật tab được chọn
+            document.getElementById('tab-profile-' + type).classList.add('active');
+            document.getElementById('form-profile-' + type).classList.add('active');
+        }
+
+        function logoutUser() {
+            if(confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                auth.signOut().then(() => location.reload());
+            }
+        }
+
+        // Hàm Tải Lịch sử Nạp từ Firebase
+        function loadDepositHistory() {
+            if(!currentUserUid) return;
+            const tbody = document.getElementById('deposit-tbody');
+            
+            database.ref('users/' + currentUserUid + '/deposits').once('value').then((snapshot) => {
+                if (snapshot.exists()) {
+                    let html = '';
+                    snapshot.forEach((childSnapshot) => {
+                        let row = childSnapshot.val();
+                        let d = new Date(row.timestamp).toLocaleString('vi-VN');
+                        html += `<tr>
+                                    <td>#${childSnapshot.key.slice(-6).toUpperCase()}</td>
+                                    <td style="color:#10b981; font-weight:bold;">+${row.amount.toLocaleString('vi-VN')}đ</td>
+                                    <td>${d}</td>
+                                    <td><span class="status-badge status-success">Thành công</span></td>
+                                 </tr>`;
+                    });
+                    tbody.innerHTML = html;
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="4" class="empty-history">Chưa có giao dịch nạp tiền nào.</td></tr>';
+                }
+            });
+        }
+
+        // Hàm Tải Lịch sử Mua Code/Script từ Firebase
+        function loadPurchaseHistory() {
+            if(!currentUserUid) return;
+            const tbody = document.getElementById('purchase-tbody');
+            
+            database.ref('users/' + currentUserUid + '/purchases').once('value').then((snapshot) => {
+                if (snapshot.exists()) {
+                    let html = '';
+                    snapshot.forEach((childSnapshot) => {
+                        let row = childSnapshot.val();
+                        let d = new Date(row.timestamp).toLocaleString('vi-VN');
+                        html += `<tr>
+                                    <td style="font-weight:600;">${row.productName}</td>
+                                    <td style="color:var(--error);">-${row.price.toLocaleString('vi-VN')}đ</td>
+                                    <td>${d}</td>
+                                 </tr>`;
+                    });
+                    tbody.innerHTML = html;
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="3" class="empty-history">Chưa có lịch sử mua hàng.</td></tr>';
+                }
+            });
+        }
         function filterCatalog(category) {
             const buttons = document.querySelectorAll('.filter-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
