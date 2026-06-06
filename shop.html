@@ -699,6 +699,30 @@ window.updateProfile = function() {
         }).catch((error) => alert("Lỗi đổi mật khẩu: " + error.message));
     }
 }
+
+        // ==========================================
+// CHẶN CHUỘT PHẢI & THÔNG BÁO CẤM
+// ==========================================
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); // Chặn menu chuột phải
+    
+    // Tạo một cái thông báo nhỏ hiện lên nhanh rồi mất
+    const warning = document.createElement('div');
+    warning.innerText = "🚫 HOANGKUN STORE: Quyền sở hữu trí tuệ, cấm copy!";
+    warning.style.cssText = `
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+        background: #ea580c; color: white; padding: 10px 20px;
+        border-radius: 8px; font-weight: bold; z-index: 9999;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    `;
+    document.body.appendChild(warning);
+    
+    // Tự động xóa thông báo sau 2 giây
+    setTimeout(() => {
+        warning.remove();
+    }, 2000);
+});
+        
     </script>
 </body>
 </html>
