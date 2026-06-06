@@ -415,51 +415,36 @@
             .stats-grid { grid-template-columns: 1fr; }
         }
         
-/* Container chung để căn giữa và giữ độ rộng */
-.button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 0 20px; /* Thêm chút padding để không sát mép màn hình mobile */
-}
-
-/* Base style cho tất cả các nút (để chúng đều nhau) */
+/* Style chung cho TẤT CẢ các nút bao gồm cả Shop VIP */
 .btn-style {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;           /* Ép tất cả các nút rộng bằng nhau */
+    width: 100%;
     padding: 16px 20px;
-    border-radius: 30px;   /* Bo tròn đẹp */
+    margin-top: 15px;
+    border-radius: 30px; /* Bo góc mềm mại giống nút trên */
+    text-decoration: none;
     font-weight: 700;
     color: white;
-    text-decoration: none;
-    transition: 0.3s ease;
-    border: none;
-    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+    background: rgba(255, 255, 255, 0.05); /* Nền tối mờ giống nút trên */
+    border: 1px solid rgba(255, 255, 255, 0.15); /* Viền mỏng */
+    backdrop-filter: blur(5px);
 }
 
-/* Hiệu ứng riêng cho nút Shop VIP */
+/* Hiệu ứng riêng cho nút Shop VIP để nó nổi bật nhưng vẫn "đều" */
 .btn-shop-vip {
-    background: linear-gradient(90deg, #ea580c, #e11d48, #9333ea);
-    background-size: 200% 200%;
-    animation: gradientShift 3s ease infinite;
-    box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
+    background: rgba(234, 88, 12, 0.1); /* Nền màu cam nhẹ */
+    border: 1px solid var(--primary);    /* Viền cam nổi bật */
+    box-shadow: 0 0 10px rgba(234, 88, 12, 0.2);
 }
 
-.btn-shop-vip:hover { 
-    transform: scale(1.02); 
-    box-shadow: 0 6px 25px rgba(225, 29, 72, 0.6); 
-}
-
-@keyframes gradientShift { 
-    0% { background-position: 0% 50%; } 
-    50% { background-position: 100% 50%; } 
-    100% { background-position: 0% 50%; } 
+.btn-shop-vip:hover {
+    background: var(--primary);
+    transform: scale(1.02);
+    box-shadow: 0 0 20px var(--primary-glow);
 }
     </style>
 </head>
@@ -494,25 +479,22 @@
                 Sáng tạo nội dung video ngắn, chuyên các series TikTok tâm trạng cực chill và Review phim đa thể loại trên YouTube. Nơi chia sẻ những góc nhìn điện ảnh chân thực và đồng điệu cảm xúc.
             </p>
 
-         <div class="quick-links">
-                <a href="https://www.youtube.com/@Hazen06" class="cta-btn-main" target="_blank">
-                    🎬 Đăng Ký Kênh YouTube Review Phim
-                </a>
-                
-                <a href="https://www.tiktok.com/@hpdbox" class="link-outline-btn" target="_blank">
-                    <span class="icon-diamond">♦</span> Kênh TikTok Tâm Trạng
-                    <span class="icon-diamond">♦</span>
-                </a>
-                
-                <a href="chat.html" class="link-outline-btn">
-                    <span class="icon-diamond">♦</span> Trò Chuyện Trực Tiếp (Chat)
-                    <span class="icon-diamond">♦</span>
-                </a>
+         <div class="button-container">
+    <a href="https://www.youtube.com/@Hazen06" class="btn-style cta-btn-main" target="_blank">
+        🎬 Đăng Ký Kênh YouTube Review Phim
+    </a>
+    
+    <a href="https://www.tiktok.com/@hpdbox" class="btn-style link-outline-btn" target="_blank">
+        ♦ Kênh TikTok Tâm Trạng ♦
+    </a>
+    
+    <a href="chat.html" class="btn-style link-outline-btn">
+        ♦ Trò Chuyện Trực Tiếp (Chat) ♦
+    </a>
 
-             <!-- Nút chuyển sang Web Shop -->
-                <a href="shop.html" class="btn-shop-vip">
-               🔥 HOANGKUNSTORE - Web Shop 🔥
-              </a>
+    <a href="shop.html" class="btn-style btn-shop-vip">
+        🔥 HOANGKUNSTORE - Web Shop 🔥
+    </a>
 
             </div>
             
