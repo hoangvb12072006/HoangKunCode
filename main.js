@@ -55,7 +55,7 @@ function hideTyping() {
     if (el) el.remove();
 }
 
-// 2. KHỞI TẠO KHUNG CHAT MỚI
+// 2. KHỞI TẠO KHUNG CHAT MỚI VÀ HIỆU ỨNG XẾP HÀNG
 window.initChat = function() {
     const currentName = window.guestName || localStorage.getItem('guestName');
     if (chatBox) chatBox.innerHTML = ''; 
@@ -70,13 +70,12 @@ window.initChat = function() {
     });
 
     // 🚀 BÁO TELEGRAM CÓ KHÁCH VÀO
-    sendTelegramAlert(`🟢 <b>KHÁCH HÀNG MỚI TRUY CẬP!</b>\n👤 Tên khách: <b>${currentName}</b>\n👉 Đang xem kịch bản tự động...`);
+    sendTelegramAlert(`🟢 <b>KHÁCH HÀNG MỚI TRUY CẬP!</b>\n👤 Tên khách: <b>${currentName}</b>\n👉 Khách đang ở phòng chờ...`);
 
     // LẮNG NGHE TIN NHẮN TỪ FIREBASE
     db.ref('chats/' + currentRoomId).on('child_added', (snapshot) => {
         const data = snapshot.val();
         
-        // --- NẾU NHẬN ĐƯỢC LỆNH KẾT THÚC TỪ ADMIN ---
         if (data.sender === 'system' && data.action === 'ADMIN_END_CHAT') {
             if (typeof window.endChat === 'function') {
                 window.endChat(true); 
@@ -84,7 +83,6 @@ window.initChat = function() {
             return;
         }
 
-        // 🌟 NẾU ADMIN GỬI TIN NHẮN MỚI -> PHÁT ÂM THANH
         if (data.sender === 'admin' && data.timestamp > lastPingTime) {
             notifySound.play().catch(e => console.log("Trình duyệt chặn âm thanh vì khách chưa tương tác."));
             lastPingTime = data.timestamp; 
@@ -102,17 +100,74 @@ window.initChat = function() {
         }
     });
 
-    // Gọi Bot chào mừng
+    // KÍCH HOẠT HIỆU ỨNG NHẢY SỐ XẾP HÀNG
+    showQueueMessage(currentName);
+}
+
+// ==========================================
+// HÀM TẠO HIỆU ỨNG NHẢY SỐ XẾP HÀNG
+// ==========================================
+function showQueueMessage(guestName) {
+    if (!chatBox) return;
+
+    // Tạo bong bóng tin nhắn hệ thống
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message msg-received';
+    msgDiv.style.backgroundColor = '#f1f5f9'; 
+    msgDiv.style.border = '1px solid #cbd5e1';
+    msgDiv.style.color = '#334155';
+    msgDiv.style.fontSize = '0.9rem';
+
+    // Tạo số ảo xếp hàng từ 50 đến 80
+    let queueNum = Math.floor(Math.random() * 30) + 50; 
+    let waitTime = Math.ceil(queueNum / 20); // Nhẩm thời gian
+
+    msgDiv.innerHTML = `Một trong số những đại diện của chúng tôi sẽ gặp bạn trong giây lát. Bạn xếp số <strong id="q-num" style="color:#ea580c; font-size: 1.1em;">${queueNum}</strong> trong hàng. Thời gian chờ đợi của bạn xấp xỉ <strong id="q-time" style="color:#ea580c; font-size: 1.1em;">${waitTime}</strong> phút. Cảm ơn bạn đã kiên nhẫn chờ.`;
+
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Thiết lập đếm lùi tự động
+    const qTimer = setInterval(() => {
+        // Mỗi lần nhảy lùi 5 đến 12 số
+        queueNum -= Math.floor(Math.random() * 8) + 5;
+
+        if (queueNum <= 0) {
+            queueNum = 0; waitTime = 0;
+            clearInterval(qTimer);
+
+            // Chốt số 0
+            document.getElementById('q-num').innerText = queueNum;
+            document.getElementById('q-time').innerText = waitTime;
+
+            // Đếm xong thì gọi Bot ra chào
+            setTimeout(() => {
+                runBotScenario(guestName);
+            }, 1000);
+            
+        } else {
+            // Cập nhật số liên tục
+            waitTime = Math.ceil(queueNum / 20);
+            document.getElementById('q-num').innerText = queueNum;
+            document.getElementById('q-time').innerText = waitTime;
+        }
+    }, 1200); // 1.2 giây nhảy 1 lần
+}
+
+// ==========================================
+// HÀM GỌI KỊCH BẢN KUN BOT 
+// ==========================================
+function runBotScenario(guestName) {
     setTimeout(() => {
         showTyping();
         setTimeout(() => {
             hideTyping();
-            const botWelcomeText = `Chào <b>${currentName}</b>! 👋 Cảm ơn bạn đã liên hệ HOANGKUN STORE.<br><br>` +
-                                  `Nguyễn Việt Hoàng sẽ trả lời bạn sớm nhất có thể ạ!<br><br>` +
-                                  `Trong lúc chờ đợi, bạn cần hỗ trợ về Source Code nào ạ? 😊`;
+            const botWelcomeText = `Chào <b>${guestName}</b>! 👋 Cảm ơn bạn đã liên hệ HOANGKUN STORE.<br><br>` +
+                                  `Kun Bot sẽ hỗ trợ bạn ngay lập tức!<br><br>` +
+                                  `Trong lúc chờ đợi, bạn cần hỗ trợ về Source Code hay Hack Game nào ạ? 😊`;
             
             db.ref('chats/' + currentRoomId).push({
-                sender: 'admin', senderName: 'Nguyễn Việt Hoàng',
+                sender: 'admin', senderName: 'Kun Bot',
                 text: botWelcomeText, timestamp: Date.now()
             });
             
@@ -281,7 +336,7 @@ window.showBotOptions = function(menuType) {
                          '🦕 <b>Dòng Game Sinh Tồn Khắc Nghiệt:</b> ARK: Survival Evolved Mobile, PUBG Mobile, Call of Duty Mobile. Cung cấp ESP, Aimbot, God Mode, Vô hạn đạn.<br>' +
                          '🌍 <b>Dòng Game Thế Giới Mở / Gacha:</b> Genshin Impact, Honkai Star Rail. Cung cấp Teleport các điểm dịch chuyển, Auto đánh quái, No Cooldown skill.<br>' +
                          '⚔️ <b>Dòng Game MMORPG Cày Cuốc Tiên Hiệp/Kiếm Hiệp:</b> Cung cấp Tool Auto Click, Auto tự động treo máy đánh quái, Tự động mua máu/mana, Tự động dọn rương, nhặt đồ tự động 24/7 không cần thức đêm canh máy.<br><br>' +
-                         '👉 Đừng ngần ngại! Bạn đang cần tìm bản Hack cho tựa game nào? Những tính năng bá đạo nào bạn đang khát khao sở hữu? Cứ gõ trực tiếp tên game và yêu cầu chi tiết lên đây để Admin vào check kho dữ liệu Server ngầm và báo giá ngay lập tức cho bạn nhé!' 
+                         '👉 Đừng ngần ngại! Bạn đang cần tìm bản Hack cho tựa game nào? Những tính năng bá đạo nào bạn đang khát kho sở hữu? Cứ gõ trực tiếp tên game và yêu cầu chi tiết lên đây để Admin vào check kho dữ liệu Server ngầm và báo giá ngay lập tức cho bạn nhé!' 
             },
             { 
                 label: '🔙 Quay lại Menu', 
@@ -405,7 +460,7 @@ window.showBotOptions = function(menuType) {
                 setTimeout(() => {
                     hideTyping();
                     db.ref('chats/' + currentRoomId).push({
-                        sender: 'admin', senderName: 'Nguyễn Việt Hoàng',
+                        sender: 'admin', senderName: 'Kun Bot',
                         text: opt.botText, timestamp: Date.now()
                     });
                     if (opt.nextMenu) setTimeout(() => window.showBotOptions(opt.nextMenu), 500);
