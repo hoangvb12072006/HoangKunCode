@@ -427,6 +427,30 @@
 .btn-shop-vip:hover { transform: scale(1.02); box-shadow: 0 6px 25px rgba(225, 29, 72, 0.6); }
 @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
+        /* Container chứa các nút */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Khoảng cách giữa các nút */
+    width: 100%;
+    max-width: 500px; /* Độ rộng tối đa của nhóm nút */
+    margin: 0 auto;
+}
+
+/* Style cho từng nút để chúng đều nhau */
+.btn-style {
+    width: 100%;           /* Ép tất cả các nút rộng bằng nhau */
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    transition: 0.3s;
+    display: block;        /* Để width có tác dụng */
+}
+        
     </style>
 </head>
 <body data-theme="dark">
