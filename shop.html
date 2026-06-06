@@ -424,20 +424,6 @@
     <button class="submit-auth-btn" style="margin-top: 10px;" onclick="updateProfile()">CẬP NHẬT THÔNG TIN</button>
 </div>
 
-                <!-- ==========================================
-       💎 MODAL XÁC NHẬN ĐĂNG XUẤT
-       ========================================== -->
-    <div class="modal-overlay" id="confirmModalOverlay" style="z-index: 1005;">
-        <div class="auth-box" style="max-width: 350px; text-align: center; padding: 30px;">
-            <h3 style="margin-bottom: 15px; color: #fff; font-size: 1.5rem;">ĐĂNG XUẤT</h3>
-            <p style="color: var(--text-dim); margin-bottom: 25px;">Bạn có chắc chắn muốn thoát tài khoản không?</p>
-            <div style="display: flex; gap: 15px;">
-                <button class="submit-auth-btn" style="margin-top: 0; background: rgba(255,255,255,0.1); box-shadow: none;" onclick="closeConfirmModal()">HỦY BỎ</button>
-                <button class="submit-auth-btn" style="margin-top: 0; background: linear-gradient(135deg, var(--error), #991b1b);" onclick="executeLogout()">XÁC NHẬN</button>
-            </div>
-        </div>
-    </div>
-
                 <!-- TAB LỊCH SỬ NẠP -->
                 <div class="auth-form" id="form-profile-deposit">
                     <div class="history-table-wrapper">
@@ -466,6 +452,21 @@
             </div>
         </div>
     </div>
+
+        <!-- ==========================================
+       💎 MODAL XÁC NHẬN ĐĂNG XUẤT
+       ========================================== -->
+    <div class="modal-overlay" id="confirmModalOverlay" style="z-index: 1005;">
+        <div class="auth-box" style="max-width: 350px; text-align: center; padding: 30px;">
+            <h3 style="margin-bottom: 15px; color: #fff; font-size: 1.5rem;">ĐĂNG XUẤT</h3>
+            <p style="color: var(--text-dim); margin-bottom: 25px;">Bạn có chắc chắn muốn thoát tài khoản không?</p>
+            <div style="display: flex; gap: 15px;">
+                <button class="submit-auth-btn" style="margin-top: 0; background: rgba(255,255,255,0.1); box-shadow: none;" onclick="closeConfirmModal()">HỦY BỎ</button>
+                <button class="submit-auth-btn" style="margin-top: 0; background: linear-gradient(135deg, var(--error), #991b1b);" onclick="executeLogout()">XÁC NHẬN</button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- TÍCH HỢP FIREBASE -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
