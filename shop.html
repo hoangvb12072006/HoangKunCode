@@ -446,6 +446,8 @@
 
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        // Thêm dòng này để Firebase ghi nhớ đăng nhập vĩnh viễn trên trình duyệt
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         const database = firebase.database();
 
         // ==========================================
