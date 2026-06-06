@@ -520,25 +520,39 @@ window.endChat = function(isFromAdmin = false) {
     if (endBtn) endBtn.style.display = 'none';
     document.querySelectorAll('.quick-replies-container').forEach(el => el.remove());
 
-    const reviewDiv = document.createElement('div');
+  const reviewDiv = document.createElement('div');
     reviewDiv.className = 'review-box';
+    // Style cho box đánh giá mới, hiện đại và bo tròn
+    reviewDiv.style.cssText = "background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; margin-top: 20px; border: 1px solid #e2e8f0;";
+    
     reviewDiv.innerHTML = `
-        <div class="review-title">Phiên chat đã hoàn tất</div>
-        <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Vui lòng đánh giá chất lượng hỗ trợ của Admin</p>
+        <h3 style="color: #1e293b; font-size: 1.2rem; margin-bottom: 5px;">Đánh giá chất lượng</h3>
+        <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 15px;">Dịch vụ hỗ trợ của Kun Bot có làm bạn hài lòng?</p>
         
-        <div class="stars">
-            <input type="radio" id="star5" name="rating" value="5" /><label for="star5">★</label>
-            <input type="radio" id="star4" name="rating" value="4" /><label for="star4">★</label>
-            <input type="radio" id="star3" name="rating" value="3" /><label for="star3">★</label>
-            <input type="radio" id="star2" name="rating" value="2" /><label for="star2">★</label>
-            <input type="radio" id="star1" name="rating" value="1" /><label for="star1">★</label>
+        <div class="stars" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; cursor: pointer; font-size: 1.8rem; color: #cbd5e1;">
+            <span onclick="setRating(1)" onmouseover="hoverStar(1)" onmouseout="resetStars()" id="s1">★</span>
+            <span onclick="setRating(2)" onmouseover="hoverStar(2)" onmouseout="resetStars()" id="s2">★</span>
+            <span onclick="setRating(3)" onmouseover="hoverStar(3)" onmouseout="resetStars()" id="s3">★</span>
+            <span onclick="setRating(4)" onmouseover="hoverStar(4)" onmouseout="resetStars()" id="s4">★</span>
+            <span onclick="setRating(5)" onmouseover="hoverStar(5)" onmouseout="resetStars()" id="s5">★</span>
         </div>
         
-        <textarea id="review-comment" class="review-input" rows="3" placeholder="Nhận xét của bạn về HOANGKUN STORE... (Không bắt buộc)"></textarea>
-        <button class="submit-review-btn" onclick="submitReview()">Gửi Đánh Giá</button>
+        <textarea id="review-comment" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; resize: none; margin-bottom: 15px; outline: none;" rows="3" placeholder="Nhận xét của bạn..."></textarea>
+        <button onclick="submitReview()" style="width: 100%; padding: 12px; background: #ea580c; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s;">GỬI ĐÁNH GIÁ</button>
     `;
     chatBox.appendChild(reviewDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Bổ sung thêm 2 hàm nhỏ này ngay dưới hàm endChat để hiệu ứng sao chạy mượt
+let currentRating = 0;
+window.setRating = (n) => { currentRating = n; highlightStars(n); };
+window.hoverStar = (n) => highlightStars(n);
+window.resetStars = () => highlightStars(currentRating);
+function highlightStars(n) {
+    for(let i=1; i<=5; i++) {
+        document.getElementById('s'+i).style.color = (i <= n) ? '#fbbf24' : '#cbd5e1';
+    }
 }
 
 // 6. GỬI FEEDBACK LÊN HỆ THỐNG
