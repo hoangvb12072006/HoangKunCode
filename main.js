@@ -107,10 +107,16 @@ window.initChat = function() {
 // ==========================================
 // HÀM TẠO HIỆU ỨNG NHẢY SỐ XẾP HÀNG
 // ==========================================
+// ==========================================
+// HIỆU ỨNG TIN NHẮN XẾP HÀNG (CHẬM & THẬT)
+// ==========================================
 function showQueueMessage(guestName) {
     if (!chatBox) return;
 
-    // Tạo bong bóng tin nhắn hệ thống
+    // 1. Ẩn khung nhập tin nhắn ngay khi bắt đầu xếp hàng
+    const bottomInput = document.getElementById('bottom-input-area');
+    if (bottomInput) bottomInput.style.display = 'none';
+
     const msgDiv = document.createElement('div');
     msgDiv.className = 'message msg-received';
     msgDiv.style.backgroundColor = '#f1f5f9'; 
@@ -118,40 +124,40 @@ function showQueueMessage(guestName) {
     msgDiv.style.color = '#334155';
     msgDiv.style.fontSize = '0.9rem';
 
-    // Tạo số ảo xếp hàng từ 50 đến 80
-    let queueNum = Math.floor(Math.random() * 30) + 50; 
-    let waitTime = Math.ceil(queueNum / 20); // Nhẩm thời gian
+    // Bắt đầu từ số 49 như ảnh của bạn
+    let queueNum = 49; 
+    let waitTime = 3; 
 
     msgDiv.innerHTML = `Một trong số những đại diện của chúng tôi sẽ gặp bạn trong giây lát. Bạn xếp số <strong id="q-num" style="color:#ea580c; font-size: 1.1em;">${queueNum}</strong> trong hàng. Thời gian chờ đợi của bạn xấp xỉ <strong id="q-time" style="color:#ea580c; font-size: 1.1em;">${waitTime}</strong> phút. Cảm ơn bạn đã kiên nhẫn chờ.`;
 
     chatBox.appendChild(msgDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Thiết lập đếm lùi tự động
+    // Thiết lập đếm lùi chậm (khoảng 3-4 giây mới nhảy 1 số)
     const qTimer = setInterval(() => {
-        // Mỗi lần nhảy lùi 5 đến 12 số
-        queueNum -= Math.floor(Math.random() * 8) + 5;
-
+        queueNum--;
+        
         if (queueNum <= 0) {
             queueNum = 0; waitTime = 0;
             clearInterval(qTimer);
 
-            // Chốt số 0
             document.getElementById('q-num').innerText = queueNum;
             document.getElementById('q-time').innerText = waitTime;
 
-            // Đếm xong thì gọi Bot ra chào
+            // Đếm xong thì hiện lại khung nhập tin nhắn và gọi Bot
+            if (bottomInput) bottomInput.style.display = 'flex';
+            
             setTimeout(() => {
                 runBotScenario(guestName);
             }, 1000);
             
         } else {
-            // Cập nhật số liên tục
-            waitTime = Math.ceil(queueNum / 20);
+            // Tự động tính lại thời gian dựa trên số người còn lại
+            waitTime = Math.ceil(queueNum / 15); 
             document.getElementById('q-num').innerText = queueNum;
             document.getElementById('q-time').innerText = waitTime;
         }
-    }, 1200); // 1.2 giây nhảy 1 lần
+    }, 3500); // Tăng lên 3500ms (3.5 giây) để nhảy số thật hơn
 }
 
 // ==========================================
