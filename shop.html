@@ -384,21 +384,19 @@
                     <button class="auth-tab" id="tab-profile-history" onclick="switchProfileTab('history')">LS MUA CODE</button>
                 </div>
 
-                <!-- TAB THÔNG TIN -->
-                <div class="auth-form active" id="form-profile-info">
-                    <div class="profile-info-group">
-                        <span class="profile-label">Tên hiển thị:</span>
-                        <span class="profile-value" id="profile-name-display">...</span>
-                    </div>
-                    <div class="profile-info-group">
-                        <span class="profile-label">Số dư hiện tại:</span>
-                        <span class="profile-value money" id="profile-balance-display">0 VNĐ</span>
-                    </div>
-                    <div class="profile-info-group">
-                        <span class="profile-label">Ngày tham gia:</span>
-                        <span class="profile-value" id="profile-date-display">...</span>
-                    </div>
-                </div>
+               <div class="auth-form active" id="form-profile-info">
+    <div class="profile-info-group">
+        <span class="profile-label">Email:</span>
+        <span class="profile-value" id="profile-email-display">...</span>
+    </div>
+    <div class="input-group">
+        <input type="text" class="auth-input" id="profile-name-input" placeholder="Tên hiển thị mới">
+    </div>
+    <div class="input-group">
+        <input type="password" class="auth-input" id="new-password" placeholder="Mật khẩu mới (để trống nếu không đổi)">
+    </div>
+    <button class="submit-auth-btn" style="margin-top: 10px;" onclick="updateProfile()">CẬP NHẬT THÔNG TIN</button>
+</div>
 
                 <!-- TAB LỊCH SỬ NẠP -->
                 <div class="auth-form" id="form-profile-deposit">
@@ -672,6 +670,33 @@
                     closeAuthModal();
                 }).catch(() => errorDiv.style.display = 'block');
         }
+
+        // Hàm Cập Nhật Thông Tin & Mật Khẩu
+window.updateProfile = function() {
+    const newName = document.getElementById('profile-name-input').value.trim();
+    const newPass = document.getElementById('new-password').value;
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    // 1. Cập nhật tên hiển thị trong Realtime Database
+    if (newName) {
+        database.ref('users/' + user.uid).update({ username: newName })
+            .then(() => alert("Cập nhật tên thành công!"));
+    }
+
+    // 2. Cập nhật mật khẩu nếu có nhập
+    if (newPass) {
+        if (newPass.length < 6) {
+            alert("Mật khẩu phải từ 6 ký tự trở lên!");
+            return;
+        }
+        user.updatePassword(newPass).then(() => {
+            alert("Đổi mật khẩu thành công! Hãy đăng nhập lại.");
+            auth.signOut().then(() => location.reload());
+        }).catch((error) => alert("Lỗi đổi mật khẩu: " + error.message));
+    }
+}
     </script>
 </body>
 </html>
