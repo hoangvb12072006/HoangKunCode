@@ -7,145 +7,185 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #0b0f19;
-            --bg-card: #151b2b;
+            --bg-main: #050814;
+            --bg-card: rgba(15, 23, 42, 0.6);
             --primary: #ea580c;
-            --primary-glow: rgba(234, 88, 12, 0.4);
+            --primary-glow: rgba(234, 88, 12, 0.6);
+            --neon-blue: #06b6d4;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.08);
+            --border-color: rgba(255, 255, 255, 0.1);
             --error: #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--text-main); 
+            line-height: 1.6; 
+            overflow-x: hidden; 
+            position: relative;
+        }
 
-        /* NỀN ĐƠN GIẢN SẠCH SẼ */
+        /* NỀN ĐỘNG CYBERPUNK SANG TRỌNG */
         body::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 0%, rgba(234, 88, 12, 0.08), transparent 50%);
+            content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.08), transparent 40%),
+                        radial-gradient(circle at 80% 20%, rgba(234, 88, 12, 0.08), transparent 30%);
+            animation: backgroundShift 15s ease-in-out infinite alternate;
             z-index: -1; pointer-events: none;
         }
+        @keyframes backgroundShift {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(5deg) scale(1.1); }
+        }
 
-        /* HEADER */
+        /* HEADER KÍNH MỜ */
         header {
-            background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            background: rgba(5, 8, 20, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             position: fixed; width: 100%; top: 0; z-index: 100;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
         }
-        .logo { font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; color: #fff; }
-        .logo span { color: var(--primary); }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; color: #fff; text-transform: uppercase; }
+        .logo span { background: linear-gradient(to right, var(--primary), var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .nav-container { display: flex; align-items: center; gap: 20px; }
-        .nav-links { display: flex; gap: 20px; }
-        .nav-links a { color: var(--text-dim); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.3s; }
-        .nav-links a:hover { color: #fff; }
+        .nav-container { display: flex; align-items: center; gap: 25px; }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { color: var(--text-dim); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.3s; position: relative; }
+        .nav-links a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
         
         .auth-nav-btn {
-            background: transparent; border: 1px solid var(--border-color); color: white;
-            padding: 8px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s;
+            background: linear-gradient(135deg, rgba(234,88,12,0.1), rgba(6,182,212,0.1));
+            border: 1px solid var(--primary); color: white;
+            padding: 10px 24px; border-radius: 30px; font-weight: 700; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 0 15px rgba(234,88,12,0.2);
         }
-        .auth-nav-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+        .auth-nav-btn:hover { background: var(--primary); box-shadow: 0 0 25px var(--primary-glow); transform: translateY(-2px); }
 
         /* BANNER */
-        .hero { padding: 120px 5% 40px 5%; text-align: center; }
-        .hero h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 15px; line-height: 1.2; }
-        .hero h1 span { color: var(--primary); }
-        .hero p { color: var(--text-dim); max-width: 600px; margin: 0 auto 35px auto; font-size: 1.05rem; }
+        .hero { padding: 140px 5% 60px 5%; text-align: center; }
+        .hero h1 { font-size: 3.2rem; font-weight: 800; margin-bottom: 20px; line-height: 1.2; letter-spacing: -1px; }
+        .hero h1 span { background: linear-gradient(to right, var(--primary), var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-dim); max-width: 650px; margin: 0 auto 40px auto; font-size: 1.1rem; }
 
-        /* BỘ LỌC */
-        .filters { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
+        /* BỘ LỌC TỐI GIẢN */
+        .filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; flex-wrap: wrap; }
         .filter-btn {
-            background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-dim); 
-            padding: 10px 24px; border-radius: 30px; cursor: pointer; font-weight: 600; transition: 0.3s;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: var(--text-dim); 
+            padding: 12px 28px; border-radius: 30px; cursor: pointer; font-weight: 600; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .filter-btn.active, .filter-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 15px var(--primary-glow); }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 5px 20px var(--primary-glow); transform: translateY(-3px); }
 
-        /* LƯỚI SẢN PHẨM SẠCH SẼ */
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 5% 100px 5%; max-width: 1200px; margin: 0 auto; }
+        /* LƯỚI SẢN PHẨM GLASSMORPHISM */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; padding: 0 5% 100px 5%; max-width: 1300px; margin: 0 auto; }
         .product-card {
-            background: var(--bg-card); border-radius: 20px; overflow: hidden;
-            border: 1px solid var(--border-color); transition: 0.3s; display: flex; flex-direction: column;
+            background: var(--bg-card); border-radius: 24px; overflow: hidden;
+            border: 1px solid var(--border-color); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            transition: 0.4s; display: flex; flex-direction: column; position: relative;
         }
-        .product-card:hover { transform: translateY(-5px); border-color: rgba(234, 88, 12, 0.5); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .product-img-wrapper { width: 100%; height: 180px; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; border-bottom: 1px solid var(--border-color); }
-        .product-info { padding: 25px; flex: 1; display: flex; flex-direction: column; }
-        .category-tag { font-size: 0.75rem; color: var(--primary); text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; }
-        .product-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: #fff; }
-        .product-desc { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 25px; flex: 1; }
+        .product-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%); pointer-events: none; }
+        .product-card:hover { transform: translateY(-10px); border-color: rgba(6, 182, 212, 0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 20px rgba(6, 182, 212, 0.2); }
+        .product-img-wrapper { width: 100%; height: 200px; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; font-size: 4rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .product-info { padding: 30px; flex: 1; display: flex; flex-direction: column; }
+        .category-tag { font-size: 0.75rem; color: var(--neon-blue); text-transform: uppercase; font-weight: 800; margin-bottom: 10px; letter-spacing: 1.5px; }
+        .product-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; color: #fff; }
+        .product-desc { font-size: 0.95rem; color: var(--text-dim); margin-bottom: 30px; flex: 1; }
         .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
-        .price { font-size: 1.2rem; font-weight: 700; color: #10b981; }
-        .buy-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; }
-        .buy-btn:hover { background: #c2410c; }
+        .price { font-size: 1.3rem; font-weight: 800; color: #10b981; text-shadow: 0 0 10px rgba(16,185,129,0.3); }
+        .buy-btn { background: linear-gradient(135deg, var(--primary), #c2410c); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-decoration: none; box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3); }
+        .buy-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px var(--primary-glow); }
 
         /* NÚT FLOAT */
-        .float-support { position: fixed; bottom: 30px; right: 30px; background: var(--primary); width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px var(--primary-glow); font-size: 1.5rem; cursor: pointer; transition: 0.3s; text-decoration: none; z-index: 100; }
-        .float-support:hover { transform: scale(1.05); }
+        .float-support { position: fixed; bottom: 35px; right: 35px; background: var(--primary); width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 25px var(--primary-glow); font-size: 1.8rem; cursor: pointer; transition: 0.3s; text-decoration: none; z-index: 100; }
+        .float-support:hover { transform: scale(1.1) rotate(10deg); }
 
         /* ==========================================
-           💎 FORM ĐĂNG NHẬP SẠCH SẼ - HIỆN ĐẠI
+           💎 FORM ĐĂNG NHẬP (THIẾT KẾ MỚI CỰC ĐỈNH)
            ========================================== */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s ease;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s ease;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
         .auth-box {
-            background: #111827; border: 1px solid var(--border-color);
-            width: 90%; max-width: 400px; border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            transform: translateY(-20px); transition: 0.3s ease;
-            padding: 25px; position: relative;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255,255,255,0.15);
+            width: 90%; max-width: 420px; border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,255,255,0.05);
+            transform: translateY(-30px) scale(0.95); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 35px 30px; position: relative;
+            overflow: hidden;
         }
-        .modal-overlay.active .auth-box { transform: translateY(0); }
+        /* Hiệu ứng viền sáng góc form */
+        .auth-box::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(234,88,12,0.15), transparent 60%);
+            animation: rotateGlow 10s linear infinite; pointer-events: none; z-index: 0;
+        }
+        @keyframes rotateGlow { 100% { transform: rotate(360deg); } }
+
+        .modal-overlay.active .auth-box { transform: translateY(0) scale(1); }
 
         .close-modal-btn {
-            position: absolute; top: 15px; right: 15px; background: transparent; 
-            border: none; color: var(--text-dim); width: 30px; height: 30px; border-radius: 50%; 
-            display: flex; justify-content: center; align-items: center; font-size: 1.2rem; 
-            cursor: pointer; z-index: 10; transition: 0.3s;
+            position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1); color: var(--text-dim); 
+            width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; 
+            font-size: 1.2rem; cursor: pointer; z-index: 10; transition: 0.3s;
         }
-        .close-modal-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .close-modal-btn:hover { background: var(--error); color: white; border-color: var(--error); transform: rotate(90deg); }
 
-        .auth-tabs { display: flex; border-bottom: 2px solid var(--border-color); margin-bottom: 25px; }
+        .auth-content { position: relative; z-index: 1; }
+
+        .auth-header { text-align: center; margin-bottom: 30px; }
+        .auth-header h2 { font-size: 1.8rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px; background: linear-gradient(to right, #fff, var(--text-dim)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .auth-tabs { display: flex; background: rgba(0,0,0,0.3); border-radius: 15px; margin-bottom: 25px; padding: 5px; }
         .auth-tab {
             flex: 1; padding: 12px 0; text-align: center; background: transparent; border: none; 
-            color: var(--text-dim); font-size: 1rem; font-weight: 600; cursor: pointer; 
-            border-bottom: 2px solid transparent; margin-bottom: -2px; transition: 0.3s;
+            color: var(--text-dim); font-size: 0.95rem; font-weight: 700; cursor: pointer; 
+            border-radius: 10px; transition: 0.3s;
         }
-        .auth-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .auth-tab.active { color: #fff; background: rgba(255,255,255,0.1); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
         .auth-form { display: none; }
-        .auth-form.active { display: block; animation: fadeIn 0.3s ease; }
+        .auth-form.active { display: block; animation: slideUpFade 0.4s ease forwards; }
 
-        .input-group { margin-bottom: 15px; }
-        .auth-input {
-            width: 100%; padding: 14px 18px; background: rgba(255, 255, 255, 0.03); 
-            border: 1px solid var(--border-color); border-radius: 12px; 
-            color: white; font-size: 0.95rem; outline: none; transition: 0.3s;
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .auth-input::placeholder { color: var(--text-dim); }
-        .auth-input:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.05); }
+
+        .input-group { margin-bottom: 18px; position: relative; }
+        .input-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 1.1rem; opacity: 0.5; transition: 0.3s; }
+        .auth-input {
+            width: 100%; padding: 15px 15px 15px 45px; background: rgba(0, 0, 0, 0.4); 
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; 
+            color: white; font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .auth-input::placeholder { color: rgba(255,255,255,0.3); }
+        .auth-input:focus { border-color: var(--primary); background: rgba(234, 88, 12, 0.05); box-shadow: 0 0 15px rgba(234, 88, 12, 0.2); }
+        .auth-input:focus + .input-icon { opacity: 1; color: var(--primary); }
 
         .submit-auth-btn {
-            width: 100%; padding: 14px; background: var(--primary); 
-            color: white; border: none; border-radius: 12px; font-size: 1rem; 
-            font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px;
+            width: 100%; padding: 16px; background: linear-gradient(135deg, var(--primary), #c2410c); 
+            color: white; border: none; border-radius: 14px; font-size: 1.05rem; letter-spacing: 1px;
+            font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 15px;
+            box-shadow: 0 10px 20px rgba(234, 88, 12, 0.3); text-transform: uppercase;
         }
-        .submit-auth-btn:hover { background: #c2410c; }
+        .submit-auth-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(234, 88, 12, 0.5); }
 
-        .error-message { color: var(--error); font-size: 0.85rem; margin-top: 8px; display: none; font-weight: 500; text-align: center; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .error-message { color: var(--error); font-size: 0.85rem; margin-top: 10px; display: none; font-weight: 600; text-align: center; background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3); }
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
             .products-grid { gap: 20px; padding: 0 20px 60px 20px; }
             header { padding: 15px 20px; }
             .nav-links { display: none; }
+            .auth-box { padding: 25px 20px; }
         }
     </style>
 </head>
@@ -158,12 +198,12 @@
                 <a href="index.html">Bio Link</a>
                 <a href="chat.html">Hỗ Trợ Live</a>
             </div>
-            <button class="auth-nav-btn" id="header-auth-btn" onclick="openAuthModal('login')">Đăng Nhập</button>
+            <button class="auth-nav-btn" id="header-auth-btn" onclick="openAuthModal('login')">Đăng Nhập Ngay</button>
         </div>
     </header>
 
     <section class="hero">
-        <h1>Kho <span>Source Code</span> & <span>Hack Game</span></h1>
+        <h1>Kho <span>Source Code</span> & <span>Hack Game VIP</span></h1>
         <p>Hệ thống tự động cung cấp giải pháp lập trình Website kinh doanh 24/7 và các Script Mod Game Mobile hoàn hảo, chống ban, tối ưu mượt mà.</p>
         
         <div class="filters">
@@ -229,46 +269,65 @@
 
     <a href="chat.html" class="float-support" title="Trò chuyện với Kun Bot">💬</a>
 
+    <!-- ==========================================
+       💎 FORM ĐĂNG NHẬP / ĐĂNG KÝ (NEW DESIGN)
+       ========================================== -->
     <div class="modal-overlay" id="authModalOverlay">
         <div class="auth-box">
             <button class="close-modal-btn" onclick="closeAuthModal()">✕</button>
             
-            <div class="auth-tabs">
-                <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">ĐĂNG NHẬP</button>
-                <button class="auth-tab" id="tab-register" onclick="switchTab('register')">ĐĂNG KÝ MỚI</button>
-            </div>
+            <div class="auth-content">
+                <div class="auth-header">
+                    <h2>HOANGKUN</h2>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Hệ thống thành viên VIP</p>
+                </div>
 
-            <div class="auth-form active" id="form-login">
-                <div class="input-group">
-                    <input type="email" class="auth-input" id="login-email" placeholder="Nhập địa chỉ Email">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">ĐĂNG NHẬP</button>
+                    <button class="auth-tab" id="tab-register" onclick="switchTab('register')">ĐĂNG KÝ MỚI</button>
                 </div>
-                <div class="input-group">
-                    <input type="password" class="auth-input" id="login-password" placeholder="Nhập mật khẩu">
-                </div>
-                <div class="error-message" id="login-error-msg">⚠️ Sai tài khoản hoặc mật khẩu!</div>
-                <button class="submit-auth-btn" onclick="handleLoginSubmit()">ĐĂNG NHẬP</button>
-            </div>
 
-            <div class="auth-form" id="form-register">
-                <div class="input-group">
-                    <input type="text" class="auth-input" id="reg-username" placeholder="Tên hiển thị tài khoản">
+                <!-- TAB ĐĂNG NHẬP -->
+                <div class="auth-form active" id="form-login">
+                    <div class="input-group">
+                        <input type="email" class="auth-input" id="login-email" placeholder="Địa chỉ Email của bạn">
+                        <span class="input-icon">📧</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" class="auth-input" id="login-password" placeholder="Mật khẩu bảo mật">
+                        <span class="input-icon">🔑</span>
+                    </div>
+                    <div class="error-message" id="login-error-msg">⚠️ Sai tài khoản hoặc mật khẩu!</div>
+                    <button class="submit-auth-btn" onclick="handleLoginSubmit()">XÁC NHẬN ĐĂNG NHẬP</button>
                 </div>
-                <div class="input-group">
-                    <input type="email" class="auth-input" id="reg-email" placeholder="Địa chỉ Email">
+
+                <!-- TAB ĐĂNG KÝ -->
+                <div class="auth-form" id="form-register">
+                    <div class="input-group">
+                        <input type="text" class="auth-input" id="reg-username" placeholder="Tên hiển thị">
+                        <span class="input-icon">👤</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" class="auth-input" id="reg-email" placeholder="Địa chỉ Email">
+                        <span class="input-icon">📧</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" class="auth-input" id="reg-password" placeholder="Mật khẩu">
+                        <span class="input-icon">🔓</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" class="auth-input" id="reg-confirm-password" placeholder="Nhập lại mật khẩu">
+                        <span class="input-icon">🔒</span>
+                    </div>
+                    <div class="error-message" id="reg-error-msg">⚠️ Mật khẩu không trùng khớp!</div>
+                    
+                    <button class="submit-auth-btn" onclick="handleRegisterSubmit()">KHỞI TẠO TÀI KHOẢN</button>
                 </div>
-                <div class="input-group">
-                    <input type="password" class="auth-input" id="reg-password" placeholder="Mật khẩu bảo mật">
-                </div>
-                <div class="input-group">
-                    <input type="password" class="auth-input" id="reg-confirm-password" placeholder="Nhập lại mật khẩu">
-                </div>
-                <div class="error-message" id="reg-error-msg">⚠️ Mật khẩu không trùng khớp!</div>
-                
-                <button class="submit-auth-btn" onclick="handleRegisterSubmit()">TẠO TÀI KHOẢN</button>
             </div>
         </div>
     </div>
 
+    <!-- TÍCH HỢP FIREBASE -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
@@ -295,7 +354,7 @@
             if (user) {
                 database.ref('users/' + user.uid).once('value').then((snapshot) => {
                     const username = (snapshot.val() && snapshot.val().username) || 'Thành Viên';
-                    headerBtn.innerHTML = `Chào, ${username}`;
+                    headerBtn.innerHTML = `Hi, ${username}`;
                     headerBtn.onclick = () => {
                         if(confirm('Bạn có muốn đăng xuất tài khoản không?')) {
                             auth.signOut().then(() => location.reload());
@@ -303,7 +362,7 @@
                     };
                 });
             } else {
-                headerBtn.innerHTML = 'Đăng Nhập';
+                headerBtn.innerHTML = 'Đăng Nhập Ngay';
                 headerBtn.onclick = () => openAuthModal('login');
             }
         });
