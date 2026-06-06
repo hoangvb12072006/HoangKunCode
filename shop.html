@@ -245,6 +245,62 @@
             from { transform: translateX(0); opacity: 1; } 
             to { transform: translateX(120%); opacity: 0; } 
         }
+
+        /* ==========================================
+           💎 TIÊU ĐỀ PHÂN MỤC SẢN PHẨM
+           ========================================== */
+        .category-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 20px 0 40px 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .category-title span {
+            background: linear-gradient(to right, var(--primary), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .category-title::after {
+            content: ''; display: block;
+            width: 80px; height: 4px;
+            background: var(--primary);
+            margin: 15px auto 0; border-radius: 2px;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        /* ==========================================
+           💎 CSS GIỚI THIỆU & ĐÁNH GIÁ
+           ========================================== */
+        .intro-wrapper {
+            grid-column: 1 / -1; /* Ép thẻ này nằm tràn viền */
+            animation: slideUpFade 0.4s ease forwards;
+        }
+        .intro-box {
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid var(--primary);
+            border-radius: 20px; padding: 30px; text-align: center;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.1);
+            margin-bottom: 40px;
+        }
+        .intro-box h3 { color: #fff; font-size: 1.6rem; margin-bottom: 12px; }
+        .intro-box p { color: var(--text-dim); font-size: 1.05rem; max-width: 800px; margin: 0 auto; }
+        
+        .feedback-title { text-align: center; color: #fff; font-size: 1.4rem; margin: 0 0 25px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
+        .feedback-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .feedback-card {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 25px; transition: 0.3s;
+        }
+        .feedback-card:hover { transform: translateY(-5px); border-color: var(--neon-blue); box-shadow: 0 10px 20px rgba(14, 165, 233, 0.15); }
+        .feedback-text { font-style: italic; color: var(--text-dim); margin-bottom: 15px; line-height: 1.6; }
+        .feedback-user { color: var(--neon-blue); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
+        
+        /* Ẩn hiện các mục mượt mà */
+        .catalog-item { display: none; }
+        .item-intro { display: block; } /* Mặc định hiện Intro */
+        
     </style>
 </head>
 <body>
@@ -264,65 +320,82 @@
         <h1>Kho <span>Source Code</span> & <span>Hack Game VIP</span></h1>
         <p>Hệ thống tự động cung cấp giải pháp lập trình Website kinh doanh 24/7 và các Script Mod Game Mobile hoàn hảo, chống ban, tối ưu mượt mà.</p>
         
+      <!-- BỘ LỌC MỚI (Bỏ "Tất Cả", thêm "Giới Thiệu") -->
         <div class="filters">
-            <button class="filter-btn active" onclick="filterCatalog('all')">Tất Cả Sản Phẩm</button>
-            <button class="filter-btn" onclick="filterCatalog('web')">Mã Nguồn Web</button>
-            <button class="filter-btn" onclick="filterCatalog('game')">Bản Hack / Script Game</button>
+            <button class="filter-btn active" onclick="filterCatalog('intro', this)">Giới Thiệu & Đánh Giá</button>
+            <button class="filter-btn" onclick="filterCatalog('web', this)">Mã Nguồn Web</button>
+            <button class="filter-btn" onclick="filterCatalog('game', this)">Bản Hack / Script Game</button>
         </div>
     </section>
 
     <section class="products-grid" id="catalogGrid">
-        <div class="product-card item-web">
+        
+        <!-- 🌟 KHU VỰC 1: GIỚI THIỆU & ĐÁNH GIÁ (HIỂN THỊ MẶC ĐỊNH KHI VÀO TRANG) -->
+        <div class="intro-wrapper catalog-item item-intro">
+            <div class="intro-box">
+                <h3>🌟 Uy Tín Tạo Nên Thương Hiệu</h3>
+                <p>Hệ thống tự động của HOANGKUN STORE chuyên cung cấp các giải pháp Website kinh doanh 24/7 và Script Hack Game tối ưu mượt mà, chống ban, đảm bảo an toàn tuyệt đối cho người dùng.</p>
+            </div>
+            
+            <h3 class="feedback-title">💬 Khách Hàng Nói Gì Về Chúng Tôi?</h3>
+            <div class="feedback-grid">
+                <div class="feedback-card">
+                    <p class="feedback-text">"Source code mua tại HOANGKUN STORE chạy rất mượt, cấu trúc code cực kỳ sạch sẽ và dễ dàng tùy biến lại theo ý thích. Quá uy tín!"</p>
+                    <div class="feedback-user">👤 Developer T.A</div>
+                </div>
+                <div class="feedback-card">
+                    <p class="feedback-text">"Hệ thống tích hợp cổng thanh toán API tự động chạy ổn định, tiết kiệm rất nhiều thời gian quản lý vận hành shop."</p>
+                    <div class="feedback-user">👤 Admin Shop Game</div>
+                </div>
+                <div class="feedback-card">
+                    <p class="feedback-text">"Script Hack chuẩn VIP, bypass cực an toàn. Treo farm nguyên đêm không lo bị khóa acc. Sẽ ủng hộ shop lâu dài."</p>
+                    <div class="feedback-user">👤 Dân Chơi Mobile</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🌐 KHU VỰC 2: SẢN PHẨM WEB (Thêm class "catalog-item") -->
+        <div class="product-card catalog-item item-web">
             <div class="product-img-wrapper">🛒</div>
             <div class="product-info">
                 <span class="category-tag">Source Code Web</span>
                 <h3 class="product-title">Code Web Shop Game Auto Bank</h3>
                 <p class="product-desc">Website bán tài khoản tích hợp API nhận diện số dư ngân hàng và Momo tự động xuất đơn trong 3 giây.</p>
-                <div class="price-row">
-                    <span class="price">Liên Hệ</span>
-                    <a href="chat.html" class="buy-btn">Mua Ngay</a>
-                </div>
+                <div class="price-row"><span class="price">Liên Hệ</span><a href="chat.html" class="buy-btn">Mua Ngay</a></div>
             </div>
         </div>
 
-        <div class="product-card item-web">
+        <div class="product-card catalog-item item-web">
             <div class="product-img-wrapper">🎨</div>
             <div class="product-info">
                 <span class="category-tag">Source Code Web</span>
-                <h3 class="product-title">Landing Page Cyberpunk Tech</h3>
+                <h3 class="product-title">Landing Page Cyberpunk</h3>
                 <p class="product-desc">Giao diện Landing Page phong cách Neon rực rỡ, tích hợp hiệu ứng JS mượt mà và chuẩn SEO.</p>
-                <div class="price-row">
-                    <span class="price">Liên Hệ</span>
-                    <a href="chat.html" class="buy-btn">Mua Ngay</a>
-                </div>
+                <div class="price-row"><span class="price">Liên Hệ</span><a href="chat.html" class="buy-btn">Mua Ngay</a></div>
             </div>
         </div>
 
-        <div class="product-card item-game">
+        <!-- 🎮 KHU VỰC 3: SẢN PHẨM GAME (Thêm class "catalog-item") -->
+        <div class="product-card catalog-item item-game">
             <div class="product-img-wrapper">🤖</div>
             <div class="product-info">
                 <span class="category-tag">Script Hack Game</span>
                 <h3 class="product-title">Script Blox Fruits Auto Farm</h3>
                 <p class="product-desc">Script treo máy cày cấp độ siêu tốc, tự săn Boss, nhặt đồ cực xịn chạy mượt trên Fluxus/Delta.</p>
-                <div class="price-row">
-                    <span class="price">Liên Hệ</span>
-                    <a href="chat.html" class="buy-btn">Mua Ngay</a>
-                </div>
+                <div class="price-row"><span class="price">Liên Hệ</span><a href="chat.html" class="buy-btn">Mua Ngay</a></div>
             </div>
         </div>
 
-        <div class="product-card item-game">
+        <div class="product-card catalog-item item-game">
             <div class="product-img-wrapper">🔥</div>
             <div class="product-info">
                 <span class="category-tag">Hack Game Mobile</span>
                 <h3 class="product-title">Hack Free Fire VIP Headshot</h3>
                 <p class="product-desc">Tự động ghim tâm vào đầu 100%, nhìn thấu tường vẽ định vị Antenna. Tích hợp Bypass xịn.</p>
-                <div class="price-row">
-                    <span class="price">Liên Hệ</span>
-                    <a href="chat.html" class="buy-btn">Mua Ngay</a>
-                </div>
+                <div class="price-row"><span class="price">Liên Hệ</span><a href="chat.html" class="buy-btn">Mua Ngay</a></div>
             </div>
         </div>
+
     </section>
 
     <a href="chat.html" class="float-support" title="Trò chuyện với Kun Bot">💬</a>
@@ -629,15 +702,20 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
                 }
             });
         }
-        function filterCatalog(category) {
+        
+        // Hàm lọc danh mục kết hợp Ẩn/Hiện Giới Thiệu
+        function filterCatalog(category, btnElement) {
+            // Xóa active các nút, set active nút đang bấm
             const buttons = document.querySelectorAll('.filter-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            btnElement.classList.add('active');
 
-            const items = document.querySelectorAll('.product-card');
+            // Ẩn/Hiện dựa vào class
+            const items = document.querySelectorAll('.catalog-item');
             items.forEach(item => {
-                if (category === 'all' || item.classList.contains('item-' + category)) {
-                    item.style.display = 'flex';
+                if (item.classList.contains('item-' + category)) {
+                    // Nếu là sản phẩm thì bật flex, nếu là giới thiệu thì bật block
+                    item.style.display = item.classList.contains('product-card') ? 'flex' : 'block';
                 } else {
                     item.style.display = 'none';
                 }
