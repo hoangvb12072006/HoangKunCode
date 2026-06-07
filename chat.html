@@ -466,5 +466,121 @@ document.addEventListener('contextmenu', function(e) {
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="main.js"></script>
 
+    <!-- ==========================================
+       🛡️ SCRIPT CHỐNG SOẠN CODE & THÔNG BÁO CYBERPUNK
+       ========================================== -->
+    <style>
+        /* CSS CHO THÔNG BÁO TOAST */
+        #cyber-toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            pointer-events: none;
+        }
+        .cyber-toast {
+            background: rgba(15, 15, 22, 0.95);
+            border-left: 4px solid #ef4444; /* Viền đỏ cảnh báo */
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3), inset 0 0 15px rgba(239, 68, 68, 0.05);
+            padding: 15px 25px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            opacity: 0;
+            /* Hiệu ứng trượt vào và rung lắc nhẹ */
+            animation: slideInToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, shakeToast 0.4s 0.4s;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .cyber-toast.hide {
+            animation: slideOutToast 0.4s ease forwards;
+        }
+        .toast-icon {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+        @keyframes slideInToast { to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutToast { to { transform: translateX(120%); opacity: 0; } }
+        @keyframes shakeToast {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+    </style>
+
+    <script>
+        // Hàm tạo và hiển thị thông báo
+        function showCyberToast(message) {
+            let container = document.getElementById('cyber-toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'cyber-toast-container';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            toast.className = 'cyber-toast';
+            toast.innerHTML = `<div class="toast-icon">!</div><div>${message}</div>`;
+            
+            container.appendChild(toast);
+
+            // Tự động ẩn sau 3 giây
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 400); // Xóa element sau khi chạy xong animation ẩn
+            }, 3000);
+        }
+
+        // 1. Chặn bấm chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            showCyberToast('🛑 HOẠT ĐỘNG CHUỘT PHẢI ĐÃ BỊ KHÓA!');
+        });
+
+        // 2. Chặn các phím tắt nguy hiểm
+        document.onkeydown = function(e) {
+            // Danh sách mã phím chặn
+            const forbiddenKeys = [
+                123, // F12
+                (e.ctrlKey && e.shiftKey && e.keyCode === 73), // Ctrl+Shift+I
+                (e.ctrlKey && e.shiftKey && e.keyCode === 74), // Ctrl+Shift+J
+                (e.ctrlKey && e.shiftKey && e.keyCode === 67), // Ctrl+Shift+C
+                (e.ctrlKey && e.keyCode === 85),               // Ctrl+U
+                (e.ctrlKey && e.keyCode === 83)                // Ctrl+S
+            ];
+
+            if (forbiddenKeys.includes(true) || e.keyCode === 123) {
+                e.preventDefault();
+                showCyberToast('⚠️ F12 VÀ XEM MÃ NGUỒN ĐÃ BỊ VÔ HIỆU HÓA!');
+                return false;
+            }
+        };
+        
+        // 3. Vô hiệu hóa kéo thả bôi đen văn bản
+        document.onselectstart = function(e) {
+            e.preventDefault();
+            return false;
+        };
+    </script>
+    
 </body>
 </html>
