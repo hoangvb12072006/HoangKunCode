@@ -49,7 +49,7 @@
 
         /* KHUNG DOWNLOAD CHÍNH (FORM MỚI) */
         .installer-card {
-            width: 100%; max-width: 900px;
+            width: 100%; max-width: 950px;
             background: var(--bg-card);
             border: 1px solid var(--primary-glow);
             border-radius: 30px;
@@ -67,17 +67,17 @@
 
         /* KHU VỰC TOP: NÚT TRỞ VỀ */
         .card-header {
-            padding: 15px 20px;
+            padding: 15px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px dashed var(--border-color);
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         .back-btn {
             background: rgba(255,255,255,0.05);
             color: var(--text-dim);
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 20px;
             text-decoration: none;
             font-size: 0.9rem;
@@ -96,30 +96,31 @@
         /* NỘI DUNG FORM */
         .card-body {
             display: grid;
-            grid-template-columns: 1.1fr 1.6fr; /* Tỷ lệ cột chia lại cho cân đối trên PC */
-            gap: 35px;
-            padding: 0 20px 30px 20px;
-            align-items: start; /* QUAN TRỌNG: Không ép cột ảnh phải dài bằng cột chữ */
+            grid-template-columns: 1fr 1.3fr;
+            gap: 40px;
+            padding: 0 30px 40px 30px;
+            align-items: stretch; /* Giúp 2 cột bằng nhau để căn giữa ảnh */
         }
 
-        /* CỘT ẢNH CHUẨN POSTER */
+        /* CỘT ẢNH - CHỈNH LẠI CHO BANNER NGANG */
         .img-wrapper {
             position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            background: rgba(0,0,0,0.4); /* Nền tối để tôn ảnh */
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; height: 100%;
         }
         .img-wrapper img {
             width: 100%; 
-            height: auto; /* Để ảnh tự động kéo dài đúng tỷ lệ gốc */
-            display: block;
-            object-fit: contain; /* Hiển thị trọn vẹn 100% chi tiết ảnh */
+            height: auto; 
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.1);
             transition: 0.5s ease;
+            display: block;
         }
         .img-wrapper:hover img {
-            transform: scale(1.03);
+            transform: scale(1.03) translateY(-5px);
+            box-shadow: 0 25px 60px rgba(139, 92, 246, 0.2);
+            border-color: var(--primary-glow);
         }
 
         /* CỘT THÔNG TIN */
@@ -135,7 +136,7 @@
         }
         .tag.os { background: rgba(14, 165, 233, 0.15); color: var(--neon-blue); border-color: rgba(14, 165, 233, 0.3); }
 
-        .product-title { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 15px; line-height: 1.3; letter-spacing: -0.5px;}
+        .product-title { font-size: 2.1rem; font-weight: 800; color: #fff; margin-bottom: 15px; line-height: 1.3; letter-spacing: -0.5px;}
         
         .meta-grid { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
@@ -148,44 +149,67 @@
         .meta-value.safe { color: var(--success); text-shadow: 0 0 10px rgba(16,185,129,0.3); }
 
         .desc-box {
-            margin-bottom: 30px; flex: 1;
+            margin-bottom: 25px;
         }
-        .desc-box h4 { color: #fff; margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;}
         .desc-list { list-style: none; }
         .desc-list li { 
-            margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; 
+            margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; 
             background: rgba(255,255,255,0.03); padding: 10px 15px; border-radius: 10px; border: 1px solid var(--border-color);
-            font-size: 0.95rem; color: #cbd5e1; line-height: 1.5;
+            font-size: 0.9rem; color: #cbd5e1; line-height: 1.5;
         }
         .desc-list li b { color: var(--neon-blue); margin-right: 5px; white-space: nowrap; }
 
-        /* NÚT TẢI RUNG ĐỘNG */
-        .download-btn {
-            background: linear-gradient(135deg, var(--neon-blue), #0284c7);
-            color: white; border: none; padding: 20px; border-radius: 16px; 
-            font-size: 1.15rem; font-weight: 800; letter-spacing: 1px;
-            cursor: pointer; transition: 0.3s; text-align: center; text-decoration: none;
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
-            text-transform: uppercase;
-            display: flex; justify-content: center; align-items: center; gap: 12px;
-            position: relative; overflow: hidden;
-            margin-top: auto;
+        /* KHU VỰC CÁC NÚT TẢI */
+        .download-group {
+            display: flex; flex-direction: column; gap: 12px; margin-top: auto;
+            background: rgba(0,0,0,0.3); padding: 20px; border-radius: 20px;
+            border: 1px dashed rgba(255,255,255,0.15);
         }
-        .download-btn::after {
+        .download-title {
+            text-align: center; color: var(--text-dim); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px;
+        }
+        
+        .dl-btn {
+            color: white; border: none; padding: 16px; border-radius: 14px; 
+            font-size: 1.05rem; font-weight: 800; letter-spacing: 0.5px;
+            cursor: pointer; transition: 0.3s; text-align: center; text-decoration: none;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            text-transform: uppercase; position: relative; overflow: hidden;
+        }
+        .dl-btn::after {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
             transform: rotate(45deg); animation: shine 3s infinite;
         }
-        @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
-        .download-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(14, 165, 233, 0.6); }
+        .dl-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        /* CSS RIÊNG CHO TỪNG NÚT */
+        .btn-ios {
+            background: linear-gradient(135deg, var(--neon-blue), #0284c7);
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.4);
+        }
+        .btn-adr-64 {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+        .btn-adr-32 {
+            background: rgba(16, 185, 129, 0.05);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            box-shadow: none;
+        }
+        .btn-adr-32:hover {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: #10b981;
+            color: #fff;
+        }
         
-        .security-note { text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px; font-weight: 500;}
+        .security-note { text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-top: 15px; font-weight: 500;}
 
         /* Responsive Mobile */
         @media (max-width: 768px) {
-            .card-body { grid-template-columns: 1fr; gap: 25px; padding: 0 15px 25px 15px;}
-            .img-wrapper { max-height: 400px; } /* Giới hạn chiều cao trên điện thoại */
-            .product-title { font-size: 1.7rem; }
+            .card-body { grid-template-columns: 1fr; gap: 30px; padding: 0 20px 30px 20px;}
+            .product-title { font-size: 1.8rem; }
             .meta-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -208,12 +232,12 @@
 
         <!-- NỘI DUNG CHÍNH -->
         <div class="card-body">
-            <!-- CỘT ẢNH ĐÃ SỬA CĂN CHỈNH -->
+            <!-- CỘT ẢNH BANNER NGANG -->
             <div class="img-wrapper">
                 <img src="https://sf-static.upanhlaylink.com/img/image_2026060635f61d0a7c344f1ceb0c03914ae54fb5.jpg" alt="Menu Mod Liên Quân">
             </div>
 
-            <!-- CỘT THÔNG TIN -->
+            <!-- CỘT THÔNG TIN VÀ NÚT TẢI -->
             <div class="info-col">
                 <div class="tag-group">
                     <span class="tag">MENU VIP PRO</span>
@@ -225,7 +249,7 @@
                 <div class="meta-grid">
                     <div class="meta-item">
                         <span class="meta-label">📦 Dung lượng</span>
-                        <span class="meta-value">277.8 MB</span>
+                        <span class="meta-value">~277 MB</span>
                     </div>
                     <div class="meta-item">
                         <span class="meta-label">🔄 Cập nhật</span>
@@ -238,7 +262,6 @@
                 </div>
 
                 <div class="desc-box">
-                    <h4>🚀 TÍNH NĂNG MENU MOD:</h4>
                     <ul class="desc-list">
                         <li><b>AIM TÂM:</b> Tự động ghim tâm chiêu thức chuẩn xác 100%.</li>
                         <li><b>FULL SKIN:</b> Mở khóa đầy đủ toàn bộ trang phục, hiệu ứng.</li>
@@ -247,11 +270,29 @@
                     </ul>
                 </div>
 
-                <!-- NÚT TẢI TRỰC TIẾP -->
-                <a href="https://dl.ipas.cc/ipas/c466o2.ipa" class="download-btn" download>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    TẢI XUỐNG BẢN HACK (IPA)
-                </a>
+                <!-- BẢNG ĐIỀU KHIỂN NÚT TẢI -->
+                <div class="download-group">
+                    <div class="download-title">Chọn Phiên Bản Phù Hợp Máy Bạn</div>
+                    
+                    <!-- NÚT IOS -->
+                    <a href="https://dl.ipas.cc/ipas/c466o2.ipa" class="dl-btn btn-ios" download>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        TẢI BẢN IOS (IPA)
+                    </a>
+
+                    <!-- NÚT ANDROID 64BIT -->
+                    <a href="https://www.mediafire.com/file/cpcv6gaqx0qpxjl/%5Bx64%5DLie%CC%82n+Qua%CC%82n+Mobile_1.62gf.1.4_apks_clone+#1.apk/file" target="_blank" class="dl-btn btn-adr-64">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        TẢI ANDROID (BẢN CHUẨN x64)
+                    </a>
+
+                    <!-- NÚT ANDROID 32BIT -->
+                    <a href="https://www.mediafire.com/file/ioz5tzeqjq7oeng/%5Bx32%5DLie%CC%82n+Qua%CC%82n+Mobile_1.62.1bb.4_apks_clone#9.apk/file" target="_blank" class="dl-btn btn-adr-32">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        TẢI ANDROID (MÁY YẾU x32)
+                    </a>
+                </div>
+
                 <div class="security-note">
                     🛡️ Tệp nguồn sạch 100% - Đã quét qua HOANGKUN Security
                 </div>
