@@ -168,6 +168,16 @@
             .meta-grid { grid-template-columns: 1fr; }
             .desc-list { grid-template-columns: 1fr; }
         }
+
+        /* STYLE CHO NÚT BẢO TRÌ */
+        .btn-maintenance {
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.3);
+            border: 1px dashed rgba(255,255,255,0.1);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
     </style>
 </head>
 <body>
@@ -228,16 +238,16 @@
                     <div class="download-title">Menu Cài Đặt & Hướng Dẫn</div>
                     
                     <!-- NÚT TẢI IOS -->
-                    <a href="#" class="dl-btn dl-active btn-ios" download>
+                    <a href="https://dl.ipas.cc/ipas/nfm1hg.ipa" class="dl-btn dl-active btn-ios" download>
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                         TẢI BẢN IOS (IPA)
                     </a>
 
-                    <!-- NÚT TẢI ANDROID -->
-                    <a href="#" class="dl-btn dl-active btn-adr" download>
+                   <!-- NÚT TẢI ANDROID (ĐANG BẢO TRÌ) -->
+                    <button class="dl-btn btn-maintenance" disabled>
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        TẢI BẢN ANDROID (APK)
-                    </a>
+                        TẢI BẢN ANDROID (ĐANG BẢO TRÌ)
+                    </button>
 
                 <div class="security-note">
                     🛡️ Tệp nguồn sạch 100% - Đã quét qua HOANGKUN Security
