@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Mã Nguồn Landing Page | HOANGKUN STORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #09090e;
+            --bg-card: rgba(15, 15, 22, 0.7);
+            --primary: #8b5cf6; /* Tím Neon */
+            --primary-glow: rgba(139, 92, 246, 0.4);
+            --neon-blue: #0ea5e9;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --success: #10b981;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+        body { 
+            background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; min-height: 100vh; overflow-x: hidden;
+            background-image: radial-gradient(circle at 90% 10%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
+        }
+
+        /* HEADER */
+        header { background: rgba(10, 10, 15, 0.9); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); }
+        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: 1px; }
+        .logo span { background: linear-gradient(to right, var(--primary), var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .back-btn { background: rgba(255,255,255,0.05); color: var(--text-dim); padding: 8px 18px; border-radius: 20px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: 0.3s; border: 1px solid transparent; }
+        .back-btn:hover { background: rgba(14, 165, 233, 0.1); color: #fff; border-color: var(--neon-blue); }
+
+        /* BỐ CỤC TRANG CHI TIẾT */
+        .detail-container { max-width: 1200px; margin: 40px auto; padding: 0 15px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; }
+
+        /* CỘT 1: ẢNH VÀ MÔ TẢ DÀI */
+        .left-col { display: flex; flex-direction: column; gap: 25px; }
+        .image-gallery { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .main-img { width: 100%; border-radius: 12px; overflow: hidden; background: #000; }
+        .main-img img { width: 100%; display: block; object-fit: cover; transition: 0.3s; opacity: 0.9; }
+        .main-img:hover img { transform: scale(1.02); opacity: 1; }
+
+        .tech-stack { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .tech-tag { background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: var(--neon-blue); padding: 6px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; }
+
+        .description-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; }
+        .description-box h3 { color: #fff; margin-bottom: 15px; font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .desc-text { color: var(--text-dim); font-size: 0.95rem; line-height: 1.8; }
+        .desc-text p { margin-bottom: 15px; }
+
+        /* CỘT 2: THÔNG TIN MUA CODE & TÍNH NĂNG */
+        .right-col { display: flex; flex-direction: column; gap: 20px; }
+        
+        .product-info { background: var(--bg-card); border: 1px solid var(--neon-blue); border-radius: 20px; padding: 25px; box-shadow: inset 0 0 20px rgba(14, 165, 233, 0.05); }
+        .prod-title { font-size: 2.1rem; font-weight: 800; color: #fff; line-height: 1.3; margin-bottom: 15px; }
+        
+        .status-tag { display: inline-block; background: rgba(14, 165, 233, 0.2); color: var(--neon-blue); border: 1px solid var(--neon-blue); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 20px; }
+
+        .prod-price { font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 25px; text-shadow: 0 0 15px var(--primary-glow); }
+
+        .feature-list { list-style: none; margin-bottom: 30px; }
+        .feature-list li { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; color: #e2e8f0; font-size: 0.95rem; }
+        .feature-list li::before { content: '⚡'; color: var(--neon-blue); }
+
+        .action-btns { display: flex; flex-direction: column; gap: 12px; }
+        .btn-buy { background: linear-gradient(135deg, var(--neon-blue), #0284c7); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: 0.3s; text-align: center; text-decoration: none; box-shadow: 0 10px 25px rgba(14, 165, 233, 0.4); }
+        .btn-buy:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(14, 165, 233, 0.6); }
+        
+        .btn-demo { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-color); padding: 18px; border-radius: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: 0.3s; text-align: center; text-decoration: none; }
+        .btn-demo:hover { background: rgba(139, 92, 246, 0.1); border-color: var(--primary); color: var(--primary); }
+
+        /* BOX BẢO HÀNH CODE */
+        .policy-box { background: rgba(0,0,0,0.4); border: 1px dashed var(--border-color); padding: 20px; border-radius: 15px; }
+        .policy-box h4 { color: var(--success); margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .policy-item { margin-bottom: 10px; font-size: 0.9rem; color: var(--text-dim); display: flex; gap: 8px; }
+        .policy-item b { color: #fff; }
+
+        @media (max-width: 900px) {
+            .detail-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-top">
+            <a href="shop.html" class="logo">HOANGKUN <span>STORE</span></a>
+            <a href="shop.html" class="back-btn">⬅ Quay lại Shop</a>
+        </div>
+    </header>
+
+    <div class="detail-container">
+        
+        <div class="left-col">
+            <div class="image-gallery">
+                <div class="main-img">
+                    <img src="https://sf-static.upanhlaylink.com/img/image_20260607f08028a92f0f3870e68812a465cafa72.jpg" alt="Mã Nguồn Web Hệ Thống Hack" style="filter: hue-rotate(180deg);">
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-tag">HTML5 / CSS3 Pure</span>
+                    <span class="tech-tag">Giao Diện Web-App</span>
+                    <span class="tech-tag">Glassmorphism</span>
+                    <span class="tech-tag">Single Page App</span>
+                </div>
+            </div>
+
+            <div class="description-box">
+                <h3>📝 Thông Tin Mã Nguồn</h3>
+                <div class="desc-text">
+                    <p><b>Mã nguồn Hệ Thống Hack & Code VIP</b> là bộ giao diện dạng Dashboard Panel (Bảng điều khiển) siêu ngầu phong cách Matrix/Cyberpunk. Phù hợp tuyệt đối cho anh em làm web bán Script Hack, Tool, hoặc Key Game.</p>
+                    <p>Điểm ăn tiền của bộ code này là cơ chế <b>Single Page Application (SPA)</b>. Khách hàng click menu bên trái, nội dung bên phải sẽ chuyển đổi ngay lập tức mà không cần load lại trang. Trên điện thoại, menu tự động trượt xuống thành thanh App Bar dưới đáy cực kỳ chuyên nghiệp.</p>
+                    <p>Sản phẩm đã được tích hợp sẵn "Khiên bảo vệ": Chặn chuột phải, chặn F12 và hệ thống thông báo Toast Cyberpunk trượt từ góc phải siêu mượt.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-col">
+            <div class="product-info">
+                <div class="status-tag">Giao diện UI/UX Cao Cấp</div>
+                <h1 class="prod-title">Web Hệ Thống Hack & Code VIP (Matrix UI)</h1>
+                
+                <div class="prod-price">Liên Hệ</div>
+
+                <ul class="feature-list">
+                    <li>Bố cục Dashboard App xịn sò, không đụng hàng.</li>
+                    <li>Hiệu ứng Kính Mờ (Glassmorphism) & Viền Sáng Neon.</li>
+                    <li>Thanh Menu biến hình thành Bottom Bar trên Mobile.</li>
+                    <li>Hệ thống Modal Đăng nhập / Đăng ký trượt siêu mượt.</li>
+                    <li>Kèm sẵn Script Anti-Inspect (Chống soi code/F12) VIP.</li>
+                </ul>
+
+                <div class="action-btns">
+                    <a href="chat.html" class="btn-buy">💬 NHẮN TIN LẤY SOURCE CODE</a>
+                    <a href="#" class="btn-demo">👁️ XEM DEMO GIAO DIỆN</a>
+                </div>
+            </div>
+
+            <div class="policy-box">
+                <h4>🛡️ Chính Sách Developer</h4>
+                <div class="policy-item">👉 <b>Tối ưu hóa:</b> Code sạch sẽ, dễ đọc, dễ thay đổi màu nền/gradient.</div>
+                <div class="policy-item">👉 <b>Linh hoạt:</b> Ghép cực dễ với Firebase hoặc các hệ thống API Backend.</div>
+                <div class="policy-item">👉 <b>Bảo hành:</b> Hỗ trợ hướng dẫn chỉnh sửa UI cơ bản nếu gặp lỗi hiển thị.</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
