@@ -456,6 +456,43 @@
     transition: 0.3s;
     display: block;        /* Để width có tác dụng */
 }
+
+        /* ==========================================
+           CSS KHU VỰC BÌNH LUẬN
+           ========================================== */
+        .comments-wrapper { width: 100%; max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        
+        .divider-title { text-align: center; margin-bottom: 30px; position: relative; }
+        .divider-title::before { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: var(--border-color); z-index: 0; }
+        .divider-title span { background: var(--bg-main); padding: 0 20px; color: var(--text-dim); font-weight: 700; font-size: 1.1rem; letter-spacing: 2px; position: relative; z-index: 1; }
+
+        .comments-container { background: rgba(15, 15, 22, 0.6); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
+
+        /* Khung nhập liệu */
+        .comment-input-area { display: flex; gap: 15px; margin-bottom: 30px; }
+        .user-avatar-placeholder { width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--neon-blue)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .input-box { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .input-box input, .input-box textarea { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 15px; color: #fff; font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.3s; }
+        .input-box input:focus, .input-box textarea:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); }
+        .input-box textarea { resize: vertical; min-height: 80px; }
+        .input-actions { display: flex; justify-content: flex-end; }
+        #btn-submit-cmt { background: linear-gradient(to right, var(--primary), var(--neon-blue)); color: white; border: none; padding: 10px 24px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        #btn-submit-cmt:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4); }
+
+        /* Danh sách bình luận */
+        .comments-list { display: flex; flex-direction: column; gap: 20px; max-height: 500px; overflow-y: auto; padding-right: 5px; }
+        .comments-list::-webkit-scrollbar { width: 6px; }
+        .comments-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        
+        .cmt-item { display: flex; gap: 15px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .cmt-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
+        .cmt-body { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 12px 18px; border-radius: 18px; border-top-left-radius: 4px; flex: 1; }
+        .cmt-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+        .cmt-name { color: #fff; font-weight: 700; font-size: 0.95rem; }
+        .cmt-time { color: var(--text-dim); font-size: 0.75rem; }
+        .cmt-text { color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; word-break: break-word; }
+        .loading-cmt { text-align: center; color: var(--text-dim); font-style: italic; }
         
     </style>
 </head>
@@ -547,17 +584,31 @@
         </section>
 
         <section>
-            <h2 class="section-title">Cảm Nhận Từ Cộng Đồng</h2>
-            <div class="feedback-list">
-                <div class="feedback-card">
-                    <p class="feedback-text">"Source code mua tại HOANGKUN STORE chạy rất mượt, cấu trúc code cực kỳ sạch sẽ và dễ dàng tùy biến lại theo ý thích. Quá uy tín!"</p>
-                    <div class="feedback-user">👤 Thành Viên Cộng Đồng Developer</div>
+           <!-- KHU VỰC BÌNH LUẬN ĐỘNG (GIAO DIỆN FACEBOOK DARK MODE) -->
+        <div class="comments-wrapper">
+            <div class="divider-title">
+                <span>BÌNH LUẬN TỪ CỘNG ĐỒNG</span>
+            </div>
+
+            <div class="comments-container">
+                <!-- Khu vực nhập bình luận -->
+                <div class="comment-input-area">
+                    <div class="user-avatar-placeholder">👤</div>
+                    <div class="input-box">
+                        <input type="text" id="cmt-name" placeholder="Tên của bạn..." maxlength="30">
+                        <textarea id="cmt-content" placeholder="Để lại nhận xét hoặc câu hỏi của bạn tại đây..." rows="2"></textarea>
+                        <div class="input-actions">
+                            <button onclick="submitComment()" id="btn-submit-cmt">GỬI BÌNH LUẬN 🚀</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="feedback-card">
-                    <p class="feedback-text">"Hệ thống tích hợp cổng thanh toán API tự động chạy ổn định, tiết kiệm rất nhiều thời gian quản lý vận hành shop."</p>
-                    <div class="feedback-user">👤 Khách Hàng Hệ Thống</div>
+
+                <!-- Danh sách bình luận sẽ hiện ở đây -->
+                <div id="comments-list" class="comments-list">
+                    <div class="loading-cmt">Đang tải bình luận...</div>
                 </div>
             </div>
+        </div>
         </section>
 
     </div>
@@ -664,6 +715,112 @@ document.addEventListener('contextmenu', function(e) {
     </script>
 
     <script src="preloader.js"></script>
-    
+    <!-- KẾT NỐI FIREBASE CHO BÌNH LUẬN -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+    <script>
+        // Sử dụng chung DataBase với trang Shop của ông
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9Vi39Xuj8qf_bYjtZLAjpOkEvMIhzD1Y",
+            authDomain: "hoangkun-chat.firebaseapp.com",
+            databaseURL: "https://hoangkun-chat-default-rtdb.firebaseio.com",
+            projectId: "hoangkun-chat",
+            storageBucket: "hoangkun-chat.firebasestorage.app",
+            messagingSenderId: "713375578505",
+            appId: "1:713375578505:web:6d7d5c2a2d9a1608998958"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+        const commentsRef = database.ref('bio_comments');
+
+        // Hàm Gửi Bình Luận
+        function submitComment() {
+            const nameInput = document.getElementById('cmt-name');
+            const contentInput = document.getElementById('cmt-content');
+            const btn = document.getElementById('btn-submit-cmt');
+            
+            const name = nameInput.value.trim();
+            const content = contentInput.value.trim();
+
+            if (!name || !content) {
+                alert("⚠️ Vui lòng nhập đầy đủ tên và nội dung bình luận!");
+                return;
+            }
+
+            btn.innerText = "ĐANG GỬI...";
+            btn.disabled = true;
+
+            const newComment = {
+                name: name,
+                text: content,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            commentsRef.push(newComment).then(() => {
+                // Xóa form sau khi gửi
+                contentInput.value = '';
+                btn.innerText = "GỬI BÌNH LUẬN 🚀";
+                btn.disabled = false;
+            }).catch((error) => {
+                alert("Lỗi: " + error.message);
+                btn.innerText = "GỬI BÌNH LUẬN 🚀";
+                btn.disabled = false;
+            });
+        }
+
+        // Hàm Format thời gian (VD: 10 phút trước, 2 giờ trước)
+        function timeAgo(time) {
+            const now = new Date().getTime();
+            const diff = now - time;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (minutes < 1) return "Vừa xong";
+            if (minutes < 60) return minutes + " phút trước";
+            if (hours < 24) return hours + " giờ trước";
+            return days + " ngày trước";
+        }
+
+        // Lắng nghe dữ liệu Bình luận từ Firebase
+        const commentsList = document.getElementById('comments-list');
+        
+        commentsRef.orderByChild('timestamp').on('value', (snapshot) => {
+            commentsList.innerHTML = ''; // Xóa loading
+            
+            if (!snapshot.exists()) {
+                commentsList.innerHTML = '<div class="loading-cmt">Hãy là người đầu tiên để lại bình luận!</div>';
+                return;
+            }
+
+            let commentsHTML = '';
+            // Lặp ngược để bình luận mới nhất hiện lên đầu
+            const cmtArray = [];
+            snapshot.forEach((child) => { cmtArray.push(child.val()); });
+            cmtArray.reverse();
+
+            cmtArray.forEach((data) => {
+                const timeString = data.timestamp ? timeAgo(data.timestamp) : "Gần đây";
+                
+                commentsHTML += `
+                    <div class="cmt-item">
+                        <div class="cmt-avatar">👤</div>
+                        <div class="cmt-body">
+                            <div class="cmt-header">
+                                <span class="cmt-name">${data.name}</span>
+                                <span class="cmt-time">${timeString}</span>
+                            </div>
+                            <div class="cmt-text">${data.text}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            commentsList.innerHTML = commentsHTML;
+        });
+    </script>
 </body>
 </html>
