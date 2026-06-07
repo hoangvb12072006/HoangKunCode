@@ -72,7 +72,7 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px dashed var(--border-color);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .back-btn {
             background: rgba(255,255,255,0.05);
@@ -96,29 +96,30 @@
         /* NỘI DUNG FORM */
         .card-body {
             display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 30px;
+            grid-template-columns: 1.1fr 1.6fr; /* Tỷ lệ cột chia lại cho cân đối trên PC */
+            gap: 35px;
             padding: 0 20px 30px 20px;
+            align-items: start; /* QUAN TRỌNG: Không ép cột ảnh phải dài bằng cột chữ */
         }
 
-        /* CỘT ẢNH */
+        /* CỘT ẢNH CHUẨN POSTER */
         .img-wrapper {
             position: relative;
             border-radius: 20px;
             overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: flex; align-items: center; justify-content: center;
-            background: #000;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.4); /* Nền tối để tôn ảnh */
         }
         .img-wrapper img {
-            width: 100%; height: 100%;
-            object-fit: cover;
+            width: 100%; 
+            height: auto; /* Để ảnh tự động kéo dài đúng tỷ lệ gốc */
+            display: block;
+            object-fit: contain; /* Hiển thị trọn vẹn 100% chi tiết ảnh */
             transition: 0.5s ease;
         }
         .img-wrapper:hover img {
-            transform: scale(1.05);
-            opacity: 0.8;
+            transform: scale(1.03);
         }
 
         /* CỘT THÔNG TIN */
@@ -126,7 +127,7 @@
             display: flex; flex-direction: column;
         }
         
-        .tag-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .tag-group { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
         .tag { 
             background: rgba(139, 92, 246, 0.15); color: var(--primary); 
             padding: 6px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 800; 
@@ -134,16 +135,16 @@
         }
         .tag.os { background: rgba(14, 165, 233, 0.15); color: var(--neon-blue); border-color: rgba(14, 165, 233, 0.3); }
 
-        .product-title { font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 15px; line-height: 1.2; letter-spacing: -0.5px;}
+        .product-title { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 15px; line-height: 1.3; letter-spacing: -0.5px;}
         
         .meta-grid { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
             background: rgba(0,0,0,0.4); padding: 15px 20px; border-radius: 16px; 
             margin-bottom: 25px; border: 1px solid var(--border-color);
         }
-        .meta-item { display: flex; flex-direction: column; gap: 3px; }
-        .meta-label { color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; font-weight: 700; }
-        .meta-value { color: #fff; font-size: 1rem; font-weight: 600; }
+        .meta-item { display: flex; flex-direction: column; gap: 4px; }
+        .meta-label { color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; }
+        .meta-value { color: #fff; font-size: 0.95rem; font-weight: 600; }
         .meta-value.safe { color: var(--success); text-shadow: 0 0 10px rgba(16,185,129,0.3); }
 
         .desc-box {
@@ -154,20 +155,21 @@
         .desc-list li { 
             margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; 
             background: rgba(255,255,255,0.03); padding: 10px 15px; border-radius: 10px; border: 1px solid var(--border-color);
-            font-size: 0.95rem; color: #cbd5e1;
+            font-size: 0.95rem; color: #cbd5e1; line-height: 1.5;
         }
-        .desc-list li b { color: var(--neon-blue); margin-right: 5px; }
+        .desc-list li b { color: var(--neon-blue); margin-right: 5px; white-space: nowrap; }
 
         /* NÚT TẢI RUNG ĐỘNG */
         .download-btn {
             background: linear-gradient(135deg, var(--neon-blue), #0284c7);
             color: white; border: none; padding: 20px; border-radius: 16px; 
-            font-size: 1.2rem; font-weight: 800; letter-spacing: 1px;
+            font-size: 1.15rem; font-weight: 800; letter-spacing: 1px;
             cursor: pointer; transition: 0.3s; text-align: center; text-decoration: none;
             box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
             text-transform: uppercase;
             display: flex; justify-content: center; align-items: center; gap: 12px;
             position: relative; overflow: hidden;
+            margin-top: auto;
         }
         .download-btn::after {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
@@ -179,10 +181,11 @@
         
         .security-note { text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px; font-weight: 500;}
 
+        /* Responsive Mobile */
         @media (max-width: 768px) {
-            .card-body { grid-template-columns: 1fr; }
-            .img-wrapper { max-height: 250px; }
-            .product-title { font-size: 1.8rem; }
+            .card-body { grid-template-columns: 1fr; gap: 25px; padding: 0 15px 25px 15px;}
+            .img-wrapper { max-height: 400px; } /* Giới hạn chiều cao trên điện thoại */
+            .product-title { font-size: 1.7rem; }
             .meta-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -200,12 +203,12 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 Quay Lại Shop
             </a>
-            <span style="color: var(--text-dim); font-size: 0.85rem; font-weight: 600;">HỆ THỐNG DOWNLOAD VIP</span>
+            <span style="color: var(--text-dim); font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;">HỆ THỐNG DOWNLOAD VIP</span>
         </div>
 
         <!-- NỘI DUNG CHÍNH -->
         <div class="card-body">
-            <!-- CỘT ẢNH -->
+            <!-- CỘT ẢNH ĐÃ SỬA CĂN CHỈNH -->
             <div class="img-wrapper">
                 <img src="https://sf-static.upanhlaylink.com/img/image_2026060635f61d0a7c344f1ceb0c03914ae54fb5.jpg" alt="Menu Mod Liên Quân">
             </div>
