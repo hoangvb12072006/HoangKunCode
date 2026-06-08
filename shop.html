@@ -300,6 +300,59 @@
         /* Ẩn hiện các mục mượt mà */
         .catalog-item { display: none; }
         .item-intro { display: block; } /* Mặc định hiện Intro */
+
+                 /* CSS Uy Tín & Tính Năng */
+            .premium-about-section { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
+            
+            .stats-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-bottom: 60px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 30px; border-radius: 24px; box-shadow: inset 0 0 40px rgba(0,0,0,0.5); }
+            .stat-box { text-align: center; }
+            .stat-num { font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #0ea5e9, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+            .stat-label { color: #94a3b8; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+            .section-header-center { text-align: center; max-width: 700px; margin: 0 auto 50px auto; }
+            .gradient-text { display: inline-block; padding: 5px 15px; background: rgba(139, 92, 246, 0.1); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
+            .section-header-center h2 { font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 15px; }
+            .section-header-center p { color: #94a3b8; font-size: 1rem; line-height: 1.6; }
+
+            .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+            .feat-card { background: rgba(15, 15, 22, 0.6); border: 1px solid rgba(255,255,255,0.05); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); transition: 0.3s; position: relative; overflow: hidden; }
+            .feat-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.15); box-shadow: 0 15px 30px rgba(0,0,0,0.5); background: rgba(255,255,255,0.03); }
+            .feat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
+            .feat-card h4 { color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+            .feat-card p { color: #94a3b8; font-size: 0.9rem; line-height: 1.6; }
+
+            /* CSS Đánh Giá Vô Cực (Marquee) */
+            .reviews-section { margin: 80px 0; overflow: hidden; position: relative; }
+            /* Tạo bóng mờ 2 bên viền để nhìn giống đang trượt ra/vào */
+            .reviews-section::before, .reviews-section::after { content: ''; position: absolute; top: 0; bottom: 0; width: 150px; z-index: 2; pointer-events: none; }
+            .reviews-section::before { left: 0; background: linear-gradient(to right, #09090e, transparent); }
+            .reviews-section::after { right: 0; background: linear-gradient(to left, #09090e, transparent); }
+
+            .marquee-wrapper { width: 100%; display: flex; overflow: hidden; }
+            .marquee-track { display: flex; gap: 20px; width: max-content; animation: marqueeLeft 30s linear infinite; }
+            .marquee-track.reverse { animation: marqueeRight 35s linear infinite; }
+            .marquee-track:hover { animation-play-state: paused; } /* Di chuột vào thì dừng lại để đọc */
+
+            .review-card { width: 350px; background: rgba(18, 18, 26, 0.6); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; display: flex; flex-direction: column; transition: 0.3s; }
+            .review-card:hover { border-color: rgba(139, 92, 246, 0.4); background: rgba(255,255,255,0.02); }
+            
+            .r-stars { color: #fbbf24; font-size: 0.8rem; margin-bottom: 15px; letter-spacing: 2px; }
+            .r-text { color: #e2e8f0; font-size: 0.95rem; line-height: 1.6; font-style: italic; margin-bottom: 20px; flex: 1; }
+            
+            .r-user { display: flex; align-items: center; gap: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; }
+            .r-avatar { width: 40px; height: 40px; border-radius: 50%; background: #0ea5e9; color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+            .r-info b { display: block; color: #fff; font-size: 0.95rem; }
+            .r-info span { color: #64748b; font-size: 0.8rem; }
+
+            /* Animation chạy ngang vô cực */
+            @keyframes marqueeLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+            @keyframes marqueeRight { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+
+            @media (max-width: 768px) {
+                .reviews-section::before, .reviews-section::after { width: 50px; }
+                .review-card { width: 280px; padding: 20px; }
+                .stat-box { width: 45%; margin-bottom: 10px; }
+            }
         
     </style>
 </head>
@@ -331,26 +384,166 @@
 
     <section class="products-grid" id="catalogGrid">
         
-        <!-- 🌟 KHU VỰC 1: GIỚI THIỆU & ĐÁNH GIÁ (HIỂN THỊ MẶC ĐỊNH KHI VÀO TRANG) -->
-        <div class="intro-wrapper catalog-item item-intro">
-            <div class="intro-box">
-                <h3>🌟 Uy Tín Tạo Nên Thương Hiệu</h3>
-                <p>Hệ thống tự động của HOANGKUN STORE chuyên cung cấp các giải pháp Website kinh doanh 24/7 và Script Hack Game tối ưu mượt mà, chống ban, đảm bảo an toàn tuyệt đối cho người dùng.</p>
-            </div>
+        <div class="premium-about-section">
             
-            <h3 class="feedback-title">💬 Khách Hàng Nói Gì Về Chúng Tôi?</h3>
-            <div class="feedback-grid">
-                <div class="feedback-card">
-                    <p class="feedback-text">"Source code mua tại HOANGKUN STORE chạy rất mượt, cấu trúc code cực kỳ sạch sẽ và dễ dàng tùy biến lại theo ý thích. Quá uy tín!"</p>
-                    <div class="feedback-user">👤 Developer T.A</div>
+            <div class="stats-container">
+                <div class="stat-box">
+                    <h3 class="stat-num">500+</h3>
+                    <p class="stat-label">Khách Hàng Tin Tưởng</p>
                 </div>
-                <div class="feedback-card">
-                    <p class="feedback-text">"Hệ thống tích hợp cổng thanh toán API tự động chạy ổn định, tiết kiệm rất nhiều thời gian quản lý vận hành shop."</p>
-                    <div class="feedback-user">👤 Admin Shop Game</div>
+                <div class="stat-box">
+                    <h3 class="stat-num">1,200+</h3>
+                    <p class="stat-label">Bản Code Đã Bán</p>
                 </div>
-                <div class="feedback-card">
-                    <p class="feedback-text">"Script Hack chuẩn VIP, bypass cực an toàn. Treo farm nguyên đêm không lo bị khóa acc. Sẽ ủng hộ shop lâu dài."</p>
-                    <div class="feedback-user">👤 Dân Chơi Mobile</div>
+                <div class="stat-box">
+                    <h3 class="stat-num">99.9%</h3>
+                    <p class="stat-label">Tỷ Lệ Hoạt Động (Uptime)</p>
+                </div>
+                <div class="stat-box">
+                    <h3 class="stat-num">24/7</h3>
+                    <p class="stat-label">Hỗ Trợ Kỹ Thuật</p>
+                </div>
+            </div>
+
+            <div class="section-header-center">
+                <span class="gradient-text">Uy Tín Tạo Nên Thương Hiệu</span>
+                <h2>Giải Pháp Công Nghệ Tối Ưu Cho Bạn</h2>
+                <p>Chúng tôi không chỉ bán Source Code hay Script, chúng tôi mang đến hệ sinh thái vận hành tự động và bảo mật tuyệt đối cho công việc kinh doanh của bạn.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feat-card">
+                    <div class="feat-icon" style="color: #0ea5e9; background: rgba(14,165,233,0.1);">⚡</div>
+                    <h4>Hệ Thống Auto Bank Tốc Độ Cao</h4>
+                    <p>Mã nguồn tích hợp API ngân hàng, Momo, thẻ cào. Nhận diện dòng tiền và xuất đơn tự động hoàn toàn chỉ trong 3 giây.</p>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon" style="color: #ef4444; background: rgba(239,68,68,0.1);">🛡️</div>
+                    <h4>Công Nghệ Anti-Ban / Bypass VIP</h4>
+                    <p>Các Script Game được cập nhật Bypass liên tục theo phiên bản mới nhất. Đảm bảo an toàn, chống khóa nick hiệu quả cho dân cày.</p>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon" style="color: #a855f7; background: rgba(168,85,247,0.1);">💻</div>
+                    <h4>Mã Nguồn "Sạch" Chuẩn SEO</h4>
+                    <p>Code tay 100% bằng HTML/CSS/JS, không dùng mã hóa ẩn, không mã độc. Dễ dàng tùy biến, thân thiện với Google Search.</p>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon" style="color: #10b981; background: rgba(16,185,129,0.1);">🎧</div>
+                    <h4>Hỗ Trợ & Bảo Hành Dài Hạn</h4>
+                    <p>Fix bug miễn phí cho bản build hiện tại. Hỗ trợ hướng dẫn upload lên Hosting/Vercel cho anh em mới vào nghề.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="reviews-section">
+            <div class="section-header-center" style="margin-bottom: 40px;">
+                <span class="gradient-text">Cộng Đồng HOANGKUN</span>
+                <h2>Khách Hàng Nói Gì Về Chúng Tôi?</h2>
+            </div>
+
+            <div class="marquee-wrapper left">
+                <div class="marquee-track">
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Giao diện web shop game quá đẹp, mượt. Mua về thay logo là dùng được luôn, hệ thống Auto Momo nhận tiền cực nhanh 10/10."</p>
+                        <div class="r-user">
+                            <div class="r-avatar">T</div>
+                            <div class="r-info"><b>Tuấn Anh</b><span>Admin Shop Acc</span></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Bản Hack FF Proxy V3 bên anh Hoàng bypass quá đỉnh. Treo máy cày rank mấy ngày nay nick vẫn an toàn không một vết xước."</p>
+                        <div class="r-user">
+                            <div class="r-avatar" style="background: #ef4444;">D</div>
+                            <div class="r-info"><b>Dân Chơi Mobile</b><span>Khách hàng VIP</span></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Source code sạch sẽ, comment rõ ràng. Rất hợp cho sinh viên mua về ngâm cứu hoặc làm đồ án. Quá uy tín!"</p>
+                        <div class="r-user">
+                            <div class="r-avatar" style="background: #10b981;">H</div>
+                            <div class="r-info"><b>Hoàng Developer</b><span>Lập trình viên</span></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Giao diện web shop game quá đẹp, mượt. Mua về thay logo là dùng được luôn, hệ thống Auto Momo nhận tiền cực nhanh 10/10."</p>
+                        <div class="r-user">
+                            <div class="r-avatar">T</div>
+                            <div class="r-info"><b>Tuấn Anh</b><span>Admin Shop Acc</span></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Bản Hack FF Proxy V3 bên anh Hoàng bypass quá đỉnh. Treo máy cày rank mấy ngày nay nick vẫn an toàn không một vết xước."</p>
+                        <div class="r-user">
+                            <div class="r-avatar" style="background: #ef4444;">D</div>
+                            <div class="r-info"><b>Dân Chơi Mobile</b><span>Khách hàng VIP</span></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Source code sạch sẽ, comment rõ ràng. Rất hợp cho sinh viên mua về ngâm cứu hoặc làm đồ án. Quá uy tín!"</p>
+                        <div class="r-user">
+                            <div class="r-avatar" style="background: #10b981;">H</div>
+                            <div class="r-info"><b>Hoàng Developer</b><span>Lập trình viên</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="marquee-wrapper right" style="margin-top: 20px;">
+                <div class="marquee-track reverse">
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Hỗ trợ nhiệt tình vãi! Mình gà mờ không biết up code lên hosting, admin teamview làm giúp từ A-Z luôn. Tặng 10 sao."</p>
+                        <div class="r-user">
+                            <div class="r-avatar" style="background: #a855f7;">N</div>
+                            <div class="r-info"><b>Ngọc Nhi</b><span>Khách mua Code Web</span></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Mình đã mua Landing Page Cyberpunk ở đây, chạy rất nhẹ, không bị lag như mấy code share tràn lan trên mạng."</p>
+                        <div class="r-user">
+                            <div class="r-avatar" style="background: #fbbf24; color: #000;">K</div>
+                            <div class="r-info"><b>Khai Design</b><span>Designer</span></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Aim cực dính, menu mod Liên Quân dùng sướng thật sự. Cày thuê bằng bản này thì hết nước chấm. Giá lại hợp lý."</p>
+                        <div class="r-user">
+                            <div class="r-avatar" style="background: #0ea5e9;">C</div>
+                            <div class="r-info"><b>Cày Thuê Group</b><span>Dịch vụ cày rank</span></div>
+                        </div>
+                    </div>
+                     <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Hỗ trợ nhiệt tình vãi! Mình gà mờ không biết up code lên hosting, admin teamview làm giúp từ A-Z luôn. Tặng 10 sao."</p>
+                        <div class="r-user">
+                            <div class="r-avatar" style="background: #a855f7;">N</div>
+                            <div class="r-info"><b>Ngọc Nhi</b><span>Khách mua Code Web</span></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Mình đã mua Landing Page Cyberpunk ở đây, chạy rất nhẹ, không bị lag như mấy code share tràn lan trên mạng."</p>
+                        <div class="r-user">
+                            <div class="r-avatar" style="background: #fbbf24; color: #000;">K</div>
+                            <div class="r-info"><b>Khai Design</b><span>Designer</span></div>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="r-stars">⭐⭐⭐⭐⭐</div>
+                        <p class="r-text">"Aim cực dính, menu mod Liên Quân dùng sướng thật sự. Cày thuê bằng bản này thì hết nước chấm. Giá lại hợp lý."</p>
+                        <div class="r-user">
+                            <div class="r-avatar" style="background: #0ea5e9;">C</div>
+                            <div class="r-info"><b>Cày Thuê Group</b><span>Dịch vụ cày rank</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
