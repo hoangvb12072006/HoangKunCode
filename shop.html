@@ -271,26 +271,29 @@
         }
 
         /* ==========================================
-   💎 CSS ĐÁNH GIÁ KHÁCH HÀNG (REVIEWS)
+   💎 CSS GIỚI THIỆU & ĐÁNH GIÁ (FIX LỖI VỠ LAYOUT)
    ========================================== */
-:root {
-    --bg-dark: #09090e;
-    --card-bg: rgba(18, 18, 26, 0.7);
-    --border-color: rgba(255, 255, 255, 0.08);
-    --accent: #a855f7;
-    --accent-glow: rgba(168, 85, 247, 0.4);
-    --text-primary: #ffffff;
-    --text-secondary: #94a3b8;
+
+/* Ép phần Uy Tín tràn viền ngang, không bị lọt vào cột sản phẩm */
+.premium-about-section {
+    grid-column: 1 / -1; 
+    width: 100%;
+    max-width: 1200px; 
+    margin: 80px auto; 
+    padding: 0 20px; 
 }
 
+/* Ép phần Đánh Giá tràn viền ngang */
 .reviews-section {
+    grid-column: 1 / -1; 
+    width: 100%;
     padding: 60px 0;
     overflow: hidden;
     position: relative;
-    background-color: var(--bg-dark);
+    background-color: transparent; 
 }
 
-/* Hiệu ứng bóng mờ 2 bên viền */
+/* Hiệu ứng bóng mờ 2 bên viền để che mượt nội dung trượt */
 .reviews-section::before, 
 .reviews-section::after { 
     content: ''; 
@@ -302,11 +305,11 @@
 }
 .reviews-section::before { 
     left: 0; 
-    background: linear-gradient(to right, var(--bg-dark), transparent); 
+    background: linear-gradient(to right, var(--bg-main), transparent); 
 }
 .reviews-section::after { 
     right: 0; 
-    background: linear-gradient(to left, var(--bg-dark), transparent); 
+    background: linear-gradient(to left, var(--bg-main), transparent); 
 }
 
 /* Phần Tiêu Đề */
@@ -320,7 +323,7 @@
     display: inline-block; 
     padding: 6px 18px; 
     background: rgba(168, 85, 247, 0.1); 
-    color: var(--accent); 
+    color: var(--primary); 
     border: 1px solid rgba(168, 85, 247, 0.3); 
     border-radius: 30px; 
     font-size: 0.85rem; 
@@ -332,11 +335,11 @@
 .section-header-center h2 { 
     font-size: 2.2rem; 
     font-weight: 800; 
-    color: var(--text-primary); 
+    color: var(--text-main); 
     margin-bottom: 10px; 
 }
 .section-header-center p { 
-    color: var(--text-secondary); 
+    color: var(--text-dim); 
     font-size: 1rem; 
 }
 
@@ -355,7 +358,7 @@
     padding: 10px 0;
 }
 .marquee-track:hover { 
-    animation-play-state: paused; /* Dừng lại khi di chuột */
+    animation-play-state: paused; /* Dừng lại khi di chuột vào */
 }
 .track-left { animation: scrollLeft 35s linear infinite; }
 .track-right { animation: scrollRight 35s linear infinite; }
@@ -363,7 +366,7 @@
 /* Thiết kế Thẻ Đánh Giá (Card) */
 .review-card { 
     width: 380px; 
-    background: var(--card-bg); 
+    background: var(--bg-card); 
     border: 1px solid var(--border-color); 
     padding: 25px; 
     border-radius: 20px; 
@@ -373,9 +376,9 @@
     backdrop-filter: blur(10px);
 }
 .review-card:hover { 
-    border-color: var(--accent-glow); 
+    border-color: var(--primary-glow); 
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.15); 
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); 
 }
 
 /* Sao & Chữ */
@@ -407,8 +410,8 @@
     justify-content: center; 
     font-size: 1.2rem; 
 }
-.r-info b { display: block; color: var(--text-primary); font-size: 1rem; margin-bottom: 2px;}
-.r-info span { color: var(--text-secondary); font-size: 0.85rem; font-weight: 500;}
+.r-info b { display: block; color: var(--text-main); font-size: 1rem; margin-bottom: 2px;}
+.r-info span { color: var(--text-dim); font-size: 0.85rem; font-weight: 500;}
 
 /* Màu sắc Avatar (Tiện ích) */
 .bg-blue { background: #3b82f6; }
@@ -420,7 +423,7 @@
 .bg-orange { background: #f97316; }
 .text-dark { color: #000 !important; }
 
-/* Animations - Hoạt ảnh trượt */
+/* Animations - Hoạt ảnh trượt ngang */
 @keyframes scrollLeft { 
     0% { transform: translateX(0); } 
     100% { transform: translateX(-50%); } 
@@ -430,7 +433,7 @@
     100% { transform: translateX(0); } 
 }
 
-/* Responsive (Điện thoại) */
+/* Responsive cho Điện thoại */
 @media (max-width: 768px) {
     .reviews-section::before, .reviews-section::after { width: 50px; }
     .review-card { width: 300px; padding: 20px; }
