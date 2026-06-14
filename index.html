@@ -3,317 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nguyễn Việt Hoàng | Tactical Control Center</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Nguyễn Việt Hoàng | Creator Bio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #04060a;
-            --panel-bg: #090d16;
-            --panel-hover: #101726;
-            --cyan: #06b6d4;
-            --purple: #a855f7;
-            --emerald: #10b981;
-            --rose: #f43f5e;
+            --bg-solid: #09090b; /* Nền đen sâu */
+            --glass-bg: rgba(24, 24, 27, 0.4); /* Kính đen mờ */
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --primary: #c084fc; /* Tím nhạt */
+            --secondary: #38bdf8; /* Xanh ngọc */
             --text-main: #f8fafc;
-            --text-muted: #64748b;
-            --border-glow: rgba(6, 182, 212, 0.15);
+            --text-dim: #94a3b8;
+            --glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-solid);
             color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center;
             overflow-x: hidden;
-            padding: 40px 20px;
-            /* Tạo hiệu ứng dải sáng ảo ảnh ở nền */
-            background-image: 
-                radial-gradient(circle at 0% 0%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(6, 182, 212, 0.04) 0%, transparent 50%);
-            background-attachment: fixed;
+            position: relative;
         }
 
-        /* TÊN HỆ THỐNG PHÔNG CHỮ CÔNG NGHỆ CAO */
-        h1, h2, h3, .tech-font { font-family: 'Orbitron', sans-serif; }
-
-        /* ==================== CONTROL CENTER CONTAINER ==================== */
-        .control-panel {
-            width: 100%;
-            max-width: 850px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            animation: panelFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        /* --- NỀN QUANG PHỔ CHUYỂN ĐỘNG SIÊU NHẸ (NO LAG) --- */
+        .orb {
+            position: fixed; width: 60vw; height: 60vw; border-radius: 50%;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 60%);
+            filter: blur(90px); opacity: 0.15; z-index: -1; pointer-events: none;
+            top: -20%; left: -10%;
+            animation: orbFloat 25s ease-in-out infinite alternate;
         }
-        @keyframes panelFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .orb.two {
+            background: radial-gradient(circle, var(--secondary) 0%, transparent 60%);
+            top: auto; bottom: -20%; left: auto; right: -10%;
+            animation-delay: -10s;
+        }
+        @keyframes orbFloat { 0% { transform: translate(0, 0); } 100% { transform: translate(15%, 15%); } }
 
-        /* THANH ĐẦU HUD (TOP SYSTEM BAR) */
-        .hud-top-bar {
+        /* --- CONTAINER CHÍNH --- */
+        .wrapper { width: 100%; max-width: 650px; padding: 50px 20px; z-index: 1; display: flex; flex-direction: column; gap: 30px;}
+
+        /* --- PROFILE CARD (KÍNH MỜ) --- */
+        .profile-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 32px; padding: 40px 30px; text-align: center;
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--glow); animation: fadeUp 0.6s ease-out;
+        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .avatar-wrap {
+            width: 140px; height: 140px; margin: 0 auto 20px; position: relative;
+        }
+        .avatar-wrap::before {
+            content: ''; position: absolute; inset: -4px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            z-index: 0; animation: spinGlow 4s linear infinite;
+        }
+        .avatar-wrap img {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+            position: relative; z-index: 1; border: 4px solid var(--bg-solid);
+        }
+        @keyframes spinGlow { 100% { transform: rotate(360deg); } }
+
+        .name { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; color: #fff; }
+        .tag { font-size: 0.85rem; color: var(--secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; display: inline-block; background: rgba(56, 189, 248, 0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.2); }
+        .bio { color: var(--text-dim); font-size: 1rem; line-height: 1.6; font-weight: 500; }
+
+        /* --- NÚT BẤM (GLASS LINKS) --- */
+        .links-group { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        .link-btn {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 18px 25px; border-radius: 20px; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.05rem;
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--panel-bg); border: 1px solid var(--border-glow);
-            padding: 12px 25px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;
-            letter-spacing: 1px; color: var(--text-muted);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;
         }
-        .system-status { display: flex; align-items: center; gap: 8px; color: var(--emerald); }
-        .pulse-dot { width: 8px; height: 8px; background: var(--emerald); border-radius: 50%; animation: pulse 1.5s infinite; box-shadow: 0 0 10px var(--emerald); }
-        @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        .link-btn::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); transform: translateX(-100%); transition: 0.5s; }
+        .link-btn:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+        .link-btn:hover::before { transform: translateX(100%); }
+        .link-btn .arr { font-size: 1.2rem; color: var(--text-dim); transition: 0.3s; }
+        .link-btn:hover .arr { color: #fff; transform: translateX(5px); }
 
-        /* ==================== BENTO BỐ CỤC KHỐI MODULAR ==================== */
-        .bento-layout {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 20px;
-        }
+        .link-btn.highlight { background: linear-gradient(135deg, rgba(192, 132, 252, 0.1), rgba(56, 189, 248, 0.1)); border-color: rgba(192, 132, 252, 0.3); }
+        .link-btn.highlight:hover { border-color: var(--primary); box-shadow: 0 10px 30px rgba(192, 132, 252, 0.2); }
 
-        /* KHỐI TRÁI: PROFILE CHÍNH */
-        .panel-core {
-            background: var(--panel-bg); border: 1px solid var(--border-glow);
-            border-radius: 24px; padding: 40px 30px; text-align: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-        }
-        /* Góc vát công nghệ */
-        .panel-core::before { content: ''; position: absolute; top: 0; right: 0; border-width: 0 16px 16px 0; border-style: solid; border-color: transparent var(--bg-dark) transparent transparent; }
+        /* --- MẠNG XÃ HỘI --- */
+        .social-box { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+        .soc-icon { width: 50px; height: 50px; border-radius: 16px; background: var(--glass-bg); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .soc-icon svg { width: 22px; height: 22px; fill: var(--text-main); transition: 0.3s; }
+        .soc-icon:hover { border-color: var(--secondary); background: rgba(56, 189, 248, 0.1); transform: translateY(-3px); }
+        .soc-icon:hover svg { fill: var(--secondary); }
 
-        .avatar-hud {
-            position: relative; width: 140px; height: 140px; margin-bottom: 25px;
-        }
-        .avatar-hud img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.05); }
+        /* --- BÌNH LUẬN (FEEDBACK FORM) --- */
+        .comment-section { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 32px; padding: 35px 25px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: var(--glow); }
+        .sec-title { font-size: 1.2rem; font-weight: 800; text-align: center; margin-bottom: 25px; color: #fff; }
+
+        .input-wrap { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+        .inp-field { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: #fff; border-radius: 14px; padding: 15px; font-size: 0.95rem; outline: none; transition: 0.3s; }
+        .inp-field:focus { border-color: var(--primary); background: rgba(192, 132, 252, 0.05); }
+        textarea.inp-field { min-height: 90px; resize: vertical; }
         
-        /* Vòng quét radar bao quanh Avatar */
-        .radar-ring {
-            position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px;
-            border: 2px solid transparent; border-top-color: var(--cyan); border-bottom-color: var(--cyan);
-            border-radius: 50%; animation: radarRotate 6s linear infinite;
-        }
-        @keyframes radarRotate { 100% { transform: rotate(360deg); } }
+        .btn-send { background: #fff; color: #000; border: none; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+        .btn-send:hover { background: var(--secondary); color: #fff; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(56, 189, 248, 0.3); }
 
-        .profile-name-box { height: 45px; display: flex; align-items: center; margin-bottom: 12px; }
-        .profile-name { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .typing-cursor { width: 3px; height: 2rem; background: var(--cyan); margin-left: 6px; animation: cursorBlink 0.7s infinite; }
-        @keyframes cursorBlink { 50% { opacity: 0; } }
-
-        .profile-bio { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; max-width: 400px; margin-bottom: 25px; }
-
-        /* Mạng xã hội dạng ô lưới nhỏ */
-        .social-grid { display: flex; gap: 12px; }
-        .social-cell {
-            width: 46px; height: 48px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-light);
-            border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: 0.2s;
-        }
-        .social-cell svg { width: 20px; height: 20px; fill: var(--text-main); }
-        .social-cell:hover { border-color: var(--cyan); background: rgba(6, 182, 212, 0.05); transform: translateY(-2px); }
-        .social-cell:hover svg { fill: var(--cyan); }
-
-        /* KHỐI PHẢI: CHI TIẾT ĐƯỜNG DẪN (TACTICAL TERMINAL) */
-        .panel-terminal { display: flex; flex-direction: column; gap: 15px; }
-
-        .terminal-link {
-            background: var(--panel-bg); border: 1px solid var(--border-glow);
-            border-radius: 16px; padding: 20px; display: flex; align-items: center;
-            justify-content: space-between; text-decoration: none; color: #fff;
-            transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative;
-        }
-        .link-meta { display: flex; flex-direction: column; gap: 4px; }
-        .link-tag { font-size: 0.7rem; font-weight: 800; color: var(--cyan); letter-spacing: 1px; text-transform: uppercase; }
-        .link-title { font-size: 1.1rem; font-weight: 700; }
-        .link-arrow { font-size: 1.1rem; color: var(--text-muted); transition: 0.3s; }
+        .cmt-feed { display: flex; flex-direction: column; gap: 15px; max-height: 300px; overflow-y: auto; padding-right: 5px; }
+        .cmt-feed::-webkit-scrollbar { width: 4px; }
+        .cmt-feed::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
         
-        /* Hiệu ứng viền chạy sáng khi Hover link */
-        .terminal-link:hover { background: var(--panel-hover); border-color: var(--cyan); padding-left: 25px; }
-        .terminal-link:hover .link-arrow { color: var(--cyan); transform: translateX(4px); }
+        .cmt-item { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); padding: 15px; border-radius: 16px; }
+        .cmt-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .cmt-head b { color: var(--secondary); font-size: 0.95rem; }
+        .cmt-head span { color: var(--text-dim); font-size: 0.75rem; }
+        .cmt-txt { color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; }
 
-        /* Nút Highlight đặc biệt */
-        .terminal-link.prime { border-left: 4px solid var(--purple); }
-        .terminal-link.prime .link-tag { color: var(--purple); }
-        .terminal-link.prime:hover { border-color: var(--purple); }
+        /* --- TOAST & FOOTER --- */
+        #toast-zone { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast-msg { background: rgba(15, 15, 20, 0.95); border: 1px solid #f43f5e; color: #f43f5e; padding: 12px 25px; border-radius: 30px; font-weight: 700; font-size: 0.9rem; opacity: 0; animation: tFade 2.5s ease forwards; box-shadow: 0 5px 15px rgba(244, 63, 94, 0.2); }
+        @keyframes tFade { 0% { opacity: 0; transform: translateY(15px); } 15%, 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-15px); } }
 
-        /* ==================== DATA ANALYTICS (THÔNG SỐ) ==================== */
-        .analytics-deck {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;
-        }
-        .analytic-card {
-            background: var(--panel-bg); border: 1px solid var(--border-glow);
-            padding: 22px 15px; border-radius: 16px; text-align: center;
-        }
-        .analytic-num { font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 2px; }
-        .analytic-lbl { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        footer { text-align: center; color: var(--text-dim); font-size: 0.8rem; font-weight: 600; margin-top: 10px; }
 
-        /* ==================== LOG MESSAGE (BÌNH LUẬN) ==================== */
-        .feed-box {
-            background: var(--panel-bg); border: 1px solid var(--border-glow); border-radius: 24px; padding: 30px;
-        }
-        .feed-title { font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 25px; color: #fff; display: flex; align-items: center; gap: 10px;}
-        .feed-title::after { content: ''; flex: 1; height: 1px; background: var(--border-glow); }
-
-        .feed-input-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .feed-input-wrapper textarea { grid-column: span 2; min-height: 80px; resize: vertical; }
-        .feed-ctrl { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glow); border-radius: 12px; padding: 14px 18px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
-        .feed-ctrl:focus { border-color: var(--cyan); box-shadow: 0 0 15px rgba(6, 182, 212, 0.15); }
-        
-        .btn-broadcast { grid-column: span 2; justify-self: flex-end; background: transparent; color: var(--cyan); border: 1px solid var(--cyan); padding: 12px 30px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; cursor: pointer; transition: 0.3s; text-transform: uppercase;}
-        .btn-broadcast:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px rgba(6, 182, 212, 0.4); }
-
-        .feed-stream { display: flex; flex-direction: column; gap: 15px; max-height: 350px; overflow-y: auto; padding-right: 8px; }
-        .feed-stream::-webkit-scrollbar { width: 4px; }
-        .feed-stream::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
-        
-        .feed-node { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.02); padding: 16px 20px; border-radius: 14px; animation: nodeIn 0.3s ease; }
-        @keyframes nodeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        .node-meta { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px; font-weight: bold; }
-        .node-user { color: var(--cyan); }
-        .node-time { color: var(--text-muted); }
-        .node-text { color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; }
-
-        /* THEME TOGGLE SÁNG TỐI (GIỮ ĐỂ WEB ĐẦY ĐỦ TIỆN NGHI) */
-        .theme-switch { width: 36px; height: 36px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-glow); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
-        .theme-switch:hover { border-color: var(--cyan); transform: scale(1.05); }
-        .theme-switch svg { width: 16px; height: 16px; fill: var(--text-muted); }
-
-        /* TOAST BẢO MẬT */
-        #cyber-toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .cyber-toast { background: rgba(9, 13, 22, 0.95); border: 1px solid var(--rose); border-radius: 8px; padding: 12px 24px; color: var(--rose); font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 700; opacity: 0; animation: toastFadeKey 2.5s ease forwards; box-shadow: 0 0 15px rgba(244, 63, 94, 0.2); }
-        @keyframes toastFadeKey { 0% { opacity: 0; transform: translateY(15px); } 15% { opacity: 1; transform: translateY(0); } 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-15px); } }
-
-        /* FOOTER */
-        footer { text-align: center; font-size: 0.8rem; color: #334155; padding: 20px 0; font-weight: 600; letter-spacing: 0.5px; }
-
-        /* RESPONSIVE */
-        @media (max-width: 800px) {
-            .bento-layout { grid-template-columns: 1fr; }
-            .analytics-deck { grid-template-columns: repeat(2, 1fr); }
+        @media (max-width: 600px) {
+            .wrapper { padding: 30px 15px; }
+            .profile-card { padding: 30px 20px; }
+            .name { font-size: 1.8rem; }
         }
     </style>
 </head>
-<body data-theme="dark">
+<body>
 
-    <div class="control-panel">
+    <div class="orb"></div>
+    <div class="orb two"></div>
+
+    <div class="wrapper">
         
-        <div class="hud-top-bar">
-            <div class="system-status"><span class="pulse-dot"></span> SECURE_NODE // ONLINE</div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <span class="tech-font" style="font-size: 0.75rem;">OPERATOR: VIET_HOANG</span>
-                <div class="theme-switch" onclick="toggleTheme()"><svg viewBox="0 0 24 24"><path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c-0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/></svg></div>
+        <div class="profile-card">
+            <div class="avatar-wrap">
+                <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Nguyễn Việt Hoàng">
+            </div>
+            <h1 class="name">Nguyễn Việt Hoàng</h1>
+            <div class="tag">Content Creator</div>
+            <p class="bio">Sáng tạo nội dung video ngắn, chuyên các series TikTok tâm trạng cực chill và Review phim đa thể loại trên YouTube.</p>
+            
+            <div class="social-box">
+                <a href="https://www.facebook.com/profile.php?id=100043746734819" class="soc-icon" target="_blank"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-0.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/></svg></a>
+                <a href="https://www.youtube.com/@Hazen06" class="soc-icon" target="_blank"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <a href="https://www.tiktok.com/@hpdbox" class="soc-icon" target="_blank"><svg viewBox="0 0 24 24"><path d="M12.525.465a5.775 5.775 0 0 0 1.01 3.425 5.72 5.72 0 0 0 2.395 2.05A8.345 8.345 0 0 1 15.86 3.85a7.12 7.12 0 0 1-.22-2.145V0h-3.41v16.14a4.135 4.135 0 0 1-4.13 4.13 4.135 4.135 0 0 1-4.13-4.13 4.135 4.135 0 0 1 4.13-4.13c.49 0 .96.09 1.4.25V8.79a7.48 7.48 0 0 0-1.4-.13A7.55 7.55 0 0 0 .55 16.21a7.55 7.55 0 0 0 7.55 7.55 7.55 7.55 0 0 0 7.55-7.55V5.51A9.06 9.06 0 0 0 22.12 8.41V4.99a5.67 5.67 0 0 1-3.64-1.95 5.74 5.74 0 0 1-.955-2.575h-5z"/></svg></a>
             </div>
         </div>
 
-        <div class="bento-layout">
-            
-            <section class="panel-core">
-                <div class="avatar-hud">
-                    <div class="radar-ring"></div>
-                    <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Nguyễn Việt Hoàng">
-                </div>
-                <div class="profile-name-box">
-                    <h2 class="profile-name" id="profile-name-text"></h2>
-                    <span class="typing-cursor"></span>
-                </div>
-                <p class="profile-bio">Sáng tạo nội dung video ngắn, chuyên các series TikTok tâm trạng cực chill và Review phim đa thể loại trên YouTube.</p>
-                
-                <div class="social-grid">
-                    <a href="https://www.facebook.com/profile.php?id=100043746734819" class="social-cell" target="_blank"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-0.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/></svg></a>
-                    <a href="https://www.youtube.com/@Hazen06" class="social-cell" target="_blank"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-                    <a href="https://www.tiktok.com/@hpdbox" class="social-cell" target="_blank"><svg viewBox="0 0 24 24"><path d="M12.525.465a5.775 5.775 0 0 0 1.01 3.425 5.72 5.72 0 0 0 2.395 2.05A8.345 8.345 0 0 1 15.86 3.85a7.12 7.12 0 0 1-.22-2.145V0h-3.41v16.14a4.135 4.135 0 0 1-4.13 4.13 4.135 4.135 0 0 1-4.13-4.13 4.135 4.135 0 0 1 4.13-4.13c.49 0 .96.09 1.4.25V8.79a7.48 7.48 0 0 0-1.4-.13A7.55 7.55 0 0 0 .55 16.21a7.55 7.55 0 0 0 7.55 7.55 7.55 7.55 0 0 0 7.55-7.55V5.51A9.06 9.06 0 0 0 22.12 8.41V4.99a5.67 5.67 0 0 1-3.64-1.95 5.74 5.74 0 0 1-.955-2.575h-5z"/></svg></a>
-                </div>
-            </section>
-
-            <nav class="panel-terminal">
-                <a href="https://www.youtube.com/@kunmusic06" class="terminal-link prime" target="_blank">
-                    <div class="link-meta"><span class="link-tag">AUDIO_BROADCAST</span><span class="link-title">Kênh YouTube Music</span></div>
-                    <span class="link-arrow">➔</span>
-                </a>
-                <a href="https://www.tiktok.com/@hpdbox" class="terminal-link" target="_blank">
-                    <div class="link-meta"><span class="link-tag">STREAM_FEED_1</span><span class="link-title">Kênh TikTok Tâm Trạng</span></div>
-                    <span class="link-arrow">➔</span>
-                </a>
-                <a href="https://www.tiktok.com/@kunmusic06" class="terminal-link" target="_blank">
-                    <div class="link-meta"><span class="link-tag">STREAM_FEED_2</span><span class="link-title">Kênh TikTok Music</span></div>
-                    <span class="link-arrow">➔</span>
-                </a>
-                <a href="chat.html" class="terminal-link" style="border-left-color: var(--emerald);">
-                    <div class="link-meta"><span class="link-tag" style="color: var(--emerald);">LIVE_COMMS</span><span class="link-title">Trò Chuyện Trực Tiếp</span></div>
-                    <span class="link-arrow" style="color: var(--emerald);">➔</span>
-                </a>
-            </nav>
+        <div class="links-group">
+            <a href="https://www.youtube.com/@kunmusic06" class="link-btn highlight" target="_blank">
+                <span>🎬 Đăng Ký Kênh YouTube Music</span><span class="arr">➔</span>
+            </a>
+            <a href="https://www.tiktok.com/@hpdbox" class="link-btn" target="_blank">
+                <span>✨ Kênh TikTok Tâm Trạng</span><span class="arr">➔</span>
+            </a>
+            <a href="https://www.tiktok.com/@kunmusic06" class="link-btn" target="_blank">
+                <span>🎵 Kênh TikTok Music</span><span class="arr">➔</span>
+            </a>
+            <a href="chat.html" class="link-btn">
+                <span>💬 Trò Chuyện Trực Tiếp</span><span class="arr">➔</span>
+            </a>
         </div>
 
-        <section class="analytics-deck">
-            <div class="analytic-card"><div class="analytic-num">1.8K</div><div class="analytic-lbl">Followers</div></div>
-            <div class="analytic-card"><div class="analytic-num">119K</div><div class="analytic-lbl">Lượt Tim</div></div>
-            <div class="analytic-card"><div class="analytic-num">1.7M</div><div class="analytic-lbl">Lượt Xem</div></div>
-            <div class="analytic-card"><div class="analytic-num">15K+</div><div class="analytic-lbl">Members</div></div>
-        </section>
-
-        <section class="feed-box">
-            <div class="feed-title">DATA_COMMUNICATION_LOG</div>
-            
-            <div class="feed-input-wrapper">
-                <input type="text" id="cmt-name" class="feed-ctrl" placeholder="> Xác thực định danh (Tên)..." maxlength="30">
-                <textarea id="cmt-content" class="feed-ctrl" placeholder="> Nhập gói tin dữ liệu gửi đến Admin..."></textarea>
-                <button onclick="submitComment()" id="btn-submit-cmt" class="btn-broadcast">Gửi Gói Tin // BROADCAST</button>
+        <div class="comment-section">
+            <div class="sec-title">Góc Lưu Bút</div>
+            <div class="input-wrap">
+                <input type="text" id="cmt-name" class="inp-field" placeholder="Tên hiển thị..." maxlength="30">
+                <textarea id="cmt-content" class="inp-field" placeholder="Để lại vài lời nhắn..."></textarea>
+                <button onclick="submitComment()" id="btn-submit-cmt" class="btn-send">GỬI LỜI NHẮN</button>
             </div>
-
-            <div id="comments-list" class="feed-stream">
-                <div style="text-align: center; color: var(--text-muted); font-family: monospace;">[SYSTEM] Đang tải luồng dữ liệu...</div>
+            <div id="comments-list" class="cmt-feed">
+                <div style="text-align: center; color: var(--text-dim); font-style: italic;">Đang kết nối hệ thống...</div>
             </div>
-        </section>
+        </div>
 
         <footer>
-            HUD_INTERFACE_V3 // OPERATED BY NGUYEN VIET HOANG
+            © 2026 NGUYEN VIET HOANG. All rights reserved.
         </footer>
-
     </div>
 
-    <div id="cyber-toast-container"></div>
+    <div id="toast-zone"></div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script>
-        // 1. Hiệu ứng gõ tên
-        const nameElem = document.getElementById('profile-name-text');
-        const textToType = "Nguyễn Việt Hoàng";
-        let isDeleting = false; let textIndex = 0;
-
-        function typeAnimation() {
-            const currentText = textToType.substring(0, textIndex);
-            nameElem.textContent = currentText;
-            let speed = isDeleting ? 40 : 120;
-            if (!isDeleting && textIndex === textToType.length) { speed = 2500; isDeleting = true; } 
-            else if (isDeleting && textIndex === 0) { isDeleting = false; speed = 600; }
-            textIndex += isDeleting ? -1 : 1;
-            setTimeout(typeAnimation, speed);
+        // CHỐNG SOI CODE
+        function showToastBlock(msg) {
+            const z = document.getElementById('toast-zone');
+            const t = document.createElement('div');
+            t.className = 'toast-msg'; t.innerText = msg;
+            z.appendChild(t); setTimeout(() => t.remove(), 2500);
         }
-        window.addEventListener('DOMContentLoaded', typeAnimation);
-
-        // 2. Chuyển đổi Theme Sáng Tối mượt mà
-        function toggleTheme() {
-            const body = document.body;
-            const currentTheme = body.getAttribute('data-theme');
-            body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
-        }
-
-        // 3. Script bảo mật chống soi code không lag
-        function showCyberToast(message) {
-            let container = document.getElementById('cyber-toast-container');
-            if(!container) return;
-            const toast = document.createElement('div');
-            toast.className = 'cyber-toast'; toast.innerText = message;
-            container.appendChild(toast);
-            setTimeout(() => { toast.remove(); }, 2400);
-        }
-        document.addEventListener('contextmenu', e => { e.preventDefault(); showCyberToast('[SECURITY] CHỨC NĂNG CHUỘT PHẢI ĐÃ BỊ MÃ HÓA'); });
+        document.addEventListener('contextmenu', e => { e.preventDefault(); showToastBlock('🚫 Cấm sao chép nội dung!'); });
         document.onkeydown = function(e) {
             const forbidden = [123, (e.ctrlKey && e.shiftKey && e.keyCode===73), (e.ctrlKey && e.keyCode===85), (e.ctrlKey && e.keyCode===83)];
-            if(forbidden.includes(true)) { e.preventDefault(); showCyberToast('[SECURITY] PHÁT HIỆN F12 // KHÓA TRUY CẬP'); return false; }
+            if(forbidden.includes(true)) { e.preventDefault(); showToastBlock('🚫 Phát hiện phím tắt F12 - Bị khóa!'); return false; }
         };
         document.onselectstart = e => { e.preventDefault(); return false; };
 
-        /* ==================== KẾT NỐI FIREBASE CỦA HOÀNG ==================== */
+        // FIREBASE CHUẨN
         const firebaseConfig = {
             apiKey: "AIzaSyD9Vi39Xuj8qf_bYjtZLAjpOkEvMIhzD1Y",
             authDomain: "hoangkun-chat.firebaseapp.com",
@@ -333,31 +227,31 @@
             const btn = document.getElementById('btn-submit-cmt');
             const name = nameInput.value.trim(); const content = contentInput.value.trim();
 
-            if (!name || !content) { showCyberToast('[SYSTEM] LỖI: THIẾU GÓI DỮ LIỆU ĐẦU VÀO'); return; }
-            btn.innerText = "[ PROCESSING... ]"; btn.disabled = true;
+            if (!name || !content) { showToastBlock('⚠️ Vui lòng nhập đủ thông tin!'); return; }
+            btn.innerText = "ĐANG GỬI..."; btn.disabled = true;
 
             commentsRef.push({ name: name, text: content, timestamp: firebase.database.ServerValue.TIMESTAMP }).then(() => {
-                contentInput.value = ''; btn.innerText = "Gửi Gói Tin // BROADCAST"; btn.disabled = false;
-            }).catch((error) => { showCyberToast("[ERR] " + error.message); btn.innerText = "Gửi Gói Tin // BROADCAST"; btn.disabled = false; });
+                contentInput.value = ''; btn.innerText = "GỬI LỜI NHẮN"; btn.disabled = false;
+            }).catch((error) => { showToastBlock("Lỗi: " + error.message); btn.innerText = "GỬI LỜI NHẮN"; btn.disabled = false; });
         }
 
         function timeAgo(time) {
             const diff = new Date().getTime() - time; const mins = Math.floor(diff / 60000);
-            if (mins < 1) return "just_now"; if (mins < 60) return mins + "m_ago";
-            if (mins < 1440) return Math.floor(mins / 60) + "h_ago"; return Math.floor(mins / 1440) + "d_ago";
+            if (mins < 1) return "Vừa xong"; if (mins < 60) return mins + " phút trước";
+            if (mins < 1440) return Math.floor(mins / 60) + " giờ trước"; return Math.floor(mins / 1440) + " ngày trước";
         }
 
         const commentsList = document.getElementById('comments-list');
         commentsRef.orderByChild('timestamp').on('value', (snapshot) => {
-            if (!snapshot.exists()) { commentsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); font-family: monospace;">[SYSTEM] Không tìm thấy lịch sử log tin nhắn...</div>'; return; }
+            if (!snapshot.exists()) { commentsList.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-style:italic;">Chưa có lời nhắn nào.</div>'; return; }
             let html = ''; const cmtArray = [];
             snapshot.forEach(child => cmtArray.push(child.val()));
             cmtArray.reverse();
             cmtArray.forEach(data => {
                 html += `
-                    <div class="feed-node">
-                        <div class="node-meta"><span class="node-user">> ID: ${data.name}</span><span class="node-time">[${data.timestamp ? timeAgo(data.timestamp) : "recent"}]</span></div>
-                        <div class="node-text">${data.text}</div>
+                    <div class="cmt-item">
+                        <div class="cmt-head"><b>${data.name}</b><span>${data.timestamp ? timeAgo(data.timestamp) : ""}</span></div>
+                        <div class="cmt-txt">${data.text}</div>
                     </div>
                 `;
             });
