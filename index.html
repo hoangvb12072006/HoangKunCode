@@ -3,309 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nguyễn Việt Hoàng | Cyberpunk Bio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>Nguyễn Việt Hoàng | Tactical Control Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-deep: #030305;
-            --grid-color: rgba(14, 165, 233, 0.05);
-            --card-bg: rgba(10, 10, 15, 0.7);
-            --primary: #8b5cf6; /* Tím Neon */
-            --secondary: #0ea5e9; /* Cyan */
-            --accent: #f43f5e; /* Đỏ Neon */
-            --text-main: #ffffff;
-            --text-dim: #8b9bb4;
-            --border-tech: rgba(139, 92, 246, 0.3);
-            --glow: 0 0 20px rgba(14, 165, 233, 0.4);
+            --bg-dark: #04060a;
+            --panel-bg: #090d16;
+            --panel-hover: #101726;
+            --cyan: #06b6d4;
+            --purple: #a855f7;
+            --emerald: #10b981;
+            --rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+            --border-glow: rgba(6, 182, 212, 0.15);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Rajdhani', sans-serif; }
-
-        /* NỀN LƯỚI MA TRẬN BẰNG CSS (SIÊU NHẸ) */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
-            background-color: var(--bg-deep);
-            background-image: 
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 40px 40px;
-            background-attachment: fixed;
+            background-color: var(--bg-dark);
             color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             overflow-x: hidden;
+            padding: 40px 20px;
+            /* Tạo hiệu ứng dải sáng ảo ảnh ở nền */
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(6, 182, 212, 0.04) 0%, transparent 50%);
+            background-attachment: fixed;
         }
 
-        /* TẠO ÁNH SÁNG CHIẾU TỪ TRÊN XUỐNG */
-        body::before {
-            content: ''; position: fixed; top: 0; left: 50%; transform: translateX(-50%);
-            width: 80vw; height: 500px;
-            background: radial-gradient(ellipse at top, rgba(139, 92, 246, 0.15), transparent 70%);
-            pointer-events: none; z-index: -1;
+        /* TÊN HỆ THỐNG PHÔNG CHỮ CÔNG NGHỆ CAO */
+        h1, h2, h3, .tech-font { font-family: 'Orbitron', sans-serif; }
+
+        /* ==================== CONTROL CENTER CONTAINER ==================== */
+        .control-panel {
+            width: 100%;
+            max-width: 850px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: panelFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes panelFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* THANH ĐẦU HUD (TOP SYSTEM BAR) */
+        .hud-top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--panel-bg); border: 1px solid var(--border-glow);
+            padding: 12px 25px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;
+            letter-spacing: 1px; color: var(--text-muted);
+        }
+        .system-status { display: flex; align-items: center; gap: 8px; color: var(--emerald); }
+        .pulse-dot { width: 8px; height: 8px; background: var(--emerald); border-radius: 50%; animation: pulse 1.5s infinite; box-shadow: 0 0 10px var(--emerald); }
+        @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+        /* ==================== BENTO BỐ CỤC KHỐI MODULAR ==================== */
+        .bento-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 20px;
         }
 
-        .main-wrapper {
-            width: 100%; max-width: 700px; padding: 50px 20px;
-            display: flex; flex-direction: column; gap: 40px; z-index: 1;
+        /* KHỐI TRÁI: PROFILE CHÍNH */
+        .panel-core {
+            background: var(--panel-bg); border: 1px solid var(--border-glow);
+            border-radius: 24px; padding: 40px 30px; text-align: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
         }
+        /* Góc vát công nghệ */
+        .panel-core::before { content: ''; position: absolute; top: 0; right: 0; border-width: 0 16px 16px 0; border-style: solid; border-color: transparent var(--bg-dark) transparent transparent; }
 
-        /* --- PROFILE HERO --- */
-        .profile-section { text-align: center; position: relative; }
+        .avatar-hud {
+            position: relative; width: 140px; height: 140px; margin-bottom: 25px;
+        }
+        .avatar-hud img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.05); }
         
-        .tech-badge {
-            display: inline-block; padding: 4px 15px; margin-bottom: 25px;
-            background: rgba(14, 165, 233, 0.1); border: 1px solid var(--secondary);
-            color: var(--secondary); font-weight: 700; font-size: 0.85rem;
-            letter-spacing: 2px; text-transform: uppercase;
-            box-shadow: inset 0 0 10px rgba(14, 165, 233, 0.2);
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        /* Vòng quét radar bao quanh Avatar */
+        .radar-ring {
+            position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px;
+            border: 2px solid transparent; border-top-color: var(--cyan); border-bottom-color: var(--cyan);
+            border-radius: 50%; animation: radarRotate 6s linear infinite;
         }
+        @keyframes radarRotate { 100% { transform: rotate(360deg); } }
 
-        .avatar-tech-ring {
-            width: 170px; height: 170px; margin: 0 auto 25px; position: relative;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .avatar-tech-ring::before {
-            content: ''; position: absolute; width: 100%; height: 100%;
-            border-radius: 50%; border: 2px dashed var(--primary);
-            animation: spinRight 15s linear infinite;
-        }
-        .avatar-tech-ring::after {
-            content: ''; position: absolute; width: 115%; height: 115%;
-            border-radius: 50%; border: 2px solid transparent;
-            border-left-color: var(--secondary); border-right-color: var(--secondary);
-            animation: spinLeft 10s linear infinite;
-        }
-        @keyframes spinRight { 100% { transform: rotate(360deg); } }
-        @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
+        .profile-name-box { height: 45px; display: flex; align-items: center; margin-bottom: 12px; }
+        .profile-name { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .typing-cursor { width: 3px; height: 2rem; background: var(--cyan); margin-left: 6px; animation: cursorBlink 0.7s infinite; }
+        @keyframes cursorBlink { 50% { opacity: 0; } }
 
-        .avatar-inner {
-            width: 140px; height: 140px; border-radius: 50%; overflow: hidden;
-            border: 3px solid #fff; box-shadow: var(--glow); z-index: 2;
-        }
-        .avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-bio { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; max-width: 400px; margin-bottom: 25px; }
 
-        /* HIỆU ỨNG GLITCH CHỮ */
-        .glitch-wrapper { position: relative; display: inline-block; margin-bottom: 10px; }
-        .profile-name { font-size: 3.2rem; font-weight: 800; letter-spacing: 1px; color: #fff; position: relative; text-transform: uppercase; }
-        .profile-name::before, .profile-name::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.8;
+        /* Mạng xã hội dạng ô lưới nhỏ */
+        .social-grid { display: flex; gap: 12px; }
+        .social-cell {
+            width: 46px; height: 48px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-light);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: 0.2s;
         }
-        .profile-name::before { left: 2px; text-shadow: -2px 0 var(--accent); clip: rect(24px, 550px, 90px, 0); animation: glitch-anim 3s infinite linear alternate-reverse; }
-        .profile-name::after { left: -2px; text-shadow: -2px 0 var(--secondary); clip: rect(85px, 550px, 140px, 0); animation: glitch-anim 2.5s infinite linear alternate-reverse; }
-        @keyframes glitch-anim {
-            0% { clip: rect(20px, 9999px, 85px, 0); }
-            20% { clip: rect(70px, 9999px, 15px, 0); }
-            40% { clip: rect(10px, 9999px, 50px, 0); }
-            60% { clip: rect(90px, 9999px, 30px, 0); }
-            80% { clip: rect(30px, 9999px, 80px, 0); }
-            100% { clip: rect(50px, 9999px, 10px, 0); }
-        }
+        .social-cell svg { width: 20px; height: 20px; fill: var(--text-main); }
+        .social-cell:hover { border-color: var(--cyan); background: rgba(6, 182, 212, 0.05); transform: translateY(-2px); }
+        .social-cell:hover svg { fill: var(--cyan); }
 
-        .bio-desc { color: var(--text-dim); font-size: 1.1rem; line-height: 1.6; max-width: 550px; margin: 0 auto; font-weight: 600; }
+        /* KHỐI PHẢI: CHI TIẾT ĐƯỜNG DẪN (TACTICAL TERMINAL) */
+        .panel-terminal { display: flex; flex-direction: column; gap: 15px; }
 
-        /* --- SOCIAL HACKER STYLE --- */
-        .social-row { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
-        .social-box {
-            width: 50px; height: 50px; background: rgba(0,0,0,0.5);
-            border: 1px solid var(--border-tech); display: flex; align-items: center; justify-content: center;
-            position: relative; transition: 0.3s;
+        .terminal-link {
+            background: var(--panel-bg); border: 1px solid var(--border-glow);
+            border-radius: 16px; padding: 20px; display: flex; align-items: center;
+            justify-content: space-between; text-decoration: none; color: #fff;
+            transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative;
         }
-        /* Góc chéo công nghệ */
-        .social-box::before { content: ''; position: absolute; top: -1px; left: -1px; width: 10px; height: 10px; border-top: 2px solid var(--secondary); border-left: 2px solid var(--secondary); transition: 0.3s;}
-        .social-box::after { content: ''; position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; border-bottom: 2px solid var(--secondary); border-right: 2px solid var(--secondary); transition: 0.3s;}
+        .link-meta { display: flex; flex-direction: column; gap: 4px; }
+        .link-tag { font-size: 0.7rem; font-weight: 800; color: var(--cyan); letter-spacing: 1px; text-transform: uppercase; }
+        .link-title { font-size: 1.1rem; font-weight: 700; }
+        .link-arrow { font-size: 1.1rem; color: var(--text-muted); transition: 0.3s; }
         
-        .social-box svg { width: 24px; height: 24px; fill: var(--text-main); transition: 0.3s; }
-        .social-box:hover { background: rgba(14, 165, 233, 0.2); box-shadow: var(--glow); transform: translateY(-3px); }
-        .social-box:hover::before, .social-box:hover::after { width: 100%; height: 100%; }
-        .social-box:hover svg { fill: var(--secondary); }
+        /* Hiệu ứng viền chạy sáng khi Hover link */
+        .terminal-link:hover { background: var(--panel-hover); border-color: var(--cyan); padding-left: 25px; }
+        .terminal-link:hover .link-arrow { color: var(--cyan); transform: translateX(4px); }
 
-        /* --- NÚT BẤM (TECH BUTTONS) --- */
-        .links-container { display: flex; flex-direction: column; gap: 18px; width: 100%; }
-        .tech-btn {
-            position: relative; width: 100%; background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.1); border-left: 4px solid var(--primary);
-            padding: 18px 25px; color: #fff; text-decoration: none; font-size: 1.1rem; font-weight: 700;
-            display: flex; align-items: center; justify-content: space-between;
-            transition: 0.3s; overflow: hidden; backdrop-filter: blur(10px);
+        /* Nút Highlight đặc biệt */
+        .terminal-link.prime { border-left: 4px solid var(--purple); }
+        .terminal-link.prime .link-tag { color: var(--purple); }
+        .terminal-link.prime:hover { border-color: var(--purple); }
+
+        /* ==================== DATA ANALYTICS (THÔNG SỐ) ==================== */
+        .analytics-deck {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;
         }
-        .tech-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: 0.5s;
+        .analytic-card {
+            background: var(--panel-bg); border: 1px solid var(--border-glow);
+            padding: 22px 15px; border-radius: 16px; text-align: center;
         }
-        .tech-btn:hover { border-color: var(--primary); box-shadow: 0 5px 20px rgba(139, 92, 246, 0.2); transform: translateX(5px); }
-        .tech-btn:hover::before { left: 100%; }
-        .btn-icon { color: var(--secondary); font-size: 1.2rem; }
+        .analytic-num { font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 2px; }
+        .analytic-lbl { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .tech-btn.vip { border-left-color: var(--accent); background: linear-gradient(90deg, rgba(244, 63, 94, 0.1), transparent); }
-        .tech-btn.vip:hover { border-color: var(--accent); box-shadow: 0 5px 20px rgba(244, 63, 94, 0.2); }
-        .tech-btn.vip .btn-icon { color: var(--accent); }
-
-        /* --- THỐNG KÊ (DATA PANELS) --- */
-        .data-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
-        .data-panel {
-            background: rgba(0,0,0,0.4); border: 1px solid var(--border-tech);
-            padding: 25px 15px; text-align: center; position: relative;
+        /* ==================== LOG MESSAGE (BÌNH LUẬN) ==================== */
+        .feed-box {
+            background: var(--panel-bg); border: 1px solid var(--border-glow); border-radius: 24px; padding: 30px;
         }
-        .data-panel::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 2px; background: var(--secondary); }
-        .data-val { font-size: 2.2rem; font-weight: 800; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); margin-bottom: 5px; }
-        .data-label { color: var(--secondary); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
+        .feed-title { font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 25px; color: #fff; display: flex; align-items: center; gap: 10px;}
+        .feed-title::after { content: ''; flex: 1; height: 1px; background: var(--border-glow); }
 
-        /* --- TERMINAL COMMENT SECTION --- */
-        .terminal-box {
-            width: 100%; background: #050505; border: 1px solid #333; border-top: 25px solid #1a1a24;
-            border-radius: 8px; position: relative; padding: 25px; margin-top: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-        .terminal-box::before { content: '•••'; position: absolute; top: -22px; left: 15px; color: #555; font-size: 20px; letter-spacing: 2px; }
-        .terminal-box::after { content: 'SYS.COMMENTS_LOG'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); color: #666; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
-
-        .terminal-input-group { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; border-bottom: 1px dashed #333; padding-bottom: 25px; }
-        .t-input { background: transparent; border: 1px solid #333; color: #0ea5e9; font-family: monospace; font-size: 1rem; padding: 12px; outline: none; transition: 0.3s; }
-        .t-input:focus { border-color: var(--secondary); box-shadow: inset 0 0 10px rgba(14, 165, 233, 0.1); }
-        .t-input::placeholder { color: #444; }
+        .feed-input-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .feed-input-wrapper textarea { grid-column: span 2; min-height: 80px; resize: vertical; }
+        .feed-ctrl { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glow); border-radius: 12px; padding: 14px 18px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
+        .feed-ctrl:focus { border-color: var(--cyan); box-shadow: 0 0 15px rgba(6, 182, 212, 0.15); }
         
-        .btn-execute {
-            align-self: flex-start; background: transparent; color: var(--secondary); border: 1px solid var(--secondary);
-            padding: 10px 25px; font-family: monospace; font-weight: 700; cursor: pointer; transition: 0.3s;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-        .btn-execute:hover { background: var(--secondary); color: #000; box-shadow: 0 0 15px var(--secondary); }
+        .btn-broadcast { grid-column: span 2; justify-self: flex-end; background: transparent; color: var(--cyan); border: 1px solid var(--cyan); padding: 12px 30px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; cursor: pointer; transition: 0.3s; text-transform: uppercase;}
+        .btn-broadcast:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px rgba(6, 182, 212, 0.4); }
 
-        .log-list { display: flex; flex-direction: column; gap: 15px; max-height: 350px; overflow-y: auto; padding-right: 10px; }
-        .log-list::-webkit-scrollbar { width: 4px; }
-        .log-list::-webkit-scrollbar-thumb { background: #333; }
+        .feed-stream { display: flex; flex-direction: column; gap: 15px; max-height: 350px; overflow-y: auto; padding-right: 8px; }
+        .feed-stream::-webkit-scrollbar { width: 4px; }
+        .feed-stream::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
         
-        .log-item { display: flex; flex-direction: column; gap: 5px; animation: fadeInLog 0.3s ease; }
-        @keyframes fadeInLog { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        .log-head { font-family: monospace; font-size: 0.85rem; color: #555; }
-        .log-head span { color: var(--primary); font-weight: bold; }
-        .log-body { color: #e2e8f0; font-size: 1rem; padding-left: 15px; border-left: 2px solid #333; }
+        .feed-node { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.02); padding: 16px 20px; border-radius: 14px; animation: nodeIn 0.3s ease; }
+        @keyframes nodeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .node-meta { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px; font-weight: bold; }
+        .node-user { color: var(--cyan); }
+        .node-time { color: var(--text-muted); }
+        .node-text { color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; }
 
-        /* TOAST CYBERPUNK */
-        #cyber-toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 99999; display: flex; flex-direction: column; gap: 15px; pointer-events: none; }
-        .cyber-toast { background: rgba(0,0,0,0.9); border: 1px solid var(--accent); padding: 12px 25px; color: var(--accent); font-family: monospace; font-size: 0.9rem; font-weight: 700; opacity: 0; animation: fadeToast 2.5s ease forwards; box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); text-transform: uppercase; }
-        @keyframes fadeToast { 0% { opacity: 0; transform: translateY(20px); } 15% { opacity: 1; transform: translateY(0); } 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-20px); } }
+        /* THEME TOGGLE SÁNG TỐI (GIỮ ĐỂ WEB ĐẦY ĐỦ TIỆN NGHI) */
+        .theme-switch { width: 36px; height: 36px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-glow); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+        .theme-switch:hover { border-color: var(--cyan); transform: scale(1.05); }
+        .theme-switch svg { width: 16px; height: 16px; fill: var(--text-muted); }
 
-        footer { text-align: center; padding: 20px 0; color: #555; font-family: monospace; font-size: 0.85rem; margin-top: 20px; }
+        /* TOAST BẢO MẬT */
+        #cyber-toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .cyber-toast { background: rgba(9, 13, 22, 0.95); border: 1px solid var(--rose); border-radius: 8px; padding: 12px 24px; color: var(--rose); font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 700; opacity: 0; animation: toastFadeKey 2.5s ease forwards; box-shadow: 0 0 15px rgba(244, 63, 94, 0.2); }
+        @keyframes toastFadeKey { 0% { opacity: 0; transform: translateY(15px); } 15% { opacity: 1; transform: translateY(0); } 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-15px); } }
 
-        @media (max-width: 600px) {
-            .profile-name { font-size: 2.2rem; }
-            .data-grid { grid-template-columns: 1fr; }
-            .avatar-tech-ring { width: 140px; height: 140px; }
-            .avatar-inner { width: 115px; height: 115px; }
+        /* FOOTER */
+        footer { text-align: center; font-size: 0.8rem; color: #334155; padding: 20px 0; font-weight: 600; letter-spacing: 0.5px; }
+
+        /* RESPONSIVE */
+        @media (max-width: 800px) {
+            .bento-layout { grid-template-columns: 1fr; }
+            .analytics-deck { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
-    <main class="main-wrapper">
+    <div class="control-panel">
         
-        <!-- ================= HERO ================= -->
-        <section class="profile-section">
-            <div class="tech-badge">VERIFIED_CREATOR</div>
-            
-            <div class="avatar-tech-ring">
-                <div class="avatar-inner">
-                    <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Nguyễn Việt Hoàng">
-                </div>
+        <div class="hud-top-bar">
+            <div class="system-status"><span class="pulse-dot"></span> SECURE_NODE // ONLINE</div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span class="tech-font" style="font-size: 0.75rem;">OPERATOR: VIET_HOANG</span>
+                <div class="theme-switch" onclick="toggleTheme()"><svg viewBox="0 0 24 24"><path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c-0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/></svg></div>
             </div>
-
-            <div class="glitch-wrapper">
-                <h1 class="profile-name" data-text="Nguyễn Việt Hoàng">Nguyễn Việt Hoàng</h1>
-            </div>
-            
-            <p class="bio-desc">
-                Sáng tạo nội dung video ngắn, chuyên các series TikTok tâm trạng cực chill và Review phim đa thể loại trên YouTube.
-            </p>
-        </section>
-
-        <!-- ================= SOCIAL HACKER BOXES ================= -->
-        <div class="social-row">
-            <a href="https://www.facebook.com/profile.php?id=100043746734819" class="social-box" target="_blank"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-0.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/></svg></a>
-            <a href="https://www.youtube.com/@Hazen06" class="social-box" target="_blank"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-            <a href="https://www.tiktok.com/@hpdbox" class="social-box" target="_blank"><svg viewBox="0 0 24 24"><path d="M12.525.465a5.775 5.775 0 0 0 1.01 3.425 5.72 5.72 0 0 0 2.395 2.05A8.345 8.345 0 0 1 15.86 3.85a7.12 7.12 0 0 1-.22-2.145V0h-3.41v16.14a4.135 4.135 0 0 1-4.13 4.13 4.135 4.135 0 0 1-4.13-4.13 4.135 4.135 0 0 1 4.13-4.13c.49 0 .96.09 1.4.25V8.79a7.48 7.48 0 0 0-1.4-.13A7.55 7.55 0 0 0 .55 16.21a7.55 7.55 0 0 0 7.55 7.55 7.55 7.55 0 0 0 7.55-7.55V5.51A9.06 9.06 0 0 0 22.12 8.41V4.99a5.67 5.67 0 0 1-3.64-1.95 5.74 5.74 0 0 1-.955-2.575h-5z"/></svg></a>
         </div>
 
-        <!-- ================= TECH BUTTONS ================= -->
-        <nav class="links-container">
-            <a href="https://www.youtube.com/@kunmusic06" class="tech-btn" target="_blank">
-                <span>🎬 Đăng Ký Kênh YouTube Music</span>
-                <span class="btn-icon">➔</span>
-            </a>
-            <a href="https://www.tiktok.com/@hpdbox" class="tech-btn" target="_blank">
-                <span>✨ Kênh TikTok Tâm Trạng</span>
-                <span class="btn-icon">➔</span>
-            </a>
-            <a href="https://www.tiktok.com/@kunmusic06" class="tech-btn" target="_blank">
-                <span>🎵 Kênh TikTok Music</span>
-                <span class="btn-icon">➔</span>
-            </a>
-            <a href="chat.html" class="tech-btn">
-                <span>💬 Trò Chuyện Cùng Admin</span>
-                <span class="btn-icon">➔</span>
-            </a>
-            <!-- Nút VIP Đỏ Neon -->
-            <a href="shop.html" class="tech-btn vip">
-                <span>🔥 Hệ Thống Web Shop Code / Hack</span>
-                <span class="btn-icon">⚡</span>
-            </a>
-        </nav>
-
-        <!-- ================= DATA PANELS ================= -->
-        <section class="data-grid">
-            <div class="data-panel"><div class="data-val">1805</div><div class="data-label">Followers</div></div>
-            <div class="data-panel"><div class="data-val">119K</div><div class="data-label">Lượt Tim</div></div>
-            <div class="data-panel"><div class="data-val">1.7Tr</div><div class="data-label">Lượt Xem</div></div>
-            <div class="data-panel"><div class="data-val">15K+</div><div class="data-label">Thành Viên</div></div>
-        </section>
-
-        <!-- ================= TERMINAL COMMENTS ================= -->
-        <section class="terminal-box">
-            <div class="terminal-input-group">
-                <input type="text" id="cmt-name" class="t-input" placeholder="> Nhập Tên / ID..." maxlength="30">
-                <textarea id="cmt-content" class="t-input" placeholder="> Để lại lời nhắn vào hệ thống..." rows="2"></textarea>
-                <button onclick="submitComment()" id="btn-submit-cmt" class="btn-execute">[ EXECUTE_COMMENT ]</button>
-            </div>
+        <div class="bento-layout">
             
-            <div id="comments-list" class="log-list">
-                <div style="color: #555; font-family: monospace;">Loading system logs...</div>
+            <section class="panel-core">
+                <div class="avatar-hud">
+                    <div class="radar-ring"></div>
+                    <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Nguyễn Việt Hoàng">
+                </div>
+                <div class="profile-name-box">
+                    <h2 class="profile-name" id="profile-name-text"></h2>
+                    <span class="typing-cursor"></span>
+                </div>
+                <p class="profile-bio">Sáng tạo nội dung video ngắn, chuyên các series TikTok tâm trạng cực chill và Review phim đa thể loại trên YouTube.</p>
+                
+                <div class="social-grid">
+                    <a href="https://www.facebook.com/profile.php?id=100043746734819" class="social-cell" target="_blank"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-0.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/></svg></a>
+                    <a href="https://www.youtube.com/@Hazen06" class="social-cell" target="_blank"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                    <a href="https://www.tiktok.com/@hpdbox" class="social-cell" target="_blank"><svg viewBox="0 0 24 24"><path d="M12.525.465a5.775 5.775 0 0 0 1.01 3.425 5.72 5.72 0 0 0 2.395 2.05A8.345 8.345 0 0 1 15.86 3.85a7.12 7.12 0 0 1-.22-2.145V0h-3.41v16.14a4.135 4.135 0 0 1-4.13 4.13 4.135 4.135 0 0 1-4.13-4.13 4.135 4.135 0 0 1 4.13-4.13c.49 0 .96.09 1.4.25V8.79a7.48 7.48 0 0 0-1.4-.13A7.55 7.55 0 0 0 .55 16.21a7.55 7.55 0 0 0 7.55 7.55 7.55 7.55 0 0 0 7.55-7.55V5.51A9.06 9.06 0 0 0 22.12 8.41V4.99a5.67 5.67 0 0 1-3.64-1.95 5.74 5.74 0 0 1-.955-2.575h-5z"/></svg></a>
+                </div>
+            </section>
+
+            <nav class="panel-terminal">
+                <a href="https://www.youtube.com/@kunmusic06" class="terminal-link prime" target="_blank">
+                    <div class="link-meta"><span class="link-tag">AUDIO_BROADCAST</span><span class="link-title">Kênh YouTube Music</span></div>
+                    <span class="link-arrow">➔</span>
+                </a>
+                <a href="https://www.tiktok.com/@hpdbox" class="terminal-link" target="_blank">
+                    <div class="link-meta"><span class="link-tag">STREAM_FEED_1</span><span class="link-title">Kênh TikTok Tâm Trạng</span></div>
+                    <span class="link-arrow">➔</span>
+                </a>
+                <a href="https://www.tiktok.com/@kunmusic06" class="terminal-link" target="_blank">
+                    <div class="link-meta"><span class="link-tag">STREAM_FEED_2</span><span class="link-title">Kênh TikTok Music</span></div>
+                    <span class="link-arrow">➔</span>
+                </a>
+                <a href="chat.html" class="terminal-link" style="border-left-color: var(--emerald);">
+                    <div class="link-meta"><span class="link-tag" style="color: var(--emerald);">LIVE_COMMS</span><span class="link-title">Trò Chuyện Trực Tiếp</span></div>
+                    <span class="link-arrow" style="color: var(--emerald);">➔</span>
+                </a>
+            </nav>
+        </div>
+
+        <section class="analytics-deck">
+            <div class="analytic-card"><div class="analytic-num">1.8K</div><div class="analytic-lbl">Followers</div></div>
+            <div class="analytic-card"><div class="analytic-num">119K</div><div class="analytic-lbl">Lượt Tim</div></div>
+            <div class="analytic-card"><div class="analytic-num">1.7M</div><div class="analytic-lbl">Lượt Xem</div></div>
+            <div class="analytic-card"><div class="analytic-num">15K+</div><div class="analytic-lbl">Members</div></div>
+        </section>
+
+        <section class="feed-box">
+            <div class="feed-title">DATA_COMMUNICATION_LOG</div>
+            
+            <div class="feed-input-wrapper">
+                <input type="text" id="cmt-name" class="feed-ctrl" placeholder="> Xác thực định danh (Tên)..." maxlength="30">
+                <textarea id="cmt-content" class="feed-ctrl" placeholder="> Nhập gói tin dữ liệu gửi đến Admin..."></textarea>
+                <button onclick="submitComment()" id="btn-submit-cmt" class="btn-broadcast">Gửi Gói Tin // BROADCAST</button>
+            </div>
+
+            <div id="comments-list" class="feed-stream">
+                <div style="text-align: center; color: var(--text-muted); font-family: monospace;">[SYSTEM] Đang tải luồng dữ liệu...</div>
             </div>
         </section>
 
-    </main>
+        <footer>
+            HUD_INTERFACE_V3 // OPERATED BY NGUYEN VIET HOANG
+        </footer>
 
-    <footer>
-        SYS.VER 2.0 // BY HOANGKUN STORE
-    </footer>
+    </div>
 
-    <!-- TOAST BẢO MẬT -->
     <div id="cyber-toast-container"></div>
 
-    <!-- FIREBASE & LOGIC SCRIPT -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script>
-        // --- CHỐNG F12 ---
-        function showCyberToast(msg) {
-            let box = document.getElementById('cyber-toast-container');
-            let t = document.createElement('div');
-            t.className = 'cyber-toast'; t.innerText = msg;
-            box.appendChild(t);
-            setTimeout(() => t.remove(), 2500);
+        // 1. Hiệu ứng gõ tên
+        const nameElem = document.getElementById('profile-name-text');
+        const textToType = "Nguyễn Việt Hoàng";
+        let isDeleting = false; let textIndex = 0;
+
+        function typeAnimation() {
+            const currentText = textToType.substring(0, textIndex);
+            nameElem.textContent = currentText;
+            let speed = isDeleting ? 40 : 120;
+            if (!isDeleting && textIndex === textToType.length) { speed = 2500; isDeleting = true; } 
+            else if (isDeleting && textIndex === 0) { isDeleting = false; speed = 600; }
+            textIndex += isDeleting ? -1 : 1;
+            setTimeout(typeAnimation, speed);
+        }
+        window.addEventListener('DOMContentLoaded', typeAnimation);
+
+        // 2. Chuyển đổi Theme Sáng Tối mượt mà
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
         }
 
-        document.addEventListener('contextmenu', e => { e.preventDefault(); showCyberToast('[ERR] ACCESS_DENIED: MÃ NGUỒN ĐÃ BỊ KHÓA'); });
+        // 3. Script bảo mật chống soi code không lag
+        function showCyberToast(message) {
+            let container = document.getElementById('cyber-toast-container');
+            if(!container) return;
+            const toast = document.createElement('div');
+            toast.className = 'cyber-toast'; toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 2400);
+        }
+        document.addEventListener('contextmenu', e => { e.preventDefault(); showCyberToast('[SECURITY] CHỨC NĂNG CHUỘT PHẢI ĐÃ BỊ MÃ HÓA'); });
         document.onkeydown = function(e) {
             const forbidden = [123, (e.ctrlKey && e.shiftKey && e.keyCode===73), (e.ctrlKey && e.keyCode===85), (e.ctrlKey && e.keyCode===83)];
-            if(forbidden.includes(true)) { e.preventDefault(); showCyberToast('[ERR] SECURITY_ALERT: PHÁT HIỆN F12!'); return false; }
+            if(forbidden.includes(true)) { e.preventDefault(); showCyberToast('[SECURITY] PHÁT HIỆN F12 // KHÓA TRUY CẬP'); return false; }
         };
         document.onselectstart = e => { e.preventDefault(); return false; };
 
-        // --- FIREBASE BÌNH LUẬN ---
+        /* ==================== KẾT NỐI FIREBASE CỦA HOÀNG ==================== */
         const firebaseConfig = {
             apiKey: "AIzaSyD9Vi39Xuj8qf_bYjtZLAjpOkEvMIhzD1Y",
             authDomain: "hoangkun-chat.firebaseapp.com",
@@ -315,7 +323,6 @@
             messagingSenderId: "713375578505",
             appId: "1:713375578505:web:6d7d5c2a2d9a1608998958"
         };
-
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const commentsRef = database.ref('bio_comments');
@@ -326,13 +333,12 @@
             const btn = document.getElementById('btn-submit-cmt');
             const name = nameInput.value.trim(); const content = contentInput.value.trim();
 
-            if (!name || !content) { showCyberToast('[SYS] YÊU CẦU ĐIỀN ĐỦ DỮ LIỆU!'); return; }
-
+            if (!name || !content) { showCyberToast('[SYSTEM] LỖI: THIẾU GÓI DỮ LIỆU ĐẦU VÀO'); return; }
             btn.innerText = "[ PROCESSING... ]"; btn.disabled = true;
 
             commentsRef.push({ name: name, text: content, timestamp: firebase.database.ServerValue.TIMESTAMP }).then(() => {
-                contentInput.value = ''; btn.innerText = "[ EXECUTE_COMMENT ]"; btn.disabled = false;
-            }).catch((error) => { showCyberToast("[ERR] " + error.message); btn.innerText = "[ EXECUTE_COMMENT ]"; btn.disabled = false; });
+                contentInput.value = ''; btn.innerText = "Gửi Gói Tin // BROADCAST"; btn.disabled = false;
+            }).catch((error) => { showCyberToast("[ERR] " + error.message); btn.innerText = "Gửi Gói Tin // BROADCAST"; btn.disabled = false; });
         }
 
         function timeAgo(time) {
@@ -343,17 +349,15 @@
 
         const commentsList = document.getElementById('comments-list');
         commentsRef.orderByChild('timestamp').on('value', (snapshot) => {
-            if (!snapshot.exists()) { commentsList.innerHTML = '<div style="color: #555; font-family: monospace;">> No records found...</div>'; return; }
-            
+            if (!snapshot.exists()) { commentsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); font-family: monospace;">[SYSTEM] Không tìm thấy lịch sử log tin nhắn...</div>'; return; }
             let html = ''; const cmtArray = [];
             snapshot.forEach(child => cmtArray.push(child.val()));
             cmtArray.reverse();
-
             cmtArray.forEach(data => {
                 html += `
-                    <div class="log-item">
-                        <div class="log-head">> USER: <span>${data.name}</span> [TIME: ${data.timestamp ? timeAgo(data.timestamp) : "recent"}]</div>
-                        <div class="log-body">${data.text}</div>
+                    <div class="feed-node">
+                        <div class="node-meta"><span class="node-user">> ID: ${data.name}</span><span class="node-time">[${data.timestamp ? timeAgo(data.timestamp) : "recent"}]</span></div>
+                        <div class="node-text">${data.text}</div>
                     </div>
                 `;
             });
