@@ -3,644 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nguyễn Việt Hoàng | Giao Diện Đối Tác Chính Thức</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="preloader.css">
+    <title>Nguyễn Việt Hoàng | Đối Tác Sáng Tạo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* --- HỆ THỐNG BIẾN MÀU SẮC (THEME) --- */
+        /* --- HỆ THỐNG BIẾN MÀU (AURORA THEME) --- */
         :root {
-            --bg-gradient: radial-gradient(circle at center, #14141a 0%, #08080a 100%);
-            --card-bg: rgba(20, 20, 27, 0.75);
-            --text-color: #ffffff;
+            --bg-base: #050505;
+            --text-main: #ffffff;
             --text-muted: #94a3b8;
-            --neon-primary: #8b5cf6; /* Tím Neon chủ đạo */
-            --neon-secondary: #06b6d4; /* Xanh Cyan accent */
-            --border-color: rgba(139, 92, 246, 0.25);
-            --btn-gradient: linear-gradient(90deg, #8b5cf6, #06b6d4);
-            --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.4);
+            --card-bg: rgba(20, 20, 25, 0.4);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #8b5cf6;
+            --secondary: #0ea5e9;
+            --accent: #f43f5e;
+            --aurora-1: rgba(139, 92, 246, 0.15);
+            --aurora-2: rgba(14, 165, 233, 0.15);
         }
 
         [data-theme="light"] {
-            --bg-gradient: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --text-color: #0f172a;
+            --bg-base: #f8fafc;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --neon-primary: #6d28d9;
-            --neon-secondary: #0891b2;
-            --border-color: rgba(109, 40, 217, 0.2);
-            --btn-gradient: linear-gradient(90deg, #6d28d9, #0891b2);
-            --shadow-glow: 0 10px 25px rgba(109, 40, 217, 0.15);
+            --card-bg: rgba(255, 255, 255, 0.6);
+            --card-border: rgba(0, 0, 0, 0.05);
+            --aurora-1: rgba(139, 92, 246, 0.1);
+            --aurora-2: rgba(14, 165, 233, 0.1);
         }
 
-        /* --- ĐỊNH DẠNG CƠ BẢN --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
 
         body {
-            background: var(--bg-gradient);
-            color: var(--text-color);
+            background-color: var(--bg-base);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
             position: relative;
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.4s ease;
         }
 
-        /* --- HIỆU ỨNG HẠT BACKGROUND (PARTICLES) --- */
-        #particles-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
+        /* --- BACKGROUND AURORA (SIÊU NHẸ, KHÔNG LAG) --- */
+        .ambient-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; overflow: hidden;
         }
-
-        .particle {
-            position: absolute;
-            background: var(--neon-secondary);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: floatUp linear infinite;
+        .ambient-bg::before, .ambient-bg::after {
+            content: ''; position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.8;
+            animation: float 20s ease-in-out infinite alternate;
         }
-
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-        }
-
-        /* --- NÚT CHUYỂN ĐỔI GIAO DIỆN SÁNG / TỐI --- */
-        .theme-toggle-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow-glow);
-            z-index: 10;
-            transition: transform 0.2s;
-        }
-        .theme-toggle-btn:hover { transform: scale(1.1); }
-        .theme-toggle-btn svg { width: 22px; height: 22px; fill: var(--text-color); }
-
-        /* --- CONTAINER CHÍNH --- */
-        .main-container {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            max-width: 1100px; 
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        /* --- KHỐI THÔNG TIN CÁ NHÂN (HERO SECTION) --- */
-        .profile-card {
-            background: transparent; 
-            padding: 20px 0 0 0;
-            text-align: center;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(139, 92, 246, 0.15);
-            border: 1px solid var(--neon-primary);
-            color: var(--neon-primary);
-            padding: 6px 16px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            backdrop-filter: blur(5px);
-        }
-        .badge-dot { width: 6px; height: 6px; background: var(--neon-secondary); border-radius: 50%; }
-
-       /* Đã fix cứng khung avatar tròn xoe và thêm chuyển động lơ lửng */
-        .avatar-container {
-            position: relative;
-            width: 170px; 
-            height: 170px;
-            margin: 0 auto 25px;
-            border-radius: 50%;
-            border: 4px solid var(--neon-primary); 
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); 
-            overflow: hidden; 
-            background-color: var(--card-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* THÊM KÍCH HOẠT CHUYỂN ĐỘNG Ở ĐÂY */
-            animation: floatingAvatar 3.5s ease-in-out infinite;
-        }
-
-        /* THÊM ĐOẠN KEYFRAMES NÀY NGAY BÊN DƯỚI ĐỂ TẠO NHỊP NHÀNG */
-        @keyframes floatingAvatar {
-            0% { 
-                transform: translateY(0px); 
-            }
-            50% { 
-                transform: translateY(-12px); /* Nhấc ảnh lên 12px */
-                box-shadow: 0 15px 35px rgba(139, 92, 246, 0.8); /* Loé sáng viền nhẹ lúc lên đỉnh */
-            }
-            100% { 
-                transform: translateY(0px); 
-            }
-        }
+        .ambient-bg::before { width: 50vw; height: 50vw; background: var(--aurora-1); top: -10%; left: -10%; }
+        .ambient-bg::after { width: 40vw; height: 40vw; background: var(--aurora-2); bottom: -10%; right: -10%; animation-delay: -5s; }
         
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(10vw, 10vh) scale(1.2); } }
+
+        /* --- NÚT CHUYỂN ĐỔI THEME --- */
+        .theme-toggle {
+            position: fixed; top: 20px; right: 20px; z-index: 100;
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            width: 45px; height: 45px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: 0.3s;
+        }
+        .theme-toggle:hover { transform: rotate(15deg) scale(1.1); border-color: var(--primary); }
+        .theme-toggle svg { width: 20px; height: 20px; fill: var(--text-main); }
+
+        /* --- CONTAINER --- */
+        .main-wrapper {
+            width: 100%; max-width: 680px; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; gap: 35px; z-index: 1;
         }
 
-       /* Cấu trúc tiêu đề tên */
-        .profile-name {
-            font-size: 3.5rem; 
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 15px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 4.5rem; /* Giữ khung cố định để web không bị đẩy lên xuống khi xóa chữ */
-        }
+        /* --- HERO SECTION --- */
+        .hero-section { text-align: center; width: 100%; animation: slideUp 0.6s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Hiệu ứng màu gradient cho riêng chữ */
-        #typing-text {
-            background: var(--btn-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .role-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 6px 16px; border-radius: 30px; font-size: 0.8rem; font-weight: 700;
+            color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px;
         }
+        .role-badge i { display: block; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
 
-        /* Thanh con trỏ nhấp nháy chuẩn nét */
-        .typing-cursor {
-            display: inline-block;
-            width: 4px;
-            height: 1em; /* Tự động co giãn theo kích thước chữ */
-            background: var(--neon-secondary);
-            margin-left: 8px;
-            animation: blinkCursor 0.7s infinite;
+        /* Avatar Mới - Vòng Sáng Gradient quay mượt */
+        .avatar-frame {
+            width: 160px; height: 160px; margin: 0 auto 25px; border-radius: 50%;
+            padding: 4px; background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            background-size: 200% 200%; animation: spinGradient 4s linear infinite;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
+        .avatar-inner { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: var(--bg-base); }
+        .avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+        @keyframes spinGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        @keyframes blinkCursor {
-            50% { opacity: 0; }
-        }
+        .name-box { min-height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+        .profile-name { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; }
+        .typing-text { background: linear-gradient(to right, var(--text-main), var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .cursor { display: inline-block; width: 3px; height: 2.5rem; background: var(--secondary); margin-left: 5px; animation: blink 0.8s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
 
-        .profile-desc {
-            font-size: 1.1rem;
-            color: var(--neon-primary); 
-            line-height: 1.6;
-            margin-bottom: 35px;
-            font-weight: 600;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+        .bio-text { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; max-width: 550px; margin: 0 auto; font-weight: 500; }
 
-        /* --- ĐƯỜNG DẪN LIÊN KẾT CHÍNH (CTA BUTTONS) - ĐÃ XẾP DỌC NGĂN NẮP --- */
-        .quick-links {
-            display: flex;
-            flex-direction: column; /* Ép xếp thành 1 hàng dọc */
-            align-items: center;
-            gap: 15px;
-            width: 100%;
-            margin-bottom: 10px;
+        /* --- SOCIAL ICONS --- */
+        .social-links { display: flex; gap: 15px; justify-content: center; margin-bottom: 10px; }
+        .social-btn {
+            width: 48px; height: 48px; border-radius: 14px; background: var(--card-bg); border: 1px solid var(--card-border);
+            display: flex; align-items: center; justify-content: center; transition: 0.3s;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
         }
+        .social-btn svg { width: 22px; height: 22px; fill: var(--text-main); transition: 0.3s; }
+        .social-btn:hover { transform: translateY(-5px); border-color: var(--primary); background: rgba(139, 92, 246, 0.1); }
+        .social-btn:hover svg { fill: var(--primary); }
 
-        .cta-btn-main {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: var(--btn-gradient);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 16px 30px;
-            border-radius: 50px; 
-            font-weight: 700;
-            font-size: 1.05rem;
-            box-shadow: var(--shadow-glow);
-            transition: transform 0.2s, opacity 0.2s;
-            width: 100%;
-            max-width: 650px; /* Khóa cứng độ dài tối đa */
+        /* --- DANH SÁCH LIÊN KẾT (LINKS) --- */
+        .links-group { width: 100%; display: flex; flex-direction: column; gap: 15px; }
+        .bio-link {
+            width: 100%; padding: 18px 25px; border-radius: 16px;
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 1.05rem;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: 0.3s;
         }
-        .cta-btn-main:hover { transform: translateY(-2px); opacity: 0.95; }
-
-        .link-outline-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 15px 25px;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.2s;
-            width: 100%;
-            max-width: 650px; /* Dài bằng nút chính bên trên */
-        }
-        .link-outline-btn:hover {
-            background: var(--card-bg);
-            border-color: var(--neon-secondary);
-            transform: translateY(-2px); 
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
-        }
-        .icon-diamond { color: var(--neon-secondary); font-size: 0.8rem; }
-
-        /* --- MẠNG XÃ HỘI (SOCIAL ROW) --- */
-        .social-row {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-            margin-bottom: 40px;
-        }
-        .social-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-        .social-icon:hover {
-            transform: translateY(-4px);
-            background: var(--neon-primary);
-            border-color: var(--neon-primary);
-            box-shadow: var(--shadow-glow);
-        }
-        .social-icon svg { width: 22px; height: 22px; fill: var(--text-color); }
-
-        /* --- KHỐI THỐNG KÊ (STATS ROW) - Gom thành cục 2x2 vuông vức --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Ép thành 2 cột */
-            gap: 20px;
-            width: 100%;
-            max-width: 650px; /* Bằng với độ dài của các nút */
-            margin: 0 auto; /* Đưa ra giữa */
-        }
-        .stat-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px 20px;
-            text-align: center;
-            backdrop-filter: blur(12px);
-        }
-        .stat-num { font-size: 2.2rem; font-weight: 700; color: var(--text-color); margin-bottom: 8px; }
-        .stat-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;}
-
-        /* --- KHỐI SẢN PHẨM / SHOWCASE --- */
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .section-title::before, .section-title::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 20px;
-        }
-        .product-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            transition: transform 0.2s;
-        }
-        .product-card:hover { transform: translateY(-5px); border-color: var(--neon-primary); box-shadow: var(--shadow-glow); }
-        .product-tag {
-            align-self: flex-start;
-            font-size: 0.75rem;
-            background: rgba(6, 182, 212, 0.15);
-            color: var(--neon-secondary);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: 600;
-        }
-        .product-name { font-size: 1.3rem; font-weight: 700; }
-        .product-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
-
-        /* --- KHỐI ĐÁNH GIÁ (FEEDBACK) --- */
-        .feedback-list { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px; 
-        }
-        .feedback-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 25px;
-            position: relative;
-        }
-        .feedback-text { font-style: italic; font-size: 1rem; line-height: 1.6; margin-bottom: 15px; color: var(--text-muted); }
-        .feedback-user { font-size: 0.9rem; font-weight: 700; color: var(--neon-primary); display: flex; align-items: center; gap: 8px; }
-
-        /* --- FOOTER --- */
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-            width: 100%;
-            margin-top: auto;
-            background: rgba(10, 10, 14, 0.5);
-        }
-
-     /* --- RESPONSIVE MOBILE TỐI ƯU --- */
-        @media (max-width: 900px) {
-            .product-grid { grid-template-columns: 1fr; }
-            .feedback-list { grid-template-columns: 1fr; }
-        }
+        .bio-link:hover { transform: translateY(-3px); border-color: var(--secondary); background: rgba(255,255,255,0.03); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         
+        .bio-link.highlight { background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(14, 165, 233, 0.15)); border-color: rgba(139, 92, 246, 0.3); }
+        .bio-link.highlight:hover { background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(14, 165, 233, 0.25)); border-color: var(--primary); }
+
+        /* --- THỐNG KÊ (STATS BENTO) --- */
+        .stats-bento { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .stat-card {
+            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 25px 20px;
+            text-align: center; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        }
+        .stat-card h3 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 5px; }
+        .stat-card p { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+
+        /* --- BÌNH LUẬN FIREBASE (RE-STYLED) --- */
+        .comment-section { width: 100%; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 30px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); margin-top: 10px; }
+        .cmt-title { font-size: 1.1rem; font-weight: 800; text-transform: uppercase; color: var(--text-main); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .cmt-title::after { content: ''; flex: 1; height: 1px; background: var(--card-border); }
+
+        .input-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        .form-control { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--card-border); border-radius: 12px; padding: 15px; color: var(--text-main); font-size: 0.95rem; outline: none; transition: 0.3s; }
+        .form-control:focus { border-color: var(--primary); background: rgba(139, 92, 246, 0.05); }
+        textarea.form-control { resize: vertical; min-height: 80px; }
+        
+        .btn-submit { align-self: flex-end; background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background: var(--secondary); transform: translateY(-2px); }
+
+        .cmt-list { display: flex; flex-direction: column; gap: 20px; max-height: 400px; overflow-y: auto; padding-right: 5px; }
+        .cmt-item { background: rgba(0,0,0,0.15); border: 1px solid var(--card-border); padding: 15px; border-radius: 16px; animation: slideUp 0.3s ease; }
+        .cmt-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .cmt-head b { color: var(--secondary); font-size: 0.95rem; }
+        .cmt-head span { color: var(--text-muted); font-size: 0.75rem; }
+        .cmt-body { color: var(--text-main); font-size: 0.95rem; line-height: 1.5; }
+
+        /* FOOTER */
+        footer { width: 100%; text-align: center; padding: 20px 0 40px; color: var(--text-muted); font-size: 0.85rem; z-index: 1;}
+
+        /* CSS TOAST CYBERPUNK CHẶN F12 */
+        #cyber-toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 99999; display: flex; flex-direction: column; gap: 15px; pointer-events: none; }
+        .cyber-toast { background: var(--accent); border-radius: 30px; padding: 12px 25px; color: #fff; font-size: 0.9rem; font-weight: 700; text-align: center; opacity: 0; animation: fadeToast 2s ease forwards; box-shadow: 0 5px 15px rgba(244, 63, 94, 0.4); }
+        @keyframes fadeToast { 0% { opacity: 0; transform: translateY(20px); } 15% { opacity: 1; transform: translateY(0); } 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-20px); } }
+
         @media (max-width: 600px) {
-            .profile-name { 
-                font-size: 1.8rem; /* Thu nhỏ lại để tên nằm gọn trên 1 dòng */
-                min-height: 2.5rem; /* Thu gọn khung chiều cao */
-                margin-bottom: 10px;
-            }
-            .profile-desc {
-                font-size: 0.95rem; /* Chữ mô tả nhỏ lại cho thanh thoát */
-                padding: 0 10px; /* Thêm lề 2 bên để không sát mép màn hình */
-            }
-            .avatar-container { 
-                width: 130px; 
-                height: 130px; 
-            }
-            .stats-grid { grid-template-columns: 1fr; }
+            .main-wrapper { padding: 40px 15px; gap: 25px;}
+            .profile-name { font-size: 2.2rem; }
+            .name-box { min-height: 50px; }
+            .avatar-frame { width: 140px; height: 140px; }
         }
-        
- /* CSS cho Nút Web Shop VIP */
-
-.btn-shop-vip {
-    display: flex; align-items: center; justify-content: center; width: 100%;
-    padding: 16px 20px; margin-top: 15px; margin-bottom: 16px; border-radius: 30px;
-    text-decoration: none; font-weight: 700; color: white; font-size: 1rem;
-    background: linear-gradient(90deg, #ea580c, #e11d48, #9333ea);
-    background-size: 200% 200%; animation: gradientShift 3s ease infinite;
-    box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4); transition: 0.3s;
-
-}
-        
-.btn-shop-vip:hover { transform: scale(1.02); box-shadow: 0 6px 25px rgba(225, 29, 72, 0.6); }
-@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-        /* Container chứa các nút */
-
-.button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px; /* Khoảng cách giữa các nút */
-    width: 100%;
-    max-width: 500px; /* Độ rộng tối đa của nhóm nút */
-    margin: 0 auto;
-}
-
-
-/* Style cho từng nút để chúng đều nhau */
-
-.btn-style {
-    width: 100%;           /* Ép tất cả các nút rộng bằng nhau */
-    padding: 15px 20px;
-   border-radius: 12px;
-    border: none;
-    font-weight: 700;
-    text-align: center;
-    text-decoration: none;
-    transition: 0.3s;
-    display: block;        /* Để width có tác dụng */
-}
-
-        /* ==========================================
-           CSS KHU VỰC BÌNH LUẬN
-           ========================================== */
-        .comments-wrapper { width: 100%; max-width: 800px; margin: 40px auto; padding: 0 20px; }
-        
-        .divider-title { text-align: center; margin-bottom: 30px; position: relative; }
-        .divider-title::before { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: var(--border-color); z-index: 0; }
-        .divider-title span { background: var(--bg-main); padding: 0 20px; color: var(--text-dim); font-weight: 700; font-size: 1.1rem; letter-spacing: 2px; position: relative; z-index: 1; }
-
-        .comments-container { background: rgba(15, 15, 22, 0.6); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
-
-        /* Khung nhập liệu */
-        .comment-input-area { display: flex; gap: 15px; margin-bottom: 30px; }
-        .user-avatar-placeholder { width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--neon-blue)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-        .input-box { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-        .input-box input, .input-box textarea { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 15px; color: #fff; font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.3s; }
-        .input-box input:focus, .input-box textarea:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); }
-        .input-box textarea { resize: vertical; min-height: 80px; }
-        .input-actions { display: flex; justify-content: flex-end; }
-        #btn-submit-cmt { background: linear-gradient(to right, var(--primary), var(--neon-blue)); color: white; border: none; padding: 10px 24px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        #btn-submit-cmt:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4); }
-
-        /* Danh sách bình luận */
-        .comments-list { display: flex; flex-direction: column; gap: 20px; max-height: 500px; overflow-y: auto; padding-right: 5px; }
-        .comments-list::-webkit-scrollbar { width: 6px; }
-        .comments-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-        
-        .cmt-item { display: flex; gap: 15px; animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .cmt-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
-        .cmt-body { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 12px 18px; border-radius: 18px; border-top-left-radius: 4px; flex: 1; }
-        .cmt-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
-        .cmt-name { color: #fff; font-weight: 700; font-size: 0.95rem; }
-        .cmt-time { color: var(--text-dim); font-size: 0.75rem; }
-        .cmt-text { color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; word-break: break-word; }
-        .loading-cmt { text-align: center; color: var(--text-dim); font-style: italic; }
-        
     </style>
 </head>
 <body data-theme="dark">
-    
-    <div id="preloader">
-    <div class="loader-spinner"></div>
-    <div class="loader-text">Đang tải...</div>
-</div>
 
-    <div id="particles-container"></div>
+    <div class="ambient-bg"></div>
 
-    <button class="theme-toggle-btn" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ">
         <svg id="theme-icon" viewBox="0 0 24 24">
             <path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c-0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/>
         </svg>
     </button>
 
-    <div class="main-container">
+    <main class="main-wrapper">
         
-        <section class="profile-card">
-           <div class="badge">
-                <span class="badge-dot"></span> Content Creator • Movie Reviewer
-            </div>
+        <section class="hero-section">
+            <div class="role-badge"><i></i> Content Creator</div>
             
-         <div class="avatar-container">
-                <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Nguyễn Việt Hoàng" class="avatar-img">
+            <div class="avatar-frame">
+                <div class="avatar-inner">
+                    <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Nguyễn Việt Hoàng">
+                </div>
             </div>
 
-            <h1 class="profile-name"><span id="typing-text"></span><span class="typing-cursor">|</span></h1>
-            <p class="profile-desc">
-                Sáng tạo nội dung video ngắn, chuyên các series TikTok tâm trạng cực chill và Review phim đa thể loại trên YouTube. Nơi chia sẻ những góc nhìn điện ảnh chân thực và đồng điệu cảm xúc.
+            <div class="name-box">
+                <h1 class="profile-name"><span class="typing-text" id="type-text"></span><span class="cursor"></span></h1>
+            </div>
+            
+            <p class="bio-text">
+                Sáng tạo nội dung video ngắn, chuyên các series TikTok tâm trạng cực chill và Review phim đa thể loại trên YouTube.
             </p>
-
-        <div class="button-container">
-        <a href="https://www.youtube.com/@kunmusic06" class="btn-style cta-btn-main" target="_blank">
-            🎬 Đăng Ký Kênh YouTube Music
-        </a>
-        
-        <a href="https://www.tiktok.com/@hpdbox" class="btn-style link-outline-btn" target="_blank">
-            ♦ Kênh TikTok Tâm Trạng ♦
-        </a>
-        
-        <!-- NÚT MỚI: TIKTOK MUSIC -->
-        <a href="https://www.tiktok.com/@kunmusic06" class="btn-style link-outline-btn" target="_blank">
-            🎵 Kênh TikTok Music 🎵
-        </a>
-        
-        <a href="chat.html" class="btn-style link-outline-btn">
-            ♦ Trò Chuyện Trực Tiếp (Chat) ♦
-        </a>
-
-        <a href="shop.html" class="btn-style btn-shop-vip">
-            🔥 HOANGKUNSTORE - Web Shop 🔥
-        </a>
-    </div>
-            
-           <div class="social-row">
-                <a href="https://www.facebook.com/profile.php?id=100043746734819" class="social-icon" target="_blank" title="Facebook">
-                    <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-0.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/></svg>
-                </a>
-                <a href="https://www.youtube.com/@Hazen06" class="social-icon" target="_blank" title="YouTube">
-                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                </a>
-                <a href="https://www.tiktok.com/@hpdbox" class="social-icon" target="_blank" title="TikTok">
-                    <svg viewBox="0 0 24 24"><path d="M12.525.465a5.775 5.775 0 0 0 1.01 3.425 5.72 5.72 0 0 0 2.395 2.05A8.345 8.345 0 0 1 15.86 3.85a7.12 7.12 0 0 1-.22-2.145V0h-3.41v16.14a4.135 4.135 0 0 1-4.13 4.13 4.135 4.135 0 0 1-4.13-4.13 4.135 4.135 0 0 1 4.13-4.13c.49 0 .96.09 1.4.25V8.79a7.48 7.48 0 0 0-1.4-.13A7.55 7.55 0 0 0 .55 16.21a7.55 7.55 0 0 0 7.55 7.55 7.55 7.55 0 0 0 7.55-7.55V5.51A9.06 9.06 0 0 0 22.12 8.41V4.99a5.67 5.67 0 0 1-3.64-1.95 5.74 5.74 0 0 1-.955-2.575h-5z"/></svg>
-                </a>
-            </div>
-            
         </section>
 
-        <section class="stats-grid">
-            <div class="stat-box">
-                <div class="stat-num">1805</div>
-                <div class="stat-label">Followers</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-num">119.1k</div>
-                <div class="stat-label">Tim Viewers</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-num">1tr7</div>
-                <div class="stat-label">Lựơt Xem</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-num">15K+</div>
-                <div class="stat-label">Khách Hàng</div>
-            </div>
-        </section>
-
-        <section>
-           <!-- KHU VỰC BÌNH LUẬN ĐỘNG (GIAO DIỆN FACEBOOK DARK MODE) -->
-        <div class="comments-wrapper">
-            <div class="divider-title">
-                <span>BÌNH LUẬN TỪ CỘNG ĐỒNG</span>
-            </div>
-
-            <div class="comments-container">
-                <!-- Khu vực nhập bình luận -->
-                <div class="comment-input-area">
-                    <div class="user-avatar-placeholder">👤</div>
-                    <div class="input-box">
-                        <input type="text" id="cmt-name" placeholder="Tên của bạn..." maxlength="30">
-                        <textarea id="cmt-content" placeholder="Để lại nhận xét hoặc câu hỏi của bạn tại đây..." rows="2"></textarea>
-                        <div class="input-actions">
-                            <button onclick="submitComment()" id="btn-submit-cmt">GỬI BÌNH LUẬN 🚀</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Danh sách bình luận sẽ hiện ở đây -->
-                <div id="comments-list" class="comments-list">
-                    <div class="loading-cmt">Đang tải bình luận...</div>
-                </div>
-            </div>
+        <div class="social-links">
+            <a href="https://www.facebook.com/profile.php?id=100043746734819" class="social-btn" target="_blank"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-0.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/></svg></a>
+            <a href="https://www.youtube.com/@Hazen06" class="social-btn" target="_blank"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            <a href="https://www.tiktok.com/@hpdbox" class="social-btn" target="_blank"><svg viewBox="0 0 24 24"><path d="M12.525.465a5.775 5.775 0 0 0 1.01 3.425 5.72 5.72 0 0 0 2.395 2.05A8.345 8.345 0 0 1 15.86 3.85a7.12 7.12 0 0 1-.22-2.145V0h-3.41v16.14a4.135 4.135 0 0 1-4.13 4.13 4.135 4.135 0 0 1-4.13-4.13 4.135 4.135 0 0 1 4.13-4.13c.49 0 .96.09 1.4.25V8.79a7.48 7.48 0 0 0-1.4-.13A7.55 7.55 0 0 0 .55 16.21a7.55 7.55 0 0 0 7.55 7.55 7.55 7.55 0 0 0 7.55-7.55V5.51A9.06 9.06 0 0 0 22.12 8.41V4.99a5.67 5.67 0 0 1-3.64-1.95 5.74 5.74 0 0 1-.955-2.575h-5z"/></svg></a>
         </div>
+
+        <nav class="links-group">
+            <a href="https://www.youtube.com/@kunmusic06" class="bio-link highlight" target="_blank">🎬 Đăng Ký Kênh YouTube Music</a>
+            <a href="https://www.tiktok.com/@hpdbox" class="bio-link" target="_blank">✨ Kênh TikTok Tâm Trạng</a>
+            <a href="https://www.tiktok.com/@kunmusic06" class="bio-link" target="_blank">🎵 Kênh TikTok Music</a>
+            <a href="chat.html" class="bio-link">💬 Trò Chuyện Cùng Admin</a>
+        </nav>
+
+        <section class="stats-bento">
+            <div class="stat-card"><h3>1805</h3><p>Followers</p></div>
+            <div class="stat-card"><h3>119K</h3><p>Lượt Tim</p></div>
+            <div class="stat-card"><h3>1.7Tr</h3><p>Lượt Xem</p></div>
+            <div class="stat-card"><h3>15K+</h3><p>Thành Viên</p></div>
         </section>
 
-    </div>
+        <section class="comment-section">
+            <div class="cmt-title">Góc Lưu Bút</div>
+            <div class="input-group">
+                <input type="text" id="cmt-name" class="form-control" placeholder="Tên của bạn..." maxlength="30">
+                <textarea id="cmt-content" class="form-control" placeholder="Để lại lời nhắn tại đây..."></textarea>
+                <button onclick="submitComment()" id="btn-submit-cmt" class="btn-submit">Gửi Lời Nhắn 🚀</button>
+            </div>
+            <div id="comments-list" class="cmt-list">
+                <div style="text-align: center; color: var(--text-muted); font-style: italic;">Đang kết nối dữ liệu...</div>
+            </div>
+        </section>
+
+    </main>
 
     <footer>
-        <p>© 2026 HOANGKUN STORE. All Rights Reserved.</p>
-        <p style="margin-top: 5px; opacity: 0.6;">Designed and Optimized by Hai Phong Devil</p>
+        <p>© 2026 <span>Nguyễn Việt Hoàng</span>. All rights reserved.</p>
     </footer>
 
-    <script>
-       // 1. Giữ nguyên hàm tạo hạt nền cũ của bạn
-        function createParticles() {
-            const container = document.getElementById('particles-container');
-            const particleCount = 25; 
-            
-            for(let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                const size = Math.random() * 4 + 2; 
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                particle.style.left = `${Math.random() * 100}vw`;
-                particle.style.animationDuration = `${Math.random() * 8 + 4}s`; 
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                
-                container.appendChild(particle);
-            }
-        }
+    <div id="cyber-toast-container"></div>
 
-        // 2. Giữ nguyên hàm đổi giao diện Sáng / Tối của bạn
+    <script>
+        // 1. Chuyển Theme Sáng Tối
         function toggleTheme() {
             const body = document.body;
             const currentTheme = body.getAttribute('data-theme');
@@ -651,12 +256,12 @@
             if (newTheme === 'light') {
                 iconButton.innerHTML = `<path d="M12.3,2a10,10,0,0,0-1.9.2,1,1,0,0,0-.7,1.2,1,1,0,0,0,1,.8,8,8,0,0,1,7.4,7.4,1,1,0,0,0,.8,1,1,0,0,0,1.2-.7A10,10,0,0,0,12.3,2Z"/>`;
             } else {
-                iconButton.innerHTML = `<path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/>`;
+                iconButton.innerHTML = `<path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0.55,0,1,0.45,1,1s1-0.45,1-1V2c0.55,0-1-0.45-1-1S11,1.45,11,2z M11,20v2c0.55,0,1,0.45,1,1s1-0.45,1-1v-2c0.55,0-1-0.45-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0s-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L18.36,16.95z M7.05,18.36l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0l1.06-1.06c-0.39-0.39,0.39-1.03,0-1.41S7.44,17.96,7.05,18.36z M16.95,5.99l1.06-1.06c0.39-0.39,0.39-1.03,0-1.41s-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41S16.56,6.38,16.95,5.99z"/>`;
             }
         }
 
-        /* 3. THÊM LOGIC HIỆU ỨNG TỰ ĐỘNG GÕ CHỮ TẠI ĐÂY */
-        const textElement = document.getElementById('typing-text');
+        // 2. Hiệu ứng gõ chữ
+        const textElement = document.getElementById('type-text');
         const textToType = "Nguyễn Việt Hoàng";
         let isDeleting = false;
         let textIndex = 0;
@@ -665,62 +270,36 @@
             const currentText = textToType.substring(0, textIndex);
             textElement.textContent = currentText;
 
-            // Tốc độ: gõ chữ mất 120ms, xóa chữ siêu tốc mất 40ms để tiết kiệm thời gian
             let typeSpeed = isDeleting ? 40 : 120; 
-
-            // Khi đã gõ hết chữ
-            if (!isDeleting && textIndex === textToType.length) {
-                typeSpeed = 2500; // Đứng im cho người ta đọc trong 2.5 giây
-                isDeleting = true;
-            } 
-            // Khi đã xóa hết chữ
-            else if (isDeleting && textIndex === 0) {
-                isDeleting = false;
-                typeSpeed = 600; // Nghỉ nửa giây rồi mới bắt đầu gõ lại chu kỳ mới
-            }
+            if (!isDeleting && textIndex === textToType.length) { typeSpeed = 2500; isDeleting = true; } 
+            else if (isDeleting && textIndex === 0) { isDeleting = false; typeSpeed = 600; }
 
             textIndex += isDeleting ? -1 : 1;
             setTimeout(typeAnimation, typeSpeed);
         }
+        window.addEventListener('DOMContentLoaded', typeAnimation);
 
-        // Kích hoạt chạy đồng thời cả hạt nền lẫn hiệu ứng chữ gõ ngay khi vào web
-        window.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            typeAnimation();
-        });
+        // 3. Chặn F12 & Chuột phải
+        function showCyberToast(message) {
+            let container = document.getElementById('cyber-toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'cyber-toast';
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 2000);
+        }
 
-        // ==========================================
-// CHẶN CHUỘT PHẢI & THÔNG BÁO CẤM
-// ==========================================
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault(); // Chặn menu chuột phải
-    
-    // Tạo một cái thông báo nhỏ hiện lên nhanh rồi mất
-    const warning = document.createElement('div');
-    warning.innerText = "🚫 HOANGKUN STORE: Quyền sở hữu trí tuệ, cấm copy!";
-    warning.style.cssText = `
-        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        background: #ea580c; color: white; padding: 10px 20px;
-        border-radius: 8px; font-weight: bold; z-index: 9999;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    `;
-    document.body.appendChild(warning);
-    
-    // Tự động xóa thông báo sau 2 giây
-    setTimeout(() => {
-        warning.remove();
-    }, 2000);
-});
-        
+        document.addEventListener('contextmenu', e => { e.preventDefault(); showCyberToast('🚫 Nội dung thuộc bản quyền của Hoàng!'); });
+        document.onkeydown = function(e) {
+            const forbidden = [123, (e.ctrlKey && e.shiftKey && e.keyCode===73), (e.ctrlKey && e.shiftKey && e.keyCode===74), (e.ctrlKey && e.keyCode===85), (e.ctrlKey && e.keyCode===83)];
+            if(forbidden.includes(true)) { e.preventDefault(); showCyberToast('🚫 Chức năng bị khóa!'); return false; }
+        };
+        document.onselectstart = e => { e.preventDefault(); return false; };
     </script>
 
-    <script src="preloader.js"></script>
-    <!-- KẾT NỐI FIREBASE CHO BÌNH LUẬN -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-
     <script>
-        // Sử dụng chung DataBase với trang Shop của ông
         const firebaseConfig = {
             apiKey: "AIzaSyD9Vi39Xuj8qf_bYjtZLAjpOkEvMIhzD1Y",
             authDomain: "hoangkun-chat.firebaseapp.com",
@@ -731,210 +310,52 @@ document.addEventListener('contextmenu', function(e) {
             appId: "1:713375578505:web:6d7d5c2a2d9a1608998958"
         };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
         const commentsRef = database.ref('bio_comments');
 
-        // Hàm Gửi Bình Luận
         function submitComment() {
             const nameInput = document.getElementById('cmt-name');
             const contentInput = document.getElementById('cmt-content');
             const btn = document.getElementById('btn-submit-cmt');
-            
             const name = nameInput.value.trim();
             const content = contentInput.value.trim();
 
-            if (!name || !content) {
-                alert("⚠️ Vui lòng nhập đầy đủ tên và nội dung bình luận!");
-                return;
-            }
+            if (!name || !content) { alert("⚠️ Vui lòng nhập đầy đủ thông tin!"); return; }
 
-            btn.innerText = "ĐANG GỬI...";
-            btn.disabled = true;
+            btn.innerText = "ĐANG GỬI..."; btn.disabled = true;
 
-            const newComment = {
-                name: name,
-                text: content,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
-
-            commentsRef.push(newComment).then(() => {
-                // Xóa form sau khi gửi
-                contentInput.value = '';
-                btn.innerText = "GỬI BÌNH LUẬN 🚀";
-                btn.disabled = false;
-            }).catch((error) => {
-                alert("Lỗi: " + error.message);
-                btn.innerText = "GỬI BÌNH LUẬN 🚀";
-                btn.disabled = false;
-            });
+            commentsRef.push({ name: name, text: content, timestamp: firebase.database.ServerValue.TIMESTAMP }).then(() => {
+                contentInput.value = ''; btn.innerText = "Gửi Lời Nhắn 🚀"; btn.disabled = false;
+            }).catch((error) => { alert("Lỗi: " + error.message); btn.innerText = "Gửi Lời Nhắn 🚀"; btn.disabled = false; });
         }
 
-        // Hàm Format thời gian (VD: 10 phút trước, 2 giờ trước)
         function timeAgo(time) {
-            const now = new Date().getTime();
-            const diff = now - time;
-            const minutes = Math.floor(diff / 60000);
-            const hours = Math.floor(minutes / 60);
-            const days = Math.floor(hours / 24);
-
-            if (minutes < 1) return "Vừa xong";
-            if (minutes < 60) return minutes + " phút trước";
-            if (hours < 24) return hours + " giờ trước";
-            return days + " ngày trước";
+            const diff = new Date().getTime() - time;
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return "Vừa xong"; if (mins < 60) return mins + " phút trước";
+            if (mins < 1440) return Math.floor(mins / 60) + " giờ trước"; return Math.floor(mins / 1440) + " ngày trước";
         }
 
-        // Lắng nghe dữ liệu Bình luận từ Firebase
         const commentsList = document.getElementById('comments-list');
-        
         commentsRef.orderByChild('timestamp').on('value', (snapshot) => {
-            commentsList.innerHTML = ''; // Xóa loading
+            if (!snapshot.exists()) { commentsList.innerHTML = '<div style="text-align: center; color: var(--text-muted); font-style: italic;">Chưa có lời nhắn nào. Hãy là người đầu tiên!</div>'; return; }
             
-            if (!snapshot.exists()) {
-                commentsList.innerHTML = '<div class="loading-cmt">Hãy là người đầu tiên để lại bình luận!</div>';
-                return;
-            }
-
-            let commentsHTML = '';
-            // Lặp ngược để bình luận mới nhất hiện lên đầu
+            let html = '';
             const cmtArray = [];
             snapshot.forEach((child) => { cmtArray.push(child.val()); });
             cmtArray.reverse();
 
             cmtArray.forEach((data) => {
-                const timeString = data.timestamp ? timeAgo(data.timestamp) : "Gần đây";
-                
-                commentsHTML += `
+                html += `
                     <div class="cmt-item">
-                        <div class="cmt-avatar">👤</div>
-                        <div class="cmt-body">
-                            <div class="cmt-header">
-                                <span class="cmt-name">${data.name}</span>
-                                <span class="cmt-time">${timeString}</span>
-                            </div>
-                            <div class="cmt-text">${data.text}</div>
-                        </div>
+                        <div class="cmt-head"><b>${data.name}</b><span>${data.timestamp ? timeAgo(data.timestamp) : "Gần đây"}</span></div>
+                        <div class="cmt-body">${data.text}</div>
                     </div>
                 `;
             });
-            commentsList.innerHTML = commentsHTML;
+            commentsList.innerHTML = html;
         });
     </script>
-
-        <style>
-        /* CSS CHO THÔNG BÁO TOAST */
-        #cyber-toast-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            pointer-events: none;
-        }
-        .cyber-toast {
-            background: rgba(15, 15, 22, 0.95);
-            border-left: 4px solid #ef4444; /* Viền đỏ cảnh báo */
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3), inset 0 0 15px rgba(239, 68, 68, 0.05);
-            padding: 15px 25px;
-            color: #fff;
-            font-size: 0.95rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transform: translateX(120%);
-            opacity: 0;
-            /* Hiệu ứng trượt vào và rung lắc nhẹ */
-            animation: slideInToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, shakeToast 0.4s 0.4s;
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255,255,255,0.05);
-            border-right: 1px solid rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .cyber-toast.hide {
-            animation: slideOutToast 0.4s ease forwards;
-        }
-        .toast-icon {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 1.1rem;
-        }
-        @keyframes slideInToast { to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideOutToast { to { transform: translateX(120%); opacity: 0; } }
-        @keyframes shakeToast {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-        }
-    </style>
-
-    <script>
-        // Hàm tạo và hiển thị thông báo
-        function showCyberToast(message) {
-            let container = document.getElementById('cyber-toast-container');
-            if (!container) {
-                container = document.createElement('div');
-                container.id = 'cyber-toast-container';
-                document.body.appendChild(container);
-            }
-
-            const toast = document.createElement('div');
-            toast.className = 'cyber-toast';
-            toast.innerHTML = `<div class="toast-icon">!</div><div>${message}</div>`;
-            
-            container.appendChild(toast);
-
-            // Tự động ẩn sau 3 giây
-            setTimeout(() => {
-                toast.classList.add('hide');
-                setTimeout(() => toast.remove(), 400); // Xóa element sau khi chạy xong animation ẩn
-            }, 3000);
-        }
-
-        // 1. Chặn bấm chuột phải
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            showCyberToast('🛑 HOẠT ĐỘNG CHUỘT PHẢI ĐÃ BỊ KHÓA!');
-        });
-
-        // 2. Chặn các phím tắt nguy hiểm
-        document.onkeydown = function(e) {
-            // Danh sách mã phím chặn
-            const forbiddenKeys = [
-                123, // F12
-                (e.ctrlKey && e.shiftKey && e.keyCode === 73), // Ctrl+Shift+I
-                (e.ctrlKey && e.shiftKey && e.keyCode === 74), // Ctrl+Shift+J
-                (e.ctrlKey && e.shiftKey && e.keyCode === 67), // Ctrl+Shift+C
-                (e.ctrlKey && e.keyCode === 85),               // Ctrl+U
-                (e.ctrlKey && e.keyCode === 83)                // Ctrl+S
-            ];
-
-            if (forbiddenKeys.includes(true) || e.keyCode === 123) {
-                e.preventDefault();
-                showCyberToast('⚠️ F12 VÀ XEM MÃ NGUỒN ĐÃ BỊ VÔ HIỆU HÓA!');
-                return false;
-            }
-        };
-        
-        // 3. Vô hiệu hóa kéo thả bôi đen văn bản
-        document.onselectstart = function(e) {
-            e.preventDefault();
-            return false;
-        };
-    </script>
-    
 </body>
 </html>
