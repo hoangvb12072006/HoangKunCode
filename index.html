@@ -3,211 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nguyễn Việt Hoàng | Creator Bio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <title>Nguyễn Việt Hoàng | Creator Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* BẢNG MÀU TỐI GIẢN (APPLE DARK MODE STYLE) */
         :root {
-            --bg-solid: #09090b; /* Nền đen sâu */
-            --glass-bg: rgba(24, 24, 27, 0.4); /* Kính đen mờ */
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --primary: #c084fc; /* Tím nhạt */
-            --secondary: #38bdf8; /* Xanh ngọc */
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --bg-body: #000000;
+            --bg-card: #111111;
+            --bg-card-hover: #1a1a1a;
+            --border-color: #262626;
+            --border-hover: #404040;
+            --text-main: #ededed;
+            --text-muted: #a1a1aa;
+            --accent: #ffffff;
+            --primary-color: #3b82f6; /* Điểm nhấn xanh dương rất nhẹ */
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
         body {
-            background-color: var(--bg-solid);
+            background-color: var(--bg-body);
             color: var(--text-main);
             min-height: 100vh;
-            display: flex; justify-content: center;
+            display: flex;
+            justify-content: center;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* --- NỀN QUANG PHỔ CHUYỂN ĐỘNG SIÊU NHẸ (NO LAG) --- */
-        .orb {
-            position: fixed; width: 60vw; height: 60vw; border-radius: 50%;
-            background: radial-gradient(circle, var(--primary) 0%, transparent 60%);
-            filter: blur(90px); opacity: 0.15; z-index: -1; pointer-events: none;
-            top: -20%; left: -10%;
-            animation: orbFloat 25s ease-in-out infinite alternate;
+        .container {
+            width: 100%;
+            max-width: 680px;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.6s ease-out;
         }
-        .orb.two {
-            background: radial-gradient(circle, var(--secondary) 0%, transparent 60%);
-            top: auto; bottom: -20%; left: auto; right: -10%;
-            animation-delay: -10s;
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- BENTO PROFILE HEADER --- */
+        .bento-header {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: 0.3s;
         }
-        @keyframes orbFloat { 0% { transform: translate(0, 0); } 100% { transform: translate(15%, 15%); } }
+        .bento-header:hover { border-color: var(--border-hover); }
 
-        /* --- CONTAINER CHÍNH --- */
-        .wrapper { width: 100%; max-width: 650px; padding: 50px 20px; z-index: 1; display: flex; flex-direction: column; gap: 30px;}
-
-        /* --- PROFILE CARD (KÍNH MỜ) --- */
-        .profile-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 32px; padding: 40px 30px; text-align: center;
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            box-shadow: var(--glow); animation: fadeUp 0.6s ease-out;
+        .avatar {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            background: var(--bg-body);
         }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .avatar-wrap {
-            width: 140px; height: 140px; margin: 0 auto 20px; position: relative;
+        .badge {
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--text-muted);
+            margin-bottom: 8px;
         }
-        .avatar-wrap::before {
-            content: ''; position: absolute; inset: -4px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            z-index: 0; animation: spinGlow 4s linear infinite;
+
+        .name { font-size: 2rem; font-weight: 800; color: var(--accent); margin-bottom: 15px; letter-spacing: -0.5px; }
+        .bio { font-size: 0.95rem; color: var(--text-muted); max-width: 480px; }
+
+        /* --- SOCIAL BUTTONS (BENTO ROW) --- */
+        .social-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
         }
-        .avatar-wrap img {
-            width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
-            position: relative; z-index: 1; border: 4px solid var(--bg-solid);
+        .social-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            text-decoration: none;
         }
-        @keyframes spinGlow { 100% { transform: rotate(360deg); } }
+        .social-btn svg { width: 24px; height: 24px; fill: var(--text-muted); transition: 0.3s; }
+        .social-btn:hover { background: var(--bg-card-hover); border-color: var(--border-hover); transform: translateY(-3px); }
+        .social-btn:hover svg { fill: var(--accent); }
 
-        .name { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; color: #fff; }
-        .tag { font-size: 0.85rem; color: var(--secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; display: inline-block; background: rgba(56, 189, 248, 0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.2); }
-        .bio { color: var(--text-dim); font-size: 1rem; line-height: 1.6; font-weight: 500; }
-
-        /* --- NÚT BẤM (GLASS LINKS) --- */
-        .links-group { display: flex; flex-direction: column; gap: 15px; width: 100%; }
-        .link-btn {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            padding: 18px 25px; border-radius: 20px; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.05rem;
-            display: flex; justify-content: space-between; align-items: center;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;
+        /* --- NAVIGATION LINKS --- */
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .link-btn::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); transform: translateX(-100%); transition: 0.5s; }
-        .link-btn:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
-        .link-btn:hover::before { transform: translateX(100%); }
-        .link-btn .arr { font-size: 1.2rem; color: var(--text-dim); transition: 0.3s; }
-        .link-btn:hover .arr { color: #fff; transform: translateX(5px); }
-
-        .link-btn.highlight { background: linear-gradient(135deg, rgba(192, 132, 252, 0.1), rgba(56, 189, 248, 0.1)); border-color: rgba(192, 132, 252, 0.3); }
-        .link-btn.highlight:hover { border-color: var(--primary); box-shadow: 0 10px 30px rgba(192, 132, 252, 0.2); }
-
-        /* --- MẠNG XÃ HỘI --- */
-        .social-box { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-        .soc-icon { width: 50px; height: 50px; border-radius: 16px; background: var(--glass-bg); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        .soc-icon svg { width: 22px; height: 22px; fill: var(--text-main); transition: 0.3s; }
-        .soc-icon:hover { border-color: var(--secondary); background: rgba(56, 189, 248, 0.1); transform: translateY(-3px); }
-        .soc-icon:hover svg { fill: var(--secondary); }
-
-        /* --- BÌNH LUẬN (FEEDBACK FORM) --- */
-        .comment-section { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 32px; padding: 35px 25px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: var(--glow); }
-        .sec-title { font-size: 1.2rem; font-weight: 800; text-align: center; margin-bottom: 25px; color: #fff; }
-
-        .input-wrap { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
-        .inp-field { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: #fff; border-radius: 14px; padding: 15px; font-size: 0.95rem; outline: none; transition: 0.3s; }
-        .inp-field:focus { border-color: var(--primary); background: rgba(192, 132, 252, 0.05); }
-        textarea.inp-field { min-height: 90px; resize: vertical; }
+        .neo-link {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 20px 25px;
+            border-radius: 20px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .neo-link span { display: flex; align-items: center; gap: 12px; }
+        .neo-link .arrow { color: var(--text-muted); font-size: 1.2rem; transition: 0.3s; font-style: normal; }
         
-        .btn-send { background: #fff; color: #000; border: none; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.3s; }
-        .btn-send:hover { background: var(--secondary); color: #fff; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(56, 189, 248, 0.3); }
+        .neo-link:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+        }
+        .neo-link:hover .arrow { color: var(--accent); transform: translateX(4px) translateY(-4px); }
 
-        .cmt-feed { display: flex; flex-direction: column; gap: 15px; max-height: 300px; overflow-y: auto; padding-right: 5px; }
+        /* Nút nổi bật */
+        .neo-link.primary { border-color: #3f3f46; background: #18181b; }
+        .neo-link.primary:hover { border-color: #52525b; background: #27272a; }
+
+        /* --- BÌNH LUẬN (MINIMAL FORM) --- */
+        .comments-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 35px 30px;
+            margin-top: 10px;
+        }
+        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
+
+        .input-box { width: 100%; background: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-main); padding: 14px 18px; border-radius: 12px; font-size: 0.95rem; outline: none; margin-bottom: 12px; transition: 0.2s; }
+        .input-box:focus { border-color: var(--border-hover); }
+        textarea.input-box { min-height: 80px; resize: vertical; }
+
+        .btn-submit {
+            width: 100%; background: var(--text-main); color: var(--bg-body); border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; margin-bottom: 25px;
+        }
+        .btn-submit:hover { background: #d4d4d8; }
+
+        /* Danh sách bình luận */
+        .cmt-feed { display: flex; flex-direction: column; gap: 20px; max-height: 350px; overflow-y: auto; padding-right: 5px; }
         .cmt-feed::-webkit-scrollbar { width: 4px; }
-        .cmt-feed::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .cmt-feed::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
         
-        .cmt-item { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); padding: 15px; border-radius: 16px; }
-        .cmt-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .cmt-head b { color: var(--secondary); font-size: 0.95rem; }
-        .cmt-head span { color: var(--text-dim); font-size: 0.75rem; }
-        .cmt-txt { color: #e2e8f0; font-size: 0.95rem; line-height: 1.5; }
+        .cmt-item { border-left: 2px solid var(--border-color); padding-left: 15px; animation: fadeIn 0.3s ease; }
+        .cmt-meta { display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px; }
+        .cmt-name { font-weight: 700; color: var(--accent); font-size: 0.9rem; }
+        .cmt-time { color: var(--text-muted); font-size: 0.75rem; }
+        .cmt-text { color: var(--text-muted); font-size: 0.95rem; }
 
-        /* --- TOAST & FOOTER --- */
+        /* --- FOOTER & TOAST --- */
+        footer { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px; font-weight: 500;}
+        
         #toast-zone { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .toast-msg { background: rgba(15, 15, 20, 0.95); border: 1px solid #f43f5e; color: #f43f5e; padding: 12px 25px; border-radius: 30px; font-weight: 700; font-size: 0.9rem; opacity: 0; animation: tFade 2.5s ease forwards; box-shadow: 0 5px 15px rgba(244, 63, 94, 0.2); }
-        @keyframes tFade { 0% { opacity: 0; transform: translateY(15px); } 15%, 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-15px); } }
-
-        footer { text-align: center; color: var(--text-dim); font-size: 0.8rem; font-weight: 600; margin-top: 10px; }
+        .toast { background: #18181b; border: 1px solid #3f3f46; color: #ededed; padding: 12px 24px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.5); opacity: 0; animation: toastAnim 2.5s ease forwards; display: flex; align-items: center; gap: 8px;}
+        .toast.error { border-color: #7f1d1d; color: #fecaca; background: #450a0a;}
+        @keyframes toastAnim { 0% { opacity: 0; transform: translateY(15px); } 15%, 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-15px); } }
 
         @media (max-width: 600px) {
-            .wrapper { padding: 30px 15px; }
-            .profile-card { padding: 30px 20px; }
-            .name { font-size: 1.8rem; }
+            .container { padding: 40px 15px; }
+            .bento-header { padding: 30px 20px; }
+            .name { font-size: 1.6rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="orb"></div>
-    <div class="orb two"></div>
-
-    <div class="wrapper">
+    <main class="container">
         
-        <div class="profile-card">
-            <div class="avatar-wrap">
-                <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Nguyễn Việt Hoàng">
-            </div>
+        <header class="bento-header">
+            <img src="https://sf-static.upanhlaylink.com/img/image_20260602fefd438b294ab40ad608577dd78dbf6f.jpg" alt="Nguyễn Việt Hoàng" class="avatar">
+            <div class="badge">Content Creator</div>
             <h1 class="name">Nguyễn Việt Hoàng</h1>
-            <div class="tag">Content Creator</div>
             <p class="bio">Sáng tạo nội dung video ngắn, chuyên các series TikTok tâm trạng cực chill và Review phim đa thể loại trên YouTube.</p>
-            
-            <div class="social-box">
-                <a href="https://www.facebook.com/profile.php?id=100043746734819" class="soc-icon" target="_blank"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-0.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/></svg></a>
-                <a href="https://www.youtube.com/@Hazen06" class="soc-icon" target="_blank"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-                <a href="https://www.tiktok.com/@hpdbox" class="soc-icon" target="_blank"><svg viewBox="0 0 24 24"><path d="M12.525.465a5.775 5.775 0 0 0 1.01 3.425 5.72 5.72 0 0 0 2.395 2.05A8.345 8.345 0 0 1 15.86 3.85a7.12 7.12 0 0 1-.22-2.145V0h-3.41v16.14a4.135 4.135 0 0 1-4.13 4.13 4.135 4.135 0 0 1-4.13-4.13 4.135 4.135 0 0 1 4.13-4.13c.49 0 .96.09 1.4.25V8.79a7.48 7.48 0 0 0-1.4-.13A7.55 7.55 0 0 0 .55 16.21a7.55 7.55 0 0 0 7.55 7.55 7.55 7.55 0 0 0 7.55-7.55V5.51A9.06 9.06 0 0 0 22.12 8.41V4.99a5.67 5.67 0 0 1-3.64-1.95 5.74 5.74 0 0 1-.955-2.575h-5z"/></svg></a>
-            </div>
-        </div>
+        </header>
 
-        <div class="links-group">
-            <a href="https://www.youtube.com/@kunmusic06" class="link-btn highlight" target="_blank">
-                <span>🎬 Đăng Ký Kênh YouTube Music</span><span class="arr">➔</span>
+        <div class="social-row">
+            <a href="https://www.facebook.com/profile.php?id=100043746734819" class="social-btn" target="_blank">
+                <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-0.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/></svg>
             </a>
-            <a href="https://www.tiktok.com/@hpdbox" class="link-btn" target="_blank">
-                <span>✨ Kênh TikTok Tâm Trạng</span><span class="arr">➔</span>
+            <a href="https://www.youtube.com/@Hazen06" class="social-btn" target="_blank">
+                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             </a>
-            <a href="https://www.tiktok.com/@kunmusic06" class="link-btn" target="_blank">
-                <span>🎵 Kênh TikTok Music</span><span class="arr">➔</span>
-            </a>
-            <a href="chat.html" class="link-btn">
-                <span>💬 Trò Chuyện Trực Tiếp</span><span class="arr">➔</span>
+            <a href="https://www.tiktok.com/@hpdbox" class="social-btn" target="_blank">
+                <svg viewBox="0 0 24 24"><path d="M12.525.465a5.775 5.775 0 0 0 1.01 3.425 5.72 5.72 0 0 0 2.395 2.05A8.345 8.345 0 0 1 15.86 3.85a7.12 7.12 0 0 1-.22-2.145V0h-3.41v16.14a4.135 4.135 0 0 1-4.13 4.13 4.135 4.135 0 0 1-4.13-4.13 4.135 4.135 0 0 1 4.13-4.13c.49 0 .96.09 1.4.25V8.79a7.48 7.48 0 0 0-1.4-.13A7.55 7.55 0 0 0 .55 16.21a7.55 7.55 0 0 0 7.55 7.55 7.55 7.55 0 0 0 7.55-7.55V5.51A9.06 9.06 0 0 0 22.12 8.41V4.99a5.67 5.67 0 0 1-3.64-1.95 5.74 5.74 0 0 1-.955-2.575h-5z"/></svg>
             </a>
         </div>
 
-        <div class="comment-section">
-            <div class="sec-title">Góc Lưu Bút</div>
-            <div class="input-wrap">
-                <input type="text" id="cmt-name" class="inp-field" placeholder="Tên hiển thị..." maxlength="30">
-                <textarea id="cmt-content" class="inp-field" placeholder="Để lại vài lời nhắn..."></textarea>
-                <button onclick="submitComment()" id="btn-submit-cmt" class="btn-send">GỬI LỜI NHẮN</button>
-            </div>
+        <nav class="link-list">
+            <a href="https://www.youtube.com/@kunmusic06" class="neo-link primary" target="_blank">
+                <span>🎬 Đăng Ký Kênh YouTube Music</span><i class="arrow">↗</i>
+            </a>
+            <a href="https://www.tiktok.com/@hpdbox" class="neo-link" target="_blank">
+                <span>✨ Kênh TikTok Tâm Trạng</span><i class="arrow">↗</i>
+            </a>
+            <a href="https://www.tiktok.com/@kunmusic06" class="neo-link" target="_blank">
+                <span>🎵 Kênh TikTok Music</span><i class="arrow">↗</i>
+            </a>
+            <a href="chat.html" class="neo-link">
+                <span>💬 Trò Chuyện Trực Tiếp</span><i class="arrow">↗</i>
+            </a>
+        </nav>
+
+        <section class="comments-section">
+            <div class="section-title">Sổ Lưu Bút</div>
+            <input type="text" id="cmt-name" class="input-box" placeholder="Tên của bạn..." maxlength="30">
+            <textarea id="cmt-content" class="input-box" placeholder="Để lại lời nhắn..."></textarea>
+            <button onclick="submitComment()" id="btn-submit-cmt" class="btn-submit">Gửi Lời Nhắn</button>
+
             <div id="comments-list" class="cmt-feed">
-                <div style="text-align: center; color: var(--text-dim); font-style: italic;">Đang kết nối hệ thống...</div>
+                <div style="color: var(--text-muted); font-size: 0.9rem; text-align: center;">Đang kết nối dữ liệu...</div>
             </div>
-        </div>
+        </section>
 
-        <footer>
-            © 2026 NGUYEN VIET HOANG. All rights reserved.
-        </footer>
-    </div>
+        <footer>© 2026 Nguyễn Việt Hoàng. All rights reserved.</footer>
+
+    </main>
 
     <div id="toast-zone"></div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script>
-        // CHỐNG SOI CODE
-        function showToastBlock(msg) {
+        // BẢO MẬT GIAO DIỆN
+        function sendToast(msg, isErr=false) {
             const z = document.getElementById('toast-zone');
             const t = document.createElement('div');
-            t.className = 'toast-msg'; t.innerText = msg;
-            z.appendChild(t); setTimeout(() => t.remove(), 2500);
+            t.className = 'toast' + (isErr ? ' error' : ''); 
+            t.innerHTML = `${isErr ? '🚫' : '⚡'} ${msg}`;
+            z.appendChild(t); setTimeout(() => t.remove(), 2400);
         }
-        document.addEventListener('contextmenu', e => { e.preventDefault(); showToastBlock('🚫 Cấm sao chép nội dung!'); });
+        document.addEventListener('contextmenu', e => { e.preventDefault(); sendToast('Tính năng này đã bị khóa!', true); });
         document.onkeydown = function(e) {
             const forbidden = [123, (e.ctrlKey && e.shiftKey && e.keyCode===73), (e.ctrlKey && e.keyCode===85), (e.ctrlKey && e.keyCode===83)];
-            if(forbidden.includes(true)) { e.preventDefault(); showToastBlock('🚫 Phát hiện phím tắt F12 - Bị khóa!'); return false; }
+            if(forbidden.includes(true)) { e.preventDefault(); sendToast('Hành động không được phép!', true); return false; }
         };
         document.onselectstart = e => { e.preventDefault(); return false; };
 
-        // FIREBASE CHUẨN
+        // FIREBASE BÌNH LUẬN
         const firebaseConfig = {
             apiKey: "AIzaSyD9Vi39Xuj8qf_bYjtZLAjpOkEvMIhzD1Y",
             authDomain: "hoangkun-chat.firebaseapp.com",
@@ -227,12 +270,13 @@
             const btn = document.getElementById('btn-submit-cmt');
             const name = nameInput.value.trim(); const content = contentInput.value.trim();
 
-            if (!name || !content) { showToastBlock('⚠️ Vui lòng nhập đủ thông tin!'); return; }
-            btn.innerText = "ĐANG GỬI..."; btn.disabled = true;
+            if (!name || !content) { sendToast('Vui lòng nhập đủ thông tin!', true); return; }
+            btn.innerText = "Đang gửi..."; btn.disabled = true;
 
             commentsRef.push({ name: name, text: content, timestamp: firebase.database.ServerValue.TIMESTAMP }).then(() => {
-                contentInput.value = ''; btn.innerText = "GỬI LỜI NHẮN"; btn.disabled = false;
-            }).catch((error) => { showToastBlock("Lỗi: " + error.message); btn.innerText = "GỬI LỜI NHẮN"; btn.disabled = false; });
+                contentInput.value = ''; btn.innerText = "Gửi Lời Nhắn"; btn.disabled = false;
+                sendToast('Đã gửi bình luận thành công!');
+            }).catch((error) => { sendToast("Lỗi: " + error.message, true); btn.innerText = "Gửi Lời Nhắn"; btn.disabled = false; });
         }
 
         function timeAgo(time) {
@@ -243,15 +287,18 @@
 
         const commentsList = document.getElementById('comments-list');
         commentsRef.orderByChild('timestamp').on('value', (snapshot) => {
-            if (!snapshot.exists()) { commentsList.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-style:italic;">Chưa có lời nhắn nào.</div>'; return; }
+            if (!snapshot.exists()) { commentsList.innerHTML = '<div style="color:var(--text-muted);font-size:0.9rem;text-align:center;">Chưa có bình luận nào.</div>'; return; }
             let html = ''; const cmtArray = [];
             snapshot.forEach(child => cmtArray.push(child.val()));
             cmtArray.reverse();
             cmtArray.forEach(data => {
                 html += `
                     <div class="cmt-item">
-                        <div class="cmt-head"><b>${data.name}</b><span>${data.timestamp ? timeAgo(data.timestamp) : ""}</span></div>
-                        <div class="cmt-txt">${data.text}</div>
+                        <div class="cmt-meta">
+                            <span class="cmt-name">${data.name}</span>
+                            <span class="cmt-time">${data.timestamp ? timeAgo(data.timestamp) : ""}</span>
+                        </div>
+                        <div class="cmt-text">${data.text}</div>
                     </div>
                 `;
             });
